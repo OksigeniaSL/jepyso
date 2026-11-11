@@ -30,10 +30,18 @@ const vigilar = (page, nombre) => {
 const url = (tema, fragmento = '') => `${base}/index.html?tema=${tema}${fragmento}`;
 // The figure renders on the CPU (SwiftShader). On a machine busy with other work a screenshot or a reload can take
 // far longer than Playwright's 30 s default, so every step gets more room; a real hang still fails.
+// Every screenshot prints the seconds since the start, so a slow run shows where its time went.
+const inicio = Date.now();
 const abrir = async (opciones) => {
   const page = await browser.newPage(opciones);
   page.setDefaultTimeout(120000);
   page.setDefaultNavigationTimeout(120000);
+  const foto = page.screenshot.bind(page);
+  page.screenshot = async (o) => {
+    const r = await foto(o);
+    console.log(`${String(Math.round((Date.now() - inicio) / 1000)).padStart(5)} s  ${o.path.split('/').pop()}`);
+    return r;
+  };
   return page;
 };
 
