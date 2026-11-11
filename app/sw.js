@@ -64,13 +64,38 @@ async function fijo(ev, ruta) {
   return r;
 }
 
+const mismosBytes = (a, b) => {
+  if (a.byteLength !== b.byteLength) return false;
+  const x = new Uint8Array(a);
+  const y = new Uint8Array(b);
+  for (let i = 0; i < x.length; i++) if (x[i] !== y[i]) return false;
+  return true;
+};
+
+// A file of the app that changed on the server: the open pages are told, so they can offer to update now instead of
+// showing the old version until the next visit. The server sends no ETag, so the bytes are compared.
+async function avisarVersionNueva() {
+  for (const c of await self.clients.matchAll({ type: 'window' })) c.postMessage({ tipo: 'nueva-version' });
+}
+
 // Stale while revalidate. A page load (any query, any fragment) is index.html.
 async function deLaApp(ev, ruta) {
   const cache = await caches.open(APP);
   const clave = ev.request.mode === 'navigate' || ruta === '' ? 'index.html' : ruta;
   const guardada = await cache.match(clave);
+  const antes = guardada?.clone();
   const red = fetch(ev.request).then((r) => {
-    if (r.ok && r.type === 'basic') ev.waitUntil(cache.put(clave, r.clone()).catch(() => {}));
+    if (r.ok && r.type === 'basic') {
+      const paraCache = r.clone();
+      const paraComparar = antes ? r.clone() : null;
+      ev.waitUntil(
+        (async () => {
+          const cambia = paraComparar && !mismosBytes(await antes.arrayBuffer(), await paraComparar.arrayBuffer());
+          await cache.put(clave, paraCache);
+          if (cambia) await avisarVersionNueva();
+        })().catch(() => {}),
+      );
+    }
     return r;
   });
   if (guardada) {

@@ -1807,6 +1807,28 @@ function registrarTrabajador() {
 }
 const trabajador = registrarTrabajador();
 
+// A new version arrived in the background (sw.js compares each file it refreshes). The page offers to update, a moment
+// after the last file so they all come together, and never in the middle of a set: reloading would lose it.
+let avisoVersion = null;
+navigator.serviceWorker?.addEventListener('message', (ev) => {
+  if (ev.data?.tipo !== 'nueva-version') return;
+  clearTimeout(avisoVersion);
+  avisoVersion = setTimeout(mostrarVersionNueva, 1500);
+});
+function mostrarVersionNueva() {
+  if (document.querySelector('.nueva-version')) return;
+  if (document.querySelector('.jugador')) {
+    avisoVersion = setTimeout(mostrarVersionNueva, 5000);
+    return;
+  }
+  const aviso = document.createElement('div');
+  aviso.className = 'nueva-version';
+  aviso.setAttribute('role', 'status');
+  aviso.innerHTML = `<span>Hay una versión nueva de Jepyso.</span><button type="button" class="boton">Actualizar</button>`;
+  aviso.querySelector('button').addEventListener('click', () => location.reload());
+  document.body.append(aviso);
+}
+
 async function guardarParaSinConexion(c, ids) {
   if (!(await trabajador)) return false;
   const m = await cargarManifiesto(c);
