@@ -28,22 +28,76 @@ const vigilar = (page, nombre) => {
   page.on('pageerror', (e) => errores.push(`${nombre} pageerror: ${e.message}`));
 };
 const url = (tema, fragmento = '') => `${base}/index.html?tema=${tema}${fragmento}`;
+// The figure renders on the CPU (SwiftShader). On a machine busy with other work a screenshot or a reload can take
+// far longer than Playwright's 30 s default, so every step gets more room; a real hang still fails.
+const abrir = async (opciones) => {
+  const page = await browser.newPage(opciones);
+  page.setDefaultTimeout(120000);
+  page.setDefaultNavigationTimeout(120000);
+  return page;
+};
 
 try {
   for (const tema of ['claro', 'oscuro']) {
-    // Builder, wide. The acceptable discomfort goes down from 5 to 4 and travels inside the link.
-    const ancho = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    // Builder, wide: an empty routine, the library with its filters, the order, a template and the acceptable
+    // discomfort lowered from 5 to 4, which travels inside the link.
+    const ancho = await abrir({ viewport: { width: 1366, height: 768 } });
     vigilar(ancho, `armar-${tema}`);
     await ancho.goto(url(tema));
     await ancho.waitForTimeout(2500);
-    await ancho.screenshot({ path: `${salida}/armar-1366-${tema}.png` });
-    await ancho.click('.ejercicio[data-id="hombro"] .ejercicio-cabeza');
-    await ancho.waitForTimeout(1500);
+    comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 0, `${tema}: la rutina nueva no empieza vacía`);
+    await ancho.screenshot({ path: `${salida}/armar-1366-vacia-${tema}.png` });
+    for (const id of ['puente', 'silla', 'hombro']) await ancho.click(`.biblio-fila[data-id="${id}"] [data-accion="anadir"]`);
+    await ancho.waitForTimeout(1200);
+    const orden = () => ancho.$$eval('.rutina-armada .ejercicio', (t) => t.map((x) => x.dataset.id).join(','));
+    comprobar((await orden()) === 'puente,silla,hombro', `${tema}: los añadidos no salen en su orden (${await orden()})`);
+    comprobar((await ancho.locator('.biblio-dentro').count()) === 3, `${tema}: la biblioteca no marca lo que ya está en la rutina`);
+    await ancho.click('.ejercicio[data-id="hombro"] [data-accion="subir"]');
+    comprobar((await orden()) === 'puente,hombro,silla', `${tema}: subir no cambia el orden (${await orden()})`);
     await ancho.screenshot({ path: `${salida}/armar-1366-hombro-${tema}.png` });
+    await ancho.click('.ejercicio[data-id="silla"] .detalle summary');
+    comprobar((await ancho.textContent('.ejercicio[data-id="silla"] .detalle')).includes('Fuente:'), `${tema}: la tarjeta no trae la explicación con su fuente`);
+    await ancho.locator('.ejercicio[data-id="silla"] .detalle').scrollIntoViewIfNeeded();
+    await ancho.screenshot({ path: `${salida}/armar-1366-explicacion-${tema}.png` });
+
+    // Filters: area, muscle and words; each one narrows the library.
+    const filas = () => ancho.$$eval('.biblio-fila', (t) => t.map((x) => x.dataset.id).join(','));
+    await ancho.click('[data-accion="zona"][data-valor="hombro"]');
+    comprobar((await filas()) === 'hombro', `${tema}: el filtro de hombro da ${await filas()}`);
+    await ancho.click('[data-accion="zona"][data-valor=""]');
+    await ancho.selectOption('[data-accion="musculo"]', 'cuadriceps');
+    comprobar((await filas()) === 'silla', `${tema}: el filtro de cuádriceps da ${await filas()}`);
+    await ancho.selectOption('[data-accion="musculo"]', '');
+    await ancho.fill('[data-accion="buscar"]', 'gluteo');
+    comprobar((await filas()) === 'puente', `${tema}: buscar «gluteo» da ${await filas()}`);
+    await ancho.fill('[data-accion="buscar"]', 'nada parecido');
+    comprobar((await ancho.locator('.biblio-vacia').count()) === 1, `${tema}: una búsqueda sin resultados no lo dice`);
+    await ancho.fill('[data-accion="buscar"]', '');
+
     await ancho.click('[data-accion="tope"][data-delta="-1"]');
     comprobar((await ancho.textContent('.general .paso output')) === '4', `${tema}: el tope no baja a 4 en el constructor`);
     await ancho.locator('.general').scrollIntoViewIfNeeded();
     await ancho.screenshot({ path: `${salida}/armar-1366-tope-${tema}.png` });
+
+    // Template: saved, the routine changes, the template brings it back; deleting asks first.
+    await ancho.click('[data-accion="nueva-plantilla"]');
+    await ancho.fill('[data-accion="nombre-plantilla"]', 'Rodilla y hombro, primera semana');
+    await ancho.press('[data-accion="nombre-plantilla"]', 'Enter');
+    comprobar((await ancho.locator('.plantilla').count()) === 1, `${tema}: la plantilla no se guarda`);
+    await ancho.click('.ejercicio[data-id="silla"] [data-accion="quitar"]');
+    await ancho.click('[data-accion="tope"][data-delta="1"]');
+    comprobar((await orden()) === 'puente,hombro', `${tema}: quitar no saca el ejercicio (${await orden()})`);
+    await ancho.locator('.plantillas').scrollIntoViewIfNeeded();
+    await ancho.screenshot({ path: `${salida}/armar-1366-plantilla-${tema}.png` });
+    await ancho.click('[data-accion="usar-plantilla"]');
+    await ancho.waitForTimeout(800);
+    comprobar((await orden()) === 'puente,hombro,silla', `${tema}: la plantilla no trae su rutina (${await orden()})`);
+    comprobar((await ancho.textContent('.general .paso output')) === '4', `${tema}: la plantilla no trae su tope`);
+    await ancho.click('[data-accion="borrar-plantilla"]');
+    comprobar((await ancho.locator('.plantilla').count()) === 1, `${tema}: la plantilla se borra sin preguntar`);
+    await ancho.click('[data-accion="borrar-plantilla"]');
+    comprobar((await ancho.locator('.plantilla').count()) === 0, `${tema}: la plantilla no se borra al confirmar`);
+
     await ancho.click('[data-accion="crear"]');
     await ancho.waitForTimeout(800);
     await ancho.screenshot({ path: `${salida}/enlace-1366-${tema}.png` });
@@ -53,25 +107,35 @@ try {
       return decodificar(u.split('#r=')[1]);
     }, enlace);
     comprobar(rutinaCreada.m === 4, `${tema}: el enlace no lleva el tope 4 (lleva ${rutinaCreada.m})`);
+    comprobar(rutinaCreada.e.map((e) => e.i).join(',') === 'puente,hombro,silla', `${tema}: el enlace no lleva el orden elegido`);
     comprobar(/^\d{4}-\d{2}-\d{2}$/.test(rutinaCreada.f), `${tema}: la fecha del enlace no es un día`);
     console.log(`enlace (${tema}): ${enlace.length} caracteres`);
     await ancho.close();
 
     if (tema === 'claro') {
-      const muyAncho = await browser.newPage({ viewport: { width: 1800, height: 1000 } });
+      const muyAncho = await abrir({ viewport: { width: 1800, height: 1000 } });
       vigilar(muyAncho, 'armar-1800');
       await muyAncho.goto(url(tema));
+      for (const id of ['puente', 'hombro']) await muyAncho.click(`.biblio-fila[data-id="${id}"] [data-accion="anadir"]`);
       await muyAncho.waitForTimeout(2000);
       await muyAncho.screenshot({ path: `${salida}/armar-1800-claro.png` });
       await muyAncho.close();
     }
 
-    // Builder on a phone.
-    const movil = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    // Builder on a phone: the preview goes inside the row looked at, then inside the card once added.
+    const movil = await abrir({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     vigilar(movil, `movil-${tema}`);
     await movil.goto(url(tema));
-    await movil.waitForTimeout(2500);
+    await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/armar-movil-${tema}.png` });
+    await movil.click('.biblio-fila[data-id="silla"] .biblio-ver');
+    await movil.waitForTimeout(1800);
+    comprobar((await movil.locator('.biblio-fila.activo[data-id="silla"] .mini-figura canvas').count()) === 1, `${tema}: en el móvil, la fila mirada no enseña la figura`);
+    await movil.locator('.biblio-fila[data-id="silla"]').scrollIntoViewIfNeeded();
+    await movil.screenshot({ path: `${salida}/armar-movil-ver-${tema}.png` });
+    await movil.click('.biblio-fila[data-id="puente"] [data-accion="anadir"]');
+    await movil.waitForTimeout(1800);
+    comprobar((await movil.locator('.ejercicio[data-id="puente"] .mini-figura canvas').count()) === 1, `${tema}: en el móvil, la tarjeta añadida no enseña la figura`);
     await movil.screenshot({ path: `${salida}/armar-movil-entera-${tema}.png`, fullPage: true });
 
     // A short routine so the walk takes seconds: two sets of two reps, then the shoulder on both sides. Tope 4.
@@ -96,6 +160,10 @@ try {
     await movil.screenshot({ path: `${salida}/cuenta-movil-${tema}.png` });
     await movil.waitForTimeout(3900);
     await movil.screenshot({ path: `${salida}/serie-movil-${tema}.png` });
+    await movil.click('[data-r="como"]');
+    comprobar((await movil.locator('.hoja .explicacion .partida').count()) === 1, `${tema}: «Cómo se hace» no trae la posición de partida`);
+    await movil.screenshot({ path: `${salida}/como-movil-${tema}.png` });
+    await movil.click('.hoja .boton');
     await movil.waitForSelector('.anillo', { timeout: 20000 });
     await movil.screenshot({ path: `${salida}/descanso-movil-${tema}.png` });
     await movil.click('[data-r="ya"]');
@@ -166,7 +234,7 @@ try {
     await movil.close();
 
     // Without a connection: a new phone opens the routine once, then does it with no signal at all.
-    const sinRed = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    const sinRed = await abrir({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     vigilar(sinRed, `sin-conexion-${tema}`);
     await sinRed.goto(url(tema, `#r=${codigo}`));
     try {

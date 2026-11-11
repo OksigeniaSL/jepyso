@@ -1,7 +1,7 @@
 // Jepyso: the professional builds a routine, sends it as a link, the person does it with the 3D figure and sends
 // back a summary link. No server: everything travels inside the links.
 import {
-  EJERCICIOS, ORDEN, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
+  EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
   codificar, decodificar, duracionEjercicio, minutos, almacen,
 } from './datos.js';
 import { Figura } from './figura.js';
@@ -118,22 +118,34 @@ async function figuraEn(contenedor, c = 'a') {
 }
 
 // ---------- Builder ----------
+// The draft: who it is for, the settings for the whole routine, the exercises in the order the professional chose
+// (orden) and the settings of every exercise touched, so one taken out and put back keeps them. The library filter
+// stays with the draft.
+function ajustesIniciales(id) {
+  const d = EJERCICIOS[id].porDefecto;
+  return { series: d.series, reps: d.reps, tempo: [...d.tempo], lado: EJERCICIOS[id].unLado ? 'der' : null, nota: '' };
+}
+
 function borradorInicial() {
   return {
-    para: '',
-    de: '',
-    descanso: 45,
-    veces: 1,
-    tope: TOPE_MOLESTIA,
-    cuerpo: 'a',
-    activo: 'puente',
-    ejercicios: Object.fromEntries(
-      ORDEN.map((id) => {
-        const d = EJERCICIOS[id].porDefecto;
-        return [id, { incluido: id !== 'hombro', series: d.series, reps: d.reps, tempo: [...d.tempo], lado: EJERCICIOS[id].unLado ? 'der' : null, nota: '' }];
-      }),
-    ),
+    para: '', de: '', descanso: 45, veces: 1, tope: TOPE_MOLESTIA, cuerpo: 'a',
+    activo: ORDEN[0], orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' },
   };
+}
+
+// Drafts saved before the library had an order kept every exercise with an «incluido» flag.
+function ponerAlDia(b) {
+  b.tope ??= TOPE_MOLESTIA;
+  b.filtro ??= { zona: '', musculo: '', texto: '' };
+  b.ejercicios ??= {};
+  if (!Array.isArray(b.orden)) b.orden = ORDEN.filter((id) => b.ejercicios[id]?.incluido);
+  b.orden = b.orden.filter((id) => ORDEN.includes(id));
+  for (const id of Object.keys(b.ejercicios)) {
+    if (EJERCICIOS[id]) delete b.ejercicios[id].incluido;
+    else delete b.ejercicios[id];
+  }
+  if (!ORDEN.includes(b.activo)) b.activo = b.orden[0] || ORDEN[0];
+  return b;
 }
 
 function paso(accion, valor, etiqueta, min, max) {
@@ -150,18 +162,34 @@ function segmentos(accion, opciones, actual) {
     .join('')}</div>`;
 }
 
-function tarjetaEjercicio(id, e, activo) {
+// How an exercise is done, for the person (the how-to sheet) and for the professional (the card).
+function explicacion(def) {
+  return `<div class="explicacion">
+    <p class="partida">${esc(def.partida)}</p>
+    <ol class="como">${def.pasos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>
+    ${def.notar ? `<p><strong>Dónde se nota.</strong> ${esc(def.notar)}</p>` : ''}
+    <p><strong>Ojo.</strong> ${esc(def.error)}</p>
+    ${def.para ? `<p><strong>Para qué.</strong> ${esc(def.para)}</p>` : ''}
+    ${def.ayuda ? `<p><strong>Más fácil.</strong> ${esc(def.ayuda)}</p>` : ''}
+    ${def.masDificil ? `<p><strong>Para más.</strong> ${esc(def.masDificil)}</p>` : ''}
+  </div>`;
+}
+
+const chipsEjercicio = (def) =>
+  `<span class="chip">${esc(def.posicion)}</span><span class="chip">${esc(def.material)}</span>${def.musculos.principales
+    .map((mu) => `<span class="chip vivo">${esc(MUSCULOS[mu] || mu)}</span>`)
+    .join('')}`;
+
+// An exercise of the routine, with its number in the routine and everything the professional sets for it.
+function tarjetaEjercicio(id, e, activo, pos, total) {
   const def = EJERCICIOS[id];
   const [s, m, b] = e.tempo;
-  return `<article class="ejercicio ${e.incluido ? 'incluido' : ''} ${activo ? 'activo' : ''}" data-id="${id}">
-    <button type="button" class="ejercicio-cabeza" data-accion="incluir" aria-pressed="${e.incluido}">
-      <span class="marca">${ICONO.check}</span>
+  return `<article class="ejercicio incluido ${activo ? 'activo' : ''}" data-id="${id}">
+    <button type="button" class="ejercicio-cabeza" data-accion="elegir">
+      <span class="marca num" aria-hidden="true">${pos + 1}</span>
       <span class="titulo">
         <h3>${esc(def.nombre)}</h3>
-        <span class="linea-chips">
-          <span class="chip">${esc(def.posicion)}</span><span class="chip">${esc(def.material)}</span>
-          ${def.musculos.map((mu) => `<span class="chip vivo">${esc(mu)}</span>`).join('')}
-        </span>
+        <span class="linea-chips">${chipsEjercicio(def)}</span>
       </span>
     </button>
     <div class="ejercicio-ajustes">
@@ -180,23 +208,117 @@ function tarjetaEjercicio(id, e, activo) {
           ${svgTempo(e.tempo, { ancho: 200, alto: 44 })}
         </div>
       </div>
+      <details class="detalle">
+        <summary>Cómo se explica a la persona</summary>
+        ${explicacion(def)}
+        <p class="fuente">Fuente: ${def.fuentes.map(esc).join('; ')}.</p>
+      </details>
       <div class="campo"><label for="nota-${id}">Nota para la persona</label>
         <textarea id="nota-${id}" data-accion="nota" rows="2" placeholder="Por ejemplo: sin dolor; si molesta, baja menos">${esc(e.nota)}</textarea></div>
+      <div class="ordenar">
+        <button type="button" class="boton secundario" data-accion="subir" ${pos === 0 ? 'disabled' : ''}>Subir</button>
+        <button type="button" class="boton secundario" data-accion="bajar" ${pos === total - 1 ? 'disabled' : ''}>Bajar</button>
+        <button type="button" class="boton fantasma" data-accion="quitar">Quitar de la rutina</button>
+      </div>
     </div>
   </article>`;
 }
 
-function vistaArmar() {
-  const b = almacen.leer('borrador', null) || borradorInicial();
-  b.tope ??= TOPE_MOLESTIA;
-  const guardar = () => almacen.guardar('borrador', b);
+function seccionRutina(b) {
+  return `<section class="rutina-armada" aria-labelledby="rutina-titulo">
+    <h2 id="rutina-titulo">La rutina</h2>
+    ${
+      b.orden.length
+        ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
+        : '<p class="rutina-vacia">Todavía no tiene ejercicios. Añádelos desde la biblioteca, aquí debajo.</p>'
+    }
+  </section>`;
+}
 
-  const incluidos = () => ORDEN.filter((id) => b.ejercicios[id].incluido);
+function filaBiblioteca(id, b) {
+  const def = EJERCICIOS[id];
+  const dentro = b.orden.includes(id);
+  return `<li class="biblio-fila ${id === b.activo && !dentro ? 'activo' : ''}" data-id="${id}">
+    <button type="button" class="biblio-ver" data-accion="ver">
+      <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="linea-chips">${chipsEjercicio(def)}</span></span>
+    </button>
+    ${
+      dentro
+        ? `<span class="biblio-dentro">${ICONO.check}En la rutina</span>`
+        : `<button type="button" class="boton secundario" data-accion="anadir" aria-label="Añadir ${esc(def.nombre)}">Añadir</button>`
+    }
+    <div class="mini-figura"></div>
+  </li>`;
+}
+
+function listaBiblioteca(b) {
+  const ids = buscarEjercicios(b.filtro);
+  return ids.length ? ids.map((id) => filaBiblioteca(id, b)).join('') : '<li class="biblio-vacia">Ningún ejercicio con esos filtros.</li>';
+}
+
+// Only the areas and muscles some exercise has: a filter that can only give an empty list is noise.
+function seccionBiblioteca(b) {
+  const zonas = Object.keys(ZONAS).filter((z) => ORDEN.some((id) => EJERCICIOS[id].zonas.includes(z)));
+  const todos = (id) => [...EJERCICIOS[id].musculos.principales, ...EJERCICIOS[id].musculos.secundarios];
+  const musculos = Object.keys(MUSCULOS).filter((mu) => ORDEN.some((id) => todos(id).includes(mu)));
+  return `<section class="biblioteca" aria-labelledby="biblio-titulo">
+    <h2 id="biblio-titulo">Añadir ejercicios</h2>
+    <div class="biblio-filtros">
+      <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
+      <div class="filtros-zona" role="group" aria-label="Zona">
+        ${[['', 'Todas'], ...zonas.map((z) => [z, ZONAS[z]])]
+          .map(([v, t]) => `<button type="button" class="filtro" data-accion="zona" data-valor="${v}" aria-pressed="${b.filtro.zona === v}">${t}</button>`)
+          .join('')}
+      </div>
+      <label class="campo-musculo"><span>Músculo</span>
+        <select data-accion="musculo">
+          <option value="">Todos</option>
+          ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(MUSCULOS[mu])}</option>`).join('')}
+        </select>
+      </label>
+    </div>
+    <ul class="biblio-lista">${listaBiblioteca(b)}</ul>
+  </section>`;
+}
+
+// Templates live in this browser. A template keeps the exercises, their settings and the settings for the whole
+// routine; never who it was for.
+function seccionPlantillas(b) {
+  const lista = almacen.leer('plantillas', []);
+  return `<section class="plantillas" aria-labelledby="plantillas-titulo">
+    <div class="plantillas-cabeza">
+      <h2 id="plantillas-titulo">Plantillas</h2>
+      <button type="button" class="boton fantasma" data-accion="nueva-plantilla" ${b.orden.length ? '' : 'disabled'}>Guardar la rutina como plantilla</button>
+    </div>
+    <form class="plantilla-nueva" hidden>
+      <input data-accion="nombre-plantilla" maxlength="60" autocomplete="off" placeholder="Por ejemplo: rodilla, primera semana" aria-label="Nombre de la plantilla">
+      <button type="submit" class="boton">Guardar</button>
+      <button type="button" class="boton fantasma" data-accion="cancelar-plantilla">Cancelar</button>
+    </form>
+    ${
+      lista.length
+        ? `<div class="lista-plantillas">${lista
+            .map(
+              (p, i) => `<span class="plantilla">
+                <button type="button" class="usar" data-accion="usar-plantilla" data-i="${i}">${esc(p.nombre)}<span class="cuantos num">${p.orden.length}</span></button>
+                <button type="button" class="borrar" data-accion="borrar-plantilla" data-i="${i}" aria-label="Borrar la plantilla ${esc(p.nombre)}">${ICONO.cerrar}</button>
+              </span>`,
+            )
+            .join('')}</div>`
+        : '<p class="ayuda">Guarda la rutina que recetas a menudo y empieza la próxima desde ella. Se guardan en este navegador.</p>'
+    }
+  </section>`;
+}
+
+function vistaArmar() {
+  const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
+  const guardar = () => almacen.guardar('borrador', b);
+  const ajustes = (id) => (b.ejercicios[id] ||= ajustesIniciales(id));
+
   const resumenCorto = () => {
-    const ids = incluidos();
-    if (!ids.length) return 'Elige al menos un ejercicio';
-    const seg = ids.reduce((t, id) => t + duracionEjercicio(b.ejercicios[id], b.descanso), 0);
-    return `${ids.length} ${ids.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(seg)}`;
+    if (!b.orden.length) return 'Elige al menos un ejercicio';
+    const seg = b.orden.reduce((t, id) => t + duracionEjercicio(b.ejercicios[id], b.descanso), 0);
+    return `${b.orden.length} ${b.orden.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(seg)}`;
   };
 
   function pintar() {
@@ -211,7 +333,9 @@ function vistaArmar() {
             <div class="campo"><label for="para">Para</label><input id="para" data-accion="para" autocomplete="off" placeholder="Su nombre" value="${esc(b.para)}"></div>
             <div class="campo"><label for="de">De</label><input id="de" data-accion="de" autocomplete="off" placeholder="Tu nombre" value="${esc(b.de)}"></div>
           </div>
-          ${ORDEN.map((id) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo)).join('')}
+          <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
+          <div class="hueco-rutina">${seccionRutina(b)}</div>
+          ${seccionBiblioteca(b)}
           <section class="general">
             <h2>Para toda la rutina</h2>
             <div class="fila">
@@ -225,7 +349,7 @@ function vistaArmar() {
         </div>
         <div class="barra-crear">
           <span class="resumen-corto">${resumenCorto()}</span>
-          <button type="button" class="boton" data-accion="crear" ${incluidos().length ? '' : 'disabled'}>Crear enlace</button>
+          <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>Crear enlace</button>
         </div>
       </div>
       <aside class="vista">
@@ -237,14 +361,16 @@ function vistaArmar() {
     colocarFigura();
   }
 
+  // The preview: in the side panel on wide screens; on a phone, inside the active card or library row.
   async function colocarFigura() {
     const ancho = window.matchMedia('(min-width: 980px)').matches;
     const id = b.activo;
-    const e = b.ejercicios[id];
-    const sitio = ancho ? app.querySelector('.vista-figura') : app.querySelector(`.ejercicio[data-id="${id}"] .mini-figura`);
-    const pie = app.querySelector('.vista-pie');
-    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[id].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span></div>`;
-    if (!sitio || (!ancho && !e.incluido)) return;
+    const e = ajustes(id);
+    const sitio = ancho
+      ? app.querySelector('.vista-figura')
+      : app.querySelector(`.ejercicio[data-id="${id}"] .mini-figura`) || app.querySelector(`.biblio-fila.activo[data-id="${id}"] .mini-figura`);
+    pintarPieVista();
+    if (!sitio) return;
     try {
       const f = await figuraEn(sitio, b.cuerpo);
       f.oyentes = { fase: [alFase] };
@@ -256,21 +382,57 @@ function vistaArmar() {
     }
   }
 
+  function pintarPieVista() {
+    const pie = app.querySelector('.vista-pie');
+    const e = ajustes(b.activo);
+    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[b.activo].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span></div>`;
+  }
+
   const alFase = (fase, restante, progreso) => {
-    if (progreso !== undefined) moverPunto(app.querySelector('.vista-pie .tempo'), b.ejercicios[b.activo].tempo, progreso);
+    if (progreso !== undefined) moverPunto(app.querySelector('.vista-pie .tempo'), ajustes(b.activo).tempo, progreso);
   };
+
+  // Re-drawing a part of the page must not drop the figure's canvas: it is put aside and placed again.
+  function apartarLienzo(zona) {
+    const lienzo = figura?.renderer.domElement;
+    if (lienzo && zona.contains(lienzo)) lienzo.remove();
+  }
+
+  function actualizarBarra() {
+    app.querySelector('.resumen-corto').textContent = resumenCorto();
+    app.querySelector('[data-accion="crear"]').disabled = !b.orden.length;
+    const nueva = app.querySelector('[data-accion="nueva-plantilla"]');
+    if (nueva) nueva.disabled = !b.orden.length;
+  }
 
   function refrescarTarjeta(id) {
     const vieja = app.querySelector(`.ejercicio[data-id="${id}"]`);
     const lienzo = figura?.renderer.domElement;
     const conservar = lienzo && vieja.contains(lienzo);
     const nueva = document.createElement('div');
-    nueva.innerHTML = tarjetaEjercicio(id, b.ejercicios[id], id === b.activo);
+    const pos = b.orden.indexOf(id);
+    nueva.innerHTML = tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, pos, b.orden.length);
     const art = nueva.firstElementChild;
     if (conservar) art.querySelector('.mini-figura').appendChild(lienzo);
     vieja.replaceWith(art);
-    app.querySelector('.resumen-corto').textContent = resumenCorto();
-    app.querySelector('[data-accion="crear"]').disabled = !incluidos().length;
+    actualizarBarra();
+  }
+
+  function refrescarRutina() {
+    const hueco = app.querySelector('.hueco-rutina');
+    apartarLienzo(hueco);
+    hueco.innerHTML = seccionRutina(b);
+    actualizarBarra();
+  }
+
+  function refrescarBiblioteca() {
+    const lista = app.querySelector('.biblio-lista');
+    apartarLienzo(lista);
+    lista.innerHTML = listaBiblioteca(b);
+  }
+
+  function refrescarPlantillas() {
+    app.querySelector('.hueco-plantillas').innerHTML = seccionPlantillas(b);
   }
 
   function actualizarTempo(id) {
@@ -279,36 +441,69 @@ function vistaArmar() {
       figura.tempo = [...e.tempo];
       figura.lado(e.lado === 'izq' ? 'izq' : 'der');
     }
-    const pie = app.querySelector('.vista-pie');
-    if (pie && id === b.activo) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[id].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span></div>`;
+    if (id === b.activo) pintarPieVista();
   }
 
+  function elegir(id) {
+    b.activo = id;
+    app.querySelectorAll('.ejercicio').forEach((t) => t.classList.toggle('activo', t.dataset.id === id));
+    app.querySelectorAll('.biblio-fila').forEach((t) => t.classList.toggle('activo', t.dataset.id === id && !b.orden.includes(id)));
+    colocarFigura();
+  }
+
+  function guardarPlantilla(nombre) {
+    const lista = almacen.leer('plantillas', []).filter((p) => p.nombre !== nombre);
+    lista.unshift({
+      nombre, d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: [...b.orden],
+      ejercicios: Object.fromEntries(b.orden.map((id) => [id, JSON.parse(JSON.stringify(b.ejercicios[id]))])),
+    });
+    almacen.guardar('plantillas', lista.slice(0, 60));
+    refrescarPlantillas();
+  }
+
+  function usarPlantilla(p) {
+    Object.assign(b, { descanso: p.d, veces: p.x, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
+    b.orden = p.orden.filter((id) => ORDEN.includes(id));
+    for (const id of b.orden) b.ejercicios[id] = { ...ajustesIniciales(id), ...JSON.parse(JSON.stringify(p.ejercicios[id] || {})) };
+    b.activo = b.orden[0] || b.activo;
+    apartarLienzo(app);
+    pintar();
+  }
+
+  let deshacerBorrar = null;
   app.onclick = (ev) => {
     const el = ev.target.closest('[data-accion]');
-    const tarjeta = ev.target.closest('.ejercicio');
-    const id = tarjeta?.dataset.id;
     const a = el?.dataset.accion;
-    if (tarjeta && id !== b.activo) {
-      // Selecting a card only moves the preview; it never re-renders, so a text field keeps its focus.
-      b.activo = id;
-      app.querySelectorAll('.ejercicio').forEach((t) => t.classList.toggle('activo', t === tarjeta));
-      if (a === 'incluir') {
-        if (!b.ejercicios[id].incluido) {
-          b.ejercicios[id].incluido = true;
-          refrescarTarjeta(id);
-        }
-        guardar();
-        colocarFigura();
-        return;
-      }
-      colocarFigura();
+    const sitio = ev.target.closest('.ejercicio, .biblio-fila');
+    const id = sitio?.dataset.id;
+    if (a !== 'borrar-plantilla' && deshacerBorrar) deshacerBorrar();
+    if (sitio && id !== b.activo && a !== 'anadir' && a !== 'quitar') {
+      // Choosing a card or a row only moves the preview; it never re-draws, so a text field keeps its focus.
+      elegir(id);
+      if (a === 'elegir' || a === 'ver' || !a) return guardar();
     }
     if (!el) return guardar();
     const delta = Number(el.dataset.delta || 0);
-    if (a === 'incluir') {
-      b.ejercicios[id].incluido = !b.ejercicios[id].incluido;
-      refrescarTarjeta(id);
+    if (a === 'anadir') {
+      ajustes(id);
+      if (!b.orden.includes(id)) b.orden.push(id);
+      b.activo = id;
+      refrescarRutina();
+      refrescarBiblioteca();
       colocarFigura();
+    } else if (a === 'quitar') {
+      b.orden = b.orden.filter((x) => x !== id);
+      if (b.activo === id) b.activo = b.orden[0] || id;
+      refrescarRutina();
+      refrescarBiblioteca();
+      colocarFigura();
+    } else if (a === 'subir' || a === 'bajar') {
+      const i = b.orden.indexOf(id);
+      const j = a === 'subir' ? i - 1 : i + 1;
+      if (j >= 0 && j < b.orden.length) [b.orden[i], b.orden[j]] = [b.orden[j], b.orden[i]];
+      refrescarRutina();
+      colocarFigura();
+      app.querySelector(`.ejercicio[data-id="${id}"] [data-accion="${a}"]:not(:disabled)`)?.focus();
     } else if (a === 'series' || a === 'reps') {
       const lim = a === 'series' ? [1, 6] : [1, 30];
       b.ejercicios[id][a] = Math.min(lim[1], Math.max(lim[0], b.ejercicios[id][a] + delta));
@@ -323,6 +518,10 @@ function vistaArmar() {
       b.ejercicios[id].lado = el.dataset.valor;
       refrescarTarjeta(id);
       actualizarTempo(id);
+    } else if (a === 'zona') {
+      b.filtro.zona = el.dataset.valor;
+      el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
+      refrescarBiblioteca();
     } else if (a === 'cuerpo') {
       b.cuerpo = el.dataset.valor;
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
@@ -333,7 +532,40 @@ function vistaArmar() {
     } else if (a === 'descanso' || a === 'veces') {
       b[a] = Number(el.dataset.valor);
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
-      app.querySelector('.resumen-corto').textContent = resumenCorto();
+      actualizarBarra();
+    } else if (a === 'nueva-plantilla') {
+      const form = app.querySelector('.plantilla-nueva');
+      form.hidden = false;
+      form.querySelector('input').focus();
+    } else if (a === 'cancelar-plantilla') {
+      app.querySelector('.plantilla-nueva').hidden = true;
+    } else if (a === 'usar-plantilla') {
+      const p = almacen.leer('plantillas', [])[Number(el.dataset.i)];
+      if (p) usarPlantilla(p);
+    } else if (a === 'borrar-plantilla') {
+      // A first touch asks; the second one deletes. Touching anything else, or waiting, leaves it as it was.
+      if (el.dataset.confirmar) {
+        deshacerBorrar = null;
+        const lista = almacen.leer('plantillas', []);
+        lista.splice(Number(el.dataset.i), 1);
+        almacen.guardar('plantillas', lista);
+        refrescarPlantillas();
+      } else {
+        if (deshacerBorrar) deshacerBorrar();
+        el.dataset.confirmar = '1';
+        el.classList.add('confirmar');
+        el.textContent = '¿Borrar?';
+        const t = setTimeout(() => deshacerBorrar?.(), 4000);
+        deshacerBorrar = () => {
+          clearTimeout(t);
+          deshacerBorrar = null;
+          if (el.isConnected) {
+            delete el.dataset.confirmar;
+            el.classList.remove('confirmar');
+            el.innerHTML = ICONO.cerrar;
+          }
+        };
+      }
     } else if (a === 'crear') {
       crearEnlace(b);
     }
@@ -344,7 +576,26 @@ function vistaArmar() {
     const a = ev.target.dataset.accion;
     if (a === 'para' || a === 'de') b[a] = ev.target.value;
     if (a === 'nota') b.ejercicios[ev.target.closest('.ejercicio').dataset.id].nota = ev.target.value;
+    if (a === 'buscar') {
+      b.filtro.texto = ev.target.value;
+      refrescarBiblioteca();
+    }
     guardar();
+  };
+
+  app.onchange = (ev) => {
+    if (ev.target.dataset.accion !== 'musculo') return;
+    b.filtro.musculo = ev.target.value;
+    refrescarBiblioteca();
+    guardar();
+  };
+
+  app.onsubmit = (ev) => {
+    ev.preventDefault();
+    const entrada = ev.target.querySelector('[data-accion="nombre-plantilla"]');
+    const nombre = entrada?.value.trim();
+    if (!nombre) return entrada?.focus();
+    guardarPlantilla(nombre);
   };
 
   pintar();
@@ -354,7 +605,7 @@ function vistaArmar() {
   return () => {
     ancho.removeEventListener('change', alCambiarAncho);
     if (figura) figura.oyentes = {};
-    app.onclick = app.oninput = null;
+    app.onclick = app.oninput = app.onchange = app.onsubmit = null;
   };
 }
 
@@ -368,7 +619,7 @@ async function crearEnlace(b) {
     m: b.tope,
     c: b.cuerpo || 'a',
     f: diaLocal(),
-    e: ORDEN.filter((id) => b.ejercicios[id].incluido).map((id) => {
+    e: b.orden.map((id) => {
       const e = b.ejercicios[id];
       return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, n: e.nota.trim() || undefined };
     }),
@@ -787,8 +1038,8 @@ async function vistaRutina(codigo) {
     if (estado === 'cuenta') clearTimeout(sesion.temporizador);
     const capa = document.createElement('div');
     capa.className = 'capa';
-    capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true"><h2>${esc(def.nombre)}</h2>
-      <ol class="como">${def.pasos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>
+    capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="como-titulo"><h2 id="como-titulo">${esc(def.nombre)}</h2>
+      ${explicacion(def)}
       ${e.n ? `<div class="tarjeta"><div class="nota">${esc(e.n)}</div></div>` : ''}
       <button type="button" class="boton">Entendido</button></div>`;
     document.body.appendChild(capa);
