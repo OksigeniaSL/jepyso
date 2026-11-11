@@ -5,6 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen,
 } from './datos.js';
 import { Figura } from './figura.js';
+import { leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia } from './personas.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 import { pintarRecorrido } from './recorrido.js';
@@ -29,6 +30,7 @@ const ICONO = {
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   abrir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>',
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
+  telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
 };
 
@@ -121,6 +123,12 @@ async function figuraEn(contenedor, c = 'a') {
   if (figura.renderer.domElement.parentElement !== contenedor) figura.mover(contenedor);
   return figura;
 }
+
+// A message with a link, ready in WhatsApp or in Telegram.
+const enlaceMensaje = (canal, texto, url) =>
+  canal === 'tg'
+    ? `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`
+    : `https://wa.me/?text=${encodeURIComponent(`${texto} ${url}`)}`;
 
 // ---------- Builder ----------
 // The draft: who it is for, the settings for the whole routine, the exercises in the order the professional chose
@@ -410,6 +418,20 @@ function seccionPlantillas(b) {
   </section>`;
 }
 
+// Under «Para», the people seen most recently: one tap fills the name, links the routine to their file and brings
+// their acceptable discomfort.
+function personasRecientes(b) {
+  const lista = leerPersonas();
+  if (!lista.length) return '';
+  const reciente = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
+  const seis = [...lista].sort((x, y) => reciente(y).localeCompare(reciente(x))).slice(0, 6);
+  return `<div class="recientes" role="group" aria-label="Para una de tus personas">
+    <span>Para una de tus personas</span>
+    ${seis.map((p) => `<button type="button" class="filtro" data-accion="persona" data-id="${esc(p.id)}" aria-pressed="${b.persona === p.id}">${esc(p.nombre)}</button>`).join('')}
+    ${lista.length > 6 ? `<a href="#personas">Todas</a>` : ''}
+  </div>`;
+}
+
 function vistaArmar() {
   const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
   let gonio = null;
@@ -427,7 +449,7 @@ function vistaArmar() {
       <div class="armar-izq">
         <header class="armar-cabecera">
           <div class="cabecera-yeso cabecera-constructor" aria-hidden="true"></div>
-          <p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p>
+          <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#personas">Mis personas${leerPersonas().length ? ` <span class="num">${leerPersonas().length}</span>` : ''}</a></div>
           <h1>Nueva rutina</h1>
           <p>Elige los ejercicios, ajústalos y mándasela por un enlace. La persona no tiene que instalar nada.</p>
         </header>
@@ -436,6 +458,7 @@ function vistaArmar() {
             <div class="campo"><label for="para">Para</label><input id="para" data-accion="para" autocomplete="off" placeholder="Su nombre" value="${esc(b.para)}"></div>
             <div class="campo"><label for="de">De</label><input id="de" data-accion="de" autocomplete="off" placeholder="Tu nombre" value="${esc(b.de)}"></div>
           </div>
+          <div class="hueco-recientes">${personasRecientes(b)}</div>
           <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
           <div class="hueco-rutina">${seccionRutina(b)}</div>
           <section class="general">
@@ -706,6 +729,17 @@ function vistaArmar() {
           }
         };
       }
+    } else if (a === 'persona') {
+      const p = leerPersonas().find((x) => x.id === el.dataset.id);
+      if (p) {
+        b.para = p.nombre;
+        b.persona = p.id;
+        if (Number.isInteger(p.m)) b.tope = p.m;
+        app.querySelector('#para').value = p.nombre;
+        app.querySelector('.hueco-recientes').innerHTML = personasRecientes(b);
+        const tope = app.querySelector('.general [data-accion="tope"]')?.closest('.paso');
+        if (tope) tope.outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
+      }
     } else if (a === 'crear') {
       crearEnlace(b);
     }
@@ -715,6 +749,13 @@ function vistaArmar() {
   app.oninput = (ev) => {
     const a = ev.target.dataset.accion;
     if (a === 'para' || a === 'de') b[a] = ev.target.value;
+    if (a === 'para' && b.persona) {
+      const elegida = leerPersonas().find((x) => x.id === b.persona);
+      if (!elegida || elegida.nombre !== b.para.trim()) {
+        b.persona = null;
+        app.querySelector('.hueco-recientes').innerHTML = personasRecientes(b);
+      }
+    }
     if (a === 'nota') b.ejercicios[ev.target.closest('.ejercicio').dataset.id].nota = ev.target.value;
     if (a === 'buscar') {
       b.filtro.texto = ev.target.value;
@@ -764,10 +805,25 @@ async function crearEnlace(b) {
       return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, n: e.nota.trim() || undefined };
     }),
   };
+  // With a name, the routine goes to that person's file: the one chosen in the builder, the only one with that name,
+  // or a new one. Its id travels in the link (p) and comes back with each summary.
+  const lista = leerPersonas();
+  let persona = null;
+  if (rutina.para) {
+    const iguales = buscarPorNombre(lista, rutina.para);
+    persona = (b.persona && lista.find((x) => x.id === b.persona)) || (iguales.length === 1 ? iguales[0] : crearPersona(lista, rutina.para));
+    rutina.p = persona.id;
+  }
   const codigo = await codificar(rutina);
+  if (persona) {
+    apuntarRutina(lista, { id: persona.id, nombre: rutina.para }, rutina, codigo);
+    guardarPersonas(lista);
+    b.persona = persona.id;
+    almacen.guardar('borrador', b);
+  }
   const url = `${location.origin}${location.pathname}${location.search}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
-  const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en el móvil y sigue a la figura: ${url}`;
+  const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en el móvil y sigue a la figura:`;
 
   let qr = '';
   try {
@@ -783,18 +839,20 @@ async function crearEnlace(b) {
   capa.className = 'capa';
   capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hoja-titulo">
     <h2 id="hoja-titulo">La rutina, lista</h2>
-    <p>Mándale el enlace por WhatsApp o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
+    <p>Mándale el enlace por WhatsApp o Telegram, o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
+    ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
     <div class="qr">${qr}</div>
     <div class="enlace-texto">${esc(url)}</div>
     <div class="botones">
-      <a class="boton" href="https://wa.me/?text=${encodeURIComponent(mensaje)}" target="_blank" rel="noopener">${ICONO.whatsapp}Enviar por WhatsApp</a>
+      <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Enviar por WhatsApp</a>
+      <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}Enviar por Telegram</a>
       <button type="button" class="boton secundario" data-h="copiar">Copiar enlace</button>
       <a class="boton fantasma" href="${esc(url)}" target="_blank" rel="noopener">Verla como la persona</a>
     </div>
   </div>`;
   document.body.appendChild(capa);
   capa.addEventListener('click', async (ev) => {
-    if (ev.target === capa) capa.remove();
+    if (ev.target === capa || ev.target.closest('.en-ficha a')) capa.remove();
     if (ev.target.closest('[data-h="copiar"]')) {
       try {
         await navigator.clipboard.writeText(url);
@@ -889,7 +947,9 @@ async function vistaRutina(codigo) {
     const pie = app.querySelector('.pie');
     if (pie) {
       pie.innerHTML = `<button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>
-        ${hist.length ? `<button type="button" class="boton fantasma" data-r="mandar">Mandar lo hecho a ${quien}</button>` : ''}`;
+        ${hist.length ? `<div class="mandar-por"><span>Mandar lo hecho a ${quien}</span>
+          <button type="button" class="boton fantasma" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
+          <button type="button" class="boton fantasma" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>` : ''}`;
     }
   }
 
@@ -1167,19 +1227,22 @@ async function vistaRutina(codigo) {
       <header class="saludo"><div class="de">Hecho</div><h1>Rutina de hoy, completa</h1><p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
-        <button type="button" class="boton" data-r="mandar">${ICONO.whatsapp}Mandar a ${quien}</button>
+        <button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
+        <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
         <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>
       </footer>
     </div>`;
   }
 
-  async function mandar() {
+  // The summary goes back by WhatsApp or Telegram, as the person prefers. It carries the id of their file on the
+  // professional's side (p), so it lands on the right person even when two share a name.
+  async function mandar(canal = 'wa') {
     const hist = almacen.leer(clave, []);
-    const resumen = { v: 1, para: r.para, de: r.de, m: tope, dias: hist.slice(-14) };
+    const resumen = { v: 1, p: r.p, para: r.para, de: r.de, m: tope, dias: hist.slice(-14) };
     const cod = await codificar(resumen);
     const url = `${location.origin}${location.pathname}${location.search}#s=${cod}`;
-    const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}). ${url}`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}).`;
+    window.open(enlaceMensaje(canal, texto, url), '_blank', 'noopener');
   }
 
   function como() {
@@ -1210,7 +1273,7 @@ async function vistaRutina(codigo) {
     if (!el) return;
     const a = el.dataset.r || el.dataset.accion;
     if (a === 'empezar') return empezar();
-    if (a === 'mandar') return mandar();
+    if (a === 'mandar') return mandar(el.dataset.canal);
     if (a === 'volver') return intro();
     if (a === 'salir') {
       clearTimeout(sesion?.temporizador);
@@ -1346,11 +1409,277 @@ async function vistaResumen(codigo) {
       <div class="de">Resumen para ${esc(s.de || 'ti')}</div>
       <h1>${esc(s.para || 'La persona')} ha hecho su rutina ${dias.length} ${dias.length === 1 ? 'vez' : 'veces'}</h1>
       <p class="${marcados.length ? 'molestia-alta' : ''}">${molestia}</p>
+      <p class="en-ficha" aria-live="polite">${guardarEnFicha(s)}</p>
       <p>Lo que ha hecho, de lo más reciente a lo más antiguo.</p>
     </header>
     <section class="lista">${dias.map((d) => resumenDia(d, tope)).join('')}</section>
   </div>`;
-  return () => {};
+  app.onclick = (ev) => {
+    if (!ev.target.closest('[data-accion="guardar-resumen"]')) return;
+    app.querySelector('.en-ficha').innerHTML = guardarEnFicha(s, true);
+  };
+  return () => {
+    app.onclick = null;
+  };
+}
+
+// The summary joins the person's file: by the id it brings (routines sent from this browser), or by the only person
+// with that name. On the professional's browser (one with people or a draft) a person not yet here gets a new file;
+// anywhere else it waits for a tap, so a person opening their own summary does not start a list of people.
+function guardarEnFicha(s, aMano = false) {
+  const lista = leerPersonas();
+  const iguales = s.para ? buscarPorNombre(lista, s.para) : [];
+  let p = (s.p && lista.find((x) => x.id === s.p)) || (iguales.length === 1 ? iguales[0] : null);
+  const profesional = lista.length > 0 || almacen.leer('borrador', null) !== null;
+  if (!p && !aMano && !profesional) {
+    return `<button type="button" class="boton secundario" data-accion="guardar-resumen">Guardar en mis personas</button>`;
+  }
+  const nueva = !p;
+  if (!p) p = crearPersona(lista, s.para || 'Sin nombre', s.p || undefined);
+  const n = apuntarResumen(p, s);
+  guardarPersonas(lista);
+  const que = nueva ? `Ficha nueva para ${esc(p.nombre)}` : n ? `Guardado en la ficha de ${esc(p.nombre)}` : `Ya estaba en la ficha de ${esc(p.nombre)}`;
+  return `${que}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
+}
+
+// ---------- The professional's people ----------
+const fechaLarga = (f) => new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(new Date(f + 'T12:00:00'));
+const ultimaFecha = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
+
+// A day that passed the person's level in the last two weeks, the latest one, to see at a glance who needs a look.
+function ultimoMarcado(p) {
+  const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
+  const desde = new Date();
+  desde.setDate(desde.getDate() - 14);
+  const limite = diaLocal(desde);
+  const d = [...p.dias].reverse().find((x) => x.f >= limite && diaMarcado(x, tope));
+  return d ? { f: d.f, tope } : null;
+}
+
+function filaPersona(p) {
+  const marcado = ultimoMarcado(p);
+  const rutinas = p.rutinas.length ? `${p.rutinas.length} ${p.rutinas.length === 1 ? 'rutina' : 'rutinas'}` : 'sin rutinas';
+  const resumen = p.ultimoResumen ? `último resumen el ${fechaLarga(p.ultimoResumen)}` : 'sin resúmenes todavía';
+  return `<li><a class="persona-fila" href="#persona=${esc(p.id)}">
+    <span class="nombre">${esc(p.nombre)}</span>
+    <span class="meta">${rutinas} · ${resumen}</span>
+    ${marcado ? `<span class="chip alta">Pasó de ${marcado.tope} ${listaDias([marcado.f])}</span>` : ''}
+  </a></li>`;
+}
+
+function vistaPersonas() {
+  let texto = '';
+  const pintarLista = () => {
+    const todas = leerPersonas().sort((x, y) => ultimaFecha(y).localeCompare(ultimaFecha(x)));
+    const lista = todas.filter((p) => !texto || p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(texto));
+    const ul = app.querySelector('.lista-personas');
+    ul.innerHTML = todas.length
+      ? lista.map(filaPersona).join('') || '<li class="vacio">Nadie con ese nombre.</li>'
+      : '<li class="vacio">Todavía no hay nadie. Cuando mandes una rutina con el nombre de la persona, aparece aquí con su ficha.</li>';
+  };
+  app.innerHTML = `<div class="personas">
+    <header class="armar-cabecera">
+      <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#">Nueva rutina</a></div>
+      <h1>Mis personas</h1>
+      <p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este navegador; con una copia te las llevas a otro aparato.</p>
+    </header>
+    <div class="armar-cuerpo">
+      <input type="search" class="buscar" data-accion="buscar-persona" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar personas por nombre">
+      <ul class="lista-personas"></ul>
+      <section class="general copia">
+        <h2>Copia</h2>
+        <p class="ayuda">Guarda todas las fichas en un archivo y cárgalo en otro aparato. Al cargarla se añade lo que falte; no se borra nada.</p>
+        <div class="botones">
+          <button type="button" class="boton secundario" data-accion="exportar">Guardar copia</button>
+          <label class="boton secundario">Cargar copia<input type="file" accept=".json,application/json" data-accion="importar" class="oculto"></label>
+        </div>
+        <p class="aviso-copia" aria-live="polite"></p>
+      </section>
+    </div>
+  </div>`;
+  pintarLista();
+  app.oninput = (ev) => {
+    if (ev.target.dataset.accion !== 'buscar-persona') return;
+    texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+    pintarLista();
+  };
+  app.onclick = (ev) => {
+    if (!ev.target.closest('[data-accion="exportar"]')) return;
+    const archivo = new Blob([JSON.stringify(copia(leerPersonas()), null, 1)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(archivo);
+    a.download = `jepyso-personas-${diaLocal()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    }, 1000);
+    app.querySelector('.aviso-copia').textContent = 'Copia guardada en tus descargas.';
+  };
+  app.onchange = async (ev) => {
+    if (ev.target.dataset.accion !== 'importar' || !ev.target.files[0]) return;
+    const aviso = app.querySelector('.aviso-copia');
+    try {
+      const lista = leerPersonas();
+      const r = cargarCopia(lista, JSON.parse(await ev.target.files[0].text()));
+      guardarPersonas(lista);
+      aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.`;
+      pintarLista();
+    } catch {
+      aviso.textContent = 'Ese archivo no es una copia de Jepyso.';
+    }
+    ev.target.value = '';
+  };
+  return () => {
+    app.oninput = app.onclick = app.onchange = null;
+  };
+}
+
+// The week-by-week evolution: the highest discomfort during the exercises and on getting up, against the person's
+// level. Graphite only; the numbers are written, and the bars only repeat them.
+function barraMolestia(v, tope) {
+  if (typeof v !== 'number') return '<span class="sin-dato">—</span>';
+  return `<span class="valor-molestia ${pasaDelTope(v, tope) ? 'pasa' : ''}">
+    <svg class="barra-molestia" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true">
+      <rect class="pista" x="0" y="5" width="100" height="2"/>
+      ${v > 0 ? `<rect class="valor" x="0" y="3" width="${v * 10}" height="6" rx="1"/>` : ''}
+      <line class="tope" x1="${tope * 10}" x2="${tope * 10}" y1="0" y2="12"/>
+    </svg>
+    <span class="num">${v}</span>
+  </span>`;
+}
+
+function tablaSemanas(p) {
+  const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
+  const lista = semanas(p.dias, tope);
+  if (!lista.length) return '';
+  return `<section class="general evolucion">
+    <h2>Evolución por semanas</h2>
+    <p class="ayuda">La molestia más alta de cada semana. La raya marca su molestia aceptable, ${tope}. Según el modelo de control del dolor, no debería subir de una semana a la siguiente.</p>
+    <table class="semanas">
+      <thead><tr><th scope="col">Semana del</th><th scope="col">Sesiones</th><th scope="col">Durante</th><th scope="col">Al levantarse</th></tr></thead>
+      <tbody>${lista
+        .map((s) => `<tr class="${s.sube ? 'sube' : ''}">
+          <th scope="row">${fechaLarga(s.desde)}${s.sube ? ' <span class="marca-dia">Sube</span>' : ''}</th>
+          <td class="num" data-etiqueta="Sesiones">${s.sesiones}</td>
+          <td data-etiqueta="Durante">${barraMolestia(s.durante, tope)}</td>
+          <td data-etiqueta="Al levantarse">${barraMolestia(s.manana, tope)}</td>
+        </tr>`)
+        .join('')}</tbody>
+    </table>
+  </section>`;
+}
+
+function vistaPersona(id) {
+  const lista = leerPersonas();
+  const p = lista.find((x) => x.id === id);
+  if (!p) {
+    app.innerHTML = `<div class="personas"><header class="armar-cabecera"><a class="ir-personas" href="#personas">Mis personas</a><h1>Esta ficha no está en este navegador</h1><p>Si la tienes en otro aparato, trae su copia desde Mis personas.</p></header></div>`;
+    return () => {};
+  }
+  const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
+  const dias = [...p.dias].reverse();
+  app.innerHTML = `<div class="personas persona">
+    <header class="armar-cabecera">
+      <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#personas">Mis personas</a></div>
+      <h1>${esc(p.nombre)}</h1>
+      <p>Ficha desde el ${fechaLarga(p.creada)} · molestia aceptable ${tope}</p>
+      <div class="botones"><button type="button" class="boton" data-accion="rutina-para">Nueva rutina para ${esc(p.nombre)}</button></div>
+    </header>
+    <div class="armar-cuerpo">
+      <section class="general">
+        <h2><label for="notas">Notas</label></h2>
+        <textarea id="notas" data-accion="notas" rows="3" placeholder="Lo que quieras recordar de esta persona">${esc(p.notas)}</textarea>
+      </section>
+      ${tablaSemanas(p)}
+      <section class="lo-hecho">
+        <h2>Lo que ha hecho</h2>
+        ${dias.length ? dias.map((d) => resumenDia(d, tope)).join('') : '<p class="vacio">Aún no te ha mandado ningún resumen. Cuando lo abras, se guarda aquí.</p>'}
+      </section>
+      <section class="general">
+        <h2>Rutinas que le has mandado</h2>
+        ${p.rutinas.length ? '' : '<p class="ayuda">Ninguna desde este navegador. Las que le mandes con su nombre se apuntan aquí.</p>'}
+        <ul class="rutinas-mandadas">${[...p.rutinas]
+          .reverse()
+          .map((r) => `<li>
+            <span><strong>${fechaLarga(r.f)}</strong> · ${r.e.map((i) => esc(EJERCICIOS[i]?.nombre || i)).join(', ')}</span>
+            <span class="botones-fila">
+              <button type="button" class="boton fantasma" data-accion="abrir-rutina" data-codigo="${esc(r.codigo)}">Abrir en el constructor</button>
+              <button type="button" class="boton fantasma" data-accion="copiar-rutina" data-codigo="${esc(r.codigo)}">Copiar enlace</button>
+            </span>
+          </li>`)
+          .join('')}</ul>
+      </section>
+      <section class="borrar-ficha">
+        <button type="button" class="boton fantasma" data-accion="borrar-persona">Borrar su ficha</button>
+      </section>
+    </div>
+  </div>`;
+
+  const guardar = () => {
+    const todas = leerPersonas();
+    const i = todas.findIndex((x) => x.id === id);
+    if (i >= 0) todas[i] = p;
+    guardarPersonas(todas);
+  };
+  app.oninput = (ev) => {
+    if (ev.target.dataset.accion !== 'notas') return;
+    p.notas = ev.target.value;
+    guardar();
+  };
+  let confirmar = null;
+  app.onclick = async (ev) => {
+    const el = ev.target.closest('[data-accion]');
+    const a = el?.dataset.accion;
+    if (a !== 'borrar-persona' && confirmar) {
+      clearTimeout(confirmar);
+      confirmar = null;
+      const b = app.querySelector('[data-accion="borrar-persona"]');
+      if (b) b.textContent = 'Borrar su ficha';
+    }
+    if (a === 'rutina-para') {
+      const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
+      Object.assign(b, { para: p.nombre, persona: p.id, tope });
+      almacen.guardar('borrador', b);
+      location.hash = '';
+    } else if (a === 'abrir-rutina') {
+      // The routine as it was sent, back in the builder for this person, to change it and send it again.
+      const r = await decodificar(el.dataset.codigo);
+      const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
+      Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
+      b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
+      for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, nota: e.n || '' };
+      b.activo = b.orden[0] || b.activo;
+      almacen.guardar('borrador', b);
+      location.hash = '';
+    } else if (a === 'copiar-rutina') {
+      const url = `${location.origin}${location.pathname}${location.search}#r=${el.dataset.codigo}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        el.textContent = 'Copiado';
+      } catch {
+        el.textContent = 'No se pudo copiar';
+      }
+    } else if (a === 'borrar-persona') {
+      // A first touch asks; the second one deletes. Waiting, or touching anything else, leaves it as it was.
+      if (!confirmar) {
+        el.textContent = `¿Borrar la ficha de ${p.nombre}? Toca otra vez`;
+        confirmar = setTimeout(() => {
+          confirmar = null;
+          if (el.isConnected) el.textContent = 'Borrar su ficha';
+        }, 4000);
+        return;
+      }
+      clearTimeout(confirmar);
+      guardarPersonas(leerPersonas().filter((x) => x.id !== id));
+      location.hash = '#personas';
+    }
+  };
+  return () => {
+    clearTimeout(confirmar);
+    app.oninput = app.onclick = null;
+  };
 }
 
 // ---------- Without a connection ----------
@@ -1398,6 +1727,8 @@ async function ir() {
   const h = location.hash;
   if (h.startsWith('#r=')) limpiar = await vistaRutina(h.slice(3));
   else if (h.startsWith('#s=')) limpiar = await vistaResumen(h.slice(3));
+  else if (h === '#personas') limpiar = vistaPersonas();
+  else if (h.startsWith('#persona=')) limpiar = vistaPersona(decodeURIComponent(h.slice(9)));
   else limpiar = vistaArmar();
 }
 window.addEventListener('hashchange', ir);

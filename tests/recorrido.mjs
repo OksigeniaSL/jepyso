@@ -38,6 +38,9 @@ const abrir = async (opciones) => {
   page.setDefaultNavigationTimeout(120000);
   const foto = page.screenshot.bind(page);
   page.screenshot = async (o) => {
+    // No page may spill sideways: on a phone that is a horizontal scroll nobody wants.
+    const [ancho, ventana] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
+    if (ancho > ventana + 1) fallos.push(`${o.path.split('/').pop()}: la página se sale de lado (${ancho} px en ${ventana})`);
     const r = await foto(o);
     console.log(`${String(Math.round((Date.now() - inicio) / 1000)).padStart(5)} s  ${o.path.split('/').pop()}`);
     return r;
@@ -138,8 +141,12 @@ try {
     await ancho.click('[data-accion="borrar-plantilla"]');
     comprobar((await ancho.locator('.plantilla').count()) === 0, `${tema}: la plantilla no se borra al confirmar`);
 
+    // With a name, the routine goes to that person's file.
+    await ancho.fill('#para', 'Marta');
     await ancho.click('[data-accion="crear"]');
     await ancho.waitForTimeout(800);
+    comprobar((await ancho.textContent('.hoja .en-ficha')).includes('Guardada en la ficha de Marta'), `${tema}: la rutina no dice que va a la ficha de Marta`);
+    comprobar((await ancho.locator('.hoja a[href*="t.me/share"]').count()) === 1, `${tema}: el enlace no se puede mandar por Telegram`);
     await ancho.screenshot({ path: `${salida}/enlace-1366-${tema}.png` });
     const enlace = await ancho.textContent('.enlace-texto');
     const rutinaCreada = await ancho.evaluate(async (u) => {
@@ -150,6 +157,55 @@ try {
     comprobar(rutinaCreada.e.map((e) => e.i).join(',') === 'puente,hombro,silla', `${tema}: el enlace no lleva el orden elegido`);
     comprobar(/^\d{4}-\d{2}-\d{2}$/.test(rutinaCreada.f), `${tema}: la fecha del enlace no es un día`);
     console.log(`enlace (${tema}): ${enlace.length} caracteres`);
+
+    // The person's file: the routine is there, and a summary the person sends back joins it, week by week.
+    const personas = await ancho.evaluate(() => JSON.parse(localStorage.getItem('personas')));
+    comprobar(personas?.length === 1 && personas[0].nombre === 'Marta' && personas[0].rutinas.length === 1, `${tema}: no hay ficha de Marta con su rutina`);
+    comprobar(rutinaCreada.p === personas?.[0]?.id, `${tema}: el enlace no lleva el id de la ficha`);
+    const resumenMarta = await ancho.evaluate(async (p) => {
+      const { codificar, diaLocal } = await import('./datos.js');
+      // Yesterday, marked, and two calm days in the week before: dates from today, so the walk does not age.
+      const ayer = new Date();
+      ayer.setDate(ayer.getDate() - 1);
+      const lunes = new Date(ayer);
+      lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
+      const antes = (n) => { const d = new Date(lunes); d.setDate(d.getDate() - n); return diaLocal(d); };
+      const dia = (f, h, m, a) => ({ f, h, e: [{ i: 'puente', l: 'der', s: 2, r: 10, p: [10, 9], m }], ...(a === undefined ? {} : { a }) });
+      return codificar({ v: 1, p, para: 'Marta', de: 'Daniel', m: 4, dias: [dia(antes(6), '10:00', 3, 2), dia(antes(4), '18:30', 4, 3), dia(diaLocal(ayer), '09:15', 6, 5)] });
+    }, personas?.[0]?.id);
+    await ancho.goto(url(tema, `#s=${resumenMarta}`));
+    await ancho.waitForSelector('.en-ficha a');
+    comprobar((await ancho.textContent('.en-ficha')).includes('Guardado en la ficha de Marta'), `${tema}: el resumen no se guarda en la ficha de Marta`);
+    await ancho.reload();
+    await ancho.waitForSelector('.en-ficha a');
+    comprobar((await ancho.textContent('.en-ficha')).includes('Ya estaba en la ficha de Marta'), `${tema}: abrir el mismo resumen dos veces lo repite`);
+    await ancho.click('.en-ficha a');
+    await ancho.waitForSelector('.persona h1');
+    comprobar((await ancho.locator('.semanas tbody tr').count()) === 2, `${tema}: la ficha no trae dos semanas`);
+    comprobar((await ancho.locator('.semanas tr.sube').count()) === 1, `${tema}: la semana que sube no sale marcada`);
+    comprobar((await ancho.locator('.lo-hecho .dia').count()) === 3 && (await ancho.locator('.lo-hecho .dia.marcado').count()) === 1, `${tema}: la ficha no trae sus tres sesiones con la marcada`);
+    await ancho.fill('#notas', 'Rodilla derecha, prótesis en octubre.');
+    await ancho.screenshot({ path: `${salida}/ficha-1366-${tema}.png`, fullPage: true });
+    await ancho.reload();
+    await ancho.waitForSelector('#notas');
+    comprobar((await ancho.inputValue('#notas')) === 'Rodilla derecha, prótesis en octubre.', `${tema}: las notas de la ficha no se guardan`);
+    await ancho.click('[data-accion="abrir-rutina"]');
+    await ancho.waitForSelector('.rutina-armada');
+    comprobar((await ancho.inputValue('#para')) === 'Marta' && (await ancho.locator('.recientes [aria-pressed="true"]').count()) === 1, `${tema}: abrir la rutina de la ficha no la trae a Marta`);
+    comprobar((await orden()) === 'puente,hombro,silla', `${tema}: la rutina abierta desde la ficha no trae sus ejercicios`);
+
+    // The list of people, and the copy in a file: saved, then loaded again without repeating anything.
+    await ancho.goto(url(tema, '#personas'));
+    await ancho.waitForSelector('.persona-fila');
+    comprobar((await ancho.locator('.persona-fila').count()) === 1 && (await ancho.textContent('.persona-fila')).includes('Pasó de 4'), `${tema}: Mis personas no avisa de que Marta pasó de 4`);
+    await ancho.screenshot({ path: `${salida}/personas-1366-${tema}.png` });
+    const [descarga] = await Promise.all([ancho.waitForEvent('download'), ancho.click('[data-accion="exportar"]')]);
+    const copiaRuta = `${salida}/copia-${tema}.json`;
+    await descarga.saveAs(copiaRuta);
+    comprobar(descarga.suggestedFilename().startsWith('jepyso-personas-'), `${tema}: la copia no se llama jepyso-personas-…`);
+    await ancho.setInputFiles('[data-accion="importar"]', copiaRuta);
+    await ancho.waitForFunction(() => document.querySelector('.aviso-copia')?.textContent.startsWith('Copia cargada'));
+    comprobar((await ancho.textContent('.aviso-copia')).includes('ninguna nueva') && (await ancho.locator('.persona-fila').count()) === 1, `${tema}: cargar la copia repite personas`);
     await ancho.close();
 
     if (tema === 'claro') {
@@ -247,6 +303,7 @@ try {
     await movil.click('[data-r="continuar"]');
     await movil.waitForTimeout(500);
     comprobar((await movil.locator('.dia.marcado').count()) === 1, `${tema}: el día con molestia 6 no sale marcado al terminar`);
+    comprobar((await movil.locator('[data-r="mandar"][data-canal="wa"]').count()) === 1 && (await movil.locator('[data-r="mandar"][data-canal="tg"]').count()) === 1, `${tema}: al terminar no se puede mandar por WhatsApp y por Telegram`);
     await movil.screenshot({ path: `${salida}/final-movil-${tema}.png` });
 
     // Next day at ten in the morning: the session moves to yesterday and the routine asks about getting up.
@@ -290,6 +347,23 @@ try {
       const { codificar } = await import('./datos.js');
       return codificar({ v: 1, para: 'Marta', de: 'Daniel', dias: [{ f: '2026-11-09', h: '10:00', e: [{ i: 'puente', l: 'der', s: 1, r: 10, p: [10], m: 5 }] }] });
     });
+    // The person's file at phone width, from this phone's own sessions.
+    const idFicha = await movil.evaluate(async () => {
+      const P = await import('./personas.js');
+      const lista = P.leerPersonas();
+      const clave = Object.keys(localStorage).find((k) => k.startsWith('hist:'));
+      const p = P.crearPersona(lista, 'Marta');
+      P.apuntarResumen(p, { m: 4, dias: JSON.parse(localStorage.getItem(clave)) });
+      P.guardarPersonas(lista);
+      return p.id;
+    });
+    await movil.goto(url(tema, `#persona=${idFicha}`));
+    await movil.waitForSelector('.persona h1');
+    await movil.screenshot({ path: `${salida}/ficha-movil-${tema}.png`, fullPage: true });
+    await movil.goto(url(tema, '#personas'));
+    await movil.waitForSelector('.persona-fila');
+    await movil.screenshot({ path: `${salida}/personas-movil-${tema}.png` });
+
     await movil.goto(url(tema, `#s=${antiguo}`));
     await movil.waitForTimeout(400);
     comprobar((await movil.textContent('.saludo')).includes('no pasó de 5'), `${tema}: un resumen sin tope no usa 5`);

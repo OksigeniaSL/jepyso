@@ -615,3 +615,79 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .centro p { font-size: 18px; }
 .mando-botones .boton.fantasma { font-size: 17px; }
 .jugador .escala-pie, .rutina .escala-pie { font-size: 15px; }
+
+/* ---------- The professional's people ---------- */
+.cabecera-fila { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+.cabecera-fila .marca-jepyso { margin: 0; }
+.ir-personas {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 36px; white-space: nowrap;
+  color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
+}
+.ir-personas .num { font-family: var(--letra-cifras); font-size: 13px; color: var(--tinta-suave); text-decoration: none; }
+.recientes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.recientes > span { font-size: 13px; color: var(--tinta-suave); margin-right: 4px; }
+.recientes a { color: var(--tinta); font-size: 14px; text-underline-offset: 3px; }
+.en-ficha { margin: 0; color: var(--tinta-suave); }
+.en-ficha a { color: var(--tinta); font-weight: 600; text-underline-offset: 3px; }
+.saludo .en-ficha { margin-top: 10px; }
+.mandar-por { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; }
+.mandar-por > span { flex-basis: 100%; text-align: center; color: var(--tinta-suave); font-size: 14px; }
+.mandar-por .boton.fantasma { min-height: 40px; padding: 0 10px; }
+
+.personas .armar-cuerpo { padding-bottom: 48px; }
+.lista-personas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.persona-fila {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 12px; padding: 14px 16px;
+  background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); color: var(--tinta); text-decoration: none;
+}
+.persona-fila .nombre { font-family: var(--letra-titulo); font-size: 18px; font-weight: 500; }
+.persona-fila .meta { grid-column: 1; color: var(--tinta-suave); font-size: 14px; }
+.persona-fila .chip { grid-column: 2; grid-row: 1 / span 2; }
+.lista-personas .vacio, .lo-hecho .vacio { margin: 0; padding: 18px 16px; border: 1px dashed var(--linea); border-radius: var(--radio); color: var(--tinta-suave); }
+.copia .botones .boton { flex: 0 1 auto; }
+.aviso-copia { margin: 0; color: var(--tinta); }
+.aviso-copia:empty { display: none; }
+
+.persona .armar-cabecera .botones { margin-top: 14px; }
+.persona textarea {
+  width: 100%; border: 1px solid var(--linea); background: var(--superficie); border-radius: var(--radio-sm); padding: 12px 14px;
+  min-height: 72px; resize: vertical;
+}
+.persona textarea:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: transparent; }
+.lo-hecho { display: grid; gap: 12px; }
+.lo-hecho h2, .evolucion h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
+.rutinas-mandadas { list-style: none; margin: 0; padding: 0; display: grid; }
+.rutinas-mandadas li { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--linea); }
+.rutinas-mandadas li:first-child { border-top: 0; }
+.botones-fila { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.botones-fila .boton.fantasma { min-height: 36px; padding: 0 2px; font-size: 14px; }
+.borrar-ficha { display: flex; justify-content: flex-start; }
+
+/* The week-by-week table: one graphite bar per value, the level as a tick, the number always written. */
+.semanas { width: 100%; border-collapse: collapse; font-size: 14px; }
+.semanas th, .semanas td { padding: 8px 6px; text-align: left; border-top: 1px solid var(--linea); vertical-align: middle; }
+.semanas thead th { border-top: 0; color: var(--tinta-suave); font-weight: 500; font-size: 13px; }
+.semanas tbody th { font-weight: 500; white-space: nowrap; }
+.semanas td.num { font-family: var(--letra-cifras); }
+.valor-molestia { display: grid; grid-template-columns: minmax(48px, 1fr) 2ch; align-items: center; gap: 8px; }
+.valor-molestia .num { font-family: var(--letra-cifras); text-align: right; }
+.valor-molestia.pasa .num { font-weight: 700; }
+.barra-molestia { width: 100%; height: 12px; display: block; overflow: visible; }
+.barra-molestia .pista { fill: var(--linea); }
+.barra-molestia .valor { fill: var(--tinta); }
+.valor-molestia:not(.pasa) .barra-molestia .valor { fill: var(--tinta-suave); }
+.barra-molestia .tope { stroke: var(--tinta); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.sin-dato { color: var(--tinta-suave); }
+/* On a phone each week is a block: the week on top, then sessions and the two values, each with its label. */
+@media (max-width: 560px) {
+  .semanas thead { display: none; }
+  .semanas, .semanas tbody { display: block; }
+  .semanas tr {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; padding: 10px 0;
+    border-top: 1px solid var(--linea);
+  }
+  .semanas tr:first-child { border-top: 0; }
+  .semanas th, .semanas td { display: block; padding: 0; border: 0; }
+  .semanas tbody th { grid-column: 1 / -1; white-space: normal; }
+  .semanas td::before { content: attr(data-etiqueta); display: block; font-family: var(--letra); font-size: 12px; color: var(--tinta-suave); }
+}

@@ -11,6 +11,7 @@ const ARCHIVOS = [
   'tema.js',
   'app.js',
   'datos.js',
+  'personas.js',
   'figura.js',
   'mapa.js',
   'goniometro.js',
