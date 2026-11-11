@@ -4,7 +4,7 @@
 //   with the same name, FIJOS goes up by one so every phone fetches them again.
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1';
-const FIJOS = 'jepyso-fijos-1';
+const FIJOS = 'jepyso-fijos-2';
 const ARCHIVOS = [
   'index.html',
   'estilos.css',

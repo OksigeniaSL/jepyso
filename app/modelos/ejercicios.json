@@ -53,7 +53,7 @@
   "baston": {
    "glb": "modelos/baston.glb",
    "ficha": "modelos/baston.json",
-   "bytes": 47292,
+   "bytes": 45676,
    "lado": "derecho",
    "musculos": {
     "principales": [
