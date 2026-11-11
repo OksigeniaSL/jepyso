@@ -1,0 +1,52 @@
+{
+ "cuerpo": "modelos/b/cuerpo.glb",
+ "bytes_cuerpo": 1121936,
+ "ejercicios": {
+  "hombro": {
+   "glb": "modelos/b/hombro.glb",
+   "ficha": "modelos/b/hombro.json",
+   "bytes": 82816,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "manguito_posterior"
+    ],
+    "secundarios": [
+     "deltoides_posterior"
+    ]
+   }
+  },
+  "puente": {
+   "glb": "modelos/b/puente.glb",
+   "ficha": "modelos/b/puente.json",
+   "bytes": 45508,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "erectores"
+    ]
+   }
+  },
+  "silla": {
+   "glb": "modelos/b/silla.glb",
+   "ficha": "modelos/b/silla.json",
+   "bytes": 72216,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "gemelos",
+     "erectores"
+    ]
+   }
+  }
+ }
+}

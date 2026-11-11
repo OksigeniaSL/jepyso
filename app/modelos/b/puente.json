@@ -1,0 +1,73 @@
+{
+ "id": "puente",
+ "nombre": "Puente de glúteo",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la cadera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta arriba"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 42.7,
+   "rodilla_izquierda_flexion": 89.8,
+   "cadera_derecha_flexion": 42.7,
+   "rodilla_derecha_flexion": 89.8
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 0.0,
+   "rodilla_izquierda_flexion": 77.9,
+   "cadera_derecha_flexion": 0.0,
+   "rodilla_derecha_flexion": 77.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "erectores"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.573,
+   1.361,
+   0.615
+  ],
+  "mira": [
+   0.0,
+   0.217,
+   -0.029
+  ]
+ },
+ "archivo": "puente.glb",
+ "bytes": 45508
+}

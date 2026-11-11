@@ -1,0 +1,55 @@
+name: tests
+
+# The end-to-end walk (tests/recorrido.mjs) on every change to the app or the tests: the builder, the routine, the
+# rating, the morning-after question and the summary, in light and dark, wide and on a phone.
+
+on:
+  push:
+    branches: [main]
+    paths: ['app/**', 'tests/**', 'tools/**', '.github/workflows/tests.yml']
+  pull_request:
+    paths: ['app/**', 'tests/**', 'tools/**', '.github/workflows/tests.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  walk:
+    name: End-to-end walk
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright and its Chromium
+        working-directory: tests
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright-core install --with-deps chromium
+
+      - name: Walk through the app
+        run: tests/correr.sh "$RUNNER_TEMP/capturas"
+
+      - name: Walk through the strict-host copy
+        run: |
+          tools/construir.sh "$RUNNER_TEMP/web"
+          APP="$RUNNER_TEMP/web" PORT=8773 tests/correr.sh "$RUNNER_TEMP/capturas-web"
+
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas
+          path: ${{ runner.temp }}/capturas*
+          retention-days: 7

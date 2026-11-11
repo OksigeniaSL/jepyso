@@ -1,0 +1,9 @@
+{
+  "name": "jepyso-tests",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "playwright-core": "1.62.1"
+  }
+}

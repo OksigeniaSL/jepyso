@@ -1,0 +1,70 @@
+{
+ "id": "hombro",
+ "nombre": "Rotación externa de hombro con banda",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Lleva la mano hacia fuera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_derecha_flexion": 89.7,
+   "hombro_derecha_rotacion_externa": -25.5
+  },
+  "llegada": {
+   "codo_derecha_flexion": 89.7,
+   "hombro_derecha_rotacion_externa": 48.4
+  }
+ },
+ "musculos": {
+  "principales": [
+   "manguito_posterior"
+  ],
+  "secundarios": [
+   "deltoides_posterior"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "puerta",
+  "banda",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -1.096,
+   1.595,
+   3.726
+  ],
+  "mira": [
+   0.176,
+   0.795,
+   0.089
+  ]
+ },
+ "archivo": "hombro.glb",
+ "bytes": 82816
+}

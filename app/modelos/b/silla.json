@@ -1,0 +1,73 @@
+{
+ "id": "silla",
+ "nombre": "Levantarse de una silla y sentarse",
+ "fps": 30,
+ "duracion": 6.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Inclínate y levántate"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "De pie, erguido"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.5,
+   "texto": "Siéntate despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.5,
+   "fin": 6.5,
+   "texto": "Descansa sentado"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 72.8,
+   "rodilla_derecha_flexion": 79.9,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 4.1,
+   "rodilla_derecha_flexion": 4.0,
+   "tronco_inclinacion": 0.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "gemelos",
+   "erectores"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.305,
+   1.853,
+   0.566
+  ],
+  "mira": [
+   0.0,
+   0.795,
+   -0.029
+  ]
+ },
+ "archivo": "silla.glb",
+ "bytes": 72216
+}
