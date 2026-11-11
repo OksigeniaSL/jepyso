@@ -1,0 +1,88 @@
+{
+ "id": "rodilla_pecho",
+ "nombre": "Rodilla al pecho",
+ "fps": 30,
+ "duracion": 9.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Lleva la rodilla al pecho"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 5.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.5,
+   "fin": 8.0,
+   "texto": "Baja el pie despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.0,
+   "fin": 9.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 10.8,
+   "hombro_izquierda_flexion": -13.6,
+   "hombro_izquierda_abduccion": 16.2,
+   "hombro_izquierda_rotacion_externa": 98.3,
+   "cadera_derecha_flexion": -2.8,
+   "cadera_derecha_abduccion": -0.0,
+   "rodilla_derecha_flexion": 0.0,
+   "tobillo_derecha_flexion": 0.0,
+   "codo_derecha_flexion": 10.8,
+   "hombro_derecha_flexion": -13.6,
+   "hombro_derecha_abduccion": 16.2,
+   "hombro_derecha_rotacion_externa": 98.3
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": 39.1,
+   "hombro_izquierda_abduccion": -23.1,
+   "hombro_izquierda_rotacion_externa": -36.9,
+   "cadera_derecha_flexion": 120.0,
+   "cadera_derecha_abduccion": 8.0,
+   "rodilla_derecha_flexion": 125.0,
+   "tobillo_derecha_flexion": -10.0,
+   "codo_derecha_flexion": 3.6,
+   "hombro_derecha_flexion": 36.2,
+   "hombro_derecha_abduccion": 7.6,
+   "hombro_derecha_rotacion_externa": 7.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "gluteo_medio"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.849,
+   0.757,
+   -0.221
+  ],
+  "mira": [
+   0.0,
+   0.295,
+   -0.029
+  ]
+ },
+ "archivo": "rodilla_pecho.glb",
+ "bytes": 61740
+}

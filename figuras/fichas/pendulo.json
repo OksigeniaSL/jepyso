@@ -1,0 +1,74 @@
+{
+  "id": "pendulo",
+  "familia": "de_pie",
+  "nombre": "Péndulo de hombro",
+  "lado": "derecho",
+  "accesorios": [
+    "mesa"
+  ],
+  "parametros": {
+    "mesa": {
+      "altura": 0.75
+    }
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 0.2,
+    "bajar": 1.6,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Balancea el brazo hacia delante",
+    "mantener": "",
+    "bajar": "Y hacia atrás",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_i": "mesa",
+        "brazo_d": "cuelga"
+      },
+      "pelvis": {
+        "flex": 55
+      },
+      "spine": {
+        "flex": 20
+      },
+      "knee_l": {
+        "flex": 10
+      },
+      "knee_r": {
+        "flex": 10
+      },
+      "elbow_r": {
+        "flex": 5
+      },
+      "fingers_r": {
+        "curl": 0.2
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "flex": 15
+      }
+    },
+    "vuelta": {
+      "shoulder_r": {
+        "flex": -15
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "manguito_posterior"
+    ],
+    "secundarios": [
+      "deltoides_anterior",
+      "deltoides_medio",
+      "deltoides_posterior"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

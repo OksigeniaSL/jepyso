@@ -1,0 +1,38 @@
+{
+  "id": "hombro",
+  "familia": "rotacion_hombro",
+  "nombre": "Rotación externa de hombro con banda",
+  "lado": "derecho",
+  "accesorios": [
+    "puerta",
+    "banda",
+    "toalla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva la mano hacia fuera",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "parametros": {
+    "rotacion_inicio": -30,
+    "rotacion_final": 45,
+    "abd_codo": 12
+  },
+  "musculos": {
+    "principales": [
+      "manguito_posterior"
+    ],
+    "secundarios": [
+      "deltoides_posterior"
+    ]
+  },
+  "margen": 0.8,
+  "camara": "frente"
+}

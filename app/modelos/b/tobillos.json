@@ -1,0 +1,71 @@
+{
+ "id": "tobillos",
+ "nombre": "Bombeo de tobillos",
+ "fps": 30,
+ "duracion": 3.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Puntas hacia ti"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 1.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 1.5,
+   "fin": 3.0,
+   "texto": "Puntas hacia abajo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 3.0,
+   "fin": 3.5,
+   "texto": "Vuelve"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_izquierda_flexion": -0.0,
+   "tobillo_derecha_flexion": 0.0
+  },
+  "llegada": {
+   "tobillo_izquierda_flexion": 12.0,
+   "tobillo_derecha_flexion": 12.0
+  },
+  "vuelta": {
+   "tobillo_izquierda_flexion": -37.0,
+   "tobillo_derecha_flexion": -37.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos",
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.606,
+   1.28,
+   0.647
+  ],
+  "mira": [
+   0.0,
+   0.126,
+   -0.002
+  ]
+ },
+ "archivo": "tobillos.glb",
+ "bytes": 41656
+}

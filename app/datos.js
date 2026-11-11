@@ -433,8 +433,17 @@ export const EJERCICIOS = {
   },
 };
 
-// The library the professional sees: only exercises whose clips exist for both bodies.
-export const ORDEN = ['puente', 'silla', 'hombro'];
+// The library the professional sees, grouped by position: only exercises whose clips exist for both bodies.
+export const ORDEN = [
+  // lying on the back
+  'talon', 'pierna_recta', 'cuadriceps', 'puente', 'rodilla_pecho', 'basculacion', 'cojin_rodillas', 'tobillos',
+  // lying on the side, and on all fours
+  'almeja', 'abduccion_lado', 'bird_dog', 'gato_camello',
+  // standing by a chair, and sitting
+  'talones', 'curl_isquios', 'sentadilla', 'abduccion_pie', 'equilibrio', 'extension_rodilla', 'silla',
+  // shoulder, standing
+  'pendulo', 'cruzado', 'baston', 'hombro', 'rotacion_interna', 'remo',
+];
 
 // Body areas a professional looks for, in the order they are shown.
 export const ZONAS = {

@@ -1,0 +1,38 @@
+{
+  "id": "basculacion",
+  "familia": "boca_arriba",
+  "nombre": "Basculación pélvica",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 3.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Aplana la zona lumbar contra el suelo",
+    "mantener": "Aguanta",
+    "bajar": "Suelta",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "pelvis": {
+        "flex": -10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": [
+    -1,
+    0.05,
+    0.1
+  ]
+}

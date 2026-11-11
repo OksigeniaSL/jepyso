@@ -1,0 +1,52 @@
+{
+  "id": "gato_camello",
+  "familia": "cuatro_patas",
+  "nombre": "Gato-camello",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 3.0,
+    "reposo": 1.5
+  },
+  "textos": {
+    "subir": "Redondea la espalda hacia el techo",
+    "mantener": "Aguanta",
+    "bajar": "Húndela despacio y levanta la cabeza",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "spine": {
+        "flex": 25
+      },
+      "pelvis": {
+        "flex": -10
+      },
+      "neck": {
+        "flex": 25
+      }
+    },
+    "vuelta": {
+      "spine": {
+        "flex": -15
+      },
+      "pelvis": {
+        "flex": 10
+      },
+      "neck": {
+        "flex": -20
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.8
+}

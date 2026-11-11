@@ -1,0 +1,44 @@
+{
+  "id": "equilibrio",
+  "familia": "de_pie_silla",
+  "nombre": "Equilibrio a una pierna",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 1.5,
+    "mantener": 10.0,
+    "bajar": 1.5,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Levanta el otro pie",
+    "mantener": "Aguanta el equilibrio",
+    "bajar": "Bájalo",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "pierna_i": "libre"
+      },
+      "hip_l": {
+        "flex": 0
+      },
+      "knee_l": {
+        "flex": 40
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos",
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

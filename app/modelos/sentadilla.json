@@ -1,0 +1,97 @@
+{
+ "id": "sentadilla",
+ "nombre": "Media sentadilla",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Dobla las rodillas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Sube despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -0.2,
+   "rodilla_izquierda_flexion": 4.0,
+   "tobillo_izquierda_flexion": 4.2,
+   "codo_izquierda_flexion": 30.0,
+   "hombro_izquierda_flexion": 10.7,
+   "hombro_izquierda_abduccion": 7.7,
+   "hombro_izquierda_rotacion_externa": -16.5,
+   "cadera_derecha_flexion": -0.2,
+   "rodilla_derecha_flexion": 4.0,
+   "tobillo_derecha_flexion": 4.2,
+   "codo_derecha_flexion": 30.0,
+   "hombro_derecha_flexion": 10.7,
+   "hombro_derecha_abduccion": 7.7,
+   "hombro_derecha_rotacion_externa": -16.5,
+   "tronco_inclinacion": 0.0,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 43.5,
+   "rodilla_izquierda_flexion": 55.0,
+   "tobillo_izquierda_flexion": 23.5,
+   "codo_izquierda_flexion": 88.9,
+   "hombro_izquierda_flexion": 2.8,
+   "hombro_izquierda_abduccion": 23.0,
+   "hombro_izquierda_rotacion_externa": -25.4,
+   "cadera_derecha_flexion": 43.5,
+   "rodilla_derecha_flexion": 55.0,
+   "tobillo_derecha_flexion": 23.5,
+   "codo_derecha_flexion": 88.9,
+   "hombro_derecha_flexion": 2.8,
+   "hombro_derecha_abduccion": 23.0,
+   "hombro_derecha_rotacion_externa": -25.4,
+   "tronco_inclinacion": 17.0,
+   "pelvis_basculacion": 12.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.605,
+   2.018,
+   0.927
+  ],
+  "mira": [
+   0.0,
+   0.864,
+   0.278
+  ]
+ },
+ "archivo": "sentadilla.glb",
+ "bytes": 71096
+}

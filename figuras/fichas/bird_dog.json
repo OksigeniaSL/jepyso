@@ -1,0 +1,55 @@
+{
+  "id": "bird_dog",
+  "familia": "cuatro_patas",
+  "nombre": "Brazo y pierna contrarios a cuatro patas",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 5.0,
+    "bajar": 2.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Estira un brazo y la pierna contraria",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "brazo_i": "libre",
+        "pierna_d": "libre"
+      },
+      "shoulder_l": {
+        "flex": 175,
+        "abd": 0
+      },
+      "elbow_l": {
+        "flex": 0
+      },
+      "hip_r": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": -20
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "erectores",
+      "gluteo_mayor"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.8
+}

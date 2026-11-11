@@ -1,0 +1,64 @@
+{
+ "id": "abduccion_lado",
+ "nombre": "Abducción de cadera de lado",
+ "fps": 30,
+ "duracion": 11.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la pierna de arriba"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 7.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 7.0,
+   "fin": 9.0,
+   "texto": "Bájala despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 9.0,
+   "fin": 11.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_abduccion": -17.0
+  },
+  "llegada": {
+   "cadera_derecha_abduccion": 45.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   2.612,
+   3.338,
+   1.406
+  ],
+  "mira": [
+   0.02,
+   0.422,
+   -0.052
+  ]
+ },
+ "archivo": "abduccion_lado.glb",
+ "bytes": 41020
+}

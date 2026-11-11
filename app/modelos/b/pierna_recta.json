@@ -1,0 +1,64 @@
+{
+ "id": "pierna_recta",
+ "nombre": "Elevación de pierna recta",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la pierna estirada"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Bájala despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 5.7
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 15.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.602,
+   1.412,
+   0.62
+  ],
+  "mira": [
+   0.0,
+   0.259,
+   -0.029
+  ]
+ },
+ "archivo": "pierna_recta.glb",
+ "bytes": 40696
+}

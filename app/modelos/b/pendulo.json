@@ -1,0 +1,74 @@
+{
+ "id": "pendulo",
+ "nombre": "Péndulo de hombro",
+ "fps": 30,
+ "duracion": 3.8,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Balancea el brazo hacia delante"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 1.2,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 1.2,
+   "fin": 2.8,
+   "texto": "Y hacia atrás"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 2.8,
+   "fin": 3.8,
+   "texto": "Vuelve al centro"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 6.1,
+   "hombro_derecha_flexion": 71.5
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 3.6,
+   "hombro_derecha_flexion": 86.5
+  },
+  "vuelta": {
+   "codo_izquierda_flexion": 8.0,
+   "hombro_derecha_flexion": 56.5
+  }
+ },
+ "musculos": {
+  "principales": [
+   "manguito_posterior"
+  ],
+  "secundarios": [
+   "deltoides_anterior",
+   "deltoides_medio",
+   "deltoides_posterior"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "mesa"
+ ],
+ "camara": {
+  "pos": [
+   -3.432,
+   1.739,
+   1.177
+  ],
+  "mira": [
+   0.301,
+   0.545,
+   0.505
+  ]
+ },
+ "archivo": "pendulo.glb",
+ "bytes": 54604
+}

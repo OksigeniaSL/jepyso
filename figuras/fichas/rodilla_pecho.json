@@ -1,0 +1,63 @@
+{
+  "id": "rodilla_pecho",
+  "familia": "boca_arriba",
+  "nombre": "Rodilla al pecho",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 3.0,
+    "bajar": 2.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva la rodilla al pecho",
+    "mantener": "Aguanta",
+    "bajar": "Baja el pie despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "talon"
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre",
+        "brazos": "rodilla_d"
+      },
+      "hip_r": {
+        "flex": 120,
+        "abd": 8
+      },
+      "knee_r": {
+        "flex": 125
+      },
+      "ankle_r": {
+        "flex": -10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_mayor"
+    ],
+    "secundarios": [
+      "gluteo_medio"
+    ]
+  },
+  "camara": [
+    -1,
+    0.05,
+    0.12
+  ]
+}

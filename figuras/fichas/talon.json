@@ -1,0 +1,46 @@
+{
+  "id": "talon",
+  "familia": "boca_arriba",
+  "nombre": "Deslizamiento de talón",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 1.0,
+    "bajar": 2.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Desliza el talón hacia ti",
+    "mantener": "Aguanta",
+    "bajar": "Estira despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "talon"
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      }
+    },
+    "llegada": {
+      "knee_r": {
+        "flex": 90
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "isquiotibiales"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado"
+}

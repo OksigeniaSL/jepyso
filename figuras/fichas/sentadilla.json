@@ -1,0 +1,49 @@
+{
+  "id": "sentadilla",
+  "familia": "de_pie_silla",
+  "nombre": "Media sentadilla",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Dobla las rodillas",
+    "mantener": "Aguanta",
+    "bajar": "Sube despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "knee_l": {
+        "flex": 55
+      },
+      "knee_r": {
+        "flex": 55
+      },
+      "pelvis": {
+        "flex": 12
+      },
+      "spine": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps",
+      "gluteo_mayor"
+    ],
+    "secundarios": [
+      "isquiotibiales"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

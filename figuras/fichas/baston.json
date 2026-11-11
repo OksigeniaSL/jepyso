@@ -1,0 +1,56 @@
+{
+  "id": "baston",
+  "familia": "de_pie",
+  "nombre": "Rotación externa con bastón",
+  "lado": "derecho",
+  "accesorios": [
+    "baston"
+  ],
+  "parametros": {
+    "baston": {
+      "mano": "d"
+    }
+  },
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 5.0,
+    "bajar": 2.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Empuja el bastón hacia fuera",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_i": "baston"
+      },
+      "shoulder_r": {
+        "abd": 8,
+        "rot": 0
+      },
+      "elbow_r": {
+        "flex": 90
+      },
+      "fingers_r": {
+        "curl": 0.35
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "rot": 50
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "manguito_posterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.95
+}

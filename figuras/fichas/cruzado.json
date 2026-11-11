@@ -1,0 +1,42 @@
+{
+  "id": "cruzado",
+  "familia": "de_pie",
+  "nombre": "Estiramiento cruzado de hombro",
+  "lado": "derecho",
+  "accesorios": [],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 5.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Cruza el brazo sobre el pecho",
+    "mantener": "Aguanta",
+    "bajar": "Suelta despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "brazo_i": "brazo_d"
+      },
+      "shoulder_r": {
+        "flex": 90,
+        "abd": -35
+      },
+      "elbow_r": {
+        "flex": 0
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "deltoides_posterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.95
+}

@@ -5,6 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen,
 } from './datos.js';
 import { Figura } from './figura.js';
+import { MAPA, PUNTOS } from './mapa.js';
 
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
@@ -19,6 +20,7 @@ const ICONO = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  abrir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>',
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
 };
@@ -165,7 +167,7 @@ function segmentos(accion, opciones, actual) {
 // How an exercise is done, for the person (the how-to sheet) and for the professional (the card).
 function explicacion(def) {
   return `<div class="explicacion">
-    <p class="partida">${esc(def.partida)}</p>
+    <p class="partida"><strong>Para empezar.</strong> ${esc(def.partida)}</p>
     <ol class="como">${def.pasos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>
     ${def.notar ? `<p><strong>Dónde se nota.</strong> ${esc(def.notar)}</p>` : ''}
     <p><strong>Ojo.</strong> ${esc(def.error)}</p>
@@ -180,17 +182,27 @@ const chipsEjercicio = (def) =>
     .map((mu) => `<span class="chip vivo">${esc(MUSCULOS[mu] || mu)}</span>`)
     .join('')}`;
 
-// An exercise of the routine, with its number in the routine and everything the professional sets for it.
+// What a folded card says: sets and repetitions, the tempo line and the side.
+function dosis(def, e) {
+  return `<span class="num">${e.series} × ${e.reps}</span>${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>${
+    def.unLado && LADOS[e.lado] ? `<span>${esc(LADOS[e.lado])}</span>` : ''
+  }`;
+}
+
+// An exercise of the routine, with its number in the routine and everything the professional sets for it. Only the
+// one being looked at is open; the others fold to one line with their dose, so a long routine still fits.
 function tarjetaEjercicio(id, e, activo, pos, total) {
   const def = EJERCICIOS[id];
   const [s, m, b] = e.tempo;
   return `<article class="ejercicio incluido ${activo ? 'activo' : ''}" data-id="${id}">
-    <button type="button" class="ejercicio-cabeza" data-accion="elegir">
+    <button type="button" class="ejercicio-cabeza" data-accion="elegir" aria-expanded="${activo}">
       <span class="marca num" aria-hidden="true">${pos + 1}</span>
       <span class="titulo">
         <h3>${esc(def.nombre)}</h3>
         <span class="linea-chips">${chipsEjercicio(def)}</span>
+        <span class="dosis">${dosis(def, e)}</span>
       </span>
+      <span class="plegar" aria-hidden="true">${ICONO.abrir}</span>
     </button>
     <div class="ejercicio-ajustes">
       <div class="mini-figura"></div>
@@ -235,12 +247,15 @@ function seccionRutina(b) {
   </section>`;
 }
 
+// A library row in one line of text under the name: where it starts, what it needs and what it works. Sixty of them
+// must read as a list, not as a wall of chips.
 function filaBiblioteca(id, b) {
   const def = EJERCICIOS[id];
   const dentro = b.orden.includes(id);
+  const musculos = def.musculos.principales.map((mu) => `<span class="vivo">${esc(MUSCULOS[mu] || mu)}</span>`).join(', ');
   return `<li class="biblio-fila ${id === b.activo && !dentro ? 'activo' : ''}" data-id="${id}">
     <button type="button" class="biblio-ver" data-accion="ver">
-      <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="linea-chips">${chipsEjercicio(def)}</span></span>
+      <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="biblio-meta">${esc(def.posicion)} · ${esc(def.material)}${musculos ? ` · ${musculos}` : ''}</span></span>
     </button>
     ${
       dentro
@@ -251,25 +266,103 @@ function filaBiblioteca(id, b) {
   </li>`;
 }
 
+// Starting positions in the order a person can get into them: standing and sitting first, the floor after.
+const POSICIONES = ['De pie', 'Sentado', 'Boca arriba', 'Boca abajo', 'De lado', 'A cuatro patas'];
+const grupoPosicion = (def) => def.posicion.split(',')[0].trim();
+const rangoPosicion = (g) => (POSICIONES.includes(g) ? POSICIONES.indexOf(g) : POSICIONES.length);
+
+// A long list goes under its starting positions, which is what tells whether this person can do an exercise at all.
+// A short one stays flat: a heading over every single exercise is noise.
 function listaBiblioteca(b) {
   const ids = buscarEjercicios(b.filtro);
-  return ids.length ? ids.map((id) => filaBiblioteca(id, b)).join('') : '<li class="biblio-vacia">Ningún ejercicio con esos filtros.</li>';
+  if (!ids.length) return '<li class="biblio-vacia">Ningún ejercicio con esos filtros.</li>';
+  if (ids.length <= 6) return ids.map((id) => filaBiblioteca(id, b)).join('');
+  const grupos = new Map();
+  for (const id of ids) {
+    const g = grupoPosicion(EJERCICIOS[id]);
+    grupos.set(g, [...(grupos.get(g) || []), id]);
+  }
+  return [...grupos.keys()]
+    .sort((x, y) => rangoPosicion(x) - rangoPosicion(y))
+    .map((g) => `<li class="biblio-grupo"><span>${esc(g)}</span><span class="num">${grupos.get(g).length}</span></li>${grupos.get(g).map((id) => filaBiblioteca(id, b)).join('')}`)
+    .join('');
+}
+
+function cuentaBiblioteca(b) {
+  const n = buscarEjercicios(b.filtro).length;
+  if (n === ORDEN.length) return `${n} ${n === 1 ? 'ejercicio' : 'ejercicios'}`;
+  return `${n} de ${ORDEN.length}`;
 }
 
 // Only the areas and muscles some exercise has: a filter that can only give an empty list is noise.
+const zonasConEjercicios = () => Object.keys(ZONAS).filter((z) => ORDEN.some((id) => EJERCICIOS[id].zonas.includes(z)));
+const musculosDe = (id) => [...EJERCICIOS[id].musculos.principales, ...EJERCICIOS[id].musculos.secundarios];
+const musculosConEjercicios = () => Object.keys(MUSCULOS).filter((mu) => ORDEN.some((id) => musculosDe(id).includes(mu)));
+
+// The body map: Gaudí's body from the front and from the back, a point on every area with exercises and the muscle
+// groups the figure lights. Touching a point or a muscle filters the library; touching it again lets it go. The
+// muscle chosen lights as on the figure, so the map and the list below say the same thing.
+function mapaCuerpo(b) {
+  const zonas = zonasConEjercicios();
+  const musculos = musculosConEjercicios();
+  const { ancho, alto, vistas } = MAPA;
+  const vista = (v, rotulo) => {
+    const { silueta, musculos: regiones } = vistas[v];
+    const partes = regiones
+      .map(([mu, d]) => {
+        const con = musculos.includes(mu);
+        const clase = `mapa-musculo${con ? ' con' : ''}${b.filtro.musculo === mu ? ' encendido' : ''}`;
+        return `<path class="${clase}" d="${d}"${con ? ` data-accion="musculo-mapa" data-valor="${mu}"` : ''}><title>${esc(MUSCULOS[mu])}</title></path>`;
+      })
+      .join('');
+    const aqui = (z) => (PUNTOS[z] || []).filter((p) => p[0] === v);
+    const halos = zonas
+      .flatMap((z) => aqui(z).map(([, x, y]) => `<circle class="mapa-halo${b.filtro.zona === z ? ' encendido' : ''}" cx="${x}" cy="${y}" r="26"/>`))
+      .join('');
+    // Areas on both sides get two points; the second is the same button for the hand, not a second one for the keys.
+    const puntos = zonas
+      .flatMap((z) =>
+        aqui(z).map(([, x, y], i) => {
+          const sitio = `left:${((x / ancho) * 100).toFixed(2)}%;top:${((y / alto) * 100).toFixed(2)}%`;
+          const nombre = esc(ZONAS[z]);
+          return `<button type="button" class="mapa-punto" data-accion="zona" data-valor="${z}" data-nombre="${nombre}" aria-pressed="${b.filtro.zona === z}" style="${sitio}" ${
+            i ? 'aria-hidden="true" tabindex="-1"' : `aria-label="${nombre}"`
+          }></button>`;
+        }),
+      )
+      .join('');
+    return `<figure class="mapa-vista">
+      <div class="mapa-lamina">
+        <svg viewBox="0 0 ${ancho} ${alto}" aria-hidden="true">
+          <defs><clipPath id="mapa-silueta-${v}"><path d="${silueta}"/></clipPath></defs>
+          <path class="mapa-silueta" d="${silueta}"/>
+          ${partes}
+          <g class="mapa-halos" clip-path="url(#mapa-silueta-${v})">${halos}</g>
+        </svg>
+        ${puntos}
+      </div>
+      <figcaption>${rotulo}</figcaption>
+    </figure>`;
+  };
+  const elegidos = [
+    b.filtro.zona && ZONAS[b.filtro.zona] && `<button type="button" class="mapa-quitar" data-accion="zona" data-valor="" aria-label="Quitar ${esc(ZONAS[b.filtro.zona])}">${esc(ZONAS[b.filtro.zona])}${ICONO.cerrar}</button>`,
+    b.filtro.musculo && MUSCULOS[b.filtro.musculo] && `<button type="button" class="mapa-quitar musculo" data-accion="musculo-mapa" data-valor="" aria-label="Quitar ${esc(MUSCULOS[b.filtro.musculo])}">${esc(MUSCULOS[b.filtro.musculo])}${ICONO.cerrar}</button>`,
+  ].filter(Boolean);
+  return `<div class="mapa" role="group" aria-label="Zona del cuerpo">
+    <div class="mapa-vistas">${vista('delante', 'Delante')}${vista('detras', 'Detrás')}</div>
+    <p class="mapa-pie">${elegidos.length ? elegidos.join('') : 'Elige una zona o un músculo en la figura.'}</p>
+  </div>`;
+}
+
 function seccionBiblioteca(b) {
-  const zonas = Object.keys(ZONAS).filter((z) => ORDEN.some((id) => EJERCICIOS[id].zonas.includes(z)));
-  const todos = (id) => [...EJERCICIOS[id].musculos.principales, ...EJERCICIOS[id].musculos.secundarios];
-  const musculos = Object.keys(MUSCULOS).filter((mu) => ORDEN.some((id) => todos(id).includes(mu)));
+  const musculos = musculosConEjercicios();
   return `<section class="biblioteca" aria-labelledby="biblio-titulo">
-    <h2 id="biblio-titulo">Añadir ejercicios</h2>
+    <div class="biblio-cabeza">
+      <h2 id="biblio-titulo">Añadir ejercicios</h2>
+      <span class="biblio-cuenta num" aria-live="polite">${cuentaBiblioteca(b)}</span>
+    </div>
     <div class="biblio-filtros">
       <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
-      <div class="filtros-zona" role="group" aria-label="Zona">
-        ${[['', 'Todas'], ...zonas.map((z) => [z, ZONAS[z]])]
-          .map(([v, t]) => `<button type="button" class="filtro" data-accion="zona" data-valor="${v}" aria-pressed="${b.filtro.zona === v}">${t}</button>`)
-          .join('')}
-      </div>
       <label class="campo-musculo"><span>Músculo</span>
         <select data-accion="musculo">
           <option value="">Todos</option>
@@ -277,7 +370,10 @@ function seccionBiblioteca(b) {
         </select>
       </label>
     </div>
-    <ul class="biblio-lista">${listaBiblioteca(b)}</ul>
+    <div class="biblio-cuerpo">
+      <div class="hueco-mapa">${mapaCuerpo(b)}</div>
+      <ul class="biblio-lista">${listaBiblioteca(b)}</ul>
+    </div>
   </section>`;
 }
 
@@ -288,7 +384,7 @@ function seccionPlantillas(b) {
   return `<section class="plantillas" aria-labelledby="plantillas-titulo">
     <div class="plantillas-cabeza">
       <h2 id="plantillas-titulo">Plantillas</h2>
-      <button type="button" class="boton fantasma" data-accion="nueva-plantilla" ${b.orden.length ? '' : 'disabled'}>Guardar la rutina como plantilla</button>
+      <button type="button" class="boton fantasma" data-accion="nueva-plantilla" ${b.orden.length ? '' : 'hidden'}>Guardar la rutina como plantilla</button>
     </div>
     <form class="plantilla-nueva" hidden>
       <input data-accion="nombre-plantilla" maxlength="60" autocomplete="off" placeholder="Por ejemplo: rodilla, primera semana" aria-label="Nombre de la plantilla">
@@ -335,7 +431,6 @@ function vistaArmar() {
           </div>
           <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
           <div class="hueco-rutina">${seccionRutina(b)}</div>
-          ${seccionBiblioteca(b)}
           <section class="general">
             <h2>Para toda la rutina</h2>
             <div class="fila">
@@ -346,6 +441,7 @@ function vistaArmar() {
             </div>
             <p class="ayuda">Si al hacer un ejercicio o a la mañana siguiente la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
           </section>
+          ${seccionBiblioteca(b)}
         </div>
         <div class="barra-crear">
           <span class="resumen-corto">${resumenCorto()}</span>
@@ -402,7 +498,7 @@ function vistaArmar() {
     app.querySelector('.resumen-corto').textContent = resumenCorto();
     app.querySelector('[data-accion="crear"]').disabled = !b.orden.length;
     const nueva = app.querySelector('[data-accion="nueva-plantilla"]');
-    if (nueva) nueva.disabled = !b.orden.length;
+    if (nueva) nueva.hidden = !b.orden.length;
   }
 
   function refrescarTarjeta(id) {
@@ -429,6 +525,22 @@ function vistaArmar() {
     const lista = app.querySelector('.biblio-lista');
     apartarLienzo(lista);
     lista.innerHTML = listaBiblioteca(b);
+    app.querySelector('.biblio-cuenta').textContent = cuentaBiblioteca(b);
+  }
+
+  // The map and the muscle list say the same filter.
+  function refrescarFiltros() {
+    app.querySelector('.hueco-mapa').innerHTML = mapaCuerpo(b);
+    app.querySelector('[data-accion="musculo"]').value = b.filtro.musculo;
+    refrescarBiblioteca();
+  }
+
+  // Opening a card folds another one above it: what was just touched stays where it was on the screen.
+  function sinSaltar(buscar, cambiar) {
+    const antes = buscar()?.getBoundingClientRect().top;
+    cambiar();
+    const despues = buscar()?.getBoundingClientRect().top;
+    if (antes !== undefined && despues !== undefined && Math.abs(despues - antes) > 1) window.scrollBy(0, despues - antes);
   }
 
   function refrescarPlantillas() {
@@ -446,7 +558,10 @@ function vistaArmar() {
 
   function elegir(id) {
     b.activo = id;
-    app.querySelectorAll('.ejercicio').forEach((t) => t.classList.toggle('activo', t.dataset.id === id));
+    app.querySelectorAll('.ejercicio').forEach((t) => {
+      t.classList.toggle('activo', t.dataset.id === id);
+      t.querySelector('.ejercicio-cabeza').setAttribute('aria-expanded', String(t.dataset.id === id));
+    });
     app.querySelectorAll('.biblio-fila').forEach((t) => t.classList.toggle('activo', t.dataset.id === id && !b.orden.includes(id)));
     colocarFigura();
   }
@@ -479,7 +594,7 @@ function vistaArmar() {
     if (a !== 'borrar-plantilla' && deshacerBorrar) deshacerBorrar();
     if (sitio && id !== b.activo && a !== 'anadir' && a !== 'quitar') {
       // Choosing a card or a row only moves the preview; it never re-draws, so a text field keeps its focus.
-      elegir(id);
+      sinSaltar(() => sitio, () => elegir(id));
       if (a === 'elegir' || a === 'ver' || !a) return guardar();
     }
     if (!el) return guardar();
@@ -488,8 +603,11 @@ function vistaArmar() {
       ajustes(id);
       if (!b.orden.includes(id)) b.orden.push(id);
       b.activo = id;
-      refrescarRutina();
-      refrescarBiblioteca();
+      // The routine grows above the library: the row just added stays under the pointer.
+      sinSaltar(() => app.querySelector(`.biblio-fila[data-id="${id}"]`), () => {
+        refrescarRutina();
+        refrescarBiblioteca();
+      });
       colocarFigura();
     } else if (a === 'quitar') {
       b.orden = b.orden.filter((x) => x !== id);
@@ -518,10 +636,13 @@ function vistaArmar() {
       b.ejercicios[id].lado = el.dataset.valor;
       refrescarTarjeta(id);
       actualizarTempo(id);
-    } else if (a === 'zona') {
-      b.filtro.zona = el.dataset.valor;
-      el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
-      refrescarBiblioteca();
+    } else if (a === 'zona' || a === 'musculo-mapa') {
+      const clave = a === 'zona' ? 'zona' : 'musculo';
+      const valor = el.dataset.valor;
+      b.filtro[clave] = valor && b.filtro[clave] === valor ? '' : valor;
+      refrescarFiltros();
+      // Keyboard users keep their place: focus goes back to the same point, or to the map after letting go.
+      if (ev.detail === 0) (app.querySelector(`.mapa [data-accion="${a}"][data-valor="${valor}"]:not([aria-hidden])`) || app.querySelector('.mapa-punto'))?.focus();
     } else if (a === 'cuerpo') {
       b.cuerpo = el.dataset.valor;
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
@@ -586,7 +707,7 @@ function vistaArmar() {
   app.onchange = (ev) => {
     if (ev.target.dataset.accion !== 'musculo') return;
     b.filtro.musculo = ev.target.value;
-    refrescarBiblioteca();
+    refrescarFiltros();
     guardar();
   };
 
@@ -1040,7 +1161,7 @@ async function vistaRutina(codigo) {
     capa.className = 'capa';
     capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="como-titulo"><h2 id="como-titulo">${esc(def.nombre)}</h2>
       ${explicacion(def)}
-      ${e.n ? `<div class="tarjeta"><div class="nota">${esc(e.n)}</div></div>` : ''}
+      ${e.n ? `<p class="nota">${esc(e.n)}</p>` : ''}
       <button type="button" class="boton">Entendido</button></div>`;
     document.body.appendChild(capa);
     capa.addEventListener('click', (ev) => {

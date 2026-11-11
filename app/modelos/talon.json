@@ -1,0 +1,66 @@
+{
+ "id": "talon",
+ "nombre": "Deslizamiento de talón",
+ "fps": 30,
+ "duracion": 7.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Desliza el talón hacia ti"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 3.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.5,
+   "fin": 6.0,
+   "texto": "Estira despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 6.0,
+   "fin": 7.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": -2.8,
+   "rodilla_derecha_flexion": 0.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 43.0,
+   "rodilla_derecha_flexion": 90.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "isquiotibiales"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.76,
+   1.423,
+   0.677
+  ],
+  "mira": [
+   0.0,
+   0.22,
+   0.0
+  ]
+ },
+ "archivo": "talon.glb",
+ "bytes": 41920
+}

@@ -1,0 +1,60 @@
+{
+  "id": "remo",
+  "familia": "de_pie",
+  "nombre": "Remo con banda de pie",
+  "lado": "derecho",
+  "accesorios": [
+    "puerta",
+    "banda"
+  ],
+  "parametros": {
+    "banda": {
+      "mano": "d",
+      "ancla": "delante"
+    },
+    "pies": "juntos"
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva el codo hacia atrás",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "shoulder_r": {
+        "abd": 6
+      },
+      "elbow_r": {
+        "flex": 90
+      },
+      "fingers_r": {
+        "curl": 1
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "flex": -35
+      },
+      "elbow_r": {
+        "flex": 115
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "trapecio"
+    ],
+    "secundarios": [
+      "deltoides_posterior"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.8
+}

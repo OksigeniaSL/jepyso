@@ -1,0 +1,37 @@
+{
+  "id": "puente",
+  "familia": "puente",
+  "nombre": "Puente de glúteo",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube la cadera",
+    "mantener": "Aguanta arriba",
+    "bajar": "Baja despacio",
+    "reposo": "Descansa"
+  },
+  "parametros": {
+    "cadera_inicio": 45,
+    "cadera_arriba": 0,
+    "abd_cadera": 3,
+    "brazos_abd": 12
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_mayor"
+    ],
+    "secundarios": [
+      "isquiotibiales",
+      "erectores"
+    ]
+  },
+  "camara": "lado"
+}

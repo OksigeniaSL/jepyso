@@ -2,6 +2,162 @@
  "cuerpo": "modelos/b/cuerpo.glb",
  "bytes_cuerpo": 1121936,
  "ejercicios": {
+  "abduccion_lado": {
+   "glb": "modelos/b/abduccion_lado.glb",
+   "ficha": "modelos/b/abduccion_lado.json",
+   "bytes": 41020,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": []
+   }
+  },
+  "abduccion_pie": {
+   "glb": "modelos/b/abduccion_pie.glb",
+   "ficha": "modelos/b/abduccion_pie.json",
+   "bytes": 68260,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": []
+   }
+  },
+  "almeja": {
+   "glb": "modelos/b/almeja.glb",
+   "ficha": "modelos/b/almeja.json",
+   "bytes": 41388,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "gluteo_mayor"
+    ]
+   }
+  },
+  "basculacion": {
+   "glb": "modelos/b/basculacion.glb",
+   "ficha": "modelos/b/basculacion.json",
+   "bytes": 42012,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
+  "baston": {
+   "glb": "modelos/b/baston.glb",
+   "ficha": "modelos/b/baston.json",
+   "bytes": 46408,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "manguito_posterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "bird_dog": {
+   "glb": "modelos/b/bird_dog.glb",
+   "ficha": "modelos/b/bird_dog.json",
+   "bytes": 46100,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "erectores",
+     "gluteo_mayor"
+    ],
+    "secundarios": []
+   }
+  },
+  "cojin_rodillas": {
+   "glb": "modelos/b/cojin_rodillas.glb",
+   "ficha": "modelos/b/cojin_rodillas.json",
+   "bytes": 64696,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "aductores"
+    ],
+    "secundarios": []
+   }
+  },
+  "cruzado": {
+   "glb": "modelos/b/cruzado.glb",
+   "ficha": "modelos/b/cruzado.json",
+   "bytes": 42332,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "deltoides_posterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "cuadriceps": {
+   "glb": "modelos/b/cuadriceps.glb",
+   "ficha": "modelos/b/cuadriceps.json",
+   "bytes": 46972,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
+  "curl_isquios": {
+   "glb": "modelos/b/curl_isquios.glb",
+   "ficha": "modelos/b/curl_isquios.json",
+   "bytes": 69760,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "isquiotibiales"
+    ],
+    "secundarios": []
+   }
+  },
+  "equilibrio": {
+   "glb": "modelos/b/equilibrio.glb",
+   "ficha": "modelos/b/equilibrio.json",
+   "bytes": 68632,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gemelos",
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "extension_rodilla": {
+   "glb": "modelos/b/extension_rodilla.glb",
+   "ficha": "modelos/b/extension_rodilla.json",
+   "bytes": 65480,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
+  "gato_camello": {
+   "glb": "modelos/b/gato_camello.glb",
+   "ficha": "modelos/b/gato_camello.json",
+   "bytes": 44884,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
   "hombro": {
    "glb": "modelos/b/hombro.glb",
    "ficha": "modelos/b/hombro.json",
@@ -16,6 +172,34 @@
     ]
    }
   },
+  "pendulo": {
+   "glb": "modelos/b/pendulo.glb",
+   "ficha": "modelos/b/pendulo.json",
+   "bytes": 54604,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "manguito_posterior"
+    ],
+    "secundarios": [
+     "deltoides_anterior",
+     "deltoides_medio",
+     "deltoides_posterior"
+    ]
+   }
+  },
+  "pierna_recta": {
+   "glb": "modelos/b/pierna_recta.glb",
+   "ficha": "modelos/b/pierna_recta.json",
+   "bytes": 40696,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
   "puente": {
    "glb": "modelos/b/puente.glb",
    "ficha": "modelos/b/puente.json",
@@ -28,6 +212,61 @@
     "secundarios": [
      "isquiotibiales",
      "erectores"
+    ]
+   }
+  },
+  "remo": {
+   "glb": "modelos/b/remo.glb",
+   "ficha": "modelos/b/remo.json",
+   "bytes": 76464,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "trapecio"
+    ],
+    "secundarios": [
+     "deltoides_posterior"
+    ]
+   }
+  },
+  "rodilla_pecho": {
+   "glb": "modelos/b/rodilla_pecho.glb",
+   "ficha": "modelos/b/rodilla_pecho.json",
+   "bytes": 61740,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "gluteo_medio"
+    ]
+   }
+  },
+  "rotacion_interna": {
+   "glb": "modelos/b/rotacion_interna.glb",
+   "ficha": "modelos/b/rotacion_interna.json",
+   "bytes": 77288,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "pectoral"
+    ],
+    "secundarios": []
+   }
+  },
+  "sentadilla": {
+   "glb": "modelos/b/sentadilla.glb",
+   "ficha": "modelos/b/sentadilla.json",
+   "bytes": 71132,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales"
     ]
    }
   },
@@ -46,6 +285,43 @@
      "gemelos",
      "erectores"
     ]
+   }
+  },
+  "talon": {
+   "glb": "modelos/b/talon.glb",
+   "ficha": "modelos/b/talon.json",
+   "bytes": 41488,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "isquiotibiales"
+    ],
+    "secundarios": []
+   }
+  },
+  "talones": {
+   "glb": "modelos/b/talones.glb",
+   "ficha": "modelos/b/talones.json",
+   "bytes": 67424,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
+  "tobillos": {
+   "glb": "modelos/b/tobillos.glb",
+   "ficha": "modelos/b/tobillos.json",
+   "bytes": 41656,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos",
+     "tibial_anterior"
+    ],
+    "secundarios": []
    }
   }
  }

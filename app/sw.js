@@ -12,6 +12,7 @@ const ARCHIVOS = [
   'app.js',
   'datos.js',
   'figura.js',
+  'mapa.js',
   'modelos/musculos.js',
   'modelos/ejercicios.json',
   'modelos/b/ejercicios.json',

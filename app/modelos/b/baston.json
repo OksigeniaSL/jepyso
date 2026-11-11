@@ -1,0 +1,74 @@
+{
+ "id": "baston",
+ "nombre": "Rotación externa con bastón",
+ "fps": 30,
+ "duracion": 11.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Empuja el bastón hacia fuera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 7.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 7.5,
+   "fin": 10.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 10.0,
+   "fin": 11.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": -53.4,
+   "hombro_izquierda_abduccion": 48.0,
+   "hombro_izquierda_rotacion_externa": 125.5,
+   "hombro_derecha_flexion": -0.0,
+   "hombro_derecha_rotacion_externa": 4.0
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 71.1,
+   "hombro_izquierda_flexion": -19.4,
+   "hombro_izquierda_abduccion": 25.8,
+   "hombro_izquierda_rotacion_externa": 101.6,
+   "hombro_derecha_flexion": -3.1,
+   "hombro_derecha_rotacion_externa": 53.7
+  }
+ },
+ "musculos": {
+  "principales": [
+   "manguito_posterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "baston"
+ ],
+ "camara": {
+  "pos": [
+   -1.157,
+   1.572,
+   3.62
+  ],
+  "mira": [
+   0.079,
+   0.795,
+   0.091
+  ]
+ },
+ "archivo": "baston.glb",
+ "bytes": 46408
+}

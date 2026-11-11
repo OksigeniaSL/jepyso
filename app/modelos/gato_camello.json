@@ -1,0 +1,80 @@
+{
+ "id": "gato_camello",
+ "nombre": "Gato-camello",
+ "fps": 30,
+ "duracion": 7.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Redondea la espalda hacia el techo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 6.0,
+   "texto": "Húndela despacio y levanta la cabeza"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 6.0,
+   "fin": 7.5,
+   "texto": "Vuelve al centro"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 78.6,
+   "hombro_izquierda_flexion": 72.2,
+   "cadera_derecha_flexion": 78.6,
+   "hombro_derecha_flexion": 72.2,
+   "tronco_inclinacion": 78.3,
+   "pelvis_basculacion": -11.7
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 62.2,
+   "hombro_izquierda_flexion": 83.1,
+   "cadera_derecha_flexion": 62.2,
+   "hombro_derecha_flexion": 83.1,
+   "tronco_inclinacion": 87.0,
+   "pelvis_basculacion": -28.0
+  },
+  "vuelta": {
+   "cadera_izquierda_flexion": 88.2,
+   "hombro_izquierda_flexion": 66.3,
+   "cadera_derecha_flexion": 88.2,
+   "hombro_derecha_flexion": 66.3,
+   "tronco_inclinacion": 72.9,
+   "pelvis_basculacion": -2.1
+  }
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.801,
+   1.564,
+   0.993
+  ],
+  "mira": [
+   0.0,
+   0.348,
+   0.309
+  ]
+ },
+ "archivo": "gato_camello.glb",
+ "bytes": 45212
+}

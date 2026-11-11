@@ -1,0 +1,76 @@
+{
+ "id": "cruzado",
+ "nombre": "Estiramiento cruzado de hombro",
+ "fps": 30,
+ "duracion": 10.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Cruza el brazo sobre el pecho"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 7.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 7.0,
+   "fin": 9.0,
+   "texto": "Suelta despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 9.0,
+   "fin": 10.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 10.0,
+   "hombro_izquierda_flexion": -0.0,
+   "hombro_izquierda_abduccion": 9.0,
+   "hombro_izquierda_rotacion_externa": 41.8,
+   "codo_derecha_flexion": 10.0,
+   "hombro_derecha_flexion": -0.0,
+   "hombro_derecha_abduccion": 9.0,
+   "hombro_derecha_rotacion_externa": 41.8
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 83.8,
+   "hombro_izquierda_flexion": 69.3,
+   "hombro_izquierda_abduccion": -21.0,
+   "hombro_izquierda_rotacion_externa": -84.0,
+   "codo_derecha_flexion": 0.0,
+   "hombro_derecha_flexion": 90.0,
+   "hombro_derecha_abduccion": -31.0,
+   "hombro_derecha_rotacion_externa": -31.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "deltoides_posterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [],
+ "camara": {
+  "pos": [
+   -1.091,
+   1.481,
+   3.347
+  ],
+  "mira": [
+   0.0,
+   0.795,
+   0.229
+  ]
+ },
+ "archivo": "cruzado.glb",
+ "bytes": 42332
+}

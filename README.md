@@ -61,14 +61,16 @@ at a Chromium binary; without it, the one installed by Playwright is used.
 | `app/datos.js` | The exercises and their texts, the link format and the local store |
 | `app/figura.js` | The 3D figure |
 | `app/modelos/` | The figures: the body, and a GLB and a sheet per exercise; `b/` is the second body, with its own clips |
+| `figuras/fichas/` | The sheet each movement is built from: the joint angles of each key pose, in degrees, and what rests where |
 | `app/vendor/` | three.js 0.170.0 and qrcode-generator 1.4.4, both MIT, served from here (no CDN) |
 | `tools/construir.sh` | The copy for strict hosts |
+| `tools/mapa-cuerpo/hacer.sh` | Draws the body map of the library (`app/mapa.js`) from the body itself; run it again when the body changes |
 | `tests/` | The end-to-end walk |
 
 ## Licence
 
-The code is under the GNU GPL v3 or later ([LICENSE](LICENSE)). The figures and exercise sheets in `app/modelos/` are
-content with their own licence: free to use, unchanged, within Jepyso ([LICENSE-FIGURES.md](LICENSE-FIGURES.md)).
+The code is under the GNU GPL v3 or later ([LICENSE](LICENSE)). The figures and exercise sheets in `app/modelos/` and
+`figuras/fichas/` are content with their own licence: free to use, unchanged, within Jepyso ([LICENSE-FIGURES.md](LICENSE-FIGURES.md)).
 three.js and qrcode-generator are under the MIT licence, with their notices in `app/vendor/`.
 
 © 2026 Oksigenia SL

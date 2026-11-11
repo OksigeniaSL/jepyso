@@ -55,21 +55,45 @@ try {
     await ancho.click('.ejercicio[data-id="hombro"] [data-accion="subir"]');
     comprobar((await orden()) === 'puente,hombro,silla', `${tema}: subir no cambia el orden (${await orden()})`);
     await ancho.screenshot({ path: `${salida}/armar-1366-hombro-${tema}.png` });
+    // Only the card being looked at is open; the others fold to their dose.
+    const abiertas = () => ancho.locator('.ejercicio-ajustes:visible').count();
+    comprobar((await abiertas()) === 1, `${tema}: hay ${await abiertas()} tarjetas abiertas a la vez`);
+    await ancho.click('.ejercicio[data-id="silla"] .ejercicio-cabeza');
+    comprobar((await ancho.locator('.ejercicio[data-id="silla"] .ejercicio-ajustes:visible').count()) === 1, `${tema}: la tarjeta tocada no se abre`);
+    comprobar((await abiertas()) === 1, `${tema}: al abrir una tarjeta no se pliega la otra`);
+    comprobar((await ancho.textContent('.ejercicio[data-id="hombro"] .dosis')).includes('3 × 12'), `${tema}: la tarjeta plegada no dice sus series y repeticiones`);
     await ancho.click('.ejercicio[data-id="silla"] .detalle summary');
     comprobar((await ancho.textContent('.ejercicio[data-id="silla"] .detalle')).includes('Fuente:'), `${tema}: la tarjeta no trae la explicación con su fuente`);
     await ancho.locator('.ejercicio[data-id="silla"] .detalle').scrollIntoViewIfNeeded();
     await ancho.screenshot({ path: `${salida}/armar-1366-explicacion-${tema}.png` });
 
-    // Filters: area, muscle and words; each one narrows the library.
-    const filas = () => ancho.$$eval('.biblio-fila', (t) => t.map((x) => x.dataset.id).join(','));
+    // Filters: area, muscle and words; each one narrows the library to what the catalogue says.
+    // A long list goes under its starting positions, so the rows are compared as a set, not in catalogue order.
+    const filas = () => ancho.$$eval('.biblio-fila', (t) => t.map((x) => x.dataset.id).sort().join(','));
+    const esperado = (filtro) => ancho.evaluate(async (f) => (await import('./datos.js')).buscarEjercicios(f).sort().join(','), filtro);
+    const total = await ancho.locator('.biblio-fila').count();
     await ancho.click('[data-accion="zona"][data-valor="hombro"]');
-    comprobar((await filas()) === 'hombro', `${tema}: el filtro de hombro da ${await filas()}`);
+    const hombro = await filas();
+    comprobar(hombro === (await esperado({ zona: 'hombro' })) && hombro.includes('hombro') && hombro.split(',').length < total, `${tema}: el filtro de hombro da ${hombro}`);
+    comprobar((await ancho.locator('.mapa-halo.encendido').count()) === 2, `${tema}: el mapa no enciende los dos hombros`);
+    await ancho.screenshot({ path: `${salida}/armar-1366-mapa-${tema}.png` });
     await ancho.click('[data-accion="zona"][data-valor=""]');
     await ancho.selectOption('[data-accion="musculo"]', 'cuadriceps');
-    comprobar((await filas()) === 'silla', `${tema}: el filtro de cuádriceps da ${await filas()}`);
+    const cuadriceps = await filas();
+    comprobar(cuadriceps === (await esperado({ musculo: 'cuadriceps' })) && cuadriceps.includes('silla') && !cuadriceps.includes('hombro'), `${tema}: el filtro de cuádriceps da ${cuadriceps}`);
     await ancho.selectOption('[data-accion="musculo"]', '');
+    // A muscle touched on the map filters like the list, lights, and lets go when touched again.
+    await ancho.click('.mapa-musculo[data-valor="cuadriceps"]');
+    const delMapa = await filas();
+    comprobar(delMapa === cuadriceps, `${tema}: el cuádriceps del mapa da ${delMapa} y la lista de músculos ${cuadriceps}`);
+    comprobar((await ancho.inputValue('[data-accion="musculo"]')) === 'cuadriceps', `${tema}: la lista de músculos no sigue al mapa`);
+    comprobar((await ancho.locator('.mapa-musculo.encendido').count()) >= 1, `${tema}: el músculo elegido no se enciende`);
+    await ancho.click('.mapa-musculo[data-valor="cuadriceps"]');
+    comprobar((await filas()).split(',').length === total, `${tema}: tocar otra vez el músculo no lo suelta`);
     await ancho.fill('[data-accion="buscar"]', 'gluteo');
     comprobar((await filas()) === 'puente', `${tema}: buscar «gluteo» da ${await filas()}`);
+    await ancho.fill('[data-accion="buscar"]', 'sit to stand');
+    comprobar((await filas()) === 'silla', `${tema}: buscar por otro nombre («sit to stand») da ${await filas()}`);
     await ancho.fill('[data-accion="buscar"]', 'nada parecido');
     comprobar((await ancho.locator('.biblio-vacia').count()) === 1, `${tema}: una búsqueda sin resultados no lo dice`);
     await ancho.fill('[data-accion="buscar"]', '');

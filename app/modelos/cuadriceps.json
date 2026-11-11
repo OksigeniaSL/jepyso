@@ -1,0 +1,69 @@
+{
+ "id": "cuadriceps",
+ "nombre": "Apretar el muslo",
+ "fps": 30,
+ "duracion": 10.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Empuja la rodilla hacia abajo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 6.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 6.5,
+   "fin": 8.0,
+   "texto": "Afloja"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.0,
+   "fin": 10.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 4.9,
+   "rodilla_derecha_flexion": 6.0,
+   "tobillo_derecha_flexion": 10.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 1.7,
+   "rodilla_derecha_flexion": 0.0,
+   "tobillo_derecha_flexion": 15.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -3.709,
+   1.359,
+   0.662
+  ],
+  "mira": [
+   0.0,
+   0.172,
+   -0.006
+  ]
+ },
+ "archivo": "cuadriceps.glb",
+ "bytes": 47428
+}

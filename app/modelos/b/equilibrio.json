@@ -1,0 +1,79 @@
+{
+ "id": "equilibrio",
+ "nombre": "Equilibrio a una pierna",
+ "fps": 30,
+ "duracion": 15.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Levanta el otro pie"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 11.5,
+   "texto": "Aguanta el equilibrio"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 11.5,
+   "fin": 13.0,
+   "texto": "Bájalo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 13.0,
+   "fin": 15.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "rodilla_izquierda_flexion": 4.0,
+   "tobillo_izquierda_flexion": 4.6,
+   "hombro_izquierda_abduccion": 8.7,
+   "hombro_izquierda_rotacion_externa": -7.5,
+   "cadera_derecha_abduccion": -0.0,
+   "codo_derecha_flexion": 30.0,
+   "hombro_derecha_abduccion": 8.7,
+   "hombro_derecha_rotacion_externa": -7.5
+  },
+  "llegada": {
+   "rodilla_izquierda_flexion": 40.0,
+   "tobillo_izquierda_flexion": -0.0,
+   "hombro_izquierda_abduccion": 18.9,
+   "hombro_izquierda_rotacion_externa": 8.7,
+   "cadera_derecha_abduccion": -6.8,
+   "codo_derecha_flexion": 33.3,
+   "hombro_derecha_abduccion": -1.3,
+   "hombro_derecha_rotacion_externa": -23.1
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos",
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.616,
+   1.929,
+   0.908
+  ],
+  "mira": [
+   -0.033,
+   0.783,
+   0.263
+  ]
+ },
+ "archivo": "equilibrio.glb",
+ "bytes": 68632
+}

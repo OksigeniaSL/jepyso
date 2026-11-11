@@ -1,0 +1,43 @@
+{
+  "id": "extension_rodilla",
+  "familia": "sentado",
+  "nombre": "Extensión de rodilla sentado",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 5.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Estira la rodilla",
+    "mantener": "Aguanta",
+    "bajar": "Baja el pie despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "muslo"
+      },
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.85
+}

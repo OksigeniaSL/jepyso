@@ -1,0 +1,64 @@
+{
+  "id": "tobillos",
+  "familia": "boca_arriba",
+  "nombre": "Bombeo de tobillos",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 0.5,
+    "bajar": 1.5,
+    "reposo": 0.5
+  },
+  "textos": {
+    "subir": "Puntas hacia ti",
+    "mantener": "Aguanta",
+    "bajar": "Puntas hacia abajo",
+    "reposo": "Vuelve"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "talon"
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      },
+      "hip_l": {
+        "abd": -1
+      },
+      "hip_r": {
+        "abd": -1
+      }
+    },
+    "llegada": {
+      "ankle_l": {
+        "flex": 12
+      },
+      "ankle_r": {
+        "flex": 12
+      }
+    },
+    "vuelta": {
+      "ankle_l": {
+        "flex": -37
+      },
+      "ankle_r": {
+        "flex": -37
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos",
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado"
+}

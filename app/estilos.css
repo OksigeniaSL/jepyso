@@ -143,7 +143,18 @@ button { cursor: pointer; }
 .ejercicio.incluido .marca { background: var(--acento); border-color: var(--acento); color: var(--acento-tinta); }
 .marca { font-size: 14px; font-weight: 700; }
 .ejercicio-ajustes { display: none; padding: 4px 16px 18px; gap: 16px; }
-.ejercicio.incluido .ejercicio-ajustes { display: grid; }
+.ejercicio.incluido.activo .ejercicio-ajustes { display: grid; }
+/* Folded, a card is one line with its dose; open, it shows what the exercise is. */
+.ejercicio:not(.activo) .ejercicio-cabeza .linea-chips { display: none; }
+.ejercicio:not(.activo) .ejercicio-cabeza { padding-block: 12px; }
+.dosis { display: flex; align-items: center; gap: 4px 10px; margin-top: 4px; color: var(--tinta-suave); font-size: 14px; }
+.dosis .num { color: var(--tinta); font-weight: 650; }
+.dosis .tempo { width: 52px; flex: none; }
+.dosis .tempo .traza { stroke-width: 2.5; }
+.ejercicio.activo .dosis { display: none; }
+.plegar { flex: none; width: 24px; height: 24px; color: var(--tinta-suave); transition: transform 0.2s ease; }
+.plegar svg { display: block; width: 100%; height: 100%; }
+.ejercicio.activo .plegar { transform: rotate(180deg); }
 .fila { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
 .ajuste { display: grid; gap: 6px; }
 .ajuste > span { font-size: 13px; color: var(--tinta-suave); }
@@ -215,7 +226,7 @@ button { cursor: pointer; }
   background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: 16px; display: grid; gap: 10px;
 }
 .tarjeta h3 { margin: 0; font-size: 18px; }
-.tarjeta .nota { background: var(--acento-suave); color: var(--tinta); padding: 10px 12px; border-radius: var(--radio-sm); font-size: 15px; }
+.tarjeta .nota, .hoja .nota { margin: 0; background: var(--acento-suave); color: var(--tinta); padding: 10px 12px; border-radius: var(--radio-sm); font-size: 15px; }
 .sin-conexion { margin: 4px 4px 0; color: var(--tinta-suave); font-size: 14px; }
 .sin-conexion:empty { display: none; }
 .pie { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); display: grid; gap: 8px; }
@@ -276,7 +287,6 @@ button { cursor: pointer; }
 .explicacion { display: grid; gap: 10px; }
 .explicacion p { margin: 0; color: var(--tinta); }
 .explicacion strong { font-weight: 650; }
-.explicacion .partida { color: var(--tinta-suave); }
 .como { display: grid; gap: 8px; margin: 0; padding-left: 20px; }
 .como li { padding-left: 4px; }
 
@@ -331,26 +341,34 @@ button { cursor: pointer; }
 .ordenar .boton { min-height: 40px; padding: 0 16px; font-size: 14px; }
 .ordenar .boton.fantasma { margin-left: auto; padding: 0 6px; }
 
-.biblioteca { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: 16px; }
+.biblioteca {
+  background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: 16px;
+  container-type: inline-size;
+}
+.biblio-cabeza { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.biblio-cuenta { font-size: 13px; color: var(--tinta-suave); }
 .biblio-filtros { display: grid; gap: 10px; }
 .buscar { appearance: none; }
-.filtros-zona { display: flex; flex-wrap: wrap; gap: 6px; }
-.filtro {
-  border: 1px solid var(--linea); background: transparent; color: var(--tinta-suave); border-radius: 999px;
-  padding: 6px 14px; font-size: 14px; min-height: 36px;
-}
-.filtro[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: var(--acento-tinta); font-weight: 650; }
 .campo-musculo { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; }
 .campo-musculo > span { font-size: 13px; color: var(--tinta-suave); }
 .campo-musculo select { min-height: 44px; padding: 8px 12px; }
-.biblio-lista { list-style: none; margin: 0; padding: 0; display: grid; }
+.biblio-cuerpo { display: grid; gap: 12px; }
+.biblio-lista { list-style: none; margin: 0; padding: 0; display: grid; align-content: start; }
+.biblio-grupo {
+  display: flex; justify-content: space-between; gap: 12px; padding: 14px 0 6px; border-top: 1px solid var(--linea);
+  font-size: 12px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave);
+}
+.biblio-grupo:first-child { border-top: 0; padding-top: 4px; }
+.biblio-grupo + .biblio-fila { border-top: 0; }
+.biblio-meta { display: block; font-size: 13px; color: var(--tinta-suave); line-height: 1.4; }
+.biblio-meta .vivo { color: var(--vivo); }
 .biblio-fila {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 12px 0;
   border-top: 1px solid var(--linea);
 }
 .biblio-fila:first-child { border-top: 0; }
 .biblio-ver { border: 0; background: transparent; text-align: left; padding: 2px 0; }
-.biblio-ver h3 { margin: 0 0 6px; font-size: 16px; }
+.biblio-ver h3 { margin: 0 0 2px; font-size: 16px; }
 .biblio-fila.activo .biblio-ver h3 { color: var(--acento); }
 .biblio-fila .boton { min-height: 40px; padding: 0 16px; font-size: 14px; }
 .biblio-dentro { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--acento); font-weight: 650; white-space: nowrap; }
@@ -360,6 +378,7 @@ button { cursor: pointer; }
 
 .plantillas-cabeza { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
 .plantillas-cabeza .boton.fantasma { padding: 0 4px; min-height: 36px; font-size: 14px; }
+.plantillas-cabeza .boton[hidden] { display: none; }
 .plantilla-nueva { display: flex; flex-wrap: wrap; gap: 8px; }
 .plantilla-nueva[hidden] { display: none; }
 .plantilla-nueva input { flex: 1 1 240px; width: auto; }
@@ -383,3 +402,78 @@ button { cursor: pointer; }
 .detalle[open] summary { margin-bottom: 10px; }
 .detalle .explicacion { font-size: 15px; }
 .detalle .fuente { margin: 10px 0 0; font-size: 13px; color: var(--tinta-suave); }
+
+/* ---------- The body map of the library ----------
+   Gaudí's body from the front and from the back (mapa.js). The muscles are a quiet layer that tells front from back;
+   the ones with exercises are a touch warmer and can be touched; the one chosen lights as on the figure. The points
+   are the areas, in the routine's green. */
+:root {
+  --mapa-cuerpo: var(--superficie-2);
+  --mapa-musculo: color-mix(in srgb, var(--linea) 75%, var(--superficie-2));
+  --mapa-musculo-con: color-mix(in srgb, var(--vivo) 16%, var(--mapa-musculo));
+}
+/* On a dark card the body needs more light than the theme's second surface and an edge of its own, and the muscles
+   with exercises a warmth that still shows. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mapa-cuerpo: color-mix(in srgb, var(--tinta) 16%, var(--superficie));
+    --mapa-borde: color-mix(in srgb, var(--tinta) 34%, var(--superficie));
+    --mapa-musculo: color-mix(in srgb, var(--tinta) 23%, var(--superficie));
+    --mapa-musculo-con: color-mix(in srgb, var(--vivo) 30%, var(--mapa-musculo));
+  }
+}
+:root[data-theme="dark"] {
+  --mapa-cuerpo: color-mix(in srgb, var(--tinta) 16%, var(--superficie));
+  --mapa-borde: color-mix(in srgb, var(--tinta) 34%, var(--superficie));
+  --mapa-musculo: color-mix(in srgb, var(--tinta) 23%, var(--superficie));
+  --mapa-musculo-con: color-mix(in srgb, var(--vivo) 30%, var(--mapa-musculo));
+}
+/* As wide as the two figures: the line under them wraps there instead of widening the map. */
+.mapa { display: grid; gap: 6px; justify-items: center; width: min-content; margin-inline: auto; }
+.mapa-vistas { display: flex; justify-content: center; gap: 4px; }
+.mapa-vista { margin: 0; display: grid; justify-items: center; gap: 2px; }
+.mapa-vista figcaption { font-size: 12px; color: var(--tinta-suave); }
+.mapa-lamina { position: relative; height: var(--mapa-alto, 236px); aspect-ratio: 223 / 480; }
+.mapa-lamina svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.mapa-silueta { fill: var(--mapa-cuerpo); stroke: var(--mapa-borde, var(--linea)); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.mapa-musculo { fill: var(--mapa-musculo); transition: fill 0.15s ease; }
+.mapa-musculo.con { fill: var(--mapa-musculo-con); cursor: pointer; }
+@media (hover: hover) { .mapa-musculo.con:hover { fill: color-mix(in srgb, var(--vivo) 45%, var(--mapa-musculo)); } }
+.mapa-musculo.encendido, .mapa-musculo.encendido:hover { fill: var(--vivo); }
+.mapa-halos { pointer-events: none; }
+.mapa-halo { fill: var(--acento); opacity: 0; transition: opacity 0.2s ease; }
+.mapa-halo.encendido { opacity: 0.3; }
+.mapa-punto {
+  position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; padding: 0; border: 0; border-radius: 999px;
+  background: transparent; display: grid; place-items: center;
+}
+.mapa-punto::before {
+  content: ''; width: 13px; height: 13px; border-radius: 999px; background: var(--superficie);
+  box-shadow: 0 0 0 2.5px var(--acento), 0 1px 3px rgb(0 0 0 / 0.25); transition: transform 0.15s ease, background 0.15s ease;
+}
+@media (hover: hover) { .mapa-punto:hover::before { background: var(--acento-suave); transform: scale(1.15); } }
+.mapa-punto[aria-pressed="true"]::before { background: var(--acento); transform: scale(1.15); }
+.mapa-punto:focus-visible { outline: 2px solid var(--acento); outline-offset: 0; }
+/* The name of the area next to the point, on hover or with the keyboard. */
+.mapa-punto::after {
+  content: attr(data-nombre); position: absolute; bottom: calc(100% - 2px); left: 50%; transform: translateX(-50%);
+  padding: 2px 8px; border-radius: 999px; background: var(--tinta); color: var(--fondo); font-size: 12px; font-weight: 650;
+  white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; z-index: 1;
+}
+@media (hover: hover) { .mapa-punto:hover::after { opacity: 1; } }
+.mapa-punto:focus-visible::after { opacity: 1; }
+.mapa-pie { margin: 0; min-height: 34px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--tinta-suave); text-align: center; }
+.mapa-quitar {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px 0 14px; border: 0; border-radius: 999px;
+  background: var(--acento); color: var(--acento-tinta); font-size: 14px; font-weight: 650;
+}
+.mapa-quitar.musculo { background: var(--vivo-suave); color: var(--vivo); }
+.mapa-quitar svg { width: 14px; height: 14px; }
+
+/* A wide library: the search on top, the map at the left and the list beside it. The map stays in sight while the
+   list scrolls. */
+@container (min-width: 600px) {
+  .biblio-filtros { grid-template-columns: minmax(0, 1fr) minmax(200px, 0.6fr); align-items: center; }
+  .biblio-cuerpo { grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: start; }
+  .hueco-mapa { position: sticky; top: 16px; --mapa-alto: 262px; }
+}

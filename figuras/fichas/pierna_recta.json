@@ -1,0 +1,52 @@
+{
+  "id": "pierna_recta",
+  "familia": "boca_arriba",
+  "nombre": "Elevación de pierna recta",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "parametros": {
+    "tronco": "antebrazos"
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube la pierna estirada",
+    "mantener": "Aguanta",
+    "bajar": "Bájala despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "pierna_d": "talon"
+      },
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 10
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre"
+      },
+      "hip_r": {
+        "flex": 15
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado"
+}

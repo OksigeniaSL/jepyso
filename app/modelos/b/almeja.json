@@ -1,0 +1,68 @@
+{
+ "id": "almeja",
+ "nombre": "Almeja",
+ "fps": 30,
+ "duracion": 13.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la rodilla de arriba"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 7.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 7.0,
+   "fin": 12.0,
+   "texto": "Bájala contando hasta cinco"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 12.0,
+   "fin": 13.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 43.7,
+   "cadera_derecha_abduccion": -4.3
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 28.6,
+   "cadera_derecha_abduccion": 22.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": [
+   "gluteo_mayor"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   2.424,
+   2.961,
+   1.312
+  ],
+  "mira": [
+   0.0,
+   0.234,
+   -0.052
+  ]
+ },
+ "archivo": "almeja.glb",
+ "bytes": 41388
+}

@@ -1,0 +1,47 @@
+{
+  "id": "almeja",
+  "familia": "de_lado",
+  "nombre": "Almeja",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 5.0,
+    "bajar": 5.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube la rodilla de arriba",
+    "mantener": "Aguanta",
+    "bajar": "Bájala contando hasta cinco",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "hip_r": {
+        "abd": -4
+      }
+    },
+    "llegada": {
+      "hip_r": {
+        "abd": 40
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "gluteo_mayor"
+    ]
+  },
+  "camara": [
+    0.8,
+    -0.45,
+    0.9
+  ],
+  "margen": 0.8
+}

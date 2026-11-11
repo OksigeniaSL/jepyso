@@ -1,0 +1,60 @@
+{
+  "id": "cuadriceps",
+  "familia": "boca_arriba",
+  "nombre": "Apretar el muslo",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla",
+    "toalla"
+  ],
+  "parametros": {
+    "toalla_radio": 0.045
+  },
+  "ritmo": {
+    "subir": 1.5,
+    "mantener": 5.0,
+    "bajar": 1.5,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Empuja la rodilla hacia abajo",
+    "mantener": "Aguanta",
+    "bajar": "Afloja",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "pierna_d": "toalla",
+        "pierna_i": "talon"
+      },
+      "knee_r": {
+        "flex": 6
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 10
+      },
+      "ankle_l": {
+        "flex": 10
+      }
+    },
+    "llegada": {
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 15
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado"
+}

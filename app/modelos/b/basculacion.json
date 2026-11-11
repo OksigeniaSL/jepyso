@@ -1,0 +1,66 @@
+{
+ "id": "basculacion",
+ "nombre": "Basculación pélvica",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Aplana la zona lumbar contra el suelo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 5.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.0,
+   "fin": 7.0,
+   "texto": "Suelta"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 8.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 42.7,
+   "cadera_derecha_flexion": 42.7,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 28.8,
+   "cadera_derecha_flexion": 28.8,
+   "pelvis_basculacion": -10.0
+  }
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.774,
+   0.584,
+   -0.217
+  ],
+  "mira": [
+   0.0,
+   0.207,
+   -0.029
+  ]
+ },
+ "archivo": "basculacion.glb",
+ "bytes": 42012
+}

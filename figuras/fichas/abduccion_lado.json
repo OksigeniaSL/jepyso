@@ -1,0 +1,61 @@
+{
+  "id": "abduccion_lado",
+  "familia": "de_lado",
+  "nombre": "Abducción de cadera de lado",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 5.0,
+    "bajar": 2.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Sube la pierna de arriba",
+    "mantener": "Aguanta",
+    "bajar": "Bájala despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "pierna_d": "esterilla",
+        "brazo_d": "suelo"
+      },
+      "hip_l": {
+        "flex": 35
+      },
+      "hip_r": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 5
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre"
+      },
+      "hip_r": {
+        "abd": 45
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    0.8,
+    -0.45,
+    0.9
+  ],
+  "margen": 0.8
+}

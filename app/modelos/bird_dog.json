@@ -1,0 +1,77 @@
+{
+ "id": "bird_dog",
+ "nombre": "Brazo y pierna contrarios a cuatro patas",
+ "fps": 30,
+ "duracion": 11.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Estira un brazo y la pierna contraria"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 7.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 7.5,
+   "fin": 10.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 10.0,
+   "fin": 11.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 12.1,
+   "hombro_izquierda_flexion": 72.2,
+   "hombro_izquierda_abduccion": 0.0,
+   "hombro_izquierda_rotacion_externa": 0.0,
+   "cadera_derecha_flexion": 78.6,
+   "rodilla_derecha_flexion": 92.4,
+   "tobillo_derecha_flexion": -57.0
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 0.0,
+   "hombro_izquierda_flexion": 175.0,
+   "hombro_izquierda_abduccion": 4.0,
+   "hombro_izquierda_rotacion_externa": 38.7,
+   "cadera_derecha_flexion": -0.0,
+   "rodilla_derecha_flexion": 0.0,
+   "tobillo_derecha_flexion": -20.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "erectores",
+   "gluteo_mayor"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -4.327,
+   1.632,
+   0.939
+  ],
+  "mira": [
+   0.0,
+   0.247,
+   0.16
+  ]
+ },
+ "archivo": "bird_dog.glb",
+ "bytes": 46512
+}

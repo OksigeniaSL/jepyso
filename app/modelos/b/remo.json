@@ -1,0 +1,71 @@
+{
+ "id": "remo",
+ "nombre": "Remo con banda de pie",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Lleva el codo hacia atrás"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_derecha_flexion": 89.7,
+   "hombro_derecha_flexion": -0.0,
+   "hombro_derecha_rotacion_externa": 4.0
+  },
+  "llegada": {
+   "codo_derecha_flexion": 114.6,
+   "hombro_derecha_flexion": -35.0,
+   "hombro_derecha_rotacion_externa": 1.5
+  }
+ },
+ "musculos": {
+  "principales": [
+   "trapecio"
+  ],
+  "secundarios": [
+   "deltoides_posterior"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "puerta",
+  "banda"
+ ],
+ "camara": {
+  "pos": [
+   -3.649,
+   1.96,
+   1.137
+  ],
+  "mira": [
+   -0.007,
+   0.795,
+   0.481
+  ]
+ },
+ "archivo": "remo.glb",
+ "bytes": 76464
+}

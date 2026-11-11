@@ -1,0 +1,67 @@
+{
+ "id": "cojin_rodillas",
+ "nombre": "Cojín entre las rodillas",
+ "fps": 30,
+ "duracion": 10.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Aprieta el cojín con las rodillas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 6.5,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 6.5,
+   "fin": 8.0,
+   "texto": "Afloja"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.0,
+   "fin": 10.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_abduccion": 5.0,
+   "cadera_derecha_abduccion": 5.0
+  },
+  "llegada": {
+   "cadera_izquierda_abduccion": 2.8,
+   "cadera_derecha_abduccion": 2.8
+  }
+ },
+ "musculos": {
+  "principales": [
+   "aductores"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla",
+  "cojin"
+ ],
+ "camara": {
+  "pos": [
+   -2.123,
+   1.146,
+   2.993
+  ],
+  "mira": [
+   0.0,
+   0.236,
+   -0.04
+  ]
+ },
+ "archivo": "cojin_rodillas.glb",
+ "bytes": 65184
+}

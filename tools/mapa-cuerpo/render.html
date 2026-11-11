@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Body map renders</title>
+<script type="importmap">{ "imports": { "three": "../../app/vendor/three/three.module.js", "three/addons/": "../../app/vendor/three/addons/" } }</script>
+</head>
+<body style="margin:0">
+<script type="module">
+// Renders Gaudí's body, front and back, with an orthographic camera: the silhouette (white on black), the twenty muscle
+// masks the figure lights (grey levels) and where the joints fall, in pixels. render.mjs collects the result.
+// The arms come down from the rest pose to ABD degrees from the trunk, as on a body chart.
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const P = new URLSearchParams(location.search);
+const ALTO = Number(P.get('alto') || 1600);
+const ABD = Number(P.get('abd') || 22);
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+const gltf = await new GLTFLoader().loadAsync(P.get('glb') || '../../app/modelos/cuerpo.glb');
+const escena = new THREE.Scene();
+escena.background = new THREE.Color(0x000000);
+escena.add(gltf.scene);
+let malla = null;
+gltf.scene.traverse((o) => { if (o.isSkinnedMesh) malla = o; });
+const hueso = (n) => malla.skeleton.bones.find((b) => b.name === n);
+const donde = (n) => hueso(n).getWorldPosition(new THREE.Vector3());
+
+function bajarBrazo(lado) {
+  gltf.scene.updateMatrixWorld(true);
+  const brazo = hueso(`upperarm_${lado}`);
+  const dir = donde(`lowerarm_${lado}`).sub(donde(`upperarm_${lado}`)).normalize();
+  const a = (ABD * Math.PI) / 180;
+  const objetivo = new THREE.Vector3(Math.sign(dir.x) * Math.sin(a), -Math.cos(a), 0);
+  const giro = new THREE.Quaternion().setFromUnitVectors(dir, objetivo);
+  const nueva = giro.multiply(brazo.getWorldQuaternion(new THREE.Quaternion()));
+  brazo.quaternion.copy(brazo.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(nueva));
+}
+bajarBrazo('l');
+bajarBrazo('r');
+gltf.scene.updateMatrixWorld(true);
+
+// Bounding box of the posed (skinned) body.
+const caja = new THREE.Box3();
+const v = new THREE.Vector3();
+const pos = malla.geometry.attributes.position;
+for (let i = 0; i < pos.count; i += 2) {
+  v.fromBufferAttribute(pos, i);
+  malla.applyBoneTransform(i, v);
+  caja.expandByPoint(v.applyMatrix4(malla.matrixWorld));
+}
+const margen = 0.03;
+const alto = caja.max.y - caja.min.y + 2 * margen;
+const ancho = caja.max.x - caja.min.x + 2 * margen;
+const W = Math.round((ALTO * ancho) / alto);
+renderer.setPixelRatio(1);
+renderer.setSize(W, ALTO, false);
+document.body.appendChild(renderer.domElement);
+const centro = caja.getCenter(new THREE.Vector3());
+const cam = new THREE.OrthographicCamera(-ancho / 2, ancho / 2, alto / 2, -alto / 2, 0.01, 20);
+
+// A muscle mask: channel c of the attribute _musculosK, drawn as grey.
+function mascara(k, c) {
+  const m = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  m.onBeforeCompile = (s) => {
+    s.vertexShader = s.vertexShader
+      .replace('#include <common>', `#include <common>\nattribute vec4 _musculos${k};\nvarying float vM;`)
+      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvM = _musculos${k}[${c}];`);
+    s.fragmentShader = s.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float vM;')
+      .replace('#include <dithering_fragment>', '#include <dithering_fragment>\ngl_FragColor = vec4(vec3(vM), 1.0);');
+  };
+  m.customProgramCacheKey = () => `musculo-${k}-${c}`;
+  return m;
+}
+
+const JUNTAS = ['head', 'neck_01', 'spine_01', 'pelvis', 'upperarm_l', 'upperarm_r', 'lowerarm_l', 'lowerarm_r', 'hand_l',
+  'hand_r', 'middle_01_l', 'middle_01_r', 'thigh_l', 'thigh_r', 'calf_l', 'calf_r', 'foot_l', 'foot_r'];
+const imagenes = {};
+const info = { W, H: ALTO };
+const blanco = new THREE.MeshBasicMaterial({ color: 0xffffff });
+for (const vista of ['delante', 'detras']) {
+  cam.position.set(centro.x, centro.y, centro.z + (vista === 'delante' ? 5 : -5));
+  cam.lookAt(centro);
+  cam.updateMatrixWorld();
+  malla.material = blanco;
+  renderer.render(escena, cam);
+  imagenes[`${vista}-silueta`] = renderer.domElement.toDataURL('image/png');
+  for (let k = 0; k < 5; k++) {
+    for (let c = 0; c < 4; c++) {
+      malla.material = mascara(k, c);
+      renderer.render(escena, cam);
+      imagenes[`${vista}-m${k * 4 + c}`] = renderer.domElement.toDataURL('image/png');
+    }
+  }
+  info[`juntas-${vista}`] = Object.fromEntries(JUNTAS.map((n) => {
+    const p = donde(n).project(cam);
+    return [n, [((p.x + 1) / 2) * W, ((1 - p.y) / 2) * ALTO]];
+  }));
+}
+window.IMAGENES = imagenes;
+window.INFO = info;
+window.LISTO = true;
+</script>
+</body>
+</html>

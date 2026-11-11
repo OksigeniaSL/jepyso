@@ -1,0 +1,57 @@
+{
+  "id": "cojin_rodillas",
+  "familia": "boca_arriba",
+  "nombre": "Cojín entre las rodillas",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla",
+    "cojin"
+  ],
+  "parametros": {
+    "tronco": "almohada"
+  },
+  "ritmo": {
+    "subir": 1.5,
+    "mantener": 5.0,
+    "bajar": 1.5,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Aprieta el cojín con las rodillas",
+    "mantener": "Aguanta",
+    "bajar": "Afloja",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "vientre"
+      },
+      "hip_l": {
+        "abd": 5
+      },
+      "hip_r": {
+        "abd": 5
+      }
+    },
+    "llegada": {
+      "hip_l": {
+        "abd": 2
+      },
+      "hip_r": {
+        "abd": 2
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "aductores"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    -0.7,
+    -1,
+    0.3
+  ]
+}
