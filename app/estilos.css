@@ -843,3 +843,11 @@ body.pro { --pestanas: calc(60px + env(safe-area-inset-bottom)); padding-bottom:
   padding: 10px 10px 10px 16px; background: var(--acento); color: var(--acento-tinta); border-radius: var(--radio);
 }
 .nueva-version .boton { min-height: 40px; padding: 0 16px; background: var(--acento-tinta); color: var(--acento); }
+.nueva-version-cerrar { display: grid; place-items: center; width: 40px; height: 40px; margin: -4px -4px -4px -6px; border: 0; background: transparent; color: var(--acento-tinta); }
+.nueva-version-cerrar svg { width: 18px; height: 18px; }
+/* In the professional's app it comes under the bar of the title, never over it nor over the way back; on a tablet,
+   centred on the content beside the rail. */
+body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
+@media (min-width: 700px) {
+  body.pro .nueva-version { left: calc(50% + var(--riel) / 2); }
+}

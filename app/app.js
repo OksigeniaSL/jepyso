@@ -1824,8 +1824,11 @@ function mostrarVersionNueva() {
   const aviso = document.createElement('div');
   aviso.className = 'nueva-version';
   aviso.setAttribute('role', 'status');
-  aviso.innerHTML = `<span>Hay una versión nueva de Jepyso.</span><button type="button" class="boton">Actualizar</button>`;
-  aviso.querySelector('button').addEventListener('click', () => location.reload());
+  aviso.innerHTML = `<span>Hay una versión nueva de Jepyso.</span><button type="button" class="boton">Actualizar</button>
+    <button type="button" class="nueva-version-cerrar" aria-label="Ahora no">${ICONO.cerrar}</button>`;
+  aviso.querySelector('.boton').addEventListener('click', () => location.reload());
+  // «Not now»: it goes until the next time Jepyso is opened, which already brings the new version.
+  aviso.querySelector('.nueva-version-cerrar').addEventListener('click', () => aviso.remove());
   document.body.append(aviso);
 }
 
