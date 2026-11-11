@@ -28,6 +28,9 @@ const ICONO = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  volver: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  personas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M15.5 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></svg>',
+  plantillas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 4.5h11v14H4z"/><path d="M8 8h11v14H8z"/><path d="M11 12h5M11 15.5h5M11 19h3" stroke-linecap="round"/></svg>',
   abrir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>',
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
   telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
@@ -129,6 +132,74 @@ const enlaceMensaje = (canal, texto, url) =>
   canal === 'tg'
     ? `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`
     : `https://wa.me/?text=${encodeURIComponent(`${texto} ${url}`)}`;
+
+// ---------- The professional's app ----------
+// The professional's side is an app for the phone and the tablet (Enrique, 11 November 2026): a tab bar at the foot of
+// the phone, a rail at the side of a tablet, a bar on top with the title and, inside a file, the way back. The person's
+// routine (#r=) has none of it, and no manifest: installed from there, its icon would open the builder, not the routine.
+const PESTANAS = [['#', 'Nueva rutina', 'mas'], ['#personas', 'Personas', 'personas'], ['#plantillas', 'Plantillas', 'plantillas']];
+let pestanas = null;
+function marcoApp(h) {
+  const pro = !h.startsWith('#r=');
+  document.body.classList.toggle('pro', pro);
+  if (pro && !pestanas) {
+    pestanas = document.createElement('nav');
+    pestanas.className = 'pestanas';
+    pestanas.setAttribute('aria-label', 'Jepyso');
+    pestanas.innerHTML = `<p class="marca-jepyso pestanas-marca">jepyso<span aria-hidden="true">°</span></p>${PESTANAS.map(
+      ([href, texto, icono]) => `<a href="${href}" data-pestana="${href}">${ICONO[icono]}<span>${texto}</span></a>`,
+    ).join('')}`;
+    document.body.append(pestanas);
+  }
+  if (pestanas) {
+    pestanas.hidden = !pro;
+    const actual = h.startsWith('#persona') ? '#personas' : h === '#plantillas' ? '#plantillas' : h.startsWith('#s=') ? '' : '#';
+    pestanas.querySelectorAll('a').forEach((a) => (a.dataset.pestana === actual ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
+  }
+  let m = document.querySelector('link[rel="manifest"]');
+  if (pro && !m) {
+    m = document.createElement('link');
+    m.rel = 'manifest';
+    m.href = 'manifest.json';
+    document.head.append(m);
+  } else if (!pro && m) m.remove();
+}
+
+const barraApp = (titulo, { volver = '', accion = '' } = {}) => `<header class="barra-app">
+  ${volver ? `<a class="barra-volver" href="${volver}" aria-label="Volver">${ICONO.volver}</a>` : ''}
+  <h1>${titulo}</h1>${accion}
+</header>`;
+const botonNueva = '<a class="boton barra-boton" href="#">' + ICONO.mas + 'Nueva rutina</a>';
+
+// The free version keeps up to five people with a file (Enrique, 11 November 2026): how many there are, in sight, as five
+// squares; full, said before a routine for someone new is made.
+function capacidad(lista) {
+  const n = lista.length;
+  const max = limite();
+  const marcas = Array.from({ length: max }, (_, i) => `<i${i < n ? ' class="usada"' : ''}></i>`).join('');
+  return `<p class="capacidad${n >= max ? ' llena' : ''}"><span class="capacidad-marcas" aria-hidden="true">${marcas}</span>
+    <span><b>${Math.min(n, max)} de ${max}</b> personas con ficha${n >= max ? '. Las rutinas para alguien nuevo van igual, sin ficha' : ''} · la versión de pago no tiene límite</span></p>`;
+}
+function avisoLleno(b) {
+  const lista = leerPersonas();
+  const nombre = b.para.trim();
+  if (!nombre || caben(lista) || buscarPorNombre(lista, nombre).length) return '';
+  return `<p class="aviso-lleno">Tus ${limite()} fichas están llenas: esta rutina va en el enlace, pero no se guarda en Personas.</p>`;
+}
+
+// The steps of the builder, on top: for whom, the exercises, the settings and the link. One tap goes to each.
+function etapasApp(b) {
+  const pasos = [
+    ['para', 'Para quién', b.para.trim() ? b.para.trim() : ''],
+    ['ejercicios', 'Ejercicios', b.orden.length ? String(b.orden.length) : ''],
+    ['ajustes', 'Ajustes', ''],
+    ['enlace', 'Enlace', ''],
+  ];
+  return pasos
+    .map(([k, t, hecho], i) => `<button type="button" class="etapa-ir${hecho ? ' hecha' : ''}" data-accion="ir-etapa" data-etapa="${k}"${k === 'enlace' && !b.orden.length ? ' disabled' : ''}>
+      <b>${hecho ? ICONO.check : i + 1}</b><span>${t}</span></button>`)
+    .join('');
+}
 
 // ---------- Builder ----------
 // The draft: who it is for, the settings for the whole routine, the exercises in the order the professional chose
@@ -413,7 +484,7 @@ function seccionPlantillas(b) {
               </span>`,
             )
             .join('')}</div>`
-        : '<p class="ayuda">Guarda la rutina que recetas a menudo y empieza la próxima desde ella. Se guardan en este navegador.</p>'
+        : '<p class="ayuda">Aún no hay plantillas: guarda esta rutina como una cuando tenga ejercicios.</p>'
     }
   </section>`;
 }
@@ -447,33 +518,39 @@ function vistaArmar() {
   function pintar() {
     app.innerHTML = `<div class="armar">
       <div class="armar-izq">
-        <header class="armar-cabecera">
-          <div class="cabecera-yeso cabecera-constructor" aria-hidden="true"></div>
-          <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#personas">Mis personas${leerPersonas().length ? ` <span class="num">${leerPersonas().length}</span>` : ''}</a></div>
-          <h1>Nueva rutina</h1>
-          <p>Elige los ejercicios, ajústalos y mándasela por un enlace. La persona no tiene que instalar nada.</p>
-        </header>
+        ${barraApp('Nueva rutina')}
+        <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
         <div class="armar-cuerpo">
-          <div class="campos">
-            <div class="campo"><label for="para">Para</label><input id="para" data-accion="para" autocomplete="off" placeholder="Su nombre" value="${esc(b.para)}"></div>
-            <div class="campo"><label for="de">De</label><input id="de" data-accion="de" autocomplete="off" placeholder="Tu nombre" value="${esc(b.de)}"></div>
-          </div>
-          <div class="hueco-recientes">${personasRecientes(b)}</div>
-          <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
-          <div class="hueco-rutina">${seccionRutina(b)}</div>
-          <section class="general">
-            <h2>Para toda la rutina</h2>
-            <div class="fila">
-              <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso)}</div>
-              <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces)}</div>
-              <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo)}</div>
-              <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
+          <section class="etapa" id="etapa-para" aria-labelledby="etapa-para-t">
+            <p class="etapa-titulo" id="etapa-para-t"><b>1</b>Para quién</p>
+            <div class="campos">
+              <div class="campo"><label for="para">Para</label><input id="para" data-accion="para" autocomplete="off" placeholder="Su nombre" value="${esc(b.para)}"></div>
+              <div class="campo"><label for="de">De</label><input id="de" data-accion="de" autocomplete="off" placeholder="Tu nombre" value="${esc(b.de)}"></div>
             </div>
-            <p class="ayuda">Si al hacer un ejercicio o a la mañana siguiente la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
+            <div class="hueco-recientes">${personasRecientes(b)}</div>
+            <div class="hueco-lleno">${avisoLleno(b)}</div>
           </section>
-          ${seccionBiblioteca(b)}
+          <section class="etapa" id="etapa-ejercicios" aria-labelledby="etapa-ejercicios-t">
+            <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>Ejercicios</p>
+            <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
+            <div class="hueco-rutina">${seccionRutina(b)}</div>
+            ${seccionBiblioteca(b)}
+          </section>
+          <section class="etapa" id="etapa-ajustes" aria-labelledby="etapa-ajustes-t">
+            <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>Ajustes</p>
+            <section class="general">
+              <h2>Para toda la rutina</h2>
+              <div class="fila">
+                <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso)}</div>
+                <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces)}</div>
+                <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo)}</div>
+                <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
+              </div>
+              <p class="ayuda">Si la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
+            </section>
+          </section>
         </div>
-        <div class="barra-crear">
+        <div class="barra-crear" id="etapa-enlace">
           <span class="resumen-corto">${resumenCorto()}</span>
           <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>Crear enlace</button>
         </div>
@@ -537,6 +614,8 @@ function vistaArmar() {
 
   function actualizarBarra() {
     app.querySelector('.resumen-corto').textContent = resumenCorto();
+    const etapas = app.querySelector('.etapas-app');
+    if (etapas) etapas.innerHTML = etapasApp(b);
     app.querySelector('[data-accion="crear"]').disabled = !b.orden.length;
     const nueva = app.querySelector('[data-accion="nueva-plantilla"]');
     if (nueva) nueva.hidden = !b.orden.length;
@@ -624,6 +703,13 @@ function vistaArmar() {
     b.activo = b.orden[0] || b.activo;
     apartarLienzo(app);
     pintar();
+  // A template chosen in the Plantillas tab arrives here, once.
+  const pendiente = almacen.leer('plantilla-a-usar', null);
+  if (pendiente !== null) {
+    almacen.guardar('plantilla-a-usar', null);
+    const p = almacen.leer('plantillas', [])[pendiente];
+    if (p) usarPlantilla(p);
+  }
   }
 
   let deshacerBorrar = null;
@@ -742,6 +828,9 @@ function vistaArmar() {
       }
     } else if (a === 'crear') {
       crearEnlace(b);
+    } else if (a === 'ir-etapa') {
+      app.querySelector(`#etapa-${el.dataset.etapa}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (el.dataset.etapa === 'enlace') app.querySelector('[data-accion="crear"]')?.focus({ preventScroll: true });
     }
     guardar();
   };
@@ -749,6 +838,12 @@ function vistaArmar() {
   app.oninput = (ev) => {
     const a = ev.target.dataset.accion;
     if (a === 'para' || a === 'de') b[a] = ev.target.value;
+    if (a === 'para') {
+      const etapas = app.querySelector('.etapas-app');
+      if (etapas) etapas.innerHTML = etapasApp(b);
+      const lleno = app.querySelector('.hueco-lleno');
+      if (lleno) lleno.innerHTML = avisoLleno(b);
+    }
     if (a === 'para' && b.persona) {
       const elegida = leerPersonas().find((x) => x.id === b.persona);
       if (!elegida || elegida.nombre !== b.para.trim()) {
@@ -1479,23 +1574,23 @@ function vistaPersonas() {
   const pintarLista = () => {
     const todas = leerPersonas().sort((x, y) => ultimaFecha(y).localeCompare(ultimaFecha(x)));
     const lista = todas.filter((p) => !texto || p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(texto));
+    const cap = app.querySelector('.hueco-capacidad');
+    if (cap) cap.innerHTML = todas.length ? capacidad(todas) : '';
     const ul = app.querySelector('.lista-personas');
     ul.innerHTML = todas.length
       ? lista.map(filaPersona).join('') || '<li class="vacio">Nadie con ese nombre.</li>'
       : '<li class="vacio">Todavía no hay nadie. Cuando mandes una rutina con el nombre de la persona, aparece aquí con su ficha.</li>';
   };
   app.innerHTML = `<div class="personas">
-    <header class="armar-cabecera">
-      <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#">Nueva rutina</a></div>
-      <h1>Mis personas</h1>
-      <p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este navegador; con una copia te las llevas a otro aparato.</p>
-    </header>
+    ${barraApp('Personas', { accion: botonNueva })}
     <div class="armar-cuerpo">
       <input type="search" class="buscar" data-accion="buscar-persona" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar personas por nombre">
+      <div class="hueco-capacidad"></div>
       <ul class="lista-personas"></ul>
+      <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.</p></details>
       <section class="general copia">
         <h2>Copia</h2>
-        <p class="ayuda">Guarda todas las fichas en un archivo y cárgalo en otro aparato. Al cargarla se añade lo que falte; no se borra nada.</p>
+        <p class="ayuda">Al cargarla se añade lo que falte; no se borra nada.</p>
         <div class="botones">
           <button type="button" class="boton secundario" data-accion="exportar">Guardar copia</button>
           <label class="boton secundario">Cargar copia<input type="file" accept=".json,application/json" data-accion="importar" class="oculto"></label>
@@ -1531,7 +1626,8 @@ function vistaPersonas() {
       const lista = leerPersonas();
       const r = cargarCopia(lista, JSON.parse(await ev.target.files[0].text()));
       guardarPersonas(lista);
-      aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.`;
+      aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.${
+        r.fuera ? ` ${r.fuera} no ${r.fuera === 1 ? 'cabe' : 'caben'}: la versión gratis guarda hasta ${limite()}.` : ''}`;
       pintarLista();
     } catch {
       aviso.textContent = 'Ese archivo no es una copia de Jepyso.';
@@ -1588,12 +1684,11 @@ function vistaPersona(id) {
   const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
   const dias = [...p.dias].reverse();
   app.innerHTML = `<div class="personas persona">
-    <header class="armar-cabecera">
-      <div class="cabecera-fila"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><a class="ir-personas" href="#personas">Mis personas</a></div>
-      <h1>${esc(p.nombre)}</h1>
+    ${barraApp(esc(p.nombre), { volver: '#personas' })}
+    <div class="ficha-cabeza">
       <p>Ficha desde el ${fechaLarga(p.creada)} · molestia aceptable ${tope}</p>
-      <div class="botones"><button type="button" class="boton" data-accion="rutina-para">Nueva rutina para ${esc(p.nombre)}</button></div>
-    </header>
+      <div class="botones"><button type="button" class="boton" data-accion="rutina-para">${ICONO.mas}Nueva rutina para ${esc(p.nombre)}</button></div>
+    </div>
     <div class="armar-cuerpo">
       <div class="persona-ficha">
       <section class="general notas">
@@ -1729,14 +1824,68 @@ async function guardarParaSinConexion(c, ids) {
   });
 }
 
+// ---------- Templates, as a tab of their own ----------
+function vistaPlantillas() {
+  const pintarLista = () => {
+    const lista = almacen.leer('plantillas', []);
+    app.querySelector('.lista-plantillas-app').innerHTML = lista.length
+      ? lista.map((p, i) => `<li class="plantilla-fila">
+          <button type="button" class="plantilla-usar" data-accion="usar" data-i="${i}">
+            <span class="nombre">${esc(p.nombre)}</span>
+            <span class="meta">${p.orden.length} ${p.orden.length === 1 ? 'ejercicio' : 'ejercicios'} · ${p.orden.map((id) => esc(EJERCICIOS[id]?.nombre || id)).join(', ')}</span>
+          </button>
+          <button type="button" class="plantilla-quitar" data-accion="quitar" data-i="${i}" aria-label="Borrar la plantilla ${esc(p.nombre)}">${ICONO.cerrar}</button>
+        </li>`).join('')
+      : '<li class="vacio">Todavía no hay plantillas. Arma una rutina y, en sus ejercicios, «Guardar la rutina como plantilla».</li>';
+  };
+  app.innerHTML = `<div class="personas plantillas-app">
+    ${barraApp('Plantillas', { accion: botonNueva })}
+    <div class="armar-cuerpo">
+      <ul class="lista-plantillas-app"></ul>
+      <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Una plantilla guarda los ejercicios y sus ajustes. Al usarla se abre una rutina nueva con ellos, para cambiar lo que haga falta y mandarla. Se guardan en este aparato.</p></details>
+    </div>
+  </div>`;
+  pintarLista();
+  let confirmar = null;
+  app.onclick = (ev) => {
+    const el = ev.target.closest('[data-accion]');
+    if (!el) return;
+    if (el.dataset.accion === 'usar') {
+      almacen.guardar('plantilla-a-usar', Number(el.dataset.i));
+      location.hash = '';
+    } else if (el.dataset.accion === 'quitar') {
+      // A first touch asks; the second deletes.
+      if (el.dataset.confirmar) {
+        const lista = almacen.leer('plantillas', []);
+        lista.splice(Number(el.dataset.i), 1);
+        almacen.guardar('plantillas', lista);
+        clearTimeout(confirmar);
+        pintarLista();
+      } else {
+        el.dataset.confirmar = '1';
+        el.classList.add('confirmar');
+        el.textContent = '¿Borrar?';
+        clearTimeout(confirmar);
+        confirmar = setTimeout(pintarLista, 4000);
+      }
+    }
+  };
+  return () => {
+    clearTimeout(confirmar);
+    app.onclick = null;
+  };
+}
+
 // ---------- Router ----------
 async function ir() {
   limpiar();
   document.querySelectorAll('.capa').forEach((c) => c.remove());
   const h = location.hash;
+  marcoApp(h);
   if (h.startsWith('#r=')) limpiar = await vistaRutina(h.slice(3));
   else if (h.startsWith('#s=')) limpiar = await vistaResumen(h.slice(3));
   else if (h === '#personas') limpiar = vistaPersonas();
+  else if (h === '#plantillas') limpiar = vistaPlantillas();
   else if (h.startsWith('#persona=')) limpiar = vistaPersona(decodeURIComponent(h.slice(9)));
   else limpiar = vistaArmar();
 }
