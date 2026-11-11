@@ -96,7 +96,8 @@ export class Figura {
     this.cajas = new Map();
 
     this.reloj = new THREE.Clock();
-    new ResizeObserver(() => this.ajustar()).observe(contenedor);
+    this.observador = new ResizeObserver(() => this.ajustar());
+    this.observador.observe(contenedor);
     this.ajustar();
     r.setAnimationLoop(() => this.cuadro());
   }
@@ -108,6 +109,17 @@ export class Figura {
 
   emitir(evento, ...args) {
     for (const fn of this.oyentes[evento] || []) fn(...args);
+  }
+
+  // The figure moves between boxes (the preview, a card, the player): the one it is in now is the one watched, so a
+  // change of its size (the sheet of the player growing from the countdown to the series) redraws it at its shape
+  // instead of stretching the last picture.
+  mover(contenedor) {
+    if (this.renderer.domElement.parentElement !== contenedor) contenedor.appendChild(this.renderer.domElement);
+    this.contenedor = contenedor;
+    this.observador.disconnect();
+    this.observador.observe(contenedor);
+    this.ajustar();
   }
 
   ajustar() {

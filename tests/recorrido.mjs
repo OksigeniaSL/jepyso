@@ -205,6 +205,14 @@ try {
     await movil.screenshot({ path: `${salida}/cuenta-movil-${tema}.png` });
     await movil.waitForTimeout(3900);
     await movil.screenshot({ path: `${salida}/serie-movil-${tema}.png` });
+    // The figure is drawn at the shape of its box: the sheet grows from the countdown to the series, and a picture
+    // left at the old size would show the body stretched.
+    const forma = await movil.evaluate(() => {
+      const c = document.querySelector('.escena canvas');
+      const r = c.getBoundingClientRect();
+      return Math.abs(c.width / c.height - r.width / r.height);
+    });
+    comprobar(forma < 0.02, `${tema}: en la serie, la figura sale estirada (${forma.toFixed(2)})`);
     await movil.click('[data-r="como"]');
     comprobar((await movil.locator('.hoja .explicacion .partida').count()) === 1, `${tema}: «Cómo se hace» no trae la posición de partida`);
     await movil.screenshot({ path: `${salida}/como-movil-${tema}.png` });

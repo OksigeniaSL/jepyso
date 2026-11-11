@@ -116,11 +116,7 @@ async function figuraEn(contenedor, c = 'a') {
   const manifiesto = await cargarManifiesto(c);
   if (!figura) figura = new Figura(contenedor, manifiesto, { calidad });
   else await figura.cambiarCuerpo(manifiesto);
-  if (figura.renderer.domElement.parentElement !== contenedor) {
-    contenedor.appendChild(figura.renderer.domElement);
-    figura.contenedor = contenedor;
-    figura.ajustar();
-  }
+  if (figura.renderer.domElement.parentElement !== contenedor) figura.mover(contenedor);
   return figura;
 }
 
