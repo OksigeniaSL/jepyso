@@ -206,6 +206,20 @@ try {
     await ancho.setInputFiles('[data-accion="importar"]', copiaRuta);
     await ancho.waitForFunction(() => document.querySelector('.aviso-copia')?.textContent.startsWith('Copia cargada'));
     comprobar((await ancho.textContent('.aviso-copia')).includes('ninguna nueva') && (await ancho.locator('.persona-fila').count()) === 1, `${tema}: cargar la copia repite personas`);
+
+    // The free version keeps five people with a file: a sixth still gets her routine, without a file.
+    await ancho.evaluate(() => {
+      const l = JSON.parse(localStorage.getItem('personas'));
+      for (let i = l.length; i < 5; i++) l.push({ id: `relleno${i}`, nombre: `Persona ${i}`, notas: '', creada: '2026-11-01', rutinas: [], dias: [] });
+      localStorage.setItem('personas', JSON.stringify(l));
+    });
+    await ancho.goto(url(tema));
+    await ancho.waitForSelector('#para');
+    await ancho.fill('#para', 'Sexta');
+    await ancho.click('[data-accion="crear"]');
+    await ancho.waitForSelector('.hoja .enlace-texto');
+    comprobar((await ancho.textContent('.hoja')).includes('el máximo de la versión gratis'), `${tema}: con 5 fichas no avisa del máximo de la versión gratis`);
+    comprobar((await ancho.evaluate(() => JSON.parse(localStorage.getItem('personas')).length)) === 5, `${tema}: con 5 fichas se crea una sexta`);
     await ancho.close();
 
     if (tema === 'claro') {

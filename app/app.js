@@ -5,7 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen,
 } from './datos.js';
 import { Figura } from './figura.js';
-import { leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia } from './personas.js';
+import { leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite } from './personas.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 import { pintarRecorrido } from './recorrido.js';
@@ -809,10 +809,13 @@ async function crearEnlace(b) {
   // or a new one. Its id travels in the link (p) and comes back with each summary.
   const lista = leerPersonas();
   let persona = null;
+  let sinSitio = false;
   if (rutina.para) {
     const iguales = buscarPorNombre(lista, rutina.para);
-    persona = (b.persona && lista.find((x) => x.id === b.persona)) || (iguales.length === 1 ? iguales[0] : crearPersona(lista, rutina.para));
-    rutina.p = persona.id;
+    persona = (b.persona && lista.find((x) => x.id === b.persona)) || (iguales.length === 1 ? iguales[0] : null);
+    if (!persona && caben(lista)) persona = crearPersona(lista, rutina.para);
+    if (persona) rutina.p = persona.id;
+    else sinSitio = true;
   }
   const codigo = await codificar(rutina);
   if (persona) {
@@ -841,6 +844,7 @@ async function crearEnlace(b) {
     <h2 id="hoja-titulo">La rutina, lista</h2>
     <p>Mándale el enlace por WhatsApp o Telegram, o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
     ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
+    ${sinSitio ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
     <div class="qr">${qr}</div>
     <div class="enlace-texto">${esc(url)}</div>
     <div class="botones">
@@ -1433,6 +1437,9 @@ function guardarEnFicha(s, aMano = false) {
   const profesional = lista.length > 0 || almacen.leer('borrador', null) !== null;
   if (!p && !aMano && !profesional) {
     return `<button type="button" class="boton secundario" data-accion="guardar-resumen">Guardar en mis personas</button>`;
+  }
+  if (!p && !caben(lista)) {
+    return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
   }
   const nueva = !p;
   if (!p) p = crearPersona(lista, s.para || 'Sin nombre', s.p || undefined);

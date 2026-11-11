@@ -8,6 +8,12 @@ import { almacen, TOPE_MOLESTIA, pasaDelTope, diaLocal } from './datos.js';
 
 const CLAVE = 'personas';
 
+// The free version keeps up to five people with a file; routines can still go to anyone. The paid version, with the
+// files in the professional's own cloud, has no limit (Enrique, 11-11).
+export const LIMITE_GRATIS = 5;
+export const limite = () => LIMITE_GRATIS;
+export const caben = (lista) => lista.length < limite();
+
 export const leerPersonas = () => almacen.leer(CLAVE, []);
 export const guardarPersonas = (lista) => almacen.guardar(CLAVE, lista);
 
@@ -28,12 +34,15 @@ export function crearPersona(lista, nombre, id = nuevoId()) {
   return p;
 }
 
-// A routine sent: to the person chosen in the builder, or to the one with that exact name, or to a new file.
+// A routine sent: to the person chosen in the builder, or to the one with that exact name, or to a new file while
+// there is room. Without room it returns null: the routine still goes, without a file.
 export function apuntarRutina(lista, { id, nombre }, rutina, codigo) {
   let p = (id && lista.find((x) => x.id === id)) || null;
   if (!p) {
     const iguales = buscarPorNombre(lista, nombre);
-    p = iguales.length === 1 ? iguales[0] : crearPersona(lista, nombre);
+    if (iguales.length === 1) p = iguales[0];
+    else if (caben(lista)) p = crearPersona(lista, nombre);
+    else return null;
   }
   if (!p.rutinas.some((r) => r.codigo === codigo)) p.rutinas.push({ f: rutina.f, codigo, e: rutina.e.map((x) => x.i) });
   if (Number.isInteger(rutina.m)) p.m = rutina.m;
@@ -100,14 +109,20 @@ export function semanas(dias, tope = TOPE_MOLESTIA) {
 // The copy in a file: everything, readable, to keep or to load on another device.
 export const copia = (lista) => ({ app: 'jepyso', tipo: 'personas', v: 1, fecha: new Date().toISOString(), personas: lista });
 
-// Loading a copy adds what is not here: new people, and for those already here (same id) their routines and sessions.
-// Nothing here is deleted. Returns how many people came and how many were new.
+// Loading a copy adds what is not here: new people while there is room, and for those already here (same id) their
+// routines and sessions. Nothing here is deleted. Returns how many people came, how many were new and how many did not
+// fit.
 export function cargarCopia(lista, datos) {
   if (datos?.app !== 'jepyso' || datos?.tipo !== 'personas' || !Array.isArray(datos.personas)) throw new Error('No es una copia de Jepyso');
   let nuevas = 0;
+  let fuera = 0;
   for (const q of datos.personas) {
     if (!q?.id || !q?.nombre) continue;
     let p = lista.find((x) => x.id === q.id);
+    if (!p && !caben(lista)) {
+      fuera++;
+      continue;
+    }
     if (!p) {
       p = { ...q, rutinas: [], dias: [] };
       lista.push(p);
@@ -118,5 +133,5 @@ export function cargarCopia(lista, datos) {
     if (!p.notas && q.notas) p.notas = q.notas;
     p.ultimoResumen = [p.ultimoResumen, q.ultimoResumen].filter(Boolean).sort().at(-1);
   }
-  return { total: datos.personas.length, nuevas };
+  return { total: datos.personas.length, nuevas, fuera };
 }

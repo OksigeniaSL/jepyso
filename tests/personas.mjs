@@ -41,6 +41,14 @@ let rechaza = false;
 try { P.cargarCopia(otraLista, { app: 'otra' }); } catch { rechaza = true; }
 ok(rechaza, 'un archivo que no es una copia de Jepyso se rechaza');
 
+// The free version: up to five people with a file. The ones already there keep receiving routines.
+const llena = [];
+for (let i = 0; i < 5; i++) P.crearPersona(llena, `Persona ${i}`);
+ok(P.apuntarRutina(llena, { nombre: 'Sexta' }, { f: '2026-11-11', e: [{ i: 'puente' }] }, 'cod9') === null && llena.length === 5, 'con 5 fichas, una persona nueva no tiene sitio');
+ok(P.apuntarRutina(llena, { nombre: 'Persona 2' }, { f: '2026-11-11', e: [{ i: 'puente' }] }, 'cod10')?.nombre === 'Persona 2', 'con 5 fichas, las que ya están siguen recibiendo rutinas');
+const r3 = P.cargarCopia(llena, P.copia([{ id: 'x1', nombre: 'Otra', rutinas: [], dias: [] }]));
+ok(r3.fuera === 1 && llena.length === 5, 'una copia no pasa del límite');
+
 if (fallos.length) {
   console.error(`personas, ${fallos.length} fallos:\n  ${fallos.join('\n  ')}`);
   process.exit(1);
