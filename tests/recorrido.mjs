@@ -223,6 +223,7 @@ try {
     comprobar(forma < 0.02, `${tema}: en la serie, la figura sale estirada (${forma.toFixed(2)})`);
     await movil.click('[data-r="como"]');
     comprobar((await movil.locator('.hoja .explicacion .partida').count()) === 1, `${tema}: «Cómo se hace» no trae la posición de partida`);
+    await movil.waitForTimeout(400); // the sheet fades in for 0.18 s
     await movil.screenshot({ path: `${salida}/como-movil-${tema}.png` });
     await movil.click('.hoja .boton');
     await movil.waitForSelector('.anillo', { timeout: 20000 });
