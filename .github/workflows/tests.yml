@@ -32,19 +32,14 @@ jobs:
         with:
           node-version: 22
 
-      # The system packages come from Ubuntu's mirror, which sometimes does not resolve from the runner; most of them
-      # are fonts the walk does not need, and the runner image already carries Chrome's libraries. They are tried three
-      # times and the walk goes on without them: a library really missing shows up as a failed walk.
+      # Only the browser, without Ubuntu's system packages: the runner image already carries Chrome and its libraries,
+      # and the packages (mostly fonts) come from a mirror that sometimes does not resolve from the runner, which held
+      # the job until its time ran out. A library really missing shows up as a failed walk.
       - name: Install Playwright and its Chromium
         working-directory: tests
         run: |
           npm ci --no-audit --no-fund
           npx playwright-core install chromium
-          for intento in 1 2 3; do
-            npx playwright-core install-deps chromium && break
-            echo "::warning::system packages for Chromium, try $intento failed"
-            sleep 20
-          done
 
       - name: Walk through the app
         run: tests/correr.sh "$RUNNER_TEMP/capturas"
