@@ -537,7 +537,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 /* ---------- The plaster studio: the professional's signatures ----------
    Only on the builder: the labels of a drawing, its registration marks, the figures in mono, the goniometer and the
    path of the movement. */
-.rutina-armada > h2, .biblioteca h2, .plantillas h2, .general > h2, .vista > h2 {
+.rutina-armada > h2, .biblioteca h2, .plantillas h2, .general > h2, .vista > h2, .lo-hecho > h2 {
   font-family: var(--letra-cifras); font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--tinta-suave); padding-bottom: 9px;
   background: repeating-linear-gradient(90deg, var(--grafito-fino) 0 1px, transparent 1px 8px) left bottom / 100% 5px no-repeat,
@@ -643,6 +643,10 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .persona-fila .nombre { font-family: var(--letra-titulo); font-size: 18px; font-weight: 500; }
 .persona-fila .meta { grid-column: 1; color: var(--tinta-suave); font-size: 14px; }
 .persona-fila .chip { grid-column: 2; grid-row: 1 / span 2; }
+/* On a phone the mark goes under the name, so the line of what it has keeps its width. */
+@media (max-width: 560px) {
+  .persona-fila .chip { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 4px; }
+}
 .lista-personas .vacio, .lo-hecho .vacio { margin: 0; padding: 18px 16px; border: 1px dashed var(--linea); border-radius: var(--radio); color: var(--tinta-suave); }
 .copia .botones .boton { flex: 0 1 auto; }
 .aviso-copia { margin: 0; color: var(--tinta); }
@@ -655,13 +659,29 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 }
 .persona textarea:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: transparent; }
 .lo-hecho { display: grid; gap: 12px; }
-.lo-hecho h2, .evolucion h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
+.lo-hecho > h2, .evolucion > h2 { margin: 0; }
 .rutinas-mandadas { list-style: none; margin: 0; padding: 0; display: grid; }
 .rutinas-mandadas li { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--linea); }
 .rutinas-mandadas li:first-child { border-top: 0; }
 .botones-fila { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 .botones-fila .boton.fantasma { min-height: 36px; padding: 0 2px; font-size: 14px; }
 .borrar-ficha { display: flex; justify-content: flex-start; }
+/* The file of a person: on a phone, one column (notes, weeks, what was done, what was sent); wide, the file on the left
+   and what was done on the right, as the builder keeps the preview beside it. «New routine» keeps its own width. */
+.persona-ficha { display: contents; }
+.persona .notas { order: 1; }
+.persona .evolucion { order: 2; }
+.persona .lo-hecho { order: 3; }
+.persona .mandadas { order: 4; }
+.persona .borrar-ficha { order: 5; }
+@media (min-width: 700px) {
+  .persona .armar-cabecera .botones .boton { flex: 0 0 auto; }
+}
+@media (min-width: 980px) {
+  .persona .armar-cuerpo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; column-gap: 20px; }
+  .persona-ficha { display: grid; gap: 16px; align-content: start; }
+  .persona .lo-hecho { order: 0; }
+}
 
 /* The week-by-week table: one graphite bar per value, the level as a tick, the number always written. */
 .semanas { width: 100%; border-collapse: collapse; font-size: 14px; }

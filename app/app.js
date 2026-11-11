@@ -1588,16 +1588,13 @@ function vistaPersona(id) {
       <div class="botones"><button type="button" class="boton" data-accion="rutina-para">Nueva rutina para ${esc(p.nombre)}</button></div>
     </header>
     <div class="armar-cuerpo">
-      <section class="general">
+      <div class="persona-ficha">
+      <section class="general notas">
         <h2><label for="notas">Notas</label></h2>
         <textarea id="notas" data-accion="notas" rows="3" placeholder="Lo que quieras recordar de esta persona">${esc(p.notas)}</textarea>
       </section>
       ${tablaSemanas(p)}
-      <section class="lo-hecho">
-        <h2>Lo que ha hecho</h2>
-        ${dias.length ? dias.map((d) => resumenDia(d, tope)).join('') : '<p class="vacio">Aún no te ha mandado ningún resumen. Cuando lo abras, se guarda aquí.</p>'}
-      </section>
-      <section class="general">
+      <section class="general mandadas">
         <h2>Rutinas que le has mandado</h2>
         ${p.rutinas.length ? '' : '<p class="ayuda">Ninguna desde este navegador. Las que le mandes con su nombre se apuntan aquí.</p>'}
         <ul class="rutinas-mandadas">${[...p.rutinas]
@@ -1613,6 +1610,11 @@ function vistaPersona(id) {
       </section>
       <section class="borrar-ficha">
         <button type="button" class="boton fantasma" data-accion="borrar-persona">Borrar su ficha</button>
+      </section>
+      </div>
+      <section class="lo-hecho">
+        <h2>Lo que ha hecho</h2>
+        ${dias.length ? dias.map((d) => resumenDia(d, tope)).join('') : '<p class="vacio">Aún no te ha mandado ningún resumen. Cuando lo abras, se guarda aquí.</p>'}
       </section>
     </div>
   </div>`;
