@@ -499,3 +499,14 @@ button { cursor: pointer; }
   .biblio-cuerpo { grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: start; }
   .hueco-mapa { position: sticky; top: 16px; --mapa-alto: 262px; }
 }
+
+/* The still of each exercise in the routine of the person (tools/posters/), of their figure and their side: the left
+   side, in mirror, so the figure works the same arm or leg they will. */
+.tarjeta-cabeza { display: flex; align-items: center; gap: 14px; }
+.tarjeta-cabeza > div { flex: 1; min-width: 0; display: grid; gap: 8px; }
+.tarjeta-poster {
+  flex: none; width: 112px; aspect-ratio: 4 / 3; border-radius: var(--radio-sm); background: var(--figura-fondo); overflow: hidden;
+}
+.tarjeta-poster img { display: block; width: 100%; height: 100%; }
+.tarjeta-poster img.espejo { transform: scaleX(-1); }
+.tarjeta-poster.vacio img { visibility: hidden; }

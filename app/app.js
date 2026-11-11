@@ -10,8 +10,10 @@ import { MAPA, PUNTOS } from './mapa.js';
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
 const RUTAS = { a: 'modelos/ejercicios.json', b: 'modelos/b/ejercicios.json' };
-// The still of every exercise for the library rows, made by tools/posters/ next to each body's clips.
+// The still of every exercise, for the library rows and the routine of the person, made by tools/posters/ next to each
+// body's clips. One that is not there leaves its tile empty instead of a broken image.
 const poster = (id, c) => `modelos/${c === 'b' ? 'b/' : ''}posters/${id}.webp`;
+app.addEventListener('error', (ev) => ev.target.closest?.('.biblio-poster, .tarjeta-poster')?.classList.add('vacio'), true);
 const calidad = parametros.get('calidad') === 'baja' ? 'baja' : 'alta';
 const manifiestos = {};
 let figura = null;
@@ -724,9 +726,6 @@ function vistaArmar() {
     guardarPlantilla(nombre);
   };
 
-  // A still that is not there leaves its tile empty instead of a broken image.
-  const sinPoster = (ev) => ev.target.closest?.('.biblio-poster')?.classList.add('vacio');
-  app.addEventListener('error', sinPoster, true);
   pintar();
   const ancho = window.matchMedia('(min-width: 980px)');
   const alCambiarAncho = () => colocarFigura();
@@ -734,7 +733,6 @@ function vistaArmar() {
   return () => {
     ancho.removeEventListener('change', alCambiarAncho);
     if (figura) figura.oyentes = {};
-    app.removeEventListener('error', sinPoster, true);
     app.onclick = app.oninput = app.onchange = app.onsubmit = null;
   };
 }
@@ -898,12 +896,18 @@ async function vistaRutina(codigo) {
         ${ejercicios
           .map((e) => {
             const def = EJERCICIOS[e.i];
+            // The still of the exercise, of their figure and their side: the left side, in mirror.
             return `<article class="tarjeta">
-              <h3>${esc(def.nombre)}</h3>
-              <div class="linea-chips">
-                <span class="chip num">${e.s} ${e.s === 1 ? 'serie' : 'series'} de ${e.r}</span>
-                ${def.unLado ? `<span class="chip">${LADOS[e.l]}</span>` : ''}
-                <span class="chip">${esc(def.material)}</span>
+              <div class="tarjeta-cabeza">
+                <span class="tarjeta-poster"><img src="${poster(e.i, r.c)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
+                <div>
+                  <h3>${esc(def.nombre)}</h3>
+                  <div class="linea-chips">
+                    <span class="chip num">${e.s} ${e.s === 1 ? 'serie' : 'series'} de ${e.r}</span>
+                    ${def.unLado ? `<span class="chip">${LADOS[e.l]}</span>` : ''}
+                    <span class="chip">${esc(def.material)}</span>
+                  </div>
+                </div>
               </div>
               ${svgTempo(e.t, { etiquetas: true })}
               ${e.n ? `<div class="nota">${esc(e.n)}</div>` : ''}
@@ -1354,7 +1358,8 @@ const trabajador = registrarTrabajador();
 async function guardarParaSinConexion(c, ids) {
   if (!(await trabajador)) return false;
   const m = await cargarManifiesto(c);
-  const rutas = [...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo, ...ids.flatMap((id) => (m.ejercicios[id] ? [m.ejercicios[id].glb, m.ejercicios[id].ficha] : []))];
+  const rutas = [...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo,
+    ...ids.flatMap((id) => (m.ejercicios[id] ? [m.ejercicios[id].glb, m.ejercicios[id].ficha, poster(id, c)] : []))];
   const listo = await navigator.serviceWorker.ready;
   return new Promise((resolver) => {
     const canal = new MessageChannel();

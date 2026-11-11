@@ -181,11 +181,24 @@ try {
         ],
       });
     });
+    // In the routine of the person, each exercise with its still, of their figure and their side: the left one in mirror.
+    const izquierda = await movil.evaluate(async () => (await import('./datos.js')).codificar({
+      v: 1, c: 'b', d: 5, x: 1, m: 5, f: '2026-11-10', e: [{ i: 'hombro', s: 1, r: 2, t: [1, 0, 1], l: 'izq' }],
+    }));
+    await movil.goto(url(tema, `#r=${izquierda}`));
+    await movil.waitForSelector('.tarjeta-poster img');
+    const espejo = movil.locator('.tarjeta-poster img').first();
+    comprobar((await espejo.getAttribute('src')) === 'modelos/b/posters/hombro.webp', `${tema}: la rutina no trae el póster de su figura`);
+    comprobar((await espejo.getAttribute('class')) === 'espejo', `${tema}: el lado izquierdo no sale en espejo`);
     await movil.goto(url(tema, `#r=${codigo}`));
     await movil.evaluate(() => localStorage.clear());
     await movil.reload();
     await movil.waitForTimeout(800);
     comprobar((await movil.locator('.manana').count()) === 0, `${tema}: la pregunta de la mañana sale sin sesión del día anterior`);
+    const posters = movil.locator('.tarjeta-poster img');
+    comprobar((await posters.count()) === 2 && (await posters.first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false))),
+      `${tema}: las tarjetas de la rutina no traen su póster`);
+    comprobar((await movil.locator('.tarjeta-poster img.espejo').count()) === 0, `${tema}: un ejercicio de los dos lados sale en espejo`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
     await movil.click('[data-r="empezar"]');
     await movil.waitForTimeout(1200);
@@ -278,6 +291,8 @@ try {
     await sinRed.context().setOffline(true);
     await sinRed.reload();
     await sinRed.waitForSelector('[data-r="empezar"]', { timeout: 10000 });
+    comprobar(await sinRed.locator('.tarjeta-poster img').first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false)),
+      `${tema}: sin conexión, la tarjeta no trae su póster`);
     await sinRed.click('[data-r="empezar"]');
     try {
       await sinRed.waitForSelector('.j-fase', { timeout: 15000 });
