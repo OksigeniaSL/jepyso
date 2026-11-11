@@ -529,10 +529,20 @@ async function vistaRutina(codigo) {
             </article>`;
           })
           .join('')}
+        <p class="sin-conexion" aria-live="polite"></p>
       </section>
       <footer class="pie"></footer>
     </div>`;
     pintarPie(hist);
+    avisarSinConexion();
+  }
+
+  let guardada = null;
+  async function avisarSinConexion() {
+    guardada ||= guardarParaSinConexion(r.c, [...new Set(ejercicios.map((e) => e.i))]).catch(() => false);
+    if (!(await guardada)) return;
+    const p = app.querySelector('.sin-conexion');
+    if (p) p.textContent = 'Guardada en este móvil: puedes hacerla aunque no tengas conexión.';
   }
 
   // Queue: every exercise, every side, every set.
@@ -937,6 +947,43 @@ async function vistaResumen(codigo) {
     <section class="lista">${dias.map((d) => resumenDia(d, tope)).join('')}</section>
   </div>`;
   return () => {};
+}
+
+// ---------- Without a connection ----------
+// sw.js keeps the app. Each routine opened on the phone also keeps its body, clips and the three.js files, so the
+// person can do it later with no signal. The answer says how many of the files are kept.
+const MOTOR = [
+  'vendor/three/three.module.js',
+  'vendor/three/addons/loaders/GLTFLoader.js',
+  'vendor/three/addons/controls/OrbitControls.js',
+  'vendor/three/addons/utils/BufferGeometryUtils.js',
+];
+
+function registrarTrabajador() {
+  if (!('serviceWorker' in navigator)) return null;
+  // Offline, the update check of an existing worker fails; the one already installed keeps working.
+  return navigator.serviceWorker.register('sw.js').catch(async (err) => {
+    const ya = await navigator.serviceWorker.getRegistration().catch(() => null);
+    if (!ya) console.warn('sin conexión no disponible', err);
+    return ya || null;
+  });
+}
+const trabajador = registrarTrabajador();
+
+async function guardarParaSinConexion(c, ids) {
+  if (!(await trabajador)) return false;
+  const m = await cargarManifiesto(c);
+  const rutas = [...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo, ...ids.flatMap((id) => (m.ejercicios[id] ? [m.ejercicios[id].glb, m.ejercicios[id].ficha] : []))];
+  const listo = await navigator.serviceWorker.ready;
+  return new Promise((resolver) => {
+    const canal = new MessageChannel();
+    const espera = setTimeout(() => resolver(false), 60000);
+    canal.port1.onmessage = (ev) => {
+      clearTimeout(espera);
+      resolver(ev.data.guardados === ev.data.total);
+    };
+    listo.active.postMessage({ tipo: 'guardar', rutas }, [canal.port2]);
+  });
 }
 
 // ---------- Router ----------

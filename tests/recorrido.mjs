@@ -164,6 +164,31 @@ try {
     await movil.waitForTimeout(400);
     comprobar((await movil.textContent('.saludo')).includes('no pasó de 5'), `${tema}: un resumen sin tope no usa 5`);
     await movil.close();
+
+    // Without a connection: a new phone opens the routine once, then does it with no signal at all.
+    const sinRed = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    vigilar(sinRed, `sin-conexion-${tema}`);
+    await sinRed.goto(url(tema, `#r=${codigo}`));
+    try {
+      await sinRed.waitForFunction(() => document.querySelector('.sin-conexion')?.textContent.length > 0, null, { timeout: 60000 });
+    } catch {
+      comprobar(false, `${tema}: la rutina no dice que queda guardada para hacerla sin conexión`);
+    }
+    await sinRed.screenshot({ path: `${salida}/guardada-movil-${tema}.png`, fullPage: true });
+    await sinRed.context().setOffline(true);
+    await sinRed.reload();
+    await sinRed.waitForSelector('[data-r="empezar"]', { timeout: 10000 });
+    await sinRed.click('[data-r="empezar"]');
+    try {
+      await sinRed.waitForSelector('.j-fase', { timeout: 15000 });
+      await sinRed.waitForTimeout(1200);
+      comprobar((await sinRed.locator('.escena canvas').count()) === 1, `${tema}: sin conexión, la figura no sale`);
+    } catch {
+      comprobar(false, `${tema}: sin conexión, la serie no empieza`);
+    }
+    await sinRed.screenshot({ path: `${salida}/sin-conexion-serie-movil-${tema}.png` });
+    await sinRed.context().setOffline(false);
+    await sinRed.close();
   }
 } finally {
   await browser.close();

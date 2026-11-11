@@ -10,6 +10,7 @@ OUT=${1:-$(mktemp -d)}
 APP=${APP:-$HERE/../app}
 PORT=${PORT:-8772}
 mkdir -p "$OUT"
+node "$HERE/archivos-sw.mjs" "$APP"
 python3 -I -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP" >/dev/null 2>&1 &
 SERVER=$!
 trap 'kill "$SERVER" 2>/dev/null || true' EXIT

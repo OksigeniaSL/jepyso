@@ -215,6 +215,8 @@ button { cursor: pointer; }
 }
 .tarjeta h3 { margin: 0; font-size: 18px; }
 .tarjeta .nota { background: var(--acento-suave); color: var(--tinta); padding: 10px 12px; border-radius: var(--radio-sm); font-size: 15px; }
+.sin-conexion { margin: 4px 4px 0; color: var(--tinta-suave); font-size: 14px; }
+.sin-conexion:empty { display: none; }
 .pie { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); display: grid; gap: 8px; }
 .pie .boton { width: 100%; }
 
