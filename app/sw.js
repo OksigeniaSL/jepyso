@@ -37,12 +37,15 @@ self.addEventListener('activate', (ev) => {
   );
 });
 
-async function fijo(peticion, ruta) {
+// The page gets every answer at once; copies go to the cache behind it (event.waitUntil). Writing the copy before
+// answering held the cache while a whole clip was read: a reload during the routine's «guardar» could wait minutes
+// for its own files.
+async function fijo(ev, ruta) {
   const cache = await caches.open(FIJOS);
   const guardada = await cache.match(ruta);
   if (guardada) return guardada;
-  const r = await fetch(peticion);
-  if (r.ok) await cache.put(ruta, r.clone());
+  const r = await fetch(ev.request);
+  if (r.ok) ev.waitUntil(cache.put(ruta, r.clone()).catch(() => {}));
   return r;
 }
 
@@ -51,8 +54,8 @@ async function deLaApp(ev, ruta) {
   const cache = await caches.open(APP);
   const clave = ev.request.mode === 'navigate' || ruta === '' ? 'index.html' : ruta;
   const guardada = await cache.match(clave);
-  const red = fetch(ev.request).then(async (r) => {
-    if (r.ok && r.type === 'basic') await cache.put(clave, r.clone());
+  const red = fetch(ev.request).then((r) => {
+    if (r.ok && r.type === 'basic') ev.waitUntil(cache.put(clave, r.clone()).catch(() => {}));
     return r;
   });
   if (guardada) {
@@ -66,10 +69,21 @@ self.addEventListener('fetch', (ev) => {
   if (ev.request.method !== 'GET') return;
   const ruta = relativa(ev.request.url);
   if (ruta === null || ruta === 'sw.js') return;
-  ev.respondWith(esFijo(ruta) ? fijo(ev.request, ruta) : deLaApp(ev, ruta));
+  ev.respondWith(esFijo(ruta) ? fijo(ev, ruta) : deLaApp(ev, ruta));
 });
 
-// The page sends the paths a routine needs (body, clips, sheets, three.js) and gets back how many are kept.
+// Keeps one file for the routine, unless it is already there. Nobody else reads the response, so it goes straight
+// into the cache, without a copy.
+async function guardarUno(ruta) {
+  const cache = await caches.open(esFijo(ruta) ? FIJOS : APP);
+  if (await cache.match(ruta)) return true;
+  const r = await fetch(base + ruta);
+  if (!r.ok) return false;
+  await cache.put(ruta, r);
+  return true;
+}
+
+// The page sends the paths a routine needs (body, clips, sheets, stills, three.js) and gets back how many are kept.
 self.addEventListener('message', (ev) => {
   const { tipo, rutas } = ev.data || {};
   if (tipo !== 'guardar' || !Array.isArray(rutas)) return;
@@ -78,9 +92,8 @@ self.addEventListener('message', (ev) => {
     Promise.allSettled(
       rutas.map((ruta) => {
         const limpia = relativa(new URL(ruta, base).href);
-        if (limpia === null) return Promise.reject(new Error(ruta));
-        return esFijo(limpia) ? fijo(new Request(base + limpia), limpia) : caches.open(APP).then((c) => c.add(limpia));
+        return limpia === null ? Promise.reject(new Error(ruta)) : guardarUno(limpia);
       }),
-    ).then((res) => puerto?.postMessage({ guardados: res.filter((x) => x.status === 'fulfilled' && (!x.value || x.value.ok !== false)).length, total: rutas.length })),
+    ).then((res) => puerto?.postMessage({ guardados: res.filter((x) => x.status === 'fulfilled' && x.value).length, total: rutas.length })),
   );
 });
