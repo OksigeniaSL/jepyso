@@ -359,6 +359,8 @@ export class Figura {
     }
     this.controles.update();
     this.renderer.render(this.escena, this.camara);
+    // Right after the picture, with the same pose: what is drawn over the figure (the builder's path) never trails it.
+    this.emitir('dibujado');
   }
 
   destruir() {

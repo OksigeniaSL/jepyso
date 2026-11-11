@@ -6,6 +6,8 @@ import {
 } from './datos.js';
 import { Figura } from './figura.js';
 import { MAPA, PUNTOS } from './mapa.js';
+import { medida, dibujar, actualizar } from './goniometro.js';
+import { pintarRecorrido } from './recorrido.js';
 
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
@@ -410,6 +412,7 @@ function seccionPlantillas(b) {
 
 function vistaArmar() {
   const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
+  let gonio = null;
   const guardar = () => almacen.guardar('borrador', b);
   const ajustes = (id) => (b.ejercicios[id] ||= ajustesIniciales(id));
 
@@ -423,6 +426,8 @@ function vistaArmar() {
     app.innerHTML = `<div class="armar">
       <div class="armar-izq">
         <header class="armar-cabecera">
+          <div class="cabecera-yeso cabecera-constructor" aria-hidden="true"></div>
+          <p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p>
           <h1>Nueva rutina</h1>
           <p>Elige los ejercicios, ajústalos y mándasela por un enlace. La persona no tiene que instalar nada.</p>
         </header>
@@ -471,8 +476,11 @@ function vistaArmar() {
     if (!sitio) return;
     try {
       const f = await figuraEn(sitio, b.cuerpo);
-      f.oyentes = { fase: [alFase] };
+      // The professional's two marks over the preview: the path of the movement and, under it, the goniometer.
+      f.oyentes = { fase: [alFase], dibujado: [() => pintarRecorrido(f, gonio && gonio.id === f.id ? gonio.k : null)] };
       await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der' });
+      gonio = await medida(f);
+      pintarGonio();
       f.empezar({ modo: 'demo' });
     } catch (err) {
       sitio.innerHTML = `<p class="chip">La figura de este ejercicio aún no está</p>`;
@@ -483,11 +491,19 @@ function vistaArmar() {
   function pintarPieVista() {
     const pie = app.querySelector('.vista-pie');
     const e = ajustes(b.activo);
-    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[b.activo].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span></div>`;
+    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[b.activo].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span><div class="gonio" hidden></div></div>`;
+    pintarGonio();
+  }
+
+  // The goniometer of the exercise on the figure, when its sheet has the angles; a new picture of the foot redraws it.
+  function pintarGonio() {
+    const cont = app.querySelector('.vista-pie .gonio');
+    if (cont && gonio && gonio.id === b.activo) dibujar(cont, gonio);
   }
 
   const alFase = (fase, restante, progreso) => {
     if (progreso !== undefined) moverPunto(app.querySelector('.vista-pie .tempo'), ajustes(b.activo).tempo, progreso);
+    if (gonio && fase) actualizar(app.querySelector('.vista-pie .gonio'), figura, gonio, fase, restante);
   };
 
   // Re-drawing a part of the page must not drop the figure's canvas: it is put aside and placed again.
@@ -883,6 +899,7 @@ async function vistaRutina(codigo) {
     const vecesHoy = hist.filter((d) => d.f === hoy).length;
     app.innerHTML = `<div class="rutina">
       <header class="saludo">
+        <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
         ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
         <h1>${r.para ? `Hola, ${esc(r.para)}` : 'Tu rutina'}</h1>
         <p>${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'}, ${minutos(totalSeg)}${r.x > 1 ? ` · ${r.x} veces al día` : ''}${vecesHoy ? ` · hoy llevas ${vecesHoy}` : ''}.</p>
@@ -1276,7 +1293,7 @@ function resumenDia(dia, tope = TOPE_MOLESTIA) {
         const bien = x.p.every((v) => v >= x.r);
         return `<div class="hecho">
           <span class="nombre">${esc(def.nombre)}${def.unLado ? ` · ${LADOS[x.l].toLowerCase()}` : ''}</span>
-          ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'vivo' : ''}">Molestia ${x.m}/10</span>` : '<span></span>'}
+          ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">Molestia ${x.m}/10</span>` : '<span></span>'}
           <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${v} de ${x.r}"></span>`).join('')}</div>
           <span class="detalle num">${
             bien
@@ -1288,7 +1305,7 @@ function resumenDia(dia, tope = TOPE_MOLESTIA) {
       .join('')}
     ${
       typeof dia.a === 'number'
-        ? `<div class="manana-linea"><span>A la mañana siguiente</span><span class="chip ${pasaDelTope(dia.a, tope) ? 'vivo' : ''}">Molestia ${dia.a}/10</span></div>`
+        ? `<div class="manana-linea"><span>A la mañana siguiente</span><span class="chip ${pasaDelTope(dia.a, tope) ? 'alta' : ''}">Molestia ${dia.a}/10</span></div>`
         : ''
     }
   </article>`;

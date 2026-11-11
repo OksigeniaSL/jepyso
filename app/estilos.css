@@ -1,54 +1,71 @@
-/* Exercise app sketch. Light and dark from the same tokens; layout works from 360 px up. */
+/* Jepyso. Light and dark from the same tokens; layout works from 360 px up.
+   Its look is «the plaster studio» (Enrique, 11 November 2026): Gaudí's figure lit as a cast in a studio, graphite on
+   plaster, hairlines and square corners, no shadows. The terracotta of the working muscles is the only warm colour;
+   nothing else may look like it. Red Hat Display for titles, Text for the rest, and Mono for the professional's
+   figures. The professional's screens carry the signatures (registration marks, the protractor under the titles, the
+   goniometer, the path of the movement); the person's screens read bigger and with more contrast. */
+@font-face { font-family: 'Red Hat Display'; src: url('fuentes/red-hat-display.woff2') format('woff2'); font-weight: 300 900; font-display: swap; }
+@font-face { font-family: 'Red Hat Text'; src: url('fuentes/red-hat-text.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+@font-face { font-family: 'Red Hat Mono'; src: url('fuentes/red-hat-mono.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
 :root {
-  --fondo: #f3f0e9;
-  --superficie: #fffdf8;
-  --superficie-2: #ebe7dd;
-  --tinta: #1b2220;
-  --tinta-suave: #5a6561;
-  --linea: #dcd6c9;
-  --acento: #0d6b5b;
-  --acento-tinta: #ffffff;
-  --acento-suave: #d7ebe5;
-  --vivo: #e2603a;
-  --vivo-suave: #fbe1d6;
-  --sombra: 0 1px 2px rgb(27 34 32 / 0.06), 0 8px 24px rgb(27 34 32 / 0.06);
-  --radio: 18px;
-  --radio-sm: 12px;
-  --figura-fondo: #ece8de;
+  --letra: 'Red Hat Text', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --letra-titulo: 'Red Hat Display', 'Red Hat Text', system-ui, sans-serif;
+  --letra-cifras: 'Red Hat Mono', ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fondo: #e4e6e3;
+  --superficie: #f2f3f1;
+  --superficie-2: #d9dcd9;
+  --tinta: #1d2225;
+  --tinta-suave: #596165;
+  --linea: #bcc2c2;
+  --acento: #1d2225;
+  --acento-tinta: #f2f3f1;
+  --acento-suave: #d3d7d6;
+  --vivo: #c9553a;
+  --vivo-texto: #a5432b;
+  --vivo-suave: color-mix(in srgb, #c9553a 12%, #f2f3f1);
+  --grafito-fino: rgb(29 34 37 / 0.38);
+  --sombra: none;
+  --radio: 3px;
+  --radio-sm: 2px;
+  --figura-fondo: radial-gradient(120% 95% at 18% 0%, #f7f8f6 0%, #dfe2df 55%, #cfd3d0 100%);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --fondo: #0f1412;
-    --superficie: #171d1b;
-    --superficie-2: #212926;
-    --tinta: #e9eee9;
-    --tinta-suave: #98a5a0;
-    --linea: #2a3330;
-    --acento: #4cc0a5;
-    --acento-tinta: #06231d;
-    --acento-suave: #173a33;
-    --vivo: #ff8b5e;
-    --vivo-suave: #3d2219;
-    --sombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
-    --figura-fondo: #161c1a;
+    --fondo: #121517;
+    --superficie: #191d20;
+    --superficie-2: #22272a;
+    --tinta: #e3e6e4;
+    --tinta-suave: #a2aaae;
+    --linea: #353b3f;
+    --acento: #e3e6e4;
+    --acento-tinta: #121517;
+    --acento-suave: #2a3034;
+    --vivo: #e06a4c;
+    --vivo-texto: #ef8a70;
+    --vivo-suave: color-mix(in srgb, #e06a4c 16%, #191d20);
+    --grafito-fino: rgb(227 230 228 / 0.34);
+    --sombra: none;
+    --figura-fondo: radial-gradient(120% 95% at 18% 0%, #2c3236 0%, #1a1e21 60%, #131618 100%);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --fondo: #0f1412;
-  --superficie: #171d1b;
-  --superficie-2: #212926;
-  --tinta: #e9eee9;
-  --tinta-suave: #98a5a0;
-  --linea: #2a3330;
-  --acento: #4cc0a5;
-  --acento-tinta: #06231d;
-  --acento-suave: #173a33;
-  --vivo: #ff8b5e;
-  --vivo-suave: #3d2219;
-  --sombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
-  --figura-fondo: #161c1a;
+  --fondo: #121517;
+  --superficie: #191d20;
+  --superficie-2: #22272a;
+  --tinta: #e3e6e4;
+  --tinta-suave: #a2aaae;
+  --linea: #353b3f;
+  --acento: #e3e6e4;
+  --acento-tinta: #121517;
+  --acento-suave: #2a3034;
+  --vivo: #e06a4c;
+  --vivo-texto: #ef8a70;
+  --vivo-suave: color-mix(in srgb, #e06a4c 16%, #191d20);
+  --grafito-fino: rgb(227 230 228 / 0.34);
+  --sombra: none;
+  --figura-fondo: radial-gradient(120% 95% at 18% 0%, #2c3236 0%, #1a1e21 60%, #131618 100%);
   color-scheme: dark;
 }
 
@@ -57,63 +74,67 @@ html, body { margin: 0; height: 100%; }
 body {
   background: var(--fondo);
   color: var(--tinta);
-  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font: 16px/1.45 var(--letra);
+  letter-spacing: 0.005em;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
+h1, h2, h3 { font-family: var(--letra-titulo); }
 .num { font-variant-numeric: tabular-nums; }
 
 /* ---------- Shared pieces ---------- */
 .boton {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 48px; padding: 0 22px; border-radius: 999px; border: 0;
-  background: var(--acento); color: var(--acento-tinta); font-weight: 650; letter-spacing: 0.01em;
+  min-height: 48px; padding: 0 22px; border-radius: var(--radio-sm); border: 0;
+  background: var(--acento); color: var(--acento-tinta); font-weight: 600; letter-spacing: 0.01em;
   transition: transform 0.12s ease, filter 0.12s ease;
 }
 .boton:active { transform: scale(0.97); }
 .boton:disabled { opacity: 0.45; cursor: default; }
-.boton.secundario { background: var(--superficie-2); color: var(--tinta); }
-.boton.fantasma { background: transparent; color: var(--acento); padding: 0 12px; }
+.boton.secundario { background: transparent; border: 1px solid var(--tinta); color: var(--tinta); }
+.boton.fantasma { background: transparent; color: var(--acento); padding: 0 12px; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .boton svg { width: 20px; height: 20px; }
 
 .chip {
-  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
-  background: var(--superficie-2); color: var(--tinta-suave); font-size: 13px; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 0;
+  background: transparent; border: 1px solid var(--linea); color: var(--tinta-suave); font-size: 13px; white-space: nowrap;
 }
-.chip.vivo { background: var(--vivo-suave); color: var(--vivo); }
+/* A muscle, in its terracotta; a discomfort over the limit, in plain graphite and bold. */
+.chip.vivo { border-color: var(--vivo); color: var(--vivo-texto); }
+.chip.alta { border-color: var(--tinta); color: var(--tinta); font-weight: 700; }
 
 .paso {
-  display: inline-flex; align-items: center; border: 1px solid var(--linea); border-radius: 999px;
+  display: inline-flex; align-items: center; border: 1px solid var(--linea); border-radius: var(--radio-sm);
   background: var(--superficie); height: 40px;
 }
 .paso button {
-  width: 40px; height: 38px; border: 0; background: transparent; font-size: 20px; color: var(--acento); border-radius: 999px;
+  width: 40px; height: 38px; border: 0; background: transparent; font-size: 20px; color: var(--acento); border-radius: 1px;
 }
 .paso output { min-width: 34px; text-align: center; font-weight: 650; }
 
 .segmentos {
-  display: inline-flex; padding: 3px; border-radius: 999px; background: var(--superficie-2); gap: 2px;
+  display: inline-flex; padding: 3px; border-radius: var(--radio-sm); background: transparent; border: 1px solid var(--linea); gap: 2px;
 }
 .segmentos button {
-  border: 0; background: transparent; padding: 8px 14px; border-radius: 999px; color: var(--tinta-suave); font-size: 14px;
+  border: 0; background: transparent; padding: 8px 14px; border-radius: 1px; color: var(--tinta-suave); font-size: 14px;
   min-height: 36px;
 }
-.segmentos button[aria-pressed="true"] { background: var(--superficie); color: var(--tinta); font-weight: 650; box-shadow: var(--sombra); }
+.segmentos button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); font-weight: 600; }
 
-/* The tempo line: rest, up, hold, down drawn as a trapezoid. It is the app's signature shape. */
+/* The tempo line: rest, up, hold, down drawn as a trapezoid, a graphite stroke over a base with a tick every second. */
 .tempo { display: block; width: 100%; height: auto; overflow: visible; }
-.tempo .base { stroke: var(--linea); stroke-width: 2; fill: none; }
-.tempo .traza { stroke: var(--acento); stroke-width: 3; fill: none; stroke-linejoin: round; stroke-linecap: round; }
-.tempo .relleno { fill: var(--acento-suave); }
-.tempo .punto { fill: var(--vivo); }
-.tempo text { fill: var(--tinta-suave); font-size: 11px; }
+.tempo .base { stroke: var(--linea); stroke-width: 6; stroke-dasharray: 1 7; fill: none; }
+.tempo .traza { stroke: var(--tinta); stroke-width: 2.4; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.tempo .relleno { fill: var(--grafito-fino); opacity: 0.18; }
+.tempo .punto { fill: var(--fondo); stroke: var(--tinta); stroke-width: 2; }
+.tempo text { fill: var(--tinta-suave); font-size: 13px; }
 
 /* ---------- Builder (professional) ---------- */
 .armar { min-height: 100%; display: grid; grid-template-columns: minmax(0, 1fr); }
 .armar-cabecera { padding: 28px 20px 8px; }
-.armar-cabecera h1 { margin: 0; font-size: 28px; letter-spacing: -0.01em; }
+.armar-cabecera h1 { margin: 0; font-size: 28px; font-weight: 500; letter-spacing: -0.025em; }
 .armar-cabecera p { margin: 6px 0 0; color: var(--tinta-suave); }
 .armar-cuerpo { padding: 12px 16px 120px; display: grid; gap: 16px; }
 .campos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -132,16 +153,16 @@ button { cursor: pointer; }
   background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); box-shadow: var(--sombra);
   overflow: hidden; transition: border-color 0.15s ease;
 }
-.ejercicio.activo { border-color: var(--acento); }
+.ejercicio.activo { border-color: var(--tinta); }
 .ejercicio-cabeza { display: flex; align-items: center; gap: 14px; padding: 14px 16px; width: 100%; border: 0; background: transparent; text-align: left; }
 .ejercicio-cabeza .titulo { flex: 1; min-width: 0; }
 .ejercicio-cabeza h3 { margin: 0; font-size: 17px; }
 .ejercicio-cabeza .linea-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .marca {
-  width: 28px; height: 28px; border-radius: 999px; border: 2px solid var(--linea); display: grid; place-items: center; flex: none;
+  width: 28px; height: 28px; border-radius: 0; border: 1px solid var(--linea); display: grid; place-items: center; flex: none;
 }
-.ejercicio.incluido .marca { background: var(--acento); border-color: var(--acento); color: var(--acento-tinta); }
-.marca { font-size: 14px; font-weight: 700; }
+.ejercicio.incluido .marca { background: transparent; border-color: var(--tinta); color: var(--tinta); }
+.marca { font-size: 14px; font-weight: 600; font-family: var(--letra-cifras); }
 .ejercicio-ajustes { display: none; padding: 4px 16px 18px; gap: 16px; }
 .ejercicio.incluido.activo .ejercicio-ajustes { display: grid; }
 /* Folded, a card is one line with its dose; open, it shows what the exercise is. */
@@ -188,7 +209,7 @@ button { cursor: pointer; }
     display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; position: sticky; top: 0; height: 100vh;
     padding: 20px 20px 20px 0;
   }
-  .vista-figura { position: relative; border-radius: var(--radio); background: var(--figura-fondo); overflow: hidden; min-height: 0; }
+  .vista-figura { position: relative; border-radius: 0; border: 1px solid var(--linea); background: var(--figura-fondo); overflow: hidden; min-height: 0; }
   .barra-crear { position: static; background: transparent; backdrop-filter: none; border: 0; padding: 0 16px 24px; }
 }
 
@@ -199,10 +220,10 @@ button { cursor: pointer; }
 }
 @media (min-width: 700px) { .capa { place-items: center; } }
 .hoja {
-  width: 100%; max-height: 92vh; overflow: auto; background: var(--superficie); border-radius: 24px 24px 0 0;
+  width: 100%; max-height: 92vh; overflow: auto; background: var(--superficie); border-radius: var(--radio) var(--radio) 0 0;
   padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); display: grid; gap: 16px;
 }
-@media (min-width: 700px) { .hoja { width: min(560px, 92vw); border-radius: 24px; } }
+@media (min-width: 700px) { .hoja { width: min(560px, 92vw); border-radius: var(--radio); } }
 .hoja h2 { margin: 0; font-size: 22px; }
 .hoja p { margin: 0; color: var(--tinta-suave); }
 .qr { display: grid; place-items: center; padding: 16px; background: #fff; border-radius: var(--radio-sm); }
@@ -218,15 +239,15 @@ button { cursor: pointer; }
 /* ---------- Routine (the person) ---------- */
 .rutina { min-height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
 .saludo { padding: 32px 20px 8px; }
-.saludo .de { color: var(--acento); font-weight: 650; font-size: 14px; letter-spacing: 0.02em; }
-.saludo h1 { margin: 6px 0 0; font-size: 30px; letter-spacing: -0.01em; line-height: 1.15; }
+.saludo .de { color: var(--tinta-suave); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
+.saludo h1 { margin: 6px 0 0; font-size: 36px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.1; }
 .saludo p { margin: 8px 0 0; color: var(--tinta-suave); }
 .lista { padding: 12px 16px 24px; display: grid; gap: 12px; align-content: start; }
 .tarjeta {
   background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: 16px; display: grid; gap: 10px;
 }
 .tarjeta h3 { margin: 0; font-size: 18px; }
-.tarjeta .nota, .hoja .nota { margin: 0; background: var(--acento-suave); color: var(--tinta); padding: 10px 12px; border-radius: var(--radio-sm); font-size: 15px; }
+.tarjeta .nota, .hoja .nota { margin: 0; background: transparent; color: var(--tinta); padding: 4px 0 4px 12px; border-left: 2px solid var(--tinta); border-radius: 0; font-size: 16px; }
 .sin-conexion { margin: 4px 4px 0; color: var(--tinta-suave); font-size: 14px; }
 .sin-conexion:empty { display: none; }
 .pie { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); display: grid; gap: 8px; }
@@ -239,8 +260,8 @@ button { cursor: pointer; }
 .jugador-arriba h2 { margin: 0; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jugador-arriba .sub { color: var(--tinta-suave); font-size: 14px; }
 .redondo {
-  width: 44px; height: 44px; border-radius: 999px; border: 0; background: var(--superficie); color: var(--tinta);
-  display: grid; place-items: center; box-shadow: var(--sombra); flex: none;
+  width: 48px; height: 48px; border-radius: 0; border: 1px solid var(--linea); background: var(--fondo); color: var(--tinta);
+  display: grid; place-items: center; flex: none;
 }
 .redondo svg { width: 22px; height: 22px; }
 .escena { position: relative; min-height: 0; }
@@ -251,16 +272,18 @@ button { cursor: pointer; }
   display: flex; align-items: center; gap: 6px; pointer-events: none; transition: opacity 0.6s ease;
 }
 .mando {
-  background: var(--superficie); border-radius: 24px 24px 0 0; padding: 16px 20px calc(18px + env(safe-area-inset-bottom));
-  display: grid; gap: 12px; box-shadow: 0 -8px 30px rgb(0 0 0 / 0.08);
+  background: var(--fondo); border-top: 1px solid var(--linea); padding: 16px 20px calc(18px + env(safe-area-inset-bottom));
+  display: grid; gap: 12px;
 }
 .cuenta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.cuenta .grande { font-size: 56px; font-weight: 750; line-height: 1; letter-spacing: -0.02em; }
-.cuenta .grande small { font-size: 22px; color: var(--tinta-suave); font-weight: 600; letter-spacing: 0; }
-.fase { font-size: 22px; font-weight: 700; color: var(--acento); text-align: right; min-height: 1.2em; }
-.fase.mantener { color: var(--vivo); }
+/* What to do now leads: the phase big, the count under it (Kimi K3, 11 November 2026). */
+.cuenta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.cuenta .grande { font-family: var(--letra-titulo); font-size: 30px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; }
+.cuenta .grande small { font-size: 22px; color: var(--tinta-suave); font-weight: 500; letter-spacing: 0; }
+.fase { order: -1; font-family: var(--letra-titulo); font-size: 44px; font-weight: 600; line-height: 1.05; color: var(--tinta); min-height: 1.1em; }
+.fase.mantener { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 8px; }
 .mando-botones { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
-.mando-botones .principal { width: 72px; height: 72px; border-radius: 999px; border: 0; background: var(--acento); color: var(--acento-tinta); display: grid; place-items: center; }
+.mando-botones .principal { width: 72px; height: 72px; border-radius: 0; border: 0; background: var(--tinta); color: var(--fondo); display: grid; place-items: center; }
 .mando-botones .principal svg { width: 30px; height: 30px; }
 .mando-botones .boton.fantasma { justify-self: start; white-space: nowrap; font-size: 15px; padding: 0 6px; }
 .mando-botones .boton.fantasma:last-child { justify-self: end; }
@@ -269,18 +292,18 @@ button { cursor: pointer; }
 .anillo { width: 132px; height: 132px; justify-self: center; }
 .anillo circle { fill: none; stroke-width: 10; }
 .anillo .fondo-anillo { stroke: var(--superficie-2); }
-.anillo .avance { stroke: var(--acento); stroke-linecap: round; transition: stroke-dashoffset 0.25s linear; }
-.anillo text { fill: var(--tinta); font-size: 34px; font-weight: 750; text-anchor: middle; dominant-baseline: central; }
+.anillo .avance { stroke: var(--tinta); stroke-linecap: butt; transition: stroke-dashoffset 0.25s linear; }
+.anillo text { fill: var(--tinta); font-family: var(--letra-titulo); font-size: 36px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
 .centro { text-align: center; display: grid; gap: 4px; }
 .centro h3 { margin: 0; font-size: 22px; }
 .centro p { margin: 0; color: var(--tinta-suave); }
 
 .escala { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 4px; }
 .escala button {
-  height: 44px; border-radius: 10px; border: 1px solid var(--linea); background: var(--superficie); font-weight: 650; padding: 0;
+  height: 48px; border-radius: 0; border: 1px solid var(--linea); background: var(--superficie); font-weight: 600; padding: 0;
 }
-.escala button[aria-pressed="true"] { background: var(--vivo); color: #fff; border-color: var(--vivo); }
-.escala-pie { display: flex; justify-content: space-between; font-size: 12px; color: var(--tinta-suave); }
+.escala button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
+.escala-pie { display: flex; justify-content: space-between; font-size: 14px; color: var(--tinta-suave); }
 .series-hechas { display: flex; flex-wrap: wrap; gap: 10px; }
 .series-hechas .ajuste { justify-items: start; }
 
@@ -297,14 +320,14 @@ button { cursor: pointer; }
 .hecho .nombre { font-weight: 650; }
 .hecho .detalle { grid-column: 1 / -1; color: var(--tinta-suave); font-size: 14px; }
 .barra-series { display: flex; gap: 4px; }
-.barra-series span { height: 8px; flex: 1; border-radius: 4px; background: var(--acento); }
-.barra-series span.corta { background: var(--vivo); }
+.barra-series span { height: 8px; flex: 1; border-radius: 0; background: var(--tinta); }
+.barra-series span.corta { background: repeating-linear-gradient(45deg, var(--tinta) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px var(--tinta); }
 
 .oculto { display: none !important; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* On phones the preview lives inside the active card. */
-.mini-figura { display: none; position: relative; height: 300px; border-radius: var(--radio-sm); background: var(--figura-fondo); overflow: hidden; }
+.mini-figura { display: none; position: relative; height: 300px; border-radius: 0; border: 1px solid var(--linea); background: var(--figura-fondo); overflow: hidden; }
 .mini-figura canvas { display: block; width: 100%; height: 100%; touch-action: none; }
 .ejercicio.activo.incluido .mini-figura { display: block; }
 .vista-figura canvas { display: block; width: 100%; height: 100%; touch-action: none; }
@@ -322,20 +345,20 @@ button { cursor: pointer; }
 .manana p { margin: 0; color: var(--tinta-suave); }
 .manana .boton.fantasma { justify-self: start; padding: 0 4px; min-height: 40px; }
 .manana .apuntado { color: var(--tinta); }
-.aviso-molestia { margin: 0; min-height: 1.4em; font-size: 14px; color: var(--vivo); }
-.dia.marcado { border-color: var(--vivo); box-shadow: inset 4px 0 0 var(--vivo); }
-.marca-dia { color: var(--vivo); font-weight: 650; white-space: nowrap; }
+.aviso-molestia { margin: 0; min-height: 1.4em; font-size: 15px; color: var(--tinta); font-weight: 600; }
+.dia.marcado { border-color: var(--tinta); box-shadow: inset 4px 0 0 var(--tinta); }
+.marca-dia { color: var(--tinta); font-weight: 700; white-space: nowrap; }
 .manana-linea {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px;
   border-top: 1px solid var(--linea); color: var(--tinta-suave); font-size: 14px;
 }
-.saludo p.molestia-alta { color: var(--vivo); font-weight: 600; }
+.saludo p.molestia-alta { color: var(--tinta); font-weight: 700; }
 
 /* ---------- The routine being built, the library and the templates ---------- */
 .rutina-armada, .biblioteca, .plantillas { display: grid; gap: 12px; }
 .rutina-armada h2, .biblioteca h2, .plantillas h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
 .rutina-vacia {
-  margin: 0; padding: 18px 16px; border: 1.5px dashed var(--linea); border-radius: var(--radio); color: var(--tinta-suave);
+  margin: 0; padding: 18px 16px; border: 1px dashed var(--tinta-suave); border-radius: var(--radio); color: var(--tinta-suave);
 }
 .ordenar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .ordenar .boton { min-height: 40px; padding: 0 16px; font-size: 14px; }
@@ -361,7 +384,7 @@ button { cursor: pointer; }
 .biblio-grupo:first-child { border-top: 0; padding-top: 4px; }
 .biblio-grupo + .biblio-fila { border-top: 0; }
 .biblio-meta { display: block; font-size: 13px; color: var(--tinta-suave); line-height: 1.4; }
-.biblio-meta .vivo { color: var(--vivo); }
+.biblio-meta .vivo { color: var(--vivo-texto); }
 .biblio-fila {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 12px 0;
   border-top: 1px solid var(--linea);
@@ -371,12 +394,12 @@ button { cursor: pointer; }
 .biblio-ver .titulo { flex: 1; min-width: 0; }
 /* The still of the exercise (tools/posters/): the figure at the middle of «mantén», on the figure's own ground. */
 .biblio-poster {
-  flex: none; width: 96px; aspect-ratio: 4 / 3; border-radius: 10px; background: var(--figura-fondo); overflow: hidden;
+  flex: none; width: 96px; aspect-ratio: 4 / 3; border-radius: 0; border: 1px solid var(--linea); background: var(--figura-fondo); overflow: hidden;
   transition: box-shadow 0.15s ease;
 }
 .biblio-poster img { display: block; width: 100%; height: 100%; }
 .biblio-poster.vacio img { visibility: hidden; }
-.biblio-fila.activo .biblio-poster { box-shadow: 0 0 0 2px var(--acento); }
+.biblio-fila.activo .biblio-poster { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); }
 /* «.biblio-fila .boton» comes later and sets the padding: these name the button too, so they win. */
 .biblio-fila .boton.biblio-anadir { gap: 6px; padding-left: 12px; }
 .biblio-anadir svg { width: 16px; height: 16px; }
@@ -385,13 +408,13 @@ button { cursor: pointer; }
 @container (max-width: 420px) {
   .biblio-poster { width: 72px; }
   .biblio-fila .rotulo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .biblio-fila .boton.biblio-anadir { width: 44px; min-height: 44px; padding: 0; border-radius: 999px; }
+  .biblio-fila .boton.biblio-anadir { width: 44px; min-height: 44px; padding: 0; border-radius: var(--radio-sm); }
   .biblio-fila .biblio-anadir svg { width: 22px; height: 22px; stroke-width: 2.8; }
-  .biblio-dentro { width: 44px; height: 44px; justify-content: center; border-radius: 999px; background: var(--acento-suave); }
+  .biblio-dentro { width: 44px; height: 44px; justify-content: center; border-radius: var(--radio-sm); border: 1px solid var(--tinta); background: transparent; }
   .biblio-dentro svg { width: 20px; height: 20px; }
 }
 .biblio-ver h3 { margin: 0 0 2px; font-size: 16px; }
-.biblio-fila.activo .biblio-ver h3 { color: var(--acento); }
+.biblio-fila.activo .biblio-ver h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .biblio-fila .boton { min-height: 40px; padding: 0 16px; font-size: 14px; }
 .biblio-dentro { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--acento); font-weight: 650; white-space: nowrap; }
 .biblio-dentro svg { width: 16px; height: 16px; }
@@ -406,21 +429,21 @@ button { cursor: pointer; }
 .plantilla-nueva input { flex: 1 1 240px; width: auto; }
 .lista-plantillas { display: flex; flex-wrap: wrap; gap: 8px; }
 .plantilla {
-  display: inline-flex; align-items: stretch; border: 1px solid var(--linea); border-radius: 999px; background: var(--superficie);
+  display: inline-flex; align-items: stretch; border: 1px solid var(--linea); border-radius: var(--radio-sm); background: var(--superficie);
   overflow: hidden; max-width: 100%;
 }
 .plantilla .usar {
   border: 0; background: transparent; padding: 6px 6px 6px 14px; font-size: 14px; display: inline-flex; align-items: center;
   gap: 8px; min-height: 40px; min-width: 0; text-align: left;
 }
-.plantilla .cuantos { background: var(--acento-suave); color: var(--acento); border-radius: 999px; padding: 1px 8px; font-size: 12px; font-weight: 650; }
+.plantilla .cuantos { background: transparent; color: var(--tinta-suave); border-left: 1px solid var(--linea); border-radius: 0; padding: 1px 8px; font-family: var(--letra-cifras); font-size: 12px; font-weight: 500; }
 .plantilla .borrar { border: 0; background: transparent; color: var(--tinta-suave); padding: 0 12px 0 6px; display: grid; place-items: center; min-width: 40px; }
 .plantilla .borrar svg { width: 14px; height: 14px; }
-.plantilla .borrar.confirmar { background: var(--vivo-suave); color: var(--vivo); font-size: 13px; font-weight: 650; padding: 0 14px; }
+.plantilla .borrar.confirmar { background: var(--tinta); color: var(--fondo); font-size: 13px; font-weight: 600; padding: 0 14px; }
 
 /* The explanation inside a builder card, folded. */
 .detalle { border-top: 1px solid var(--linea); padding-top: 12px; }
-.detalle summary { cursor: pointer; color: var(--acento); font-weight: 650; font-size: 14px; min-height: 32px; display: flex; align-items: center; }
+.detalle summary { cursor: pointer; color: var(--tinta); font-weight: 600; font-size: 14px; min-height: 32px; display: flex; align-items: center; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .detalle[open] summary { margin-bottom: 10px; }
 .detalle .explicacion { font-size: 15px; }
 .detalle .fuente { margin: 10px 0 0; font-size: 13px; color: var(--tinta-suave); }
@@ -430,9 +453,9 @@ button { cursor: pointer; }
    the ones with exercises are a touch warmer and can be touched; the one chosen lights as on the figure. The points
    are the areas, in the routine's green. */
 :root {
-  --mapa-cuerpo: var(--superficie-2);
-  --mapa-musculo: color-mix(in srgb, var(--linea) 75%, var(--superficie-2));
-  --mapa-musculo-con: color-mix(in srgb, var(--vivo) 16%, var(--mapa-musculo));
+  --mapa-cuerpo: #d6d9d6;
+  --mapa-musculo: #c5cac7;
+  --mapa-musculo-con: color-mix(in srgb, var(--vivo) 18%, #c5cac7);
 }
 /* On a dark card the body needs more light than the theme's second surface and an edge of its own, and the muscles
    with exercises a warmth that still shows. */
@@ -463,7 +486,7 @@ button { cursor: pointer; }
 @media (hover: hover) { .mapa-musculo.con:hover { fill: color-mix(in srgb, var(--vivo) 45%, var(--mapa-musculo)); } }
 .mapa-musculo.encendido, .mapa-musculo.encendido:hover { fill: var(--vivo); }
 .mapa-halos { pointer-events: none; }
-.mapa-halo { fill: var(--acento); opacity: 0; transition: opacity 0.2s ease; }
+.mapa-halo { fill: var(--tinta); opacity: 0; transition: opacity 0.2s ease; }
 .mapa-halo.encendido { opacity: 0.3; }
 .mapa-punto {
   position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; padding: 0; border: 0; border-radius: 999px;
@@ -471,25 +494,25 @@ button { cursor: pointer; }
 }
 .mapa-punto::before {
   content: ''; width: 13px; height: 13px; border-radius: 999px; background: var(--superficie);
-  box-shadow: 0 0 0 2.5px var(--acento), 0 1px 3px rgb(0 0 0 / 0.25); transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 0 0 1.5px var(--tinta); transition: transform 0.15s ease, background 0.15s ease;
 }
 @media (hover: hover) { .mapa-punto:hover::before { background: var(--acento-suave); transform: scale(1.15); } }
-.mapa-punto[aria-pressed="true"]::before { background: var(--acento); transform: scale(1.15); }
+.mapa-punto[aria-pressed="true"]::before { background: var(--tinta); transform: scale(1.15); }
 .mapa-punto:focus-visible { outline: 2px solid var(--acento); outline-offset: 0; }
 /* The name of the area next to the point, on hover or with the keyboard. */
 .mapa-punto::after {
   content: attr(data-nombre); position: absolute; bottom: calc(100% - 2px); left: 50%; transform: translateX(-50%);
-  padding: 2px 8px; border-radius: 999px; background: var(--tinta); color: var(--fondo); font-size: 12px; font-weight: 650;
+  padding: 2px 8px; border-radius: 0; background: var(--tinta); color: var(--fondo); font-size: 12px; font-weight: 600;
   white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; z-index: 1;
 }
 @media (hover: hover) { .mapa-punto:hover::after { opacity: 1; } }
 .mapa-punto:focus-visible::after { opacity: 1; }
 .mapa-pie { margin: 0; min-height: 34px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--tinta-suave); text-align: center; }
 .mapa-quitar {
-  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px 0 14px; border: 0; border-radius: 999px;
-  background: var(--acento); color: var(--acento-tinta); font-size: 14px; font-weight: 650;
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px 0 14px; border: 0; border-radius: var(--radio-sm);
+  background: var(--tinta); color: var(--fondo); font-size: 14px; font-weight: 600;
 }
-.mapa-quitar.musculo { background: var(--vivo-suave); color: var(--vivo); }
+.mapa-quitar.musculo { background: var(--vivo-suave); color: var(--vivo-texto); box-shadow: inset 0 0 0 1px var(--vivo); }
 .mapa-quitar svg { width: 14px; height: 14px; }
 
 /* A wide library: the search on top, the map at the left and the list beside it. The map stays in sight while the
@@ -510,3 +533,85 @@ button { cursor: pointer; }
 .tarjeta-poster img { display: block; width: 100%; height: 100%; }
 .tarjeta-poster img.espejo { transform: scaleX(-1); }
 .tarjeta-poster.vacio img { visibility: hidden; }
+
+/* ---------- The plaster studio: the professional's signatures ----------
+   Only on the builder: the labels of a drawing, its registration marks, the figures in mono, the goniometer and the
+   path of the movement. */
+.rutina-armada > h2, .biblioteca h2, .plantillas h2, .general > h2, .vista > h2 {
+  font-family: var(--letra-cifras); font-size: 12.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--tinta-suave); padding-bottom: 9px;
+  background: repeating-linear-gradient(90deg, var(--grafito-fino) 0 1px, transparent 1px 8px) left bottom / 100% 5px no-repeat,
+    repeating-linear-gradient(90deg, var(--grafito-fino) 0 1px, transparent 1px 40px) left bottom / 100% 9px no-repeat;
+}
+.ejercicio, .biblioteca, .general, .armar .tarjeta, .rutina-vacia {
+  background:
+    linear-gradient(var(--tinta), var(--tinta)) left 6px top 6px / 10px 1px no-repeat,
+    linear-gradient(var(--tinta), var(--tinta)) left 6px top 6px / 1px 10px no-repeat,
+    linear-gradient(var(--tinta), var(--tinta)) right 6px bottom 6px / 10px 1px no-repeat,
+    linear-gradient(var(--tinta), var(--tinta)) right 6px bottom 6px / 1px 10px no-repeat,
+    var(--superficie);
+}
+.armar .chip, .armar .num, .armar .tempo text, .biblio-cuenta { font-family: var(--letra-cifras); font-variant-numeric: tabular-nums; }
+.armar .chip { font-size: 12px; letter-spacing: 0.02em; }
+
+/* Gaudí's casts head the two sides: getting up from the chair for the professional, the bridge at the top of its hold
+   for the person. Under them, the studio's light while they load. */
+.cabecera-yeso { background-repeat: no-repeat; background-size: cover; border-bottom: 1px solid var(--linea); }
+.cabecera-constructor {
+  height: 250px; margin: -28px -20px 22px;
+  background-image: url('imagenes/yeso-silla.webp'), var(--figura-fondo); background-position: 74% 4%, center;
+}
+@media (min-width: 980px) { .cabecera-constructor { margin: -28px 0 22px -20px; } }
+.cabecera-rutina {
+  height: 200px; margin: -32px -20px 22px;
+  background-image: url('imagenes/yeso-puente.webp'), var(--figura-fondo); background-position: 30% 62%, center;
+}
+
+/* The name, written: lower case, with the degree sign. */
+.marca-jepyso { margin: 0 0 14px; font-family: var(--letra-titulo); font-size: 22px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; color: var(--tinta); }
+.marca-jepyso span { font-weight: 300; }
+
+/* The goniometer (goniometro.js), under the preview. */
+.gonio { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; margin-top: 2px; padding-top: 12px; border-top: 1px solid var(--linea); }
+.gonio[hidden] { display: none; }
+.gonio svg { width: 124px; height: auto; overflow: visible; }
+.gonio-escala line { stroke: var(--tinta); stroke-width: 1; }
+.gonio-escala line.larga { stroke-width: 1.4; }
+.gonio-escala text { fill: var(--tinta-suave); font-family: var(--letra-cifras); font-size: 8.5px; }
+.gonio-arco { fill: none; stroke: var(--linea); stroke-width: 1; }
+.gonio-barrido { fill: var(--grafito-fino); opacity: 0.35; }
+.gonio-brazo { stroke: var(--tinta); stroke-width: 2.2; stroke-linecap: square; }
+.gonio-fijo { stroke: var(--tinta-suave); stroke-width: 2.2; }
+.gonio-eje { fill: var(--fondo); stroke: var(--tinta); stroke-width: 1.6; }
+.gonio-lectura { display: grid; gap: 2px; }
+.gonio-grados { font-family: var(--letra-cifras); font-size: 34px; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+.gonio-que { font-family: var(--letra-cifras); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-suave); }
+.gonio-rango { font-family: var(--letra-cifras); font-size: 13px; color: var(--tinta-suave); }
+
+/* The path of the movement (recorrido.js), over the builder's figure, in graphite. */
+.recorrido { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.recorrido-huesos line { stroke: var(--tinta); stroke-opacity: 0.3; stroke-width: 1; }
+.recorrido-puntos circle { fill: var(--tinta); fill-opacity: 0.7; }
+.recorrido-estela polyline { fill: none; stroke: var(--tinta); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.recorrido-vivo { fill: var(--fondo); stroke: var(--tinta); stroke-width: 1.6; }
+.recorrido-nombre { fill: var(--tinta); font-family: var(--letra-cifras); font-size: 10.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ---------- The person: bigger, with more contrast, and without the professional's marks ---------- */
+.rutina, .jugador { --tinta-suave: #41484c; --linea: #a9b0b1; font-size: 18px; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .rutina, :root:not([data-theme="light"]) .jugador { --tinta-suave: #c4cacd; --linea: #4a5155; }
+}
+:root[data-theme="dark"] .rutina, :root[data-theme="dark"] .jugador { --tinta-suave: #c4cacd; --linea: #4a5155; }
+.rutina .saludo p { font-size: 18px; }
+.rutina .tarjeta h3 { font-size: 21px; font-weight: 600; }
+.rutina .chip, .jugador .chip { font-size: 15px; padding: 3px 9px; color: var(--tinta); }
+.jugador .chip { background: var(--fondo); }
+.rutina .tempo text, .jugador .tempo text { font-size: 14px; }
+.rutina .boton { min-height: 52px; font-size: 18px; }
+.sin-conexion { font-size: 16px; }
+.jugador-arriba h2 { font-size: 21px; }
+.jugador-arriba .sub { font-size: 16px; }
+.girar-pista { font-size: 15px; color: var(--tinta); white-space: nowrap; }
+.centro p { font-size: 18px; }
+.mando-botones .boton.fantasma { font-size: 17px; }
+.jugador .escala-pie, .rutina .escala-pie { font-size: 15px; }

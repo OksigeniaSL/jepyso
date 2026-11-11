@@ -60,9 +60,12 @@ sale un error en la consola. `CHROMIUM_BIN` puede apuntar a un Chromium; si no, 
 | `app/app.js` | Las tres vistas, según el fragmento: armar (sin fragmento), la rutina (`#r=`) y el resumen (`#s=`) |
 | `app/datos.js` | Los ejercicios y sus textos, el formato del enlace y lo que se guarda en el móvil |
 | `app/figura.js` | La figura 3D |
+| `app/goniometro.js`, `app/recorrido.js` | Las dos marcas del profesional en la vista previa: el goniómetro, en grados sacados de la ficha de cada ejercicio, y el recorrido del movimiento, desde el esqueleto |
 | `app/modelos/` | Las figuras: el cuerpo, y un GLB y una ficha por ejercicio; `b/` es el segundo cuerpo, con sus propios clips |
 | `figuras/fichas/` | La ficha de la que sale cada movimiento: los ángulos de cada postura clave, en grados, y dónde se apoya cada parte |
 | `app/vendor/` | three.js 0.170.0 y qrcode-generator 1.4.4, los dos MIT, servidos desde aquí (sin CDN) |
+| `app/fuentes/` | Red Hat Display, Text y Mono (latín, peso variable), licencia SIL Open Font License 1.1, servidas desde aquí |
+| `app/imagenes/` | Las cabeceras de escayola del constructor y de la rutina, renderizadas desde la figura |
 | `tools/construir.sh` | La copia para alojamientos estrictos |
 | `tools/mapa-cuerpo/hacer.sh` | Dibuja el mapa del cuerpo de la biblioteca (`app/mapa.js`) a partir del propio cuerpo; se vuelve a lanzar si el cuerpo cambia |
 | `tools/posters/hacer.sh` | Dibuja el póster de cada ejercicio para las filas de la biblioteca (`app/modelos/posters/`, `app/modelos/b/posters/`); se vuelve a lanzar si cambia un clip |
@@ -72,6 +75,7 @@ sale un error en la consola. `CHROMIUM_BIN` puede apuntar a un Chromium; si no, 
 
 El código, GNU GPL v3 o posterior ([LICENSE](LICENSE)). Las figuras y las fichas de ejercicio de `app/modelos/` y
 `figuras/fichas/` son contenido con su propia licencia: se pueden usar, tal cual, dentro de Jepyso ([LICENSE-FIGURES.md](LICENSE-FIGURES.md)).
-three.js y qrcode-generator, licencia MIT, con sus avisos en `app/vendor/`.
+three.js y qrcode-generator, licencia MIT, con sus avisos en `app/vendor/`. Red Hat Display, Text y Mono, licencia SIL Open
+Font License 1.1, con su texto en `app/fuentes/LICENSE`.
 
 © 2026 Oksigenia SL
