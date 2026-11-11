@@ -10,6 +10,8 @@ import { MAPA, PUNTOS } from './mapa.js';
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
 const RUTAS = { a: 'modelos/ejercicios.json', b: 'modelos/b/ejercicios.json' };
+// The still of every exercise for the library rows, made by tools/posters/ next to each body's clips.
+const poster = (id, c) => `modelos/${c === 'b' ? 'b/' : ''}posters/${id}.webp`;
 const calidad = parametros.get('calidad') === 'baja' ? 'baja' : 'alta';
 const manifiestos = {};
 let figura = null;
@@ -17,6 +19,7 @@ let limpiar = () => {};
 
 const ICONO = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  mas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -247,20 +250,21 @@ function seccionRutina(b) {
   </section>`;
 }
 
-// A library row in one line of text under the name: where it starts, what it needs and what it works. Sixty of them
-// must read as a list, not as a wall of chips.
+// A library row: the still of the exercise, and one line of text under the name with where it starts, what it needs
+// and what it works. Sixty of them must read as a list, not as a wall of chips; among sixty, the picture is found first.
 function filaBiblioteca(id, b) {
   const def = EJERCICIOS[id];
   const dentro = b.orden.includes(id);
   const musculos = def.musculos.principales.map((mu) => `<span class="vivo">${esc(MUSCULOS[mu] || mu)}</span>`).join(', ');
   return `<li class="biblio-fila ${id === b.activo && !dentro ? 'activo' : ''}" data-id="${id}">
     <button type="button" class="biblio-ver" data-accion="ver">
+      <span class="biblio-poster"><img src="${poster(id, b.cuerpo)}" alt="" width="96" height="72" loading="lazy" decoding="async"></span>
       <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="biblio-meta">${esc(def.posicion)} · ${esc(def.material)}${musculos ? ` · ${musculos}` : ''}</span></span>
     </button>
     ${
       dentro
-        ? `<span class="biblio-dentro">${ICONO.check}En la rutina</span>`
-        : `<button type="button" class="boton secundario" data-accion="anadir" aria-label="Añadir ${esc(def.nombre)}">Añadir</button>`
+        ? `<span class="biblio-dentro">${ICONO.check}<span class="rotulo">En la rutina</span></span>`
+        : `<button type="button" class="boton secundario biblio-anadir" data-accion="anadir" aria-label="Añadir ${esc(def.nombre)}">${ICONO.mas}<span class="rotulo">Añadir</span></button>`
     }
     <div class="mini-figura"></div>
   </li>`;
@@ -646,6 +650,7 @@ function vistaArmar() {
     } else if (a === 'cuerpo') {
       b.cuerpo = el.dataset.valor;
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
+      refrescarBiblioteca();
       colocarFigura();
     } else if (a === 'tope') {
       b.tope = Math.min(9, Math.max(0, b.tope + delta));
@@ -719,6 +724,9 @@ function vistaArmar() {
     guardarPlantilla(nombre);
   };
 
+  // A still that is not there leaves its tile empty instead of a broken image.
+  const sinPoster = (ev) => ev.target.closest?.('.biblio-poster')?.classList.add('vacio');
+  app.addEventListener('error', sinPoster, true);
   pintar();
   const ancho = window.matchMedia('(min-width: 980px)');
   const alCambiarAncho = () => colocarFigura();
@@ -726,6 +734,7 @@ function vistaArmar() {
   return () => {
     ancho.removeEventListener('change', alCambiarAncho);
     if (figura) figura.oyentes = {};
+    app.removeEventListener('error', sinPoster, true);
     app.onclick = app.oninput = app.onchange = app.onsubmit = null;
   };
 }

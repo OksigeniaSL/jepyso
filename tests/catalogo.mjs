@@ -1,8 +1,8 @@
 // Checks the exercise catalogue (app/datos.js) before the walk: every exercise has its full explanation and its open
-// guides, settings the builder can show, known areas and muscles; every exercise in the library has its clips for
-// both bodies, and the muscles the card names are the ones the figure lights.
+// guides, settings the builder can show, known areas and muscles; every exercise in the library has its clips and its
+// still (tools/posters/) for both bodies, and the muscles the card names are the ones the figure lights.
 // Usage: node catalogo.mjs <app folder>
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -36,6 +36,8 @@ for (const c of ['modelos/ejercicios.json', 'modelos/b/ejercicios.json']) {
       const a = [...m.musculos.principales].sort().join(',');
       const b = [...EJERCICIOS[id].musculos.principales].sort().join(',');
       if (a !== b) mal(id, `la tarjeta nombra ${b} y la figura enciende ${a} (${c})`);
+      const still = c.replace('ejercicios.json', `posters/${id}.webp`);
+      if (!existsSync(join(app, still))) mal(id, `en la biblioteca sin póster (${still}; tools/posters/hacer.sh)`);
     }
   }
 }

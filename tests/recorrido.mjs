@@ -47,6 +47,14 @@ try {
     await ancho.waitForTimeout(2500);
     comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 0, `${tema}: la rutina nueva no empieza vacía`);
     await ancho.screenshot({ path: `${salida}/armar-1366-vacia-${tema}.png` });
+    // Every row carries the still of its exercise, of the body chosen for the routine.
+    const posterCargado = () => ancho.locator('.biblio-fila .biblio-poster img').first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false));
+    await ancho.locator('.biblio-fila .biblio-poster').first().scrollIntoViewIfNeeded();
+    comprobar(await posterCargado(), `${tema}: la primera fila no trae el póster de su ejercicio`);
+    await ancho.click('[data-accion="cuerpo"][data-valor="b"]');
+    const srcB = await ancho.locator('.biblio-fila .biblio-poster img').first().getAttribute('src');
+    comprobar(srcB.startsWith('modelos/b/posters/') && (await posterCargado()), `${tema}: con la Figura 2, la fila no cambia de póster (${srcB})`);
+    await ancho.click('[data-accion="cuerpo"][data-valor="a"]');
     for (const id of ['puente', 'silla', 'hombro']) await ancho.click(`.biblio-fila[data-id="${id}"] [data-accion="anadir"]`);
     await ancho.waitForTimeout(1200);
     const orden = () => ancho.$$eval('.rutina-armada .ejercicio', (t) => t.map((x) => x.dataset.id).join(','));

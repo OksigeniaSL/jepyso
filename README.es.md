@@ -65,6 +65,7 @@ sale un error en la consola. `CHROMIUM_BIN` puede apuntar a un Chromium; si no, 
 | `app/vendor/` | three.js 0.170.0 y qrcode-generator 1.4.4, los dos MIT, servidos desde aquí (sin CDN) |
 | `tools/construir.sh` | La copia para alojamientos estrictos |
 | `tools/mapa-cuerpo/hacer.sh` | Dibuja el mapa del cuerpo de la biblioteca (`app/mapa.js`) a partir del propio cuerpo; se vuelve a lanzar si el cuerpo cambia |
+| `tools/posters/hacer.sh` | Dibuja el póster de cada ejercicio para las filas de la biblioteca (`app/modelos/posters/`, `app/modelos/b/posters/`); se vuelve a lanzar si cambia un clip |
 | `tests/` | El recorrido de punta a punta |
 
 ## Licencia

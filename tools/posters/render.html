@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Exercise posters</title>
+<script type="importmap">{ "imports": { "three": "../../app/vendor/three/three.module.js", "three/addons/": "../../app/vendor/three/addons/" } }</script>
+<style>body { margin: 0; } #caja { width: 192px; height: 144px; }</style>
+</head>
+<body>
+<div id="caja"></div>
+<script type="module">
+// One still of every exercise of a body, drawn by the app's own figure: the sheet's camera, the body held at the
+// middle of «mantén» and the working muscles fully lit, as the preview shows them at that moment. The preview frames
+// the whole range of motion; a still only needs this pose, so it is cut close around what is drawn (the faint floor
+// shadow does not count) and fitted into 192 x 144. Drawn at twice the size and brought down, so the edges are smooth.
+// render.mjs collects window.POSTERS ({ id: data URL of a WebP }).
+import { Figura } from '../../app/figura.js';
+
+const ANCHO = 192;
+const ALTO = 144;
+const cuerpo = new URLSearchParams(location.search).get('cuerpo') === 'b' ? 'b' : 'a';
+const manifiesto = await (await fetch(`../../app/modelos/${cuerpo === 'b' ? 'b/' : ''}ejercicios.json`)).json();
+manifiesto._base = '../../app/';
+const figura = new Figura(document.getElementById('caja'), manifiesto, { calidad: 'alta' });
+figura.renderer.setAnimationLoop(null);
+const MARGEN = 0.07;
+const lienzo = document.createElement('canvas');
+lienzo.width = ANCHO;
+lienzo.height = ALTO;
+const ctx = lienzo.getContext('2d');
+ctx.imageSmoothingQuality = 'high';
+const copia = document.createElement('canvas');
+const ctxCopia = copia.getContext('2d', { willReadFrequently: true });
+
+// Box of what is drawn: pixels more opaque than the floor shadow.
+function cajaDibujada(c) {
+  const { width: w, height: h } = c;
+  const datos = ctxCopia.getImageData(0, 0, w, h).data;
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (datos[(y * w + x) * 4 + 3] > 90) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+    }
+  }
+  return x1 < 0 ? { x: 0, y: 0, w, h } : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+}
+
+const posters = {};
+for (const id of Object.keys(manifiesto.ejercicios)) {
+  await figura.poner(id);
+  const [a, b] = figura.fases.mantener;
+  figura.posar((a + b) / 2);
+  figura.musculos?.fuerza(1);
+  figura.controles.update();
+  figura.renderer.render(figura.escena, figura.camara);
+  const origen = figura.renderer.domElement;
+  copia.width = origen.width;
+  copia.height = origen.height;
+  ctxCopia.drawImage(origen, 0, 0);
+  const caja = cajaDibujada(copia);
+  // Fit the box, with its margin, into the still, centred; never more than one drawn pixel per pixel of the still,
+  // so a small pose is not blown up into a blur.
+  const escala = Math.min((ANCHO * (1 - 2 * MARGEN)) / caja.w, (ALTO * (1 - 2 * MARGEN)) / caja.h, 1);
+  ctx.clearRect(0, 0, ANCHO, ALTO);
+  ctx.drawImage(copia, caja.x - (ANCHO / escala - caja.w) / 2, caja.y - (ALTO / escala - caja.h) / 2, ANCHO / escala, ALTO / escala, 0, 0, ANCHO, ALTO);
+  posters[id] = lienzo.toDataURL('image/webp', 0.84);
+}
+window.POSTERS = posters;
+window.LISTO = true;
+</script>
+</body>
+</html>

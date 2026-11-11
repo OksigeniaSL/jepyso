@@ -8,7 +8,7 @@ import { join, relative } from 'node:path';
 const app = process.argv[2];
 const sw = readFileSync(join(app, 'sw.js'), 'utf8');
 const lista = JSON.parse(sw.match(/const ARCHIVOS = (\[[\s\S]*?\]);/)[1].replace(/'/g, '"').replace(/,\s*\]/, ']'));
-const fijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
+const fijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json|webp)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
 
 const todos = [];
 const recorrer = (dir) => {

@@ -1,6 +1,6 @@
 // Keeps Jepyso working without a connection once a routine has been opened on the phone.
 // - The app files are answered from the cache and refreshed in the background: the next visit gets the new version.
-// - Figures, exercises and the three.js files are fetched once and kept. When Gaudí changes a figure or an exercise
+// - Figures, exercises, their stills and the three.js files are fetched once and kept. When Gaudí changes a figure or an exercise
 //   with the same name, FIJOS goes up by one so every phone fetches them again.
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1';
@@ -22,7 +22,7 @@ const ARCHIVOS = [
 const base = new URL('./', self.location).href;
 const relativa = (url) => (url.startsWith(base) ? url.slice(base.length).split(/[?#]/)[0] : null);
 // Files that never change under the same name: three.js (pinned version), the bodies, the clips and their sheets.
-const esFijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
+const esFijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json|webp)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
 
 self.addEventListener('install', (ev) => {
   ev.waitUntil(caches.open(APP).then((c) => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));

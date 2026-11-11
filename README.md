@@ -65,6 +65,7 @@ at a Chromium binary; without it, the one installed by Playwright is used.
 | `app/vendor/` | three.js 0.170.0 and qrcode-generator 1.4.4, both MIT, served from here (no CDN) |
 | `tools/construir.sh` | The copy for strict hosts |
 | `tools/mapa-cuerpo/hacer.sh` | Draws the body map of the library (`app/mapa.js`) from the body itself; run it again when the body changes |
+| `tools/posters/hacer.sh` | Draws the still of each exercise for the library rows (`app/modelos/posters/`, `app/modelos/b/posters/`); run it again when a clip changes |
 | `tests/` | The end-to-end walk |
 
 ## Licence
