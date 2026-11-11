@@ -949,15 +949,21 @@ async function vistaRutina(codigo) {
   let sesion = null;
   let bloqueo = null;
 
+  // Sound and the screen lock are extras: the set never waits for them. Without a gesture the browser may keep
+  // resume() pending forever (seen on a Pixel), and the person would stay on «Empezar». A later touch unlocks the sound.
   async function empezar() {
+    const unRato = () => new Promise((r) => setTimeout(r, 400));
     try {
       audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-      await audio.resume();
+      await Promise.race([audio.resume(), unRato()]);
+      if (audio.state !== 'running') app.addEventListener('pointerdown', () => audio?.resume().catch(() => {}), { once: true });
     } catch {
       audio = null;
     }
     try {
-      bloqueo = await navigator.wakeLock?.request('screen');
+      const pedido = navigator.wakeLock?.request('screen');
+      bloqueo = (await Promise.race([pedido, unRato()])) || null;
+      if (!bloqueo && pedido) pedido.then((b) => (bloqueo = b)).catch(() => {});
     } catch {
       bloqueo = null;
     }
