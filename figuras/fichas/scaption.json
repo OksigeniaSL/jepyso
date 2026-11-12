@@ -3,7 +3,9 @@
   "familia": "de_pie",
   "nombre": "Elevación en el plano de la escápula",
   "lado": "derecho",
-  "accesorios": [],
+  "accesorios": [
+    "peso"
+  ],
   "ritmo": {
     "subir": 2,
     "mantener": 1,

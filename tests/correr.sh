@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Serves app/ on a local port, runs the end-to-end walk (tests/recorrido.mjs) and stops the server.
+# Serves app/ on a local port, checks that every prop follows its clip (tests/accesorios.mjs), runs the end-to-end walk
+# (tests/recorrido.mjs) and stops the server.
 # Usage: tests/correr.sh [screenshot dir]
 #   APP           the folder to serve (default app/; tools/construir.sh makes the strict-host copy)
 #   PORT          local port (default 8772)
@@ -18,5 +19,6 @@ python3 -I -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP" >/dev/null
 SERVER=$!
 trap 'kill "$SERVER" 2>/dev/null || true' EXIT
 curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127.0.0.1:$PORT/index.html"
+node "$HERE/accesorios.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/recorrido.mjs" "http://127.0.0.1:$PORT" "$OUT"
 echo "capturas: $OUT"

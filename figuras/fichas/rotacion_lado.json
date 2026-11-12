@@ -4,7 +4,8 @@
   "nombre": "Rotación externa tumbado de lado",
   "lado": "derecho",
   "accesorios": [
-    "esterilla"
+    "esterilla",
+    "peso"
   ],
   "ritmo": {
     "subir": 2,
@@ -29,9 +30,6 @@
       },
       "elbow_r": {
         "flex": 90
-      },
-      "fingers_r": {
-        "curl": 1
       }
     },
     "llegada": {

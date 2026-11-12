@@ -320,7 +320,7 @@
   "extension_lumbar": {
    "glb": "modelos/extension_lumbar.glb",
    "ficha": "modelos/extension_lumbar.json",
-   "bytes": 45712,
+   "bytes": 47880,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -633,7 +633,7 @@
   "rotacion_lado": {
    "glb": "modelos/rotacion_lado.glb",
    "ficha": "modelos/rotacion_lado.json",
-   "bytes": 41976,
+   "bytes": 64408,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -647,7 +647,7 @@
   "scaption": {
    "glb": "modelos/scaption.glb",
    "ficha": "modelos/scaption.json",
-   "bytes": 38944,
+   "bytes": 61836,
    "lado": "derecho",
    "musculos": {
     "principales": [

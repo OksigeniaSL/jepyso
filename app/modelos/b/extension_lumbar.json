@@ -31,26 +31,26 @@
  ],
  "angulos": {
   "partida": {
-   "codo_izquierda_flexion": 131.5,
-   "hombro_izquierda_flexion": -47.3,
-   "hombro_izquierda_abduccion": 48.1,
-   "hombro_izquierda_rotacion_externa": -8.4,
-   "codo_derecha_flexion": 131.5,
-   "hombro_derecha_flexion": -47.3,
-   "hombro_derecha_abduccion": 48.1,
-   "hombro_derecha_rotacion_externa": -8.4,
+   "codo_izquierda_flexion": 113.1,
+   "hombro_izquierda_flexion": 148.4,
+   "hombro_izquierda_abduccion": 77.8,
+   "hombro_izquierda_rotacion_externa": -54.2,
+   "codo_derecha_flexion": 113.1,
+   "hombro_derecha_flexion": 148.4,
+   "hombro_derecha_abduccion": 77.8,
+   "hombro_derecha_rotacion_externa": -54.2,
    "tronco_inclinacion": 86.0
   },
   "llegada": {
-   "codo_izquierda_flexion": 91.0,
-   "hombro_izquierda_flexion": 1.3,
-   "hombro_izquierda_abduccion": 58.4,
-   "hombro_izquierda_rotacion_externa": -16.0,
-   "codo_derecha_flexion": 91.0,
-   "hombro_derecha_flexion": 1.3,
-   "hombro_derecha_abduccion": 58.4,
-   "hombro_derecha_rotacion_externa": -16.0,
-   "tronco_inclinacion": 48.0
+   "codo_izquierda_flexion": 11.5,
+   "hombro_izquierda_flexion": 74.1,
+   "hombro_izquierda_abduccion": 18.5,
+   "hombro_izquierda_rotacion_externa": 7.5,
+   "codo_derecha_flexion": 11.5,
+   "hombro_derecha_flexion": 74.1,
+   "hombro_derecha_abduccion": 18.5,
+   "hombro_derecha_rotacion_externa": 7.5,
+   "tronco_inclinacion": 35.0
   }
  },
  "musculos": {
@@ -65,16 +65,16 @@
  ],
  "camara": {
   "pos": [
-   -3.705,
-   1.454,
-   0.539
+   -3.784,
+   1.524,
+   0.554
   ],
   "mira": [
    0.0,
-   0.269,
+   0.313,
    -0.128
   ]
  },
  "archivo": "extension_lumbar.glb",
- "bytes": 45272
+ "bytes": 47752
 }

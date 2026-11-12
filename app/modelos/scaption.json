@@ -53,19 +53,21 @@
   ]
  },
  "lado": "derecho",
- "accesorios": [],
+ "accesorios": [
+  "peso"
+ ],
  "camara": {
   "pos": [
-   -1.525,
-   1.666,
-   3.759
+   -1.533,
+   1.669,
+   3.782
   ],
   "mira": [
-   -0.249,
+   -0.253,
    0.864,
-   0.115
+   0.125
   ]
  },
  "archivo": "scaption.glb",
- "bytes": 38944
+ "bytes": 61836
 }

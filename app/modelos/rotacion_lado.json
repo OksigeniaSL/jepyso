@@ -49,20 +49,21 @@
  },
  "lado": "derecho",
  "accesorios": [
-  "esterilla"
+  "esterilla",
+  "peso"
  ],
  "camara": {
   "pos": [
-   0.811,
-   1.54,
-   1.032
+   0.808,
+   1.535,
+   1.028
   ],
   "mira": [
    0.125,
    0.397,
-   -0.492
+   -0.489
   ]
  },
  "archivo": "rotacion_lado.glb",
- "bytes": 41976
+ "bytes": 64408
 }

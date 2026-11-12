@@ -179,6 +179,10 @@ export class Figura {
     if (this.accesorios) this.grupo.remove(this.accesorios);
     this.accesorios = null;
     this.mixer.stopAllAction();
+    // The mixer keeps each track bound to the node it found by name the first time. Props of different exercises
+    // share names (every band has «banda_mano», every hand weight «mancuerna_hueso»), so without this the new clip
+    // would go on moving the props of the previous exercise, no longer in the scene, and leave its own still.
+    this.mixer.uncacheRoot(this.grupo);
 
     let clip;
     if (def.glb) {
