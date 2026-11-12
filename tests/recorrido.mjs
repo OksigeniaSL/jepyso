@@ -59,7 +59,13 @@ try {
     comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 0, `${tema}: la rutina nueva no empieza vacía`);
     await ancho.screenshot({ path: `${salida}/armar-1366-vacia-${tema}.png` });
     // Every row carries the still of its exercise, of the body chosen for the routine.
-    const posterCargado = () => ancho.locator('.biblio-fila .biblio-poster img').first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false));
+    // The stills load lazily: the first one is brought into view, and a still that never loads fails after 10 s instead
+    // of holding the walk.
+    const posterCargado = async () => {
+      const img = ancho.locator('.biblio-fila .biblio-poster img').first();
+      await img.scrollIntoViewIfNeeded();
+      return img.evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))]));
+    };
     await ancho.locator('.biblio-fila .biblio-poster').first().scrollIntoViewIfNeeded();
     comprobar(await posterCargado(), `${tema}: la primera fila no trae el póster de su ejercicio`);
     await ancho.click('[data-accion="cuerpo"][data-valor="b"]');
@@ -110,7 +116,8 @@ try {
     await ancho.click('.mapa-musculo[data-valor="cuadriceps"]');
     comprobar((await filas()).split(',').length === total, `${tema}: tocar otra vez el músculo no lo suelta`);
     await ancho.fill('[data-accion="buscar"]', 'gluteo');
-    comprobar((await filas()) === 'puente', `${tema}: buscar «gluteo» da ${await filas()}`);
+    const gluteo = await filas();
+    comprobar(gluteo === (await esperado({ texto: 'gluteo' })) && gluteo.split(',').includes('puente') && !gluteo.includes('hombro'), `${tema}: buscar «gluteo» da ${gluteo}`);
     await ancho.fill('[data-accion="buscar"]', 'sit to stand');
     comprobar((await filas()) === 'silla', `${tema}: buscar por otro nombre («sit to stand») da ${await filas()}`);
     await ancho.fill('[data-accion="buscar"]', 'nada parecido');
@@ -274,7 +281,7 @@ try {
     await movil.waitForTimeout(800);
     comprobar((await movil.locator('.manana').count()) === 0, `${tema}: la pregunta de la mañana sale sin sesión del día anterior`);
     const posters = movil.locator('.tarjeta-poster img');
-    comprobar((await posters.count()) === 2 && (await posters.first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false))),
+    comprobar((await posters.count()) === 2 && (await posters.first().evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))]))),
       `${tema}: las tarjetas de la rutina no traen su póster`);
     comprobar((await movil.locator('.tarjeta-poster img.espejo').count()) === 0, `${tema}: un ejercicio de los dos lados sale en espejo`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
@@ -396,7 +403,7 @@ try {
     await sinRed.context().setOffline(true);
     await sinRed.reload();
     await sinRed.waitForSelector('[data-r="empezar"]', { timeout: 10000 });
-    comprobar(await sinRed.locator('.tarjeta-poster img').first().evaluate((i) => i.decode().then(() => i.naturalWidth > 0, () => false)),
+    comprobar(await sinRed.locator('.tarjeta-poster img').first().evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))])),
       `${tema}: sin conexión, la tarjeta no trae su póster`);
     await sinRed.click('[data-r="empezar"]');
     try {

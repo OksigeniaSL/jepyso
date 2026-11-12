@@ -1,0 +1,40 @@
+{
+  "id": "cuello_giro",
+  "familia": "sentado",
+  "nombre": "Rotación de cuello",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2,
+    "mantener": 1,
+    "bajar": 3.5,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Gira la cabeza a un lado",
+    "mantener": "Mantén",
+    "bajar": "Gírala al otro lado",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "neck": {
+        "rot": 60
+      }
+    },
+    "vuelta": {
+      "neck": {
+        "rot": -60
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.85
+}

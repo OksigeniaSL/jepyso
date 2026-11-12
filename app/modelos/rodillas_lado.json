@@ -1,0 +1,110 @@
+{
+ "id": "rodillas_lado",
+ "nombre": "Rodillas a un lado y a otro",
+ "fps": 30,
+ "duracion": 10.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Deja caer las rodillas a un lado"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 4.5,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 4.5,
+   "fin": 8.5,
+   "texto": "Pásalas al otro lado"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.5,
+   "fin": 10.0,
+   "texto": "Vuelve al centro"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 42.3,
+   "cadera_izquierda_abduccion": 3.0,
+   "rodilla_izquierda_flexion": 89.8,
+   "tobillo_izquierda_flexion": -42.5,
+   "codo_izquierda_flexion": 10.7,
+   "hombro_izquierda_flexion": -13.8,
+   "hombro_izquierda_abduccion": 16.2,
+   "hombro_izquierda_rotacion_externa": 99.4,
+   "cadera_derecha_flexion": 42.3,
+   "cadera_derecha_abduccion": 3.0,
+   "rodilla_derecha_flexion": 89.8,
+   "tobillo_derecha_flexion": -42.5,
+   "codo_derecha_flexion": 10.7,
+   "hombro_derecha_flexion": -13.8,
+   "hombro_derecha_abduccion": 16.2,
+   "hombro_derecha_rotacion_externa": 99.4
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 30.0,
+   "cadera_izquierda_abduccion": -44.9,
+   "rodilla_izquierda_flexion": 68.8,
+   "tobillo_izquierda_flexion": -39.1,
+   "codo_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": -9.4,
+   "hombro_izquierda_abduccion": 6.9,
+   "hombro_izquierda_rotacion_externa": 131.4,
+   "cadera_derecha_flexion": 47.1,
+   "cadera_derecha_abduccion": 55.0,
+   "rodilla_derecha_flexion": 88.1,
+   "tobillo_derecha_flexion": -32.5,
+   "codo_derecha_flexion": 68.1,
+   "hombro_derecha_flexion": -44.2,
+   "hombro_derecha_abduccion": 15.0,
+   "hombro_derecha_rotacion_externa": 34.2
+  },
+  "vuelta": {
+   "cadera_izquierda_flexion": 47.1,
+   "cadera_izquierda_abduccion": 55.0,
+   "rodilla_izquierda_flexion": 88.1,
+   "tobillo_izquierda_flexion": -32.5,
+   "codo_izquierda_flexion": 68.1,
+   "hombro_izquierda_flexion": -44.2,
+   "hombro_izquierda_abduccion": 15.0,
+   "hombro_izquierda_rotacion_externa": 34.2,
+   "cadera_derecha_flexion": 30.0,
+   "cadera_derecha_abduccion": -44.9,
+   "rodilla_derecha_flexion": 68.8,
+   "tobillo_derecha_flexion": -39.1,
+   "codo_derecha_flexion": 3.6,
+   "hombro_derecha_flexion": -9.4,
+   "hombro_derecha_abduccion": 6.9,
+   "hombro_derecha_rotacion_externa": 131.4
+  }
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -2.192,
+   1.119,
+   3.091
+  ],
+  "mira": [
+   0.0,
+   0.18,
+   -0.04
+  ]
+ },
+ "archivo": "rodillas_lado.glb",
+ "bytes": 52700
+}

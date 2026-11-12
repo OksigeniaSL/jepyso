@@ -2,6 +2,20 @@
  "cuerpo": "modelos/b/cuerpo.glb",
  "bytes_cuerpo": 1121936,
  "ejercicios": {
+  "abdominal": {
+   "glb": "modelos/b/abdominal.glb",
+   "ficha": "modelos/b/abdominal.json",
+   "bytes": 41292,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "recto_abdominal"
+    ],
+    "secundarios": [
+     "oblicuos"
+    ]
+   }
+  },
   "abduccion_lado": {
    "glb": "modelos/b/abduccion_lado.glb",
    "ficha": "modelos/b/abduccion_lado.json",
@@ -40,6 +54,18 @@
     ]
    }
   },
+  "arco_corto": {
+   "glb": "modelos/b/arco_corto.glb",
+   "ficha": "modelos/b/arco_corto.json",
+   "bytes": 47316,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
   "basculacion": {
    "glb": "modelos/b/basculacion.glb",
    "ficha": "modelos/b/basculacion.json",
@@ -60,6 +86,20 @@
      "manguito_posterior"
     ],
     "secundarios": []
+   }
+  },
+  "bicho_muerto": {
+   "glb": "modelos/b/bicho_muerto.glb",
+   "ficha": "modelos/b/bicho_muerto.json",
+   "bytes": 42932,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "recto_abdominal"
+    ],
+    "secundarios": [
+     "oblicuos"
+    ]
    }
   },
   "bird_dog": {
@@ -111,6 +151,26 @@
     "secundarios": []
    }
   },
+  "cuello_giro": {
+   "glb": "modelos/b/cuello_giro.glb",
+   "ficha": "modelos/b/cuello_giro.json",
+   "bytes": 65608,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
+  "cuello_lado": {
+   "glb": "modelos/b/cuello_lado.glb",
+   "ficha": "modelos/b/cuello_lado.json",
+   "bytes": 65208,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
   "curl_isquios": {
    "glb": "modelos/b/curl_isquios.glb",
    "ficha": "modelos/b/curl_isquios.json",
@@ -136,6 +196,18 @@
     "secundarios": []
    }
   },
+  "escapulas": {
+   "glb": "modelos/b/escapulas.glb",
+   "ficha": "modelos/b/escapulas.json",
+   "bytes": 66632,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "trapecio"
+    ],
+    "secundarios": []
+   }
+  },
   "extension_rodilla": {
    "glb": "modelos/b/extension_rodilla.glb",
    "ficha": "modelos/b/extension_rodilla.json",
@@ -155,6 +227,18 @@
    "lado": "ambos",
    "musculos": {
     "principales": [],
+    "secundarios": []
+   }
+  },
+  "gluteos": {
+   "glb": "modelos/b/gluteos.glb",
+   "ficha": "modelos/b/gluteos.json",
+   "bytes": 41044,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor"
+    ],
     "secundarios": []
    }
   },
@@ -243,6 +327,16 @@
     ]
    }
   },
+  "rodillas_lado": {
+   "glb": "modelos/b/rodillas_lado.glb",
+   "ficha": "modelos/b/rodillas_lado.json",
+   "bytes": 52480,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
   "rotacion_interna": {
    "glb": "modelos/b/rotacion_interna.glb",
    "ficha": "modelos/b/rotacion_interna.json",
@@ -253,6 +347,35 @@
      "pectoral"
     ],
     "secundarios": []
+   }
+  },
+  "rotacion_lado": {
+   "glb": "modelos/b/rotacion_lado.glb",
+   "ficha": "modelos/b/rotacion_lado.json",
+   "bytes": 41524,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "manguito_posterior"
+    ],
+    "secundarios": [
+     "deltoides_posterior"
+    ]
+   }
+  },
+  "scaption": {
+   "glb": "modelos/b/scaption.glb",
+   "ficha": "modelos/b/scaption.json",
+   "bytes": 38572,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "deltoides_medio"
+    ],
+    "secundarios": [
+     "deltoides_anterior",
+     "manguito_posterior"
+    ]
    }
   },
   "sentadilla": {

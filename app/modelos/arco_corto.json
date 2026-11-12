@@ -1,0 +1,68 @@
+{
+ "id": "arco_corto",
+ "nombre": "Cuádriceps en arco corto",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Estira la rodilla"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 5.0,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.0,
+   "fin": 7.0,
+   "texto": "Bájala despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 8.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 12.1,
+   "rodilla_derecha_flexion": 30.0,
+   "tobillo_derecha_flexion": -10.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 9.2,
+   "rodilla_derecha_flexion": 0.0,
+   "tobillo_derecha_flexion": 10.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.81,
+   1.445,
+   0.699
+  ],
+  "mira": [
+   0.0,
+   0.225,
+   0.014
+  ]
+ },
+ "archivo": "arco_corto.glb",
+ "bytes": 47752
+}

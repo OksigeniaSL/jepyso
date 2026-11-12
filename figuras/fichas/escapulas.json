@@ -1,0 +1,51 @@
+{
+  "id": "escapulas",
+  "familia": "sentado",
+  "nombre": "Juntar las escápulas",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 1.5,
+    "mantener": 3,
+    "bajar": 1.5,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Junta las escápulas",
+    "mantener": "Mantén",
+    "bajar": "Suelta despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "clavicle_l": {
+        "prot": -15
+      },
+      "clavicle_r": {
+        "prot": -15
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "trapecio"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    0.6,
+    1,
+    0.4
+  ],
+  "parametros": {
+    "espalda": "libre"
+  },
+  "margen": 0.85
+}

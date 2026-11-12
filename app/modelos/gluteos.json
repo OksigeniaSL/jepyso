@@ -1,0 +1,68 @@
+{
+ "id": "gluteos",
+ "nombre": "Apretar los glúteos",
+ "fps": 30,
+ "duracion": 9.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Aprieta los glúteos"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 6.0,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 6.0,
+   "fin": 7.0,
+   "texto": "Afloja"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 9.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -2.8,
+   "cadera_derecha_flexion": -2.8,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": -8.0,
+   "cadera_derecha_flexion": -8.0,
+   "pelvis_basculacion": -4.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_mayor"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.895,
+   0.6,
+   -0.201
+  ],
+  "mira": [
+   0.0,
+   0.133,
+   -0.006
+  ]
+ },
+ "archivo": "gluteos.glb",
+ "bytes": 41496
+}

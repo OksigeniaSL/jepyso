@@ -1,0 +1,73 @@
+{
+  "id": "estira_flexores",
+  "familia": "sentado_mesa",
+  "nombre": "Estiramiento de la muñeca hacia atrás",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 10.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Baja la mano y tira de los dedos",
+    "mantener": "Mantén, sin dolor",
+    "bajar": "Suelta despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "libre",
+        "brazo_i": "dedos_d"
+      },
+      "shoulder_r": {
+        "flex": 80,
+        "abd": -22
+      },
+      "elbow_r": {
+        "flex": 12,
+        "pron": -85
+      },
+      "fingers_r": {
+        "curl": 0.1
+      },
+      "wrist_r": {
+        "flex": -18.0
+      },
+      "spine": {
+        "rot": -14
+      },
+      "clavicle_l": {
+        "prot": 18
+      }
+    },
+    "llegada": {
+      "wrist_r": {
+        "flex": -75
+      },
+      "fingers_r": {
+        "curl": -0.1
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "antebrazo"
+    ],
+    "secundarios": []
+  },
+  "camara": "tres_cuartos_alto",
+  "margen": 0.75,
+  "encuadre": [
+    "hand_r",
+    "hand_l",
+    "lowerarm_r",
+    "lowerarm_l",
+    "middle_03_r",
+    "middle_03_l"
+  ]
+}

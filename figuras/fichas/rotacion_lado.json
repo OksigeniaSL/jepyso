@@ -1,0 +1,61 @@
+{
+  "id": "rotacion_lado",
+  "familia": "de_lado",
+  "nombre": "Rotación externa tumbado de lado",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2,
+    "mantener": 1,
+    "bajar": 2,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Sube la mano hacia el techo",
+    "mantener": "Mantén",
+    "bajar": "Bájala despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "libre"
+      },
+      "shoulder_r": {
+        "abd": 5,
+        "rot": -25
+      },
+      "elbow_r": {
+        "flex": 90
+      },
+      "fingers_r": {
+        "curl": 1
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "rot": 65
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "manguito_posterior"
+    ],
+    "secundarios": [
+      "deltoides_posterior"
+    ]
+  },
+  "camara": "tumbado_pies",
+  "margen": 0.75,
+  "encuadre": [
+    "upperarm_r",
+    "lowerarm_r",
+    "hand_r",
+    "head",
+    "spine_03",
+    "clavicle_r"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "cuello_lado",
+  "familia": "sentado",
+  "nombre": "Inclinación de cuello",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2,
+    "mantener": 1,
+    "bajar": 3.5,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Lleva la oreja hacia el hombro",
+    "mantener": "Mantén",
+    "bajar": "Inclínala al otro lado",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "neck": {
+        "lat": 35
+      }
+    },
+    "vuelta": {
+      "neck": {
+        "lat": -35
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.85
+}

@@ -1,0 +1,65 @@
+{
+  "id": "prono_supinacion",
+  "familia": "sentado_mesa",
+  "nombre": "Girar la palma arriba y abajo",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "mesa"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Gira la palma hacia abajo",
+    "mantener": "Aguanta",
+    "bajar": "Gírala hacia arriba",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "mesa"
+      },
+      "elbow_r": {
+        "pron": 0
+      },
+      "fingers_r": {
+        "curl": 0.1
+      }
+    },
+    "llegada": {
+      "elbow_r": {
+        "pron": 85
+      }
+    },
+    "vuelta": {
+      "elbow_r": {
+        "pron": -85
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "antebrazo"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    -0.6,
+    -1.0,
+    0.6
+  ],
+  "encuadre": [
+    "hand_r",
+    "lowerarm_r",
+    "index_03_r",
+    "middle_03_r",
+    "pinky_03_r",
+    "thumb_03_r"
+  ],
+  "margen": 0.62
+}

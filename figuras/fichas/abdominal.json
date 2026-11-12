@@ -1,0 +1,42 @@
+{
+  "id": "abdominal",
+  "familia": "boca_arriba",
+  "nombre": "Activar el abdomen",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 1,
+    "mantener": 5,
+    "bajar": 1,
+    "reposo": 2
+  },
+  "textos": {
+    "subir": "Mete el ombligo y aprieta",
+    "mantener": "Mantén, respirando",
+    "bajar": "Afloja",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "pelvis": {
+        "flex": -3
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "recto_abdominal"
+    ],
+    "secundarios": [
+      "oblicuos"
+    ]
+  },
+  "camara": [
+    -1,
+    0.05,
+    0.1
+  ]
+}

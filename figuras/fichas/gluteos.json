@@ -1,0 +1,50 @@
+{
+  "id": "gluteos",
+  "familia": "boca_arriba",
+  "nombre": "Apretar los glúteos",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 1,
+    "mantener": 5,
+    "bajar": 1,
+    "reposo": 2
+  },
+  "textos": {
+    "subir": "Aprieta los glúteos",
+    "mantener": "Mantén",
+    "bajar": "Afloja",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "talon"
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "knee_r": {
+        "flex": 0
+      }
+    },
+    "llegada": {
+      "pelvis": {
+        "flex": -4
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_mayor"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    -1,
+    0.05,
+    0.12
+  ]
+}

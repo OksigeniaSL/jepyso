@@ -1,0 +1,73 @@
+{
+  "id": "estira_extensores",
+  "familia": "sentado_mesa",
+  "nombre": "Estiramiento de la muñeca hacia delante",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 10.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Baja la mano y empuja con la otra",
+    "mantener": "Mantén, sin dolor",
+    "bajar": "Suelta despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "libre",
+        "brazo_i": "dedos_d"
+      },
+      "shoulder_r": {
+        "flex": 80,
+        "abd": -22
+      },
+      "elbow_r": {
+        "flex": 12,
+        "pron": 90
+      },
+      "fingers_r": {
+        "curl": 0.3
+      },
+      "wrist_r": {
+        "flex": 19.5
+      },
+      "spine": {
+        "rot": -14
+      },
+      "clavicle_l": {
+        "prot": 18
+      }
+    },
+    "llegada": {
+      "wrist_r": {
+        "flex": 75
+      },
+      "fingers_r": {
+        "curl": 0.55
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "antebrazo"
+    ],
+    "secundarios": []
+  },
+  "camara": "tres_cuartos_alto",
+  "margen": 0.75,
+  "encuadre": [
+    "hand_r",
+    "hand_l",
+    "lowerarm_r",
+    "lowerarm_l",
+    "middle_03_r",
+    "middle_03_l"
+  ]
+}

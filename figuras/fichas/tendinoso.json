@@ -1,0 +1,95 @@
+{
+  "id": "tendinoso",
+  "familia": "sentado_mesa",
+  "nombre": "Deslizamiento de los tendones de los dedos",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "mesa"
+  ],
+  "ritmo": {
+    "subir": 4.0,
+    "mantener": 1.5,
+    "bajar": 6.0,
+    "reposo": 1.5
+  },
+  "textos": {
+    "subir": "Gancho y mesa",
+    "mantener": "Mantén la mesa",
+    "bajar": "Puño plano y puño completo",
+    "reposo": "Mano estirada"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "codo"
+      },
+      "fingers_r": {
+        "curl": 0.0,
+        "pulgar": 0.15
+      }
+    },
+    "llegada": {
+      "fingers_r": {
+        "mcp": 85,
+        "pip": 0,
+        "dip": 0,
+        "pulgar": 0.15
+      }
+    }
+  },
+  "intermedias": [
+    {
+      "fase": "subir",
+      "en": 0.5,
+      "postura": {
+        "fingers_r": {
+          "mcp": 0,
+          "pip": 95,
+          "dip": 75,
+          "pulgar": 0.15
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.33,
+      "postura": {
+        "fingers_r": {
+          "mcp": 85,
+          "pip": 100,
+          "dip": 0,
+          "pulgar": 0.15
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.67,
+      "postura": {
+        "fingers_r": {
+          "mcp": 85,
+          "pip": 100,
+          "dip": 70,
+          "pulgar": 0.3
+        }
+      }
+    }
+  ],
+  "musculos": {
+    "principales": [
+      "antebrazo"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "encuadre": [
+    "hand_r",
+    "lowerarm_r",
+    "index_03_r",
+    "middle_03_r",
+    "pinky_03_r",
+    "thumb_03_r"
+  ],
+  "margen": 0.6
+}

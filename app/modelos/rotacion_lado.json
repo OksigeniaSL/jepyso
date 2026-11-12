@@ -1,0 +1,68 @@
+{
+ "id": "rotacion_lado",
+ "nombre": "Rotación externa tumbado de lado",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la mano hacia el techo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Bájala despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "hombro_derecha_flexion": 1.7,
+   "hombro_derecha_rotacion_externa": -20.9
+  },
+  "llegada": {
+   "hombro_derecha_flexion": -3.6,
+   "hombro_derecha_rotacion_externa": 68.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "manguito_posterior"
+  ],
+  "secundarios": [
+   "deltoides_posterior"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   0.811,
+   1.54,
+   1.032
+  ],
+  "mira": [
+   0.125,
+   0.397,
+   -0.492
+  ]
+ },
+ "archivo": "rotacion_lado.glb",
+ "bytes": 41976
+}

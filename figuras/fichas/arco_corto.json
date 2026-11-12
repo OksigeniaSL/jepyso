@@ -1,0 +1,53 @@
+{
+  "id": "arco_corto",
+  "familia": "boca_arriba",
+  "nombre": "Cuádriceps en arco corto",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2,
+    "mantener": 3,
+    "bajar": 2,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Estira la rodilla",
+    "mantener": "Mantén",
+    "bajar": "Bájala despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "pierna_d": "toalla_rodilla",
+        "pierna_i": "talon"
+      },
+      "knee_r": {
+        "flex": 30
+      },
+      "knee_l": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": -10
+      }
+    },
+    "llegada": {
+      "knee_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado"
+}

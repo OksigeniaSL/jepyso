@@ -1,0 +1,49 @@
+{
+  "id": "deslizar_mesa",
+  "familia": "sentado_mesa",
+  "nombre": "Deslizar el brazo por la mesa",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "mesa",
+    "toalla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 2.0,
+    "bajar": 3.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Desliza la mano hacia delante",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "toalla"
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "flex": 80
+      },
+      "elbow_r": {
+        "flex": 15
+      },
+      "spine": {
+        "flex": 22
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "deltoides_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

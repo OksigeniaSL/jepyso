@@ -1,0 +1,43 @@
+{
+  "id": "scaption",
+  "familia": "de_pie",
+  "nombre": "Elevación en el plano de la escápula",
+  "lado": "derecho",
+  "accesorios": [],
+  "ritmo": {
+    "subir": 2,
+    "mantener": 1,
+    "bajar": 2,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Sube el brazo con el pulgar hacia arriba",
+    "mantener": "Mantén",
+    "bajar": "Bájalo despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "shoulder_r": {
+        "flex": 45,
+        "abd": 75,
+        "rot": 30
+      },
+      "elbow_r": {
+        "flex": 0
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "deltoides_medio"
+    ],
+    "secundarios": [
+      "deltoides_anterior",
+      "manguito_posterior"
+    ]
+  },
+  "camara": "frente",
+  "margen": 0.95
+}

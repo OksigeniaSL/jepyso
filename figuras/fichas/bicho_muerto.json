@@ -1,0 +1,73 @@
+{
+  "id": "bicho_muerto",
+  "familia": "boca_arriba",
+  "nombre": "Bicho muerto",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 2,
+    "bajar": 2.5,
+    "reposo": 1
+  },
+  "textos": {
+    "subir": "Estira un brazo y la pierna contraria",
+    "mantener": "Mantén",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "libre",
+        "piernas": "libre"
+      },
+      "shoulder_l": {
+        "flex": 90
+      },
+      "shoulder_r": {
+        "flex": 90
+      },
+      "elbow_l": {
+        "flex": 0
+      },
+      "elbow_r": {
+        "flex": 0
+      },
+      "hip_l": {
+        "flex": 90
+      },
+      "hip_r": {
+        "flex": 90
+      },
+      "knee_l": {
+        "flex": 90
+      },
+      "knee_r": {
+        "flex": 90
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "flex": 170
+      },
+      "hip_l": {
+        "flex": 20
+      },
+      "knee_l": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "recto_abdominal"
+    ],
+    "secundarios": [
+      "oblicuos"
+    ]
+  },
+  "camara": "lado"
+}

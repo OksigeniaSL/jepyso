@@ -1,0 +1,70 @@
+{
+ "id": "abdominal",
+ "nombre": "Activar el abdomen",
+ "fps": 30,
+ "duracion": 9.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Mete el ombligo y aprieta"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 6.0,
+   "texto": "Mantén, respirando"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 6.0,
+   "fin": 7.0,
+   "texto": "Afloja"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 9.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 42.3,
+   "cadera_derecha_flexion": 42.3,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 38.3,
+   "cadera_derecha_flexion": 38.3,
+   "pelvis_basculacion": -3.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "recto_abdominal"
+  ],
+  "secundarios": [
+   "oblicuos"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.843,
+   0.604,
+   -0.232
+  ],
+  "mira": [
+   0.0,
+   0.22,
+   -0.04
+  ]
+ },
+ "archivo": "abdominal.glb",
+ "bytes": 41744
+}

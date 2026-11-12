@@ -1,0 +1,55 @@
+{
+  "id": "rodillas_lado",
+  "familia": "boca_arriba",
+  "nombre": "Rodillas a un lado y a otro",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.5,
+    "mantener": 2,
+    "bajar": 4,
+    "reposo": 1.5
+  },
+  "textos": {
+    "subir": "Deja caer las rodillas a un lado",
+    "mantener": "Mantén",
+    "bajar": "Pásalas al otro lado",
+    "reposo": "Vuelve al centro"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "hip_r": {
+        "abd": 50
+      },
+      "hip_l": {
+        "abd": -45
+      },
+      "pelvis": {
+        "rot": 25
+      }
+    },
+    "vuelta": {
+      "hip_r": {
+        "abd": -45
+      },
+      "hip_l": {
+        "abd": 50
+      },
+      "pelvis": {
+        "rot": -25
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": [
+    -0.7,
+    -1,
+    0.3
+  ]
+}

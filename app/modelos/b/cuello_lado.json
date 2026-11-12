@@ -1,0 +1,59 @@
+{
+ "id": "cuello_lado",
+ "nombre": "Inclinación de cuello",
+ "fps": 30,
+ "duracion": 7.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Lleva la oreja hacia el hombro"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 6.5,
+   "texto": "Inclínala al otro lado"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 6.5,
+   "fin": 7.5,
+   "texto": "Vuelve al centro"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {},
+  "vuelta": {}
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -0.952,
+   1.25,
+   2.6
+  ],
+  "mira": [
+   0.0,
+   0.652,
+   -0.121
+  ]
+ },
+ "archivo": "cuello_lado.glb",
+ "bytes": 65208
+}

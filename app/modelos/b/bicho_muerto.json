@@ -1,0 +1,72 @@
+{
+ "id": "bicho_muerto",
+ "nombre": "Bicho muerto",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.5,
+   "texto": "Estira un brazo y la pierna contraria"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.5,
+   "fin": 4.5,
+   "texto": "Mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 4.5,
+   "fin": 7.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 8.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 90.0,
+   "rodilla_izquierda_flexion": 90.0,
+   "hombro_derecha_flexion": 90.0,
+   "hombro_derecha_rotacion_externa": 16.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 20.0,
+   "rodilla_izquierda_flexion": 5.0,
+   "hombro_derecha_flexion": 170.0,
+   "hombro_derecha_rotacion_externa": 58.8
+  }
+ },
+ "musculos": {
+  "principales": [
+   "recto_abdominal"
+  ],
+  "secundarios": [
+   "oblicuos"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.78,
+   1.547,
+   0.631
+  ],
+  "mira": [
+   -0.0,
+   0.337,
+   -0.05
+  ]
+ },
+ "archivo": "bicho_muerto.glb",
+ "bytes": 42932
+}
