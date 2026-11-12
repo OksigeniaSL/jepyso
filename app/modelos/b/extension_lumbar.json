@@ -1,0 +1,80 @@
+{
+ "id": "extension_lumbar",
+ "nombre": "Extensión boca abajo con los brazos",
+ "fps": 30,
+ "duracion": 13.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Empuja y sube el pecho"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 8.0,
+   "texto": "La pelvis, en el suelo"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 8.0,
+   "fin": 11.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 11.0,
+   "fin": 13.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 131.5,
+   "hombro_izquierda_flexion": -47.3,
+   "hombro_izquierda_abduccion": 48.1,
+   "hombro_izquierda_rotacion_externa": -8.4,
+   "codo_derecha_flexion": 131.5,
+   "hombro_derecha_flexion": -47.3,
+   "hombro_derecha_abduccion": 48.1,
+   "hombro_derecha_rotacion_externa": -8.4,
+   "tronco_inclinacion": 86.0
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 91.0,
+   "hombro_izquierda_flexion": 1.3,
+   "hombro_izquierda_abduccion": 58.4,
+   "hombro_izquierda_rotacion_externa": -16.0,
+   "codo_derecha_flexion": 91.0,
+   "hombro_derecha_flexion": 1.3,
+   "hombro_derecha_abduccion": 58.4,
+   "hombro_derecha_rotacion_externa": -16.0,
+   "tronco_inclinacion": 48.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "erectores"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.705,
+   1.454,
+   0.539
+  ],
+  "mira": [
+   0.0,
+   0.269,
+   -0.128
+  ]
+ },
+ "archivo": "extension_lumbar.glb",
+ "bytes": 45272
+}

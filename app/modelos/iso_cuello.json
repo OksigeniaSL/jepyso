@@ -1,0 +1,68 @@
+{
+ "id": "iso_cuello",
+ "nombre": "Isométricos de cuello",
+ "fps": 30,
+ "duracion": 10.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "La mano en la frente"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 6.0,
+   "texto": "Empuja sin mover la cabeza"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 6.0,
+   "fin": 7.0,
+   "texto": "Suelta"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 10.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_derecha_flexion": 70.8,
+   "hombro_derecha_flexion": -8.9,
+   "hombro_derecha_abduccion": 8.0,
+   "hombro_derecha_rotacion_externa": -24.6
+  },
+  "llegada": {
+   "codo_derecha_flexion": 110.3,
+   "hombro_derecha_flexion": 113.5,
+   "hombro_derecha_abduccion": 16.0,
+   "hombro_derecha_rotacion_externa": -109.9
+  }
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -1.416,
+   1.531,
+   1.293
+  ],
+  "mira": [
+   -0.161,
+   0.982,
+   -0.119
+  ]
+ },
+ "archivo": "iso_cuello.glb",
+ "bytes": 69820
+}

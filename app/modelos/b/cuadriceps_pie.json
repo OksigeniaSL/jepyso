@@ -1,0 +1,86 @@
+{
+ "id": "cuadriceps_pie",
+ "nombre": "Estiramiento de cuádriceps de pie",
+ "fps": 30,
+ "duracion": 28.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Coge el pie por detrás"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 23.0,
+   "texto": "Las rodillas juntas, mantén"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 23.0,
+   "fin": 26.0,
+   "texto": "Suelta despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 26.0,
+   "fin": 28.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_abduccion": 0.0,
+   "codo_izquierda_flexion": 30.0,
+   "hombro_izquierda_flexion": -17.5,
+   "hombro_izquierda_abduccion": 35.7,
+   "hombro_izquierda_rotacion_externa": 68.8,
+   "cadera_derecha_flexion": -0.6,
+   "rodilla_derecha_flexion": 4.0,
+   "tobillo_derecha_flexion": 4.6,
+   "codo_derecha_flexion": 87.3,
+   "hombro_derecha_flexion": -41.5,
+   "hombro_derecha_abduccion": 36.3,
+   "hombro_derecha_rotacion_externa": -67.9
+  },
+  "llegada": {
+   "cadera_izquierda_abduccion": -6.7,
+   "codo_izquierda_flexion": 65.5,
+   "hombro_izquierda_flexion": -36.1,
+   "hombro_izquierda_abduccion": 21.4,
+   "hombro_izquierda_rotacion_externa": 43.7,
+   "cadera_derecha_flexion": -10.0,
+   "rodilla_derecha_flexion": 148.0,
+   "tobillo_derecha_flexion": -30.0,
+   "codo_derecha_flexion": 3.6,
+   "hombro_derecha_flexion": -30.0,
+   "hombro_derecha_abduccion": -11.0,
+   "hombro_derecha_rotacion_externa": -151.8
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.602,
+   2.025,
+   0.591
+  ],
+  "mira": [
+   0.289,
+   0.78,
+   -0.11
+  ]
+ },
+ "archivo": "cuadriceps_pie.glb",
+ "bytes": 73800
+}

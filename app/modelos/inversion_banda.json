@@ -1,0 +1,62 @@
+{
+ "id": "inversion_banda",
+ "nombre": "Inversión de tobillo con banda",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Gira la planta hacia dentro"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "banda",
+  "mesa"
+ ],
+ "camara": {
+  "pos": [
+   -0.399,
+   1.148,
+   1.985
+  ],
+  "mira": [
+   -0.003,
+   0.158,
+   0.665
+  ]
+ },
+ "archivo": "inversion_banda.glb",
+ "bytes": 70012
+}

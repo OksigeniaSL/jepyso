@@ -1,0 +1,61 @@
+{
+  "id": "gemelo_pared",
+  "familia": "pared",
+  "nombre": "Estiramiento de gemelo en la pared",
+  "lado": "derecho",
+  "accesorios": [
+    "pared"
+  ],
+  "parametros": {
+    "pared": "delante",
+    "zancada": {
+      "atras": "d",
+      "largo": 0.6
+    },
+    "distancia": 0.32
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 30.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Inclínate hacia la pared",
+    "mantener": "Talón de atrás en el suelo",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "pared"
+      },
+      "elbow_l": {
+        "flex": 15
+      },
+      "elbow_r": {
+        "flex": 15
+      },
+      "knee_r": {
+        "flex": 0
+      }
+    },
+    "llegada": {
+      "elbow_l": {
+        "flex": 60
+      },
+      "elbow_r": {
+        "flex": 60
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

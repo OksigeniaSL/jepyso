@@ -1,0 +1,47 @@
+{
+  "id": "extension_lumbar",
+  "familia": "boca_abajo",
+  "nombre": "Extensión boca abajo con los brazos",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 5.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Empuja y sube el pecho",
+    "mantener": "La pelvis, en el suelo",
+    "bajar": "Baja despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "manos"
+      },
+      "spine": {
+        "flex": -4
+      }
+    },
+    "llegada": {
+      "spine": {
+        "flex": -42
+      },
+      "neck": {
+        "flex": -5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "erectores"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

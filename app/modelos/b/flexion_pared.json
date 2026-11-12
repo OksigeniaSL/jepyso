@@ -1,0 +1,89 @@
+{
+ "id": "flexion_pared",
+ "nombre": "Flexión contra la pared",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Acércate doblando los codos"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Empuja y vuelve"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Respira"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_izquierda_flexion": 17.6,
+   "codo_izquierda_flexion": 5.0,
+   "hombro_izquierda_flexion": 103.0,
+   "hombro_izquierda_abduccion": 9.9,
+   "hombro_izquierda_rotacion_externa": 5.6,
+   "tobillo_derecha_flexion": 17.6,
+   "codo_derecha_flexion": 5.0,
+   "hombro_derecha_flexion": 103.0,
+   "hombro_derecha_abduccion": 9.9,
+   "hombro_derecha_rotacion_externa": 5.6,
+   "tronco_inclinacion": 15.7,
+   "pelvis_basculacion": 15.7
+  },
+  "llegada": {
+   "tobillo_izquierda_flexion": 25.2,
+   "codo_izquierda_flexion": 95.0,
+   "hombro_izquierda_flexion": 98.8,
+   "hombro_izquierda_abduccion": 53.2,
+   "hombro_izquierda_rotacion_externa": -47.0,
+   "tobillo_derecha_flexion": 25.2,
+   "codo_derecha_flexion": 95.0,
+   "hombro_derecha_flexion": 98.8,
+   "hombro_derecha_abduccion": 53.2,
+   "hombro_derecha_rotacion_externa": -47.0,
+   "tronco_inclinacion": 23.3,
+   "pelvis_basculacion": 23.3
+  }
+ },
+ "musculos": {
+  "principales": [
+   "pectoral",
+   "triceps"
+  ],
+  "secundarios": [
+   "deltoides_anterior"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "pared"
+ ],
+ "camara": {
+  "pos": [
+   -3.442,
+   1.866,
+   1.033
+  ],
+  "mira": [
+   0.0,
+   0.765,
+   0.414
+  ]
+ },
+ "archivo": "flexion_pared.glb",
+ "bytes": 43804
+}

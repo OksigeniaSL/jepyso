@@ -1,0 +1,84 @@
+{
+ "id": "plancha_lateral",
+ "nombre": "Plancha lateral",
+ "fps": 30,
+ "duracion": 17.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la cadera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 12.0,
+   "texto": "El cuerpo recto"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 12.0,
+   "fin": 14.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 14.0,
+   "fin": 17.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "rodilla_izquierda_flexion": 0.0,
+   "hombro_izquierda_flexion": -1.6,
+   "hombro_izquierda_abduccion": 43.8,
+   "hombro_izquierda_rotacion_externa": 10.0,
+   "rodilla_derecha_flexion": 0.0,
+   "codo_derecha_flexion": 126.7,
+   "hombro_derecha_flexion": -75.1,
+   "hombro_derecha_abduccion": 29.9,
+   "hombro_derecha_rotacion_externa": -45.8,
+   "tronco_inclinacion": 44.0
+  },
+  "llegada": {
+   "rodilla_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": -4.1,
+   "hombro_izquierda_abduccion": 73.8,
+   "hombro_izquierda_rotacion_externa": 3.9,
+   "rodilla_derecha_flexion": 3.6,
+   "codo_derecha_flexion": 87.3,
+   "hombro_derecha_flexion": -41.5,
+   "hombro_derecha_abduccion": 36.3,
+   "hombro_derecha_rotacion_externa": -67.9,
+   "tronco_inclinacion": 74.1
+  }
+ },
+ "musculos": {
+  "principales": [
+   "oblicuos"
+  ],
+  "secundarios": [
+   "gluteo_medio"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   3.815,
+   1.66,
+   1.175
+  ],
+  "mira": [
+   0.016,
+   0.33,
+   0.226
+  ]
+ },
+ "archivo": "plancha_lateral.glb",
+ "bytes": 47476
+}

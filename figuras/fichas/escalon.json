@@ -1,0 +1,153 @@
+{
+  "id": "escalon",
+  "familia": "escalon",
+  "nombre": "Subir un escalón",
+  "lado": "derecho",
+  "accesorios": [
+    "escalon"
+  ],
+  "parametros": {
+    "escalon": {
+      "alto": 0.17
+    }
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 1.0,
+    "bajar": 3.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube con la derecha",
+    "mantener": "Arriba, recto",
+    "bajar": "Baja con la izquierda primero",
+    "reposo": "Respira"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "pie"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "piernas": "escalon"
+      }
+    }
+  },
+  "intermedias": [
+    {
+      "fase": "subir",
+      "en": 0.25,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "libre"
+        },
+        "hip_r": {
+          "flex": 55
+        },
+        "knee_r": {
+          "flex": 80
+        }
+      }
+    },
+    {
+      "fase": "subir",
+      "en": 0.45,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "escalon"
+        },
+        "hip_r": {
+          "flex": 45
+        },
+        "knee_r": {
+          "flex": 55
+        }
+      }
+    },
+    {
+      "fase": "subir",
+      "en": 0.75,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "escalon",
+          "pierna_i": "libre"
+        },
+        "hip_l": {
+          "flex": 30
+        },
+        "knee_l": {
+          "flex": 60
+        },
+        "knee_r": {
+          "flex": 10
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.3,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "escalon",
+          "pierna_i": "libre"
+        },
+        "hip_l": {
+          "flex": 15
+        },
+        "knee_l": {
+          "flex": 20
+        },
+        "knee_r": {
+          "flex": 40
+        },
+        "hip_r": {
+          "flex": 35
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.55,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "escalon",
+          "pierna_i": "pie"
+        },
+        "knee_r": {
+          "flex": 50
+        },
+        "hip_r": {
+          "flex": 45
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.8,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "libre",
+          "pierna_i": "pie"
+        },
+        "hip_r": {
+          "flex": 45
+        },
+        "knee_r": {
+          "flex": 70
+        }
+      }
+    }
+  ],
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": [
+      "gluteo_mayor"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

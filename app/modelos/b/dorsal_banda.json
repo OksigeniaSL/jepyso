@@ -1,0 +1,68 @@
+{
+ "id": "dorsal_banda",
+ "nombre": "Flexión dorsal con banda",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Tira de la punta hacia ti"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 78.9,
+   "tobillo_derecha_flexion": -30.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 76.8,
+   "tobillo_derecha_flexion": 15.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "banda",
+  "mesa"
+ ],
+ "camara": {
+  "pos": [
+   -4.648,
+   1.875,
+   1.586
+  ],
+  "mira": [
+   -0.09,
+   0.416,
+   0.766
+  ]
+ },
+ "archivo": "dorsal_banda.glb",
+ "bytes": 69852
+}

@@ -1,0 +1,52 @@
+{
+  "id": "toalla_dedos",
+  "familia": "sentado",
+  "nombre": "Arrugar una toalla con los dedos del pie",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "toalla"
+  ],
+  "parametros": {
+    "toalla_suelo": {
+      "pie": "d"
+    }
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 1.0,
+    "bajar": 1.0,
+    "reposo": 0.5
+  },
+  "textos": {
+    "subir": "Encoge los dedos y arruga la toalla",
+    "mantener": "Aguanta",
+    "bajar": "Suelta",
+    "reposo": "Otra vez"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      },
+      "toes_r": {
+        "flex": -10
+      }
+    },
+    "llegada": {
+      "toes_r": {
+        "flex": 40
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "encuadre": [
+    "foot_r",
+    "ball_r"
+  ],
+  "margen": 0.9
+}

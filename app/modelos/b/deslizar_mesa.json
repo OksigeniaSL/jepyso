@@ -1,0 +1,78 @@
+{
+ "id": "deslizar_mesa",
+ "nombre": "Deslizar el brazo por la mesa",
+ "fps": 30,
+ "duracion": 9.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Desliza la mano hacia delante"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.0,
+   "fin": 8.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.0,
+   "fin": 9.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "hombro_izquierda_flexion": 0.3,
+   "hombro_izquierda_rotacion_externa": 57.7,
+   "codo_derecha_flexion": 70.0,
+   "hombro_derecha_flexion": 35.3,
+   "hombro_derecha_abduccion": 42.6,
+   "hombro_derecha_rotacion_externa": -14.2,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "hombro_izquierda_flexion": 9.9,
+   "hombro_izquierda_rotacion_externa": 25.7,
+   "codo_derecha_flexion": 29.6,
+   "hombro_derecha_flexion": 83.5,
+   "hombro_derecha_abduccion": 30.7,
+   "hombro_derecha_rotacion_externa": 4.9,
+   "tronco_inclinacion": 22.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "deltoides_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla",
+  "mesa",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -2.429,
+   1.624,
+   2.495
+  ],
+  "mira": [
+   -0.206,
+   0.652,
+   -0.007
+  ]
+ },
+ "archivo": "deslizar_mesa.glb",
+ "bytes": 85692
+}

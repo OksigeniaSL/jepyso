@@ -1,0 +1,57 @@
+{
+  "id": "flexion_pared",
+  "familia": "pared",
+  "nombre": "Flexión contra la pared",
+  "lado": "ambos",
+  "accesorios": [
+    "pared"
+  ],
+  "parametros": {
+    "pared": "delante",
+    "distancia": 0.8
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Acércate doblando los codos",
+    "mantener": "Aguanta",
+    "bajar": "Empuja y vuelve",
+    "reposo": "Respira"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "pared"
+      },
+      "elbow_l": {
+        "flex": 5
+      },
+      "elbow_r": {
+        "flex": 5
+      }
+    },
+    "llegada": {
+      "elbow_l": {
+        "flex": 95
+      },
+      "elbow_r": {
+        "flex": 95
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "pectoral",
+      "triceps"
+    ],
+    "secundarios": [
+      "deltoides_anterior"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

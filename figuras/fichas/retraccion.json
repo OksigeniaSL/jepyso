@@ -1,0 +1,47 @@
+{
+  "id": "retraccion",
+  "familia": "sentado",
+  "nombre": "Meter el mentón",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "espalda": "libre"
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 3.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva la barbilla hacia atrás",
+    "mantener": "La mirada al frente",
+    "bajar": "Vuelve despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "neck": {
+        "retr": 16
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "encuadre": [
+    "head",
+    "neck_01",
+    "spine_03"
+  ],
+  "margen": 0.8
+}

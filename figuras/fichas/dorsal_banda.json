@@ -1,0 +1,49 @@
+{
+  "id": "dorsal_banda",
+  "familia": "sentado_suelo",
+  "nombre": "Flexión dorsal con banda",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla",
+    "banda",
+    "mesa"
+  ],
+  "parametros": {
+    "banda": {
+      "pie": "d",
+      "ancla": "delante"
+    }
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Tira de la punta hacia ti",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "ankle_r": {
+        "flex": -30
+      }
+    },
+    "llegada": {
+      "ankle_r": {
+        "flex": 15
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.85
+}

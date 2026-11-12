@@ -1,0 +1,58 @@
+{
+  "id": "iso_hombro",
+  "familia": "pared",
+  "nombre": "Isométricos de hombro contra la pared",
+  "lado": "derecho",
+  "accesorios": [
+    "pared"
+  ],
+  "parametros": {
+    "pared": "derecha"
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 10.0,
+    "bajar": 1.0,
+    "reposo": 3.0
+  },
+  "textos": {
+    "subir": "Empuja la pared con el codo",
+    "mantener": "Aguanta sin mover el brazo",
+    "bajar": "Suelta",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "empuja"
+      },
+      "shoulder_r": {
+        "abd": 6
+      },
+      "elbow_r": {
+        "flex": 90,
+        "pron": 0
+      },
+      "fingers_r": {
+        "curl": 0.8
+      }
+    },
+    "llegada": {
+      "shoulder_r": {
+        "abd": 7.5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "deltoides_medio"
+    ],
+    "secundarios": []
+  },
+  "camara": [
+    0.3,
+    -1.0,
+    0.35
+  ],
+  "margen": 0.85
+}

@@ -1,0 +1,63 @@
+{
+ "id": "eversion_banda",
+ "nombre": "Eversión de tobillo con banda",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Gira la planta hacia fuera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_derecha_flexion": -10.0
+  },
+  "llegada": {
+   "tobillo_derecha_flexion": -7.8
+  }
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "banda"
+ ],
+ "camara": {
+  "pos": [
+   -0.409,
+   1.157,
+   1.997
+  ],
+  "mira": [
+   -0.009,
+   0.158,
+   0.665
+  ]
+ },
+ "archivo": "eversion_banda.glb",
+ "bytes": 52220
+}

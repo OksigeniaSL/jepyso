@@ -1,0 +1,51 @@
+{
+  "id": "plantar_banda",
+  "familia": "sentado_suelo",
+  "nombre": "Flexión plantar con banda",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla",
+    "banda"
+  ],
+  "parametros": {
+    "banda": {
+      "pie": "d",
+      "ancla": "manos"
+    }
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Empuja la punta hacia abajo",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "banda"
+      },
+      "ankle_r": {
+        "flex": 5
+      }
+    },
+    "llegada": {
+      "ankle_r": {
+        "flex": -40
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.85
+}

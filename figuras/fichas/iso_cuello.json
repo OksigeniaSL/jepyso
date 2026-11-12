@@ -1,0 +1,52 @@
+{
+  "id": "iso_cuello",
+  "familia": "sentado",
+  "nombre": "Isométricos de cuello",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "espalda": "libre"
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 5.0,
+    "bajar": 1.0,
+    "reposo": 3.0
+  },
+  "textos": {
+    "subir": "La mano en la frente",
+    "mantener": "Empuja sin mover la cabeza",
+    "bajar": "Suelta",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "muslos",
+        "brazo_i": "muslos"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "brazo_d": "cabeza_frente"
+      },
+      "neck": {
+        "flex": 2
+      }
+    }
+  },
+  "musculos": {
+    "principales": [],
+    "secundarios": []
+  },
+  "camara": "tres_cuartos",
+  "encuadre": [
+    "head",
+    "neck_01",
+    "hand_r",
+    "lowerarm_r"
+  ],
+  "margen": 0.8
+}

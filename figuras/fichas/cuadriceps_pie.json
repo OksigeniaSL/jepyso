@@ -1,0 +1,72 @@
+{
+  "id": "cuadriceps_pie",
+  "familia": "de_pie_silla",
+  "nombre": "Estiramiento de cuádriceps de pie",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "silla": "izquierda"
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 20.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Coge el pie por detrás",
+    "mantener": "Las rodillas juntas, mantén",
+    "bajar": "Suelta despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_d": "cadera"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre",
+        "brazo_d": "pie_d"
+      },
+      "knee_r": {
+        "flex": 148
+      },
+      "hip_r": {
+        "flex": -10,
+        "abd": -2
+      },
+      "ankle_r": {
+        "flex": -30
+      }
+    }
+  },
+  "intermedias": [
+    {
+      "fase": "subir",
+      "en": 0.45,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "libre"
+        },
+        "knee_r": {
+          "flex": 115
+        },
+        "hip_r": {
+          "flex": 5
+        }
+      }
+    }
+  ],
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

@@ -1,0 +1,57 @@
+{
+  "id": "isquios_toalla",
+  "familia": "boca_arriba",
+  "nombre": "Estiramiento de isquios tumbado",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla",
+    "toalla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 20.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Sube la pierna recta con la toalla",
+    "mantener": "Mantén, sin dolor",
+    "bajar": "Bájala despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "pierna_i": "pie",
+        "pierna_d": "libre",
+        "brazos": "cinta_d"
+      },
+      "hip_r": {
+        "flex": 40,
+        "abd": 0
+      },
+      "knee_r": {
+        "flex": 8
+      },
+      "ankle_r": {
+        "flex": 5
+      }
+    },
+    "llegada": {
+      "hip_r": {
+        "flex": 75
+      },
+      "knee_r": {
+        "flex": 3
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "isquiotibiales"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

@@ -1,0 +1,65 @@
+{
+ "id": "plantar_banda",
+ "nombre": "Flexión plantar con banda",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Empuja la punta hacia abajo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_derecha_flexion": 5.0
+  },
+  "llegada": {
+   "tobillo_derecha_flexion": -40.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "banda"
+ ],
+ "camara": {
+  "pos": [
+   -3.813,
+   1.66,
+   1.236
+  ],
+  "mira": [
+   0.0,
+   0.44,
+   0.55
+  ]
+ },
+ "archivo": "plantar_banda.glb",
+ "bytes": 52668
+}

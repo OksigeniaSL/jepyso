@@ -1,0 +1,59 @@
+{
+ "id": "toalla_dedos",
+ "nombre": "Arrugar una toalla con los dedos del pie",
+ "fps": 30,
+ "duracion": 3.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Encoge los dedos y arruga la toalla"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 2.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Suelta"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 3.0,
+   "fin": 3.5,
+   "texto": "Otra vez"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -0.81,
+   0.24,
+   0.235
+  ],
+  "mira": [
+   -0.123,
+   0.02,
+   0.111
+  ]
+ },
+ "archivo": "toalla_dedos.glb",
+ "bytes": 98792
+}

@@ -40,6 +40,18 @@
     "secundarios": []
    }
   },
+  "abrir_cerrar": {
+   "glb": "modelos/abrir_cerrar.glb",
+   "ficha": "modelos/abrir_cerrar.json",
+   "bytes": 91296,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
   "almeja": {
    "glb": "modelos/almeja.glb",
    "ficha": "modelos/almeja.json",
@@ -115,6 +127,19 @@
     "secundarios": []
    }
   },
+  "circulos_tobillo": {
+   "glb": "modelos/circulos_tobillo.glb",
+   "ficha": "modelos/circulos_tobillo.json",
+   "bytes": 41596,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "tibial_anterior",
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
   "cojin_rodillas": {
    "glb": "modelos/cojin_rodillas.glb",
    "ficha": "modelos/cojin_rodillas.json",
@@ -143,6 +168,18 @@
    "glb": "modelos/cuadriceps.glb",
    "ficha": "modelos/cuadriceps.json",
    "bytes": 47428,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
+  "cuadriceps_pie": {
+   "glb": "modelos/cuadriceps_pie.glb",
+   "ficha": "modelos/cuadriceps_pie.json",
+   "bytes": 74508,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -183,6 +220,30 @@
     "secundarios": []
    }
   },
+  "deslizar_mesa": {
+   "glb": "modelos/deslizar_mesa.glb",
+   "ficha": "modelos/deslizar_mesa.json",
+   "bytes": 86908,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "deltoides_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "dorsal_banda": {
+   "glb": "modelos/dorsal_banda.glb",
+   "ficha": "modelos/dorsal_banda.json",
+   "bytes": 70240,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
   "equilibrio": {
    "glb": "modelos/equilibrio.glb",
    "ficha": "modelos/equilibrio.json",
@@ -196,6 +257,20 @@
     "secundarios": []
    }
   },
+  "escalon": {
+   "glb": "modelos/escalon.glb",
+   "ficha": "modelos/escalon.json",
+   "bytes": 53192,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": [
+     "gluteo_mayor"
+    ]
+   }
+  },
   "escapulas": {
    "glb": "modelos/escapulas.glb",
    "ficha": "modelos/escapulas.json",
@@ -204,6 +279,52 @@
    "musculos": {
     "principales": [
      "trapecio"
+    ],
+    "secundarios": []
+   }
+  },
+  "estira_extensores": {
+   "glb": "modelos/estira_extensores.glb",
+   "ficha": "modelos/estira_extensores.json",
+   "bytes": 72272,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
+  "estira_flexores": {
+   "glb": "modelos/estira_flexores.glb",
+   "ficha": "modelos/estira_flexores.json",
+   "bytes": 72572,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
+  "eversion_banda": {
+   "glb": "modelos/eversion_banda.glb",
+   "ficha": "modelos/eversion_banda.json",
+   "bytes": 52220,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
+  "extension_lumbar": {
+   "glb": "modelos/extension_lumbar.glb",
+   "ficha": "modelos/extension_lumbar.json",
+   "bytes": 45712,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "erectores"
     ],
     "secundarios": []
    }
@@ -220,6 +341,21 @@
     "secundarios": []
    }
   },
+  "flexion_pared": {
+   "glb": "modelos/flexion_pared.glb",
+   "ficha": "modelos/flexion_pared.json",
+   "bytes": 44284,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "pectoral",
+     "triceps"
+    ],
+    "secundarios": [
+     "deltoides_anterior"
+    ]
+   }
+  },
   "gato_camello": {
    "glb": "modelos/gato_camello.glb",
    "ficha": "modelos/gato_camello.json",
@@ -227,6 +363,18 @@
    "lado": "ambos",
    "musculos": {
     "principales": [],
+    "secundarios": []
+   }
+  },
+  "gemelo_pared": {
+   "glb": "modelos/gemelo_pared.glb",
+   "ficha": "modelos/gemelo_pared.json",
+   "bytes": 42172,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
     "secundarios": []
    }
   },
@@ -256,6 +404,76 @@
     ]
    }
   },
+  "inversion_banda": {
+   "glb": "modelos/inversion_banda.glb",
+   "ficha": "modelos/inversion_banda.json",
+   "bytes": 70012,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "iso_cuello": {
+   "glb": "modelos/iso_cuello.glb",
+   "ficha": "modelos/iso_cuello.json",
+   "bytes": 69820,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
+  "iso_hombro": {
+   "glb": "modelos/iso_hombro.glb",
+   "ficha": "modelos/iso_hombro.json",
+   "bytes": 38608,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "deltoides_medio"
+    ],
+    "secundarios": []
+   }
+  },
+  "isquios_toalla": {
+   "glb": "modelos/isquios_toalla.glb",
+   "ficha": "modelos/isquios_toalla.json",
+   "bytes": 56480,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "isquiotibiales"
+    ],
+    "secundarios": []
+   }
+  },
+  "muneca": {
+   "glb": "modelos/muneca.glb",
+   "ficha": "modelos/muneca.json",
+   "bytes": 86276,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
+  "pelota": {
+   "glb": "modelos/pelota.glb",
+   "ficha": "modelos/pelota.json",
+   "bytes": 97712,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
   "pendulo": {
    "glb": "modelos/pendulo.glb",
    "ficha": "modelos/pendulo.json",
@@ -280,6 +498,59 @@
    "musculos": {
     "principales": [
      "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
+  "plancha": {
+   "glb": "modelos/plancha.glb",
+   "ficha": "modelos/plancha.json",
+   "bytes": 45904,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "recto_abdominal",
+     "erectores"
+    ],
+    "secundarios": [
+     "gluteo_mayor"
+    ]
+   }
+  },
+  "plancha_lateral": {
+   "glb": "modelos/plancha_lateral.glb",
+   "ficha": "modelos/plancha_lateral.json",
+   "bytes": 48132,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "oblicuos"
+    ],
+    "secundarios": [
+     "gluteo_medio"
+    ]
+   }
+  },
+  "plantar_banda": {
+   "glb": "modelos/plantar_banda.glb",
+   "ficha": "modelos/plantar_banda.json",
+   "bytes": 52668,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
+  "prono_supinacion": {
+   "glb": "modelos/prono_supinacion.glb",
+   "ficha": "modelos/prono_supinacion.json",
+   "bytes": 81824,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
     ],
     "secundarios": []
    }
@@ -311,6 +582,16 @@
     "secundarios": [
      "deltoides_posterior"
     ]
+   }
+  },
+  "retraccion": {
+   "glb": "modelos/retraccion.glb",
+   "ficha": "modelos/retraccion.json",
+   "bytes": 65160,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
    }
   },
   "rodilla_pecho": {
@@ -393,6 +674,20 @@
     ]
    }
   },
+  "sentadilla_pared": {
+   "glb": "modelos/sentadilla_pared.glb",
+   "ficha": "modelos/sentadilla_pared.json",
+   "bytes": 41636,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": [
+     "gluteo_mayor"
+    ]
+   }
+  },
   "silla": {
    "glb": "modelos/silla.glb",
    "ficha": "modelos/silla.json",
@@ -434,6 +729,28 @@
     "secundarios": []
    }
   },
+  "tendinoso": {
+   "glb": "modelos/tendinoso.glb",
+   "ficha": "modelos/tendinoso.json",
+   "bytes": 93764,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
+  "toalla_dedos": {
+   "glb": "modelos/toalla_dedos.glb",
+   "ficha": "modelos/toalla_dedos.json",
+   "bytes": 99148,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [],
+    "secundarios": []
+   }
+  },
   "tobillos": {
    "glb": "modelos/tobillos.glb",
    "ficha": "modelos/tobillos.json",
@@ -443,6 +760,18 @@
     "principales": [
      "gemelos",
      "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "trapecio": {
+   "glb": "modelos/trapecio.glb",
+   "ficha": "modelos/trapecio.json",
+   "bytes": 67516,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "trapecio"
     ],
     "secundarios": []
    }

@@ -1,0 +1,70 @@
+{
+ "id": "estira_flexores",
+ "nombre": "Estiramiento de la muñeca hacia atrás",
+ "fps": 30,
+ "duracion": 18.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Baja la mano y tira de los dedos"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 13.0,
+   "texto": "Mantén, sin dolor"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 13.0,
+   "fin": 16.0,
+   "texto": "Suelta despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 16.0,
+   "fin": 18.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": 93.2,
+   "hombro_izquierda_abduccion": -19.0,
+   "hombro_izquierda_rotacion_externa": -17.3
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 31.9,
+   "hombro_izquierda_flexion": 80.7,
+   "hombro_izquierda_abduccion": -16.9,
+   "hombro_izquierda_rotacion_externa": -2.6
+  }
+ },
+ "musculos": {
+  "principales": [
+   "antebrazo"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -0.598,
+   1.719,
+   0.698
+  ],
+  "mira": [
+   -0.058,
+   0.964,
+   0.05
+  ]
+ },
+ "archivo": "estira_flexores.glb",
+ "bytes": 72056
+}

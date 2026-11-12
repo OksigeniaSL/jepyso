@@ -350,7 +350,7 @@ function filaBiblioteca(id, b) {
 }
 
 // Starting positions in the order a person can get into them: standing and sitting first, the floor after.
-const POSICIONES = ['De pie', 'Sentado', 'Boca arriba', 'Boca abajo', 'De lado', 'A cuatro patas'];
+const POSICIONES = ['De pie', 'Sentado', 'Sentado a la mesa', 'Sentado en el suelo', 'Boca arriba', 'Boca abajo', 'De lado', 'A cuatro patas'];
 const grupoPosicion = (def) => def.posicion.split(',')[0].trim();
 const rangoPosicion = (g) => (POSICIONES.includes(g) ? POSICIONES.indexOf(g) : POSICIONES.length);
 

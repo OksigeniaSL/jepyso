@@ -1,0 +1,51 @@
+{
+  "id": "plancha",
+  "familia": "boca_abajo",
+  "nombre": "Plancha",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 15.0,
+    "bajar": 2.0,
+    "reposo": 3.0
+  },
+  "textos": {
+    "subir": "Sube la cadera",
+    "mantener": "El cuerpo recto, respira",
+    "bajar": "Baja despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "antebrazos",
+        "piernas": "esterilla"
+      },
+      "neck": {
+        "flex": -10
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "piernas": "puntas"
+      },
+      "neck": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "recto_abdominal",
+      "erectores"
+    ],
+    "secundarios": [
+      "gluteo_mayor"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

@@ -1,0 +1,57 @@
+{
+  "id": "inversion_banda",
+  "familia": "sentado_suelo",
+  "nombre": "Inversión de tobillo con banda",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla",
+    "banda",
+    "mesa"
+  ],
+  "parametros": {
+    "banda": {
+      "pie": "d",
+      "ancla": "fuera"
+    }
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Gira la planta hacia dentro",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "ankle_r": {
+        "flex": -10,
+        "inv": -5
+      }
+    },
+    "llegada": {
+      "ankle_r": {
+        "inv": 25
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente_alto",
+  "encuadre": [
+    "foot_r",
+    "ball_r",
+    "calf_r",
+    "foot_l",
+    "ball_l"
+  ],
+  "margen": 0.9
+}

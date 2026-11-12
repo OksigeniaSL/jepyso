@@ -1,0 +1,65 @@
+{
+ "id": "circulos_tobillo",
+ "nombre": "Círculos de tobillo",
+ "fps": 30,
+ "duracion": 4.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Dibuja un círculo con la punta"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 2.0,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 2.0,
+   "fin": 3.5,
+   "texto": "Sigue el círculo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 3.5,
+   "fin": 4.0,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_derecha_flexion": 15.0
+  },
+  "llegada": {
+   "tobillo_derecha_flexion": -30.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "tibial_anterior",
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -0.537,
+   1.033,
+   1.86
+  ],
+  "mira": [
+   -0.186,
+   0.156,
+   0.691
+  ]
+ },
+ "archivo": "circulos_tobillo.glb",
+ "bytes": 41596
+}

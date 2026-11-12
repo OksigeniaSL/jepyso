@@ -1,0 +1,62 @@
+{
+  "id": "sentadilla_pared",
+  "familia": "pared",
+  "nombre": "Sentadilla en la pared",
+  "lado": "ambos",
+  "accesorios": [
+    "pared"
+  ],
+  "parametros": {
+    "pared": "detras",
+    "pies_delante": 0.42
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 10.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Baja deslizando la espalda",
+    "mantener": "Aguanta",
+    "bajar": "Sube despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "espalda"
+      },
+      "knee_l": {
+        "flex": 20
+      },
+      "knee_r": {
+        "flex": 20
+      },
+      "hip_l": {
+        "abd": 6
+      },
+      "hip_r": {
+        "abd": 6
+      }
+    },
+    "llegada": {
+      "knee_l": {
+        "flex": 70
+      },
+      "knee_r": {
+        "flex": 70
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": [
+      "gluteo_mayor"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

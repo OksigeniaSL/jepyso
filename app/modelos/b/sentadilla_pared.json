@@ -1,0 +1,80 @@
+{
+ "id": "sentadilla_pared",
+ "nombre": "Sentadilla en la pared",
+ "fps": 30,
+ "duracion": 18.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Baja deslizando la espalda"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 13.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 13.0,
+   "fin": 16.0,
+   "texto": "Sube despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 16.0,
+   "fin": 18.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 45.5,
+   "cadera_izquierda_abduccion": 1.1,
+   "rodilla_izquierda_flexion": 20.0,
+   "tobillo_izquierda_flexion": -25.5,
+   "cadera_derecha_flexion": 45.5,
+   "cadera_derecha_abduccion": 1.1,
+   "rodilla_derecha_flexion": 20.0,
+   "tobillo_derecha_flexion": -25.5
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 79.8,
+   "cadera_izquierda_abduccion": 3.5,
+   "rodilla_izquierda_flexion": 70.0,
+   "tobillo_izquierda_flexion": -9.9,
+   "cadera_derecha_flexion": 79.8,
+   "cadera_derecha_abduccion": 3.5,
+   "rodilla_derecha_flexion": 70.0,
+   "tobillo_derecha_flexion": -9.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": [
+   "gluteo_mayor"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "pared"
+ ],
+ "camara": {
+  "pos": [
+   -3.0,
+   1.682,
+   0.369
+  ],
+  "mira": [
+   0.0,
+   0.722,
+   -0.171
+  ]
+ },
+ "archivo": "sentadilla_pared.glb",
+ "bytes": 41252
+}

@@ -1,0 +1,62 @@
+{
+ "id": "prono_supinacion",
+ "nombre": "Girar la palma arriba y abajo",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Gira la palma hacia abajo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 6.0,
+   "texto": "Gírala hacia arriba"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 6.0,
+   "fin": 8.0,
+   "texto": "Vuelve al centro"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {},
+  "vuelta": {}
+ },
+ "musculos": {
+  "principales": [
+   "antebrazo"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla",
+  "mesa"
+ ],
+ "camara": {
+  "pos": [
+   -0.83,
+   1.457,
+   0.907
+  ],
+  "mira": [
+   -0.207,
+   0.789,
+   0.017
+  ]
+ },
+ "archivo": "prono_supinacion.glb",
+ "bytes": 81824
+}

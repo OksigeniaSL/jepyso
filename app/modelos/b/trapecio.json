@@ -1,0 +1,70 @@
+{
+ "id": "trapecio",
+ "nombre": "Estiramiento del trapecio",
+ "fps": 30,
+ "duracion": 28.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Inclina la cabeza y ayúdate con la mano"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 23.0,
+   "texto": "Suave, sin tirar fuerte"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 23.0,
+   "fin": 26.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 26.0,
+   "fin": 28.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 9.9,
+   "hombro_izquierda_flexion": 173.7,
+   "hombro_izquierda_abduccion": -25.9,
+   "hombro_izquierda_rotacion_externa": -84.4
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 3.6,
+   "hombro_izquierda_flexion": 156.8,
+   "hombro_izquierda_abduccion": -48.7,
+   "hombro_izquierda_rotacion_externa": -72.7
+  }
+ },
+ "musculos": {
+  "principales": [
+   "trapecio"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -0.558,
+   1.403,
+   1.385
+  ],
+  "mira": [
+   -0.013,
+   1.061,
+   -0.17
+  ]
+ },
+ "archivo": "trapecio.glb",
+ "bytes": 67340
+}

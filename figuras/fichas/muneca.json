@@ -34,9 +34,9 @@
       },
       "fingers_r": {
         "curl": 0,
-        "mcp": 5,
-        "pip": 60,
-        "dip": 40
+        "mcp": 30,
+        "pip": 35,
+        "dip": 15
       }
     },
     "vuelta": {

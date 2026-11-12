@@ -1,0 +1,49 @@
+{
+  "id": "plancha_lateral",
+  "familia": "plancha_lateral",
+  "nombre": "Plancha lateral",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 10.0,
+    "bajar": 2.0,
+    "reposo": 3.0
+  },
+  "textos": {
+    "subir": "Sube la cadera",
+    "mantener": "El cuerpo recto",
+    "bajar": "Baja despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_i": "antebrazo",
+        "brazo_d": "cadera",
+        "piernas": "esterilla"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "piernas": "pies"
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "oblicuos"
+    ],
+    "secundarios": [
+      "gluteo_medio"
+    ]
+  },
+  "camara": [
+    1.0,
+    -0.25,
+    0.35
+  ],
+  "margen": 0.9
+}

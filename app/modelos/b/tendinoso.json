@@ -1,0 +1,61 @@
+{
+ "id": "tendinoso",
+ "nombre": "Deslizamiento de los tendones de los dedos",
+ "fps": 30,
+ "duracion": 13.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 4.0,
+   "texto": "Gancho y mesa"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 4.0,
+   "fin": 5.5,
+   "texto": "Mantén la mesa"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.5,
+   "fin": 11.5,
+   "texto": "Puño plano y puño completo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 11.5,
+   "fin": 13.0,
+   "texto": "Mano estirada"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [
+   "antebrazo"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla",
+  "mesa"
+ ],
+ "camara": {
+  "pos": [
+   -0.611,
+   1.223,
+   0.855
+  ],
+  "mira": [
+   -0.241,
+   0.99,
+   -0.203
+  ]
+ },
+ "archivo": "tendinoso.glb",
+ "bytes": 93448
+}

@@ -1,0 +1,62 @@
+{
+ "id": "escalon",
+ "nombre": "Subir un escalón",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Sube con la derecha"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 4.0,
+   "texto": "Arriba, recto"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 4.0,
+   "fin": 7.0,
+   "texto": "Baja con la izquierda primero"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 8.0,
+   "texto": "Respira"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps"
+  ],
+  "secundarios": [
+   "gluteo_mayor"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "escalon"
+ ],
+ "camara": {
+  "pos": [
+   -3.895,
+   2.196,
+   0.983
+  ],
+  "mira": [
+   -0.0,
+   0.949,
+   0.282
+  ]
+ },
+ "archivo": "escalon.glb",
+ "bytes": 53192
+}

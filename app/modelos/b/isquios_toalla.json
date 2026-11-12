@@ -1,0 +1,75 @@
+{
+ "id": "isquios_toalla",
+ "nombre": "Estiramiento de isquios tumbado",
+ "fps": 30,
+ "duracion": 28.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Sube la pierna recta con la toalla"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 23.0,
+   "texto": "Mantén, sin dolor"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 23.0,
+   "fin": 26.0,
+   "texto": "Bájala despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 26.0,
+   "fin": 28.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "hombro_izquierda_flexion": 15.7,
+   "hombro_izquierda_rotacion_externa": -61.3,
+   "cadera_derecha_flexion": 40.0,
+   "rodilla_derecha_flexion": 8.0,
+   "hombro_derecha_flexion": 14.6,
+   "hombro_derecha_rotacion_externa": -57.8
+  },
+  "llegada": {
+   "hombro_izquierda_flexion": 43.6,
+   "hombro_izquierda_rotacion_externa": -50.0,
+   "cadera_derecha_flexion": 75.0,
+   "rodilla_derecha_flexion": 3.0,
+   "hombro_derecha_flexion": 42.8,
+   "hombro_derecha_rotacion_externa": -46.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "isquiotibiales"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -3.842,
+   1.703,
+   0.663
+  ],
+  "mira": [
+   0.0,
+   0.473,
+   -0.029
+  ]
+ },
+ "archivo": "isquios_toalla.glb",
+ "bytes": 55384
+}

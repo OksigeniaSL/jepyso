@@ -28,17 +28,17 @@
         "pron": 0
       },
       "fingers_r": {
-        "curl": 0.1
+        "curl": 0.3
       }
     },
     "llegada": {
       "elbow_r": {
-        "pron": 85
+        "pron": 80
       }
     },
     "vuelta": {
       "elbow_r": {
-        "pron": -85
+        "pron": -80
       }
     }
   },
@@ -49,9 +49,9 @@
     "secundarios": []
   },
   "camara": [
-    -0.6,
+    -0.7,
     -1.0,
-    0.6
+    0.75
   ],
   "encuadre": [
     "hand_r",
@@ -61,5 +61,10 @@
     "pinky_03_r",
     "thumb_03_r"
   ],
-  "margen": 0.62
+  "margen": 0.62,
+  "parametros": {
+    "mesa": {
+      "donde": "delante"
+    }
+  }
 }

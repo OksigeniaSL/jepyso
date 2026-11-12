@@ -1,0 +1,90 @@
+{
+ "id": "gemelo_pared",
+ "nombre": "Estiramiento de gemelo en la pared",
+ "fps": 30,
+ "duracion": 38.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Inclínate hacia la pared"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 33.0,
+   "texto": "Talón de atrás en el suelo"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 33.0,
+   "fin": 36.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 36.0,
+   "fin": 38.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 48.4,
+   "rodilla_izquierda_flexion": 3.6,
+   "tobillo_izquierda_flexion": -22.8,
+   "codo_izquierda_flexion": 15.0,
+   "hombro_izquierda_flexion": 104.5,
+   "hombro_izquierda_abduccion": 14.3,
+   "hombro_izquierda_rotacion_externa": 1.0,
+   "tobillo_derecha_flexion": 23.8,
+   "codo_derecha_flexion": 15.0,
+   "hombro_derecha_flexion": 104.5,
+   "hombro_derecha_abduccion": 14.3,
+   "hombro_derecha_rotacion_externa": 1.0,
+   "tronco_inclinacion": 22.0,
+   "pelvis_basculacion": 22.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 58.7,
+   "rodilla_izquierda_flexion": 21.8,
+   "tobillo_izquierda_flexion": -11.9,
+   "codo_izquierda_flexion": 60.0,
+   "hombro_izquierda_flexion": 99.5,
+   "hombro_izquierda_abduccion": 34.7,
+   "hombro_izquierda_rotacion_externa": -23.6,
+   "tobillo_derecha_flexion": 26.7,
+   "codo_derecha_flexion": 60.0,
+   "hombro_derecha_flexion": 99.5,
+   "hombro_derecha_abduccion": 34.7,
+   "hombro_derecha_rotacion_externa": -23.6,
+   "tronco_inclinacion": 24.9,
+   "pelvis_basculacion": 24.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "pared"
+ ],
+ "camara": {
+  "pos": [
+   -3.406,
+   1.827,
+   0.487
+  ],
+  "mira": [
+   0.0,
+   0.737,
+   -0.126
+  ]
+ },
+ "archivo": "gemelo_pared.glb",
+ "bytes": 42912
+}

@@ -1,0 +1,58 @@
+{
+ "id": "retraccion",
+ "nombre": "Meter el mentón",
+ "fps": 30,
+ "duracion": 8.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Lleva la barbilla hacia atrás"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 5.0,
+   "texto": "La mirada al frente"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 5.0,
+   "fin": 7.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 7.0,
+   "fin": 8.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -1.34,
+   1.484,
+   0.031
+  ],
+  "mira": [
+   0.0,
+   1.056,
+   -0.211
+  ]
+ },
+ "archivo": "retraccion.glb",
+ "bytes": 65160
+}

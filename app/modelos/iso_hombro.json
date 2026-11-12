@@ -1,0 +1,60 @@
+{
+ "id": "iso_hombro",
+ "nombre": "Isométricos de hombro contra la pared",
+ "fps": 30,
+ "duracion": 15.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Empuja la pared con el codo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 11.0,
+   "texto": "Aguanta sin mover el brazo"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 11.0,
+   "fin": 12.0,
+   "texto": "Suelta"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 12.0,
+   "fin": 15.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [
+   "deltoides_medio"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "pared"
+ ],
+ "camara": {
+  "pos": [
+   0.978,
+   2.001,
+   3.419
+  ],
+  "mira": [
+   0.004,
+   0.864,
+   0.172
+  ]
+ },
+ "archivo": "iso_hombro.glb",
+ "bytes": 38608
+}

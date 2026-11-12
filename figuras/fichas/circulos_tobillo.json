@@ -1,0 +1,71 @@
+{
+  "id": "circulos_tobillo",
+  "familia": "sentado_suelo",
+  "nombre": "Círculos de tobillo",
+  "lado": "derecho",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 1.5,
+    "mantener": 0.5,
+    "bajar": 1.5,
+    "reposo": 0.5
+  },
+  "textos": {
+    "subir": "Dibuja un círculo con la punta",
+    "mantener": "",
+    "bajar": "Sigue el círculo",
+    "reposo": ""
+  },
+  "posturas": {
+    "partida": {
+      "ankle_r": {
+        "flex": 15,
+        "inv": 0
+      }
+    },
+    "llegada": {
+      "ankle_r": {
+        "flex": -30,
+        "inv": 0
+      }
+    }
+  },
+  "intermedias": [
+    {
+      "fase": "subir",
+      "en": 0.5,
+      "postura": {
+        "ankle_r": {
+          "flex": -8,
+          "inv": 22
+        }
+      }
+    },
+    {
+      "fase": "bajar",
+      "en": 0.5,
+      "postura": {
+        "ankle_r": {
+          "flex": -8,
+          "inv": -16
+        }
+      }
+    }
+  ],
+  "musculos": {
+    "principales": [
+      "tibial_anterior",
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente_alto",
+  "encuadre": [
+    "foot_r",
+    "ball_r",
+    "calf_r"
+  ],
+  "margen": 0.9
+}

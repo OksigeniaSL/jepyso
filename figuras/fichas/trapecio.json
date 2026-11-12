@@ -1,0 +1,54 @@
+{
+  "id": "trapecio",
+  "familia": "sentado",
+  "nombre": "Estiramiento del trapecio",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "espalda": "libre"
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 20.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Inclina la cabeza y ayúdate con la mano",
+    "mantener": "Suave, sin tirar fuerte",
+    "bajar": "Vuelve despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazo_i": "cabeza_encima",
+        "brazo_d": "asiento"
+      }
+    },
+    "llegada": {
+      "neck": {
+        "lat": 34,
+        "flex": 25
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "trapecio"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "encuadre": [
+    "head",
+    "neck_01",
+    "spine_03",
+    "hand_l",
+    "clavicle_r",
+    "clavicle_l"
+  ],
+  "margen": 0.8
+}
