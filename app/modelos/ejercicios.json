@@ -744,7 +744,7 @@
   "toalla_dedos": {
    "glb": "modelos/toalla_dedos.glb",
    "ficha": "modelos/toalla_dedos.json",
-   "bytes": 99148,
+   "bytes": 118896,
    "lado": "derecho",
    "musculos": {
     "principales": [],
