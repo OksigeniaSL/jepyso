@@ -235,7 +235,7 @@
   "dorsal_banda": {
    "glb": "modelos/b/dorsal_banda.glb",
    "ficha": "modelos/b/dorsal_banda.json",
-   "bytes": 69852,
+   "bytes": 84448,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -310,7 +310,7 @@
   "eversion_banda": {
    "glb": "modelos/b/eversion_banda.glb",
    "ficha": "modelos/b/eversion_banda.json",
-   "bytes": 52380,
+   "bytes": 70516,
    "lado": "derecho",
    "musculos": {
     "principales": [],
@@ -407,7 +407,7 @@
   "inversion_banda": {
    "glb": "modelos/b/inversion_banda.glb",
    "ficha": "modelos/b/inversion_banda.json",
-   "bytes": 69660,
+   "bytes": 82272,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -441,7 +441,7 @@
   "isquios_toalla": {
    "glb": "modelos/b/isquios_toalla.glb",
    "ficha": "modelos/b/isquios_toalla.json",
-   "bytes": 55384,
+   "bytes": 73064,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -534,7 +534,7 @@
   "plantar_banda": {
    "glb": "modelos/b/plantar_banda.glb",
    "ficha": "modelos/b/plantar_banda.json",
-   "bytes": 52208,
+   "bytes": 65248,
    "lado": "derecho",
    "musculos": {
     "principales": [
