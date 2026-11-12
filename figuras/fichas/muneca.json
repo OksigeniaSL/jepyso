@@ -25,7 +25,8 @@
         "brazo_d": "mesa"
       },
       "fingers_r": {
-        "curl": 0.25
+        "curl": 0.25,
+        "cascada": 20
       }
     },
     "llegada": {
@@ -33,10 +34,11 @@
         "flex": -60
       },
       "fingers_r": {
-        "curl": 0,
-        "mcp": 30,
-        "pip": 35,
-        "dip": 15
+        "curl": 0.38,
+        "mcp": 8,
+        "cascada": 18,
+        "pulgar": 0.3,
+        "oposicion": 25
       }
     },
     "vuelta": {
@@ -44,7 +46,10 @@
         "flex": 70
       },
       "fingers_r": {
-        "curl": 0.05
+        "curl": 0.18,
+        "cascada": 32,
+        "pulgar": 0.15,
+        "oposicion": 12
       }
     }
   },

@@ -43,7 +43,7 @@
   "abrir_cerrar": {
    "glb": "modelos/b/abrir_cerrar.glb",
    "ficha": "modelos/b/abrir_cerrar.json",
-   "bytes": 90960,
+   "bytes": 91340,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -286,7 +286,7 @@
   "estira_extensores": {
    "glb": "modelos/b/estira_extensores.glb",
    "ficha": "modelos/b/estira_extensores.json",
-   "bytes": 71656,
+   "bytes": 71960,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -298,7 +298,7 @@
   "estira_flexores": {
    "glb": "modelos/b/estira_flexores.glb",
    "ficha": "modelos/b/estira_flexores.json",
-   "bytes": 72056,
+   "bytes": 72220,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -453,7 +453,7 @@
   "muneca": {
    "glb": "modelos/b/muneca.glb",
    "ficha": "modelos/b/muneca.json",
-   "bytes": 86004,
+   "bytes": 85000,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -465,7 +465,7 @@
   "pelota": {
    "glb": "modelos/b/pelota.glb",
    "ficha": "modelos/b/pelota.json",
-   "bytes": 97356,
+   "bytes": 97304,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -732,7 +732,7 @@
   "tendinoso": {
    "glb": "modelos/b/tendinoso.glb",
    "ficha": "modelos/b/tendinoso.json",
-   "bytes": 93448,
+   "bytes": 93408,
    "lado": "derecho",
    "musculos": {
     "principales": [

@@ -51,6 +51,9 @@
       },
       "fingers_r": {
         "curl": 0.55
+      },
+      "elbow_r": {
+        "flex": 3
       }
     }
   },
@@ -60,14 +63,13 @@
     ],
     "secundarios": []
   },
-  "camara": "tres_cuartos_alto",
-  "margen": 0.75,
+  "camara": "lado",
+  "margen": 0.8,
   "encuadre": [
+    "head",
     "hand_r",
     "hand_l",
-    "lowerarm_r",
-    "lowerarm_l",
-    "middle_03_r",
-    "middle_03_l"
+    "upperarm_r",
+    "spine_03"
   ]
 }

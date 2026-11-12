@@ -34,13 +34,15 @@
    "codo_izquierda_flexion": 3.6,
    "hombro_izquierda_flexion": 93.2,
    "hombro_izquierda_abduccion": -19.0,
-   "hombro_izquierda_rotacion_externa": -17.3
+   "hombro_izquierda_rotacion_externa": -17.3,
+   "codo_derecha_flexion": 12.0
   },
   "llegada": {
-   "codo_izquierda_flexion": 31.9,
-   "hombro_izquierda_flexion": 80.7,
-   "hombro_izquierda_abduccion": -16.9,
-   "hombro_izquierda_rotacion_externa": -2.6
+   "codo_izquierda_flexion": 28.6,
+   "hombro_izquierda_flexion": 75.8,
+   "hombro_izquierda_abduccion": -15.0,
+   "hombro_izquierda_rotacion_externa": -3.1,
+   "codo_derecha_flexion": 3.0
   }
  },
  "musculos": {
@@ -55,16 +57,16 @@
  ],
  "camara": {
   "pos": [
-   -0.598,
-   1.719,
-   0.698
+   -1.796,
+   1.584,
+   0.217
   ],
   "mira": [
-   -0.058,
-   0.964,
-   0.05
+   -0.082,
+   1.036,
+   -0.092
   ]
  },
  "archivo": "estira_flexores.glb",
- "bytes": 72056
+ "bytes": 72220
 }

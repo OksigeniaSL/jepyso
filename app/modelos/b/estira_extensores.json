@@ -33,12 +33,16 @@
   "partida": {
    "codo_izquierda_flexion": 3.6,
    "hombro_izquierda_flexion": 89.3,
-   "hombro_izquierda_rotacion_externa": -16.5
+   "hombro_izquierda_abduccion": -18.1,
+   "hombro_izquierda_rotacion_externa": -16.5,
+   "codo_derecha_flexion": 12.0
   },
   "llegada": {
-   "codo_izquierda_flexion": 30.3,
-   "hombro_izquierda_flexion": 77.2,
-   "hombro_izquierda_rotacion_externa": -3.5
+   "codo_izquierda_flexion": 27.6,
+   "hombro_izquierda_flexion": 72.1,
+   "hombro_izquierda_abduccion": -15.1,
+   "hombro_izquierda_rotacion_externa": -3.9,
+   "codo_derecha_flexion": 3.0
   }
  },
  "musculos": {
@@ -53,16 +57,16 @@
  ],
  "camara": {
   "pos": [
-   -0.585,
-   1.673,
-   0.674
+   -1.794,
+   1.584,
+   0.216
   ],
   "mira": [
-   -0.058,
-   0.936,
-   0.042
+   -0.082,
+   1.036,
+   -0.093
   ]
  },
  "archivo": "estira_extensores.glb",
- "bytes": 71656
+ "bytes": 71960
 }

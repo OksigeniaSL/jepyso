@@ -30,7 +30,10 @@
       },
       "fingers_r": {
         "curl": 0.62,
-        "pulgar": 0.35
+        "pulgar": 0.45
+      },
+      "elbow_r": {
+        "pron": 15
       }
     },
     "llegada": {
