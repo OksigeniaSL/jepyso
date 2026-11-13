@@ -41,7 +41,18 @@ const abrir = async (opciones) => {
     // No page may spill sideways: on a phone that is a horizontal scroll nobody wants.
     const [ancho, ventana] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
     if (ancho > ventana + 1) fallos.push(`${o.path.split('/').pop()}: la página se sale de lado (${ancho} px en ${ventana})`);
-    const r = await foto(o);
+    // In CI the software renderer now and then never hands over a frame while a figure is moving (seen twice on
+    // 13 November 2026, on different screenshots, both passing on a re-run): one more try, after a breath, before
+    // calling it a failure. A page that truly hangs fails the second time too.
+    let r;
+    try {
+      r = await foto({ timeout: 60000, ...o });
+    } catch (e) {
+      if (e.name !== 'TimeoutError') throw e;
+      console.log(`      ${o.path.split('/').pop()}: la captura no salió en 60 s; otra vez`);
+      await page.waitForTimeout(2000);
+      r = await foto(o);
+    }
     console.log(`${String(Math.round((Date.now() - inicio) / 1000)).padStart(5)} s  ${o.path.split('/').pop()}`);
     return r;
   };
