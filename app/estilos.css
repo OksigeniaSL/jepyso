@@ -945,10 +945,12 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 }
 
 /* Safari on the iPhone (iOS 26) lays the page under its translucent address bar, and a bar stuck at the top leaves a
-   strip above it where the page shows scrolling past. The bar covers that strip with its own colour. */
+   strip above it where the page shows scrolling past. The bar covers that strip with its own colour. A fixed height,
+   enough for the status bar and the address bar: in vh, a full-page capture turns it into the height of the whole page,
+   and that layer never finished painting in CI. */
 .barra-app::before {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 100vh; background: var(--fondo); pointer-events: none;
+  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: calc(160px + env(safe-area-inset-top)); background: var(--fondo); pointer-events: none;
 }
 .armar.biblio-abierta .biblio-arriba::before {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 100vh; background: var(--fondo); pointer-events: none;
+  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: calc(160px + env(safe-area-inset-top)); background: var(--fondo); pointer-events: none;
 }
