@@ -259,7 +259,10 @@ try {
     // Builder on a phone: the preview goes inside the row looked at, then inside the card once added.
     const movil = await abrir({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     vigilar(movil, `movil-${tema}`);
-    await movil.goto(url(tema));
+    // The builder on the phone at the app's low quality (no shadows, lower resolution): in CI's software renderer, the
+    // big figure of a library row at full quality and double density never handed over a frame for the screenshot.
+    // Full quality is still walked on the wide screens and in the person's routine.
+    await movil.goto(url(tema, '&calidad=baja'));
     await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/armar-movil-${tema}.png` });
     // On a phone the library is not in the page: «Añadir ejercicio» opens it over the whole screen, with the search on top.
