@@ -13,6 +13,7 @@ const ARCHIVOS = [
   'datos.js',
   'personas.js',
   'sincronia.js',
+  'drive.js',
   'figura.js',
   'mapa.js',
   'goniometro.js',

@@ -11,8 +11,19 @@ const CLAVE = 'personas';
 // The free version keeps up to five people with a file; routines can still go to anyone. The paid version, with the
 // files in the professional's own cloud, has no limit (Enrique, 11-11).
 export const LIMITE_GRATIS = 5;
-export const limite = () => LIMITE_GRATIS;
+// The paid version: no limit, and the files in the professional's own cloud. Until the licence is settled (the
+// coordinator's), it is switched on for testing with ?pago=1 and kept in this browser.
+export const esDePago = () => almacen.leer('version', '') === 'pago';
+export const limite = () => (esDePago() ? Infinity : LIMITE_GRATIS);
 export const caben = (lista) => lista.length < limite();
+
+// What was deleted, with its date, so a cloud copy from another device does not bring it back (see sincronia.js).
+export const leerBorradas = () => ({ personas: {}, plantillas: {}, ...almacen.leer('borradas', {}) });
+export function apuntarBorrada(tipo, clave) {
+  const b = leerBorradas();
+  b[tipo] = { ...(b[tipo] || {}), [clave]: new Date().toISOString() };
+  almacen.guardar('borradas', b);
+}
 
 export const leerPersonas = () => almacen.leer(CLAVE, []);
 export const guardarPersonas = (lista) => almacen.guardar(CLAVE, lista);

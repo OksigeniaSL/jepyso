@@ -5,7 +5,11 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe,
 } from './datos.js';
 import { Figura } from './figura.js';
-import { leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite } from './personas.js';
+import {
+  leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
+  esDePago, leerBorradas, apuntarBorrada,
+} from './personas.js';
+import { conectar, sincronizar } from './drive.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 import { pintarRecorrido } from './recorrido.js';
@@ -177,6 +181,7 @@ const botonNueva = '<a class="boton barra-boton" href="#">' + ICONO.mas + 'Nueva
 // squares; full, said before a routine for someone new is made.
 function capacidad(lista) {
   const n = lista.length;
+  if (esDePago()) return `<p class="capacidad"><span><b>${n}</b> ${n === 1 ? 'persona' : 'personas'} con ficha · sin límite</span></p>`;
   const max = limite();
   const marcas = Array.from({ length: max }, (_, i) => `<i${i < n ? ' class="usada"' : ''}></i>`).join('');
   return `<p class="capacidad${n >= max ? ' llena' : ''}"><span class="capacidad-marcas" aria-hidden="true">${marcas}</span>
@@ -773,7 +778,7 @@ function vistaArmar() {
   function guardarPlantilla(nombre) {
     const lista = almacen.leer('plantillas', []).filter((p) => p.nombre !== nombre);
     lista.unshift({
-      nombre, d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: [...b.orden],
+      nombre, cambiada: new Date().toISOString(), d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: [...b.orden],
       ejercicios: Object.fromEntries(b.orden.map((id) => [id, JSON.parse(JSON.stringify(b.ejercicios[id]))])),
     });
     almacen.guardar('plantillas', lista.slice(0, 60));
@@ -903,7 +908,8 @@ function vistaArmar() {
       if (el.dataset.confirmar) {
         deshacerBorrar = null;
         const lista = almacen.leer('plantillas', []);
-        lista.splice(Number(el.dataset.i), 1);
+        const [borrada] = lista.splice(Number(el.dataset.i), 1);
+        if (borrada) apuntarBorrada('plantillas', borrada.nombre);
         almacen.guardar('plantillas', lista);
         refrescarPlantillas();
       } else {
@@ -1698,6 +1704,47 @@ function filaPersona(p) {
   </a></li>`;
 }
 
+// The paid version keeps the files in the professional's own Google Drive (drive.js): a folder «Jepyso» that the app
+// only can see. Syncing joins what this device has with what the Drive has, and keeps it in both places.
+const ultimaSincronia = () => {
+  const f = almacen.leer('drive-ultima', '');
+  if (!f) return 'Todavía sin conectar.';
+  const d = new Date(f);
+  const hora = d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+  return `Última vez: ${diaLocal(d) === diaLocal() ? 'hoy' : `el ${fechaLarga(diaLocal(d))}`}, a las ${hora}.`;
+};
+
+function seccionDrive() {
+  return `<section class="general nube">
+    <h2>Tu Google Drive</h2>
+    <p class="ayuda">Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.</p>
+    <div class="botones"><button type="button" class="boton" data-accion="drive">Sincronizar con Google Drive</button></div>
+    <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
+  </section>`;
+}
+
+async function sincronizarDrive(boton) {
+  const aviso = app.querySelector('.aviso-nube');
+  boton.disabled = true;
+  try {
+    aviso.textContent = 'Conectando con Google…';
+    await conectar();
+    aviso.textContent = 'Sincronizando…';
+    const local = { personas: leerPersonas(), plantillas: almacen.leer('plantillas', []), borradas: leerBorradas() };
+    const r = await sincronizar(local, (junto) => {
+      guardarPersonas(junto.personas);
+      almacen.guardar('plantillas', junto.plantillas);
+      almacen.guardar('borradas', junto.borradas);
+    });
+    almacen.guardar('drive-ultima', new Date().toISOString());
+    aviso.textContent = `Hecho: ${r.personas} ${r.personas === 1 ? 'persona' : 'personas'} y ${r.plantillas} ${r.plantillas === 1 ? 'plantilla' : 'plantillas'} en tu Drive y en este aparato.`;
+  } catch (err) {
+    aviso.textContent = err.message;
+  } finally {
+    boton.disabled = false;
+  }
+}
+
 function vistaPersonas() {
   let texto = '';
   const pintarLista = () => {
@@ -1717,6 +1764,7 @@ function vistaPersonas() {
       <div class="hueco-capacidad"></div>
       <ul class="lista-personas"></ul>
       <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.</p></details>
+      ${esDePago() ? seccionDrive() : ''}
       <section class="general copia">
         <h2>Copia</h2>
         <p class="ayuda">Al cargarla se añade lo que falte; no se borra nada.</p>
@@ -1734,7 +1782,11 @@ function vistaPersonas() {
     texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
     pintarLista();
   };
-  app.onclick = (ev) => {
+  app.onclick = async (ev) => {
+    if (ev.target.closest('[data-accion="drive"]')) {
+      await sincronizarDrive(ev.target.closest('[data-accion="drive"]'));
+      return pintarLista();
+    }
     if (!ev.target.closest('[data-accion="exportar"]')) return;
     const archivo = new Blob([JSON.stringify(copia(leerPersonas()), null, 1)], { type: 'application/json' });
     const a = document.createElement('a');
@@ -1859,6 +1911,7 @@ function vistaPersona(id) {
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
     p.notas = ev.target.value;
+    p.cambiada = new Date().toISOString();
     guardar();
   };
   let confirmar = null;
@@ -1882,7 +1935,7 @@ function vistaPersona(id) {
       const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
       Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
       b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
-      for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, nota: e.n || '' };
+      for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, banda: e.b || '', nota: e.n || '' };
       b.activo = b.orden[0] || b.activo;
       almacen.guardar('borrador', b);
       location.hash = '';
@@ -1905,6 +1958,7 @@ function vistaPersona(id) {
         return;
       }
       clearTimeout(confirmar);
+      apuntarBorrada('personas', id);
       guardarPersonas(leerPersonas().filter((x) => x.id !== id));
       location.hash = '#personas';
     }
@@ -2013,7 +2067,8 @@ function vistaPlantillas() {
       // A first touch asks; the second deletes.
       if (el.dataset.confirmar) {
         const lista = almacen.leer('plantillas', []);
-        lista.splice(Number(el.dataset.i), 1);
+        const [borrada] = lista.splice(Number(el.dataset.i), 1);
+        if (borrada) apuntarBorrada('plantillas', borrada.nombre);
         almacen.guardar('plantillas', lista);
         clearTimeout(confirmar);
         pintarLista();
@@ -2045,5 +2100,7 @@ async function ir() {
   else if (h.startsWith('#persona=')) limpiar = vistaPersona(decodeURIComponent(h.slice(9)));
   else limpiar = vistaArmar();
 }
+// The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off.
+if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
 window.addEventListener('hashchange', ir);
 ir();

@@ -481,6 +481,19 @@ try {
     await sinRed.screenshot({ path: `${salida}/sin-conexion-serie-movil-${tema}.png` });
     await sinRed.context().setOffline(false);
     await sinRed.close();
+
+    // The paid version (switched on with ?pago=1 until the licence is settled): Personas offers the Google Drive and the
+    // files have no limit. Nothing reaches Google until the professional taps; that is tests/drive.mjs.
+    const pago = await abrir({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme: tema === 'oscuro' ? 'dark' : 'light' });
+    vigilar(pago, `pago-${tema}`);
+    await pago.goto(url(tema, '&pago=1#personas'));
+    await pago.waitForSelector('.lista-personas');
+    comprobar(await pago.locator('.nube [data-accion="drive"]').isVisible(), `${tema}: la versión de pago no ofrece el Drive en Personas`);
+    comprobar((await pago.textContent('.aviso-nube')).includes('sin conectar'), `${tema}: el Drive no dice que aún no se ha conectado`);
+    await pago.goto(url(tema, '&pago=0#personas'));
+    await pago.waitForSelector('.lista-personas');
+    comprobar((await pago.locator('.nube').count()) === 0, `${tema}: la versión gratis enseña el Drive`);
+    await pago.close();
   }
 } finally {
   await browser.close();
