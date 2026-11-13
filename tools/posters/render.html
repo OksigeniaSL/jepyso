@@ -15,6 +15,7 @@
 // shadow does not count) and fitted into 192 x 144. Drawn at twice the size and brought down, so the edges are smooth.
 // render.mjs collects window.POSTERS ({ id: data URL of a WebP }).
 import { Figura } from '../../app/figura.js';
+import { EJERCICIOS, BANDAS, conBanda } from '../../app/datos.js';
 
 const ANCHO = 192;
 const ALTO = 144;
@@ -50,11 +51,8 @@ function cajaDibujada(c) {
   return x1 < 0 ? { x: 0, y: 0, w, h } : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
 }
 
-const posters = {};
-for (const id of Object.keys(manifiesto.ejercicios)) {
-  await figura.poner(id);
-  const [a, b] = figura.fases.mantener;
-  figura.posar((a + b) / 2);
+// One still: the figure as it is now, cut close and fitted into the still.
+function captura() {
   figura.musculos?.fuerza(1);
   figura.controles.update();
   figura.renderer.render(figura.escena, figura.camara);
@@ -68,7 +66,24 @@ for (const id of Object.keys(manifiesto.ejercicios)) {
   const escala = Math.min((ANCHO * (1 - 2 * MARGEN)) / caja.w, (ALTO * (1 - 2 * MARGEN)) / caja.h, 1);
   ctx.clearRect(0, 0, ANCHO, ALTO);
   ctx.drawImage(copia, caja.x - (ANCHO / escala - caja.w) / 2, caja.y - (ALTO / escala - caja.h) / 2, ANCHO / escala, ALTO / escala, 0, 0, ANCHO, ALTO);
-  posters[id] = lienzo.toDataURL('image/webp', 0.84);
+  return lienzo.toDataURL('image/webp', 0.84);
+}
+
+// Exercises with an elastic band also get one still per band colour (<id>-<colour>.webp): the person's routine shows the
+// band the professional chose.
+const posters = {};
+for (const id of Object.keys(manifiesto.ejercicios)) {
+  await figura.poner(id);
+  const [a, b] = figura.fases.mantener;
+  figura.posar((a + b) / 2);
+  posters[id] = captura();
+  if (conBanda(EJERCICIOS[id])) {
+    for (const [clave, { color }] of Object.entries(BANDAS)) {
+      figura.colorBanda(color);
+      posters[`${id}-${clave}`] = captura();
+    }
+    figura.colorBanda(null);
+  }
 }
 window.POSTERS = posters;
 window.LISTO = true;

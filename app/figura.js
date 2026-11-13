@@ -169,8 +169,19 @@ export class Figura {
     this.mixer = new THREE.AnimationMixer(this.grupo);
   }
 
+  // The band of the exercise in the colour the professional chose; without one, the colour of the clip. The props of a
+  // clip are kept between exercises, so the colour is set every time.
+  colorBanda(color) {
+    this.accesorios?.traverse((o) => {
+      if (!o.isMesh || o.material?.name !== 'prop_band') return;
+      o.material.userData.original ??= o.material.color.clone();
+      if (color) o.material.color.set(color);
+      else o.material.color.copy(o.material.userData.original);
+    });
+  }
+
   // Shows one exercise. `opciones`: tempo [up, hold, down] in seconds, lado 'der' | 'izq'.
-  async poner(id, { tempo, lado = 'der' } = {}) {
+  async poner(id, { tempo, lado = 'der', banda = null } = {}) {
     await this.cargarCuerpo();
     const def = this.manifiesto.ejercicios[id];
     if (!def) throw new Error('Ejercicio sin modelo: ' + id);
@@ -197,6 +208,7 @@ export class Figura {
         }
       });
       this.grupo.add(this.accesorios);
+      this.colorBanda(banda);
       clip = g.animations[0];
     } else {
       clip = this.animacionesCuerpo.find((a) => a.name === def.clip) || this.animacionesCuerpo[0];

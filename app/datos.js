@@ -1188,6 +1188,20 @@ export function buscarEjercicios({ zona = '', musculo = '', texto = '' } = {}) {
 
 export const LADOS = { der: 'Lado derecho', izq: 'Lado izquierdo', ambos: 'Los dos lados' };
 
+// Elastic bands come in colours, one per resistance, but every brand has its own scale. The professional says the colour
+// of the band they gave the person, and the app never promises a resistance (Enrique, 13 November 2026). «color» paints
+// the swatch and the figure's band.
+export const BANDAS = {
+  amarilla: { nombre: 'Banda amarilla', color: '#e2b93b' },
+  roja: { nombre: 'Banda roja', color: '#c4433b' },
+  verde: { nombre: 'Banda verde', color: '#3f8a55' },
+  azul: { nombre: 'Banda azul', color: '#3e6fb3' },
+  negra: { nombre: 'Banda negra', color: '#2b2b2e' },
+};
+export const conBanda = (def) => def?.material === 'Banda elástica';
+// The band chosen for an exercise, or null: only for exercises with a band, and only a colour the app knows.
+export const bandaDe = (def, clave) => (conBanda(def) && Object.hasOwn(BANDAS, clave || '') ? { clave, ...BANDAS[clave] } : null);
+
 // Pain-monitoring model (Thomeé, Phys Ther 1997; Silbernagel et al., Am J Sports Med 2007): discomfort during the
 // exercise may reach a set level, should be gone by the next morning and should not grow from week to week. The
 // professional sets the level for each routine; 5 out of 10 when nothing is said. Values above it get marked.

@@ -2,7 +2,7 @@
 // back a summary link. No server: everything travels inside the links.
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
-  codificar, decodificar, duracionEjercicio, minutos, almacen,
+  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe,
 } from './datos.js';
 import { Figura } from './figura.js';
 import { leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite } from './personas.js';
@@ -15,7 +15,8 @@ const parametros = new URLSearchParams(location.search);
 const RUTAS = { a: 'modelos/ejercicios.json', b: 'modelos/b/ejercicios.json' };
 // The still of every exercise, for the library rows and the routine of the person, made by tools/posters/ next to each
 // body's clips. One that is not there leaves its tile empty instead of a broken image.
-const poster = (id, c) => `modelos/${c === 'b' ? 'b/' : ''}posters/${id}.webp`;
+// The still of an exercise; with a band colour, the one with the band in that colour.
+const poster = (id, c, banda) => `modelos/${c === 'b' ? 'b/' : ''}posters/${id}${banda ? `-${banda}` : ''}.webp`;
 app.addEventListener('error', (ev) => ev.target.closest?.('.biblio-poster, .tarjeta-poster')?.classList.add('vacio'), true);
 const calidad = parametros.get('calidad') === 'baja' ? 'baja' : 'alta';
 const manifiestos = {};
@@ -207,7 +208,7 @@ function etapasApp(b) {
 // stays with the draft.
 function ajustesIniciales(id) {
   const d = EJERCICIOS[id].porDefecto;
-  return { series: d.series, reps: d.reps, tempo: [...d.tempo], lado: EJERCICIOS[id].unLado ? 'der' : null, nota: '' };
+  return { series: d.series, reps: d.reps, tempo: [...d.tempo], lado: EJERCICIOS[id].unLado ? 'der' : null, banda: '', nota: '' };
 }
 
 function borradorInicial() {
@@ -259,16 +260,27 @@ function explicacion(def) {
   </div>`;
 }
 
+// The colour of the band, as a small strip of it beside its name.
+const muestraBanda = (banda) => `<i class="muestra-banda banda-${banda.clave}" aria-hidden="true"></i>`;
+
+// The professional picks the colour of the band they gave the person: one strip per colour, and «Sin indicar».
+function eleccionBanda(e) {
+  return `<div class="ajuste"><span>Color de la banda</span><div class="bandas" role="group" aria-label="Color de la banda">${Object.entries(BANDAS)
+    .map(([k, v]) => `<button type="button" class="banda banda-${k}" data-accion="banda" data-valor="${k}" aria-pressed="${e.banda === k}" aria-label="${esc(v.nombre)}" title="${esc(v.nombre)}"></button>`)
+    .join('')}<button type="button" class="banda-sin" data-accion="banda" data-valor="" aria-pressed="${!e.banda}">Sin indicar</button></div></div>`;
+}
+
 const chipsEjercicio = (def) =>
   `<span class="chip">${esc(def.posicion)}</span><span class="chip">${esc(def.material)}</span>${def.musculos.principales
     .map((mu) => `<span class="chip vivo">${esc(MUSCULOS[mu] || mu)}</span>`)
     .join('')}`;
 
-// What a folded card says: sets and repetitions, the tempo line and the side.
+// What a folded card says: sets and repetitions, the tempo line, the side and the band.
 function dosis(def, e) {
+  const banda = bandaDe(def, e.banda);
   return `<span class="num">${e.series} × ${e.reps}</span>${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>${
     def.unLado && LADOS[e.lado] ? `<span>${esc(LADOS[e.lado])}</span>` : ''
-  }`;
+  }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : ''}`;
 }
 
 // An exercise of the routine, with its number in the routine and everything the professional sets for it. Only the
@@ -293,6 +305,7 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
         <label class="ajuste"><span>Repeticiones</span>${paso('reps', e.reps, 'Repeticiones', 1, 30)}</label>
         ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
       </div>
+      ${conBanda(def) ? eleccionBanda(e) : ''}
       <div class="ajuste">
         <span>Ritmo de cada repetición</span>
         <div class="ritmo">
@@ -578,7 +591,7 @@ function vistaArmar() {
       const f = await figuraEn(sitio, b.cuerpo);
       // The professional's two marks over the preview: the path of the movement and, under it, the goniometer.
       f.oyentes = { fase: [alFase], dibujado: [() => pintarRecorrido(f, gonio && gonio.id === f.id ? gonio.k : null)] };
-      await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der' });
+      await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der', banda: bandaDe(EJERCICIOS[id], e.banda)?.color });
       gonio = await medida(f);
       pintarGonio();
       f.empezar({ modo: 'demo' });
@@ -763,6 +776,11 @@ function vistaArmar() {
       b.ejercicios[id].lado = el.dataset.valor;
       refrescarTarjeta(id);
       actualizarTempo(id);
+    } else if (a === 'banda') {
+      b.ejercicios[id].banda = Object.hasOwn(BANDAS, el.dataset.valor) ? el.dataset.valor : '';
+      refrescarTarjeta(id);
+      if (figura && id === b.activo) figura.colorBanda(bandaDe(EJERCICIOS[id], b.ejercicios[id].banda)?.color);
+      app.querySelector(`.ejercicio[data-id="${id}"] [data-accion="banda"][data-valor="${b.ejercicios[id].banda}"]`)?.focus();
     } else if (a === 'zona' || a === 'musculo-mapa') {
       const clave = a === 'zona' ? 'zona' : 'musculo';
       const valor = el.dataset.valor;
@@ -897,7 +915,7 @@ async function crearEnlace(b) {
     f: diaLocal(),
     e: b.orden.map((id) => {
       const e = b.ejercicios[id];
-      return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, n: e.nota.trim() || undefined };
+      return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, b: bandaDe(EJERCICIOS[id], e.banda)?.clave, n: e.nota.trim() || undefined };
     }),
   };
   // With a name, the routine goes to that person's file: the one chosen in the builder, the only one with that name,
@@ -1068,16 +1086,17 @@ async function vistaRutina(codigo) {
         ${ejercicios
           .map((e) => {
             const def = EJERCICIOS[e.i];
+            const banda = bandaDe(def, e.b);
             // The still of the exercise, of their figure and their side: the left side, in mirror.
             return `<article class="tarjeta">
               <div class="tarjeta-cabeza">
-                <span class="tarjeta-poster"><img src="${poster(e.i, r.c)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
+                <span class="tarjeta-poster"><img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
                 <div>
                   <h3>${esc(def.nombre)}</h3>
                   <div class="linea-chips">
                     <span class="chip num">${e.s} ${e.s === 1 ? 'serie' : 'series'} de ${e.r}</span>
                     ${def.unLado ? `<span class="chip">${LADOS[e.l]}</span>` : ''}
-                    <span class="chip">${esc(def.material)}</span>
+                    ${banda ? `<span class="chip con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : `<span class="chip">${esc(def.material)}</span>`}
                   </div>
                 </div>
               </div>
@@ -1096,7 +1115,7 @@ async function vistaRutina(codigo) {
 
   let guardada = null;
   async function avisarSinConexion() {
-    guardada ||= guardarParaSinConexion(r.c, [...new Set(ejercicios.map((e) => e.i))]).catch(() => false);
+    guardada ||= guardarParaSinConexion(r.c, ejercicios).catch(() => false);
     if (!(await guardada)) return;
     const p = app.querySelector('.sin-conexion');
     if (p) p.textContent = 'Guardada en este móvil: puedes hacerla aunque no tengas conexión.';
@@ -1146,19 +1165,25 @@ async function vistaRutina(codigo) {
   }
 
   const actual = () => cola[sesion.item];
+  // Under the name: the set, and the band to use when the professional said its colour.
+  const subtitulo = (e, serie) => {
+    const banda = bandaDe(EJERCICIOS[e.i], e.b);
+    return `Serie ${serie} de ${e.s}${banda ? ` · ${banda.nombre.toLowerCase()}` : ''}`;
+  };
 
   async function prepararSerie() {
     const { e, lado } = actual();
     const def = EJERCICIOS[e.i];
+    const banda = bandaDe(def, e.b);
     app.querySelector('.j-nombre').textContent = def.nombre;
-    app.querySelector('.j-sub').textContent = `Serie ${sesion.serie + 1} de ${e.s}`;
+    app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
     const etiquetaLado = app.querySelector('.j-lado');
     etiquetaLado.textContent = LADOS[lado];
     etiquetaLado.classList.toggle('oculto', !def.unLado);
     const f = await figuraEn(app.querySelector('.escena'), r.c);
     f.oyentes = {};
     f.on('girado', () => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'));
-    await f.poner(e.i, { tempo: e.t, lado });
+    await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
     cuentaAtras(3);
   }
 
@@ -1255,11 +1280,11 @@ async function vistaRutina(codigo) {
       <svg class="anillo" viewBox="0 0 132 132"><circle class="fondo-anillo" cx="66" cy="66" r="${radio}"/><circle class="avance" cx="66" cy="66" r="${radio}" stroke-dasharray="${largo}" stroke-dashoffset="0" transform="rotate(-90 66 66)"/><text x="66" y="66" class="num">${quedan}</text></svg>
       <div class="mando-botones"><button type="button" class="boton fantasma" data-r="mas">+15 s</button><span></span><button type="button" class="boton fantasma" data-r="ya">Seguir ya</button></div>`;
     if (cambiaLado) {
-      app.querySelector('.j-sub').textContent = `Serie 1 de ${e.s}`;
+      app.querySelector('.j-sub').textContent = subtitulo(e, 1);
       app.querySelector('.j-lado').textContent = LADOS[lado];
       figura.lado(lado);
     } else {
-      app.querySelector('.j-sub').textContent = `Serie ${sesion.serie + 1} de ${e.s}`;
+      app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
     }
     figura.parar();
     const anillo = mando.querySelector('.avance');
@@ -1347,6 +1372,7 @@ async function vistaRutina(codigo) {
   function como() {
     const { e } = actual();
     const def = EJERCICIOS[e.i];
+    const banda = bandaDe(def, e.b);
     const estado = sesion.estado;
     const pausada = estado === 'serie' && figura?.enMarcha;
     if (pausada) figura.pausar();
@@ -1355,6 +1381,7 @@ async function vistaRutina(codigo) {
     capa.className = 'capa';
     capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="como-titulo"><h2 id="como-titulo">${esc(def.nombre)}</h2>
       ${explicacion(def)}
+      ${banda ? `<p class="con-banda">${muestraBanda(banda)}<span>Usa la ${esc(banda.nombre.toLowerCase())}.</span></p>` : ''}
       ${e.n ? `<p class="nota">${esc(e.n)}</p>` : ''}
       <button type="button" class="boton">Entendido</button></div>`;
     document.body.appendChild(capa);
@@ -1832,11 +1859,13 @@ function mostrarVersionNueva() {
   document.body.append(aviso);
 }
 
-async function guardarParaSinConexion(c, ids) {
+// Every file the routine needs, so it can be done with no connection: its exercises ({ i, b } as in the link), each
+// with its clip, its sheet and its still (the one with the chosen band colour).
+async function guardarParaSinConexion(c, ejercicios) {
   if (!(await trabajador)) return false;
   const m = await cargarManifiesto(c);
-  const rutas = [...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo,
-    ...ids.flatMap((id) => (m.ejercicios[id] ? [m.ejercicios[id].glb, m.ejercicios[id].ficha, poster(id, c)] : []))];
+  const rutas = [...new Set([...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo,
+    ...ejercicios.flatMap(({ i, b }) => (m.ejercicios[i] ? [m.ejercicios[i].glb, m.ejercicios[i].ficha, poster(i, c, bandaDe(EJERCICIOS[i], b)?.clave)] : []))])];
   const listo = await navigator.serviceWorker.ready;
   return new Promise((resolver) => {
     const canal = new MessageChannel();

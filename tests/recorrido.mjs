@@ -79,6 +79,10 @@ try {
     comprobar((await ancho.locator('.biblio-dentro').count()) === 3, `${tema}: la biblioteca no marca lo que ya está en la rutina`);
     await ancho.click('.ejercicio[data-id="hombro"] [data-accion="subir"]');
     comprobar((await orden()) === 'puente,hombro,silla', `${tema}: subir no cambia el orden (${await orden()})`);
+    // An exercise with a band: the professional picks the colour of the band they gave, and the folded card says it.
+    await ancho.click('.ejercicio[data-id="hombro"] [data-accion="banda"][data-valor="roja"]');
+    comprobar((await ancho.getAttribute('.ejercicio[data-id="hombro"] [data-accion="banda"][data-valor="roja"]', 'aria-pressed')) === 'true', `${tema}: la banda roja no queda elegida`);
+    comprobar((await ancho.locator('.ejercicio[data-id="puente"] [data-accion="banda"]').count()) === 0, `${tema}: un ejercicio sin banda deja elegir su color`);
     await ancho.screenshot({ path: `${salida}/armar-1366-hombro-${tema}.png` });
     // Only the card being looked at is open; the others fold to their dose.
     const abiertas = () => ancho.locator('.ejercicio-ajustes:visible').count();
@@ -87,6 +91,7 @@ try {
     comprobar((await ancho.locator('.ejercicio[data-id="silla"] .ejercicio-ajustes:visible').count()) === 1, `${tema}: la tarjeta tocada no se abre`);
     comprobar((await abiertas()) === 1, `${tema}: al abrir una tarjeta no se pliega la otra`);
     comprobar((await ancho.textContent('.ejercicio[data-id="hombro"] .dosis')).includes('3 × 12'), `${tema}: la tarjeta plegada no dice sus series y repeticiones`);
+    comprobar((await ancho.textContent('.ejercicio[data-id="hombro"] .dosis')).includes('Banda roja'), `${tema}: la tarjeta plegada no dice el color de la banda`);
     await ancho.click('.ejercicio[data-id="silla"] .detalle summary');
     comprobar((await ancho.textContent('.ejercicio[data-id="silla"] .detalle')).includes('Fuente:'), `${tema}: la tarjeta no trae la explicación con su fuente`);
     await ancho.locator('.ejercicio[data-id="silla"] .detalle').scrollIntoViewIfNeeded();
@@ -162,6 +167,7 @@ try {
     }, enlace);
     comprobar(rutinaCreada.m === 4, `${tema}: el enlace no lleva el tope 4 (lleva ${rutinaCreada.m})`);
     comprobar(rutinaCreada.e.map((e) => e.i).join(',') === 'puente,hombro,silla', `${tema}: el enlace no lleva el orden elegido`);
+    comprobar(rutinaCreada.e.find((e) => e.i === 'hombro')?.b === 'roja' && rutinaCreada.e.find((e) => e.i === 'puente')?.b === undefined, `${tema}: el enlace no lleva el color de la banda`);
     comprobar(/^\d{4}-\d{2}-\d{2}$/.test(rutinaCreada.f), `${tema}: la fecha del enlace no es un día`);
     console.log(`enlace (${tema}): ${enlace.length} caracteres`);
 
@@ -262,7 +268,7 @@ try {
         v: 1, para: 'Marta', de: 'Daniel', d: 5, x: 2, m: 4, f: '2026-11-10',
         e: [
           { i: 'puente', s: 2, r: 2, t: [1, 1, 1], n: 'Sin dolor. Si molesta, sube menos.' },
-          { i: 'hombro', s: 1, r: 2, t: [1, 0, 1], l: 'ambos' },
+          { i: 'hombro', s: 1, r: 2, t: [1, 0, 1], l: 'ambos', b: 'roja' },
         ],
       });
     });
@@ -284,6 +290,9 @@ try {
     comprobar((await posters.count()) === 2 && (await posters.first().evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))]))),
       `${tema}: las tarjetas de la rutina no traen su póster`);
     comprobar((await movil.locator('.tarjeta-poster img.espejo').count()) === 0, `${tema}: un ejercicio de los dos lados sale en espejo`);
+    comprobar((await movil.locator('.tarjeta .con-banda').count()) === 1 && (await movil.textContent('.tarjeta .con-banda')).includes('Banda roja'), `${tema}: la rutina no dice el color de la banda`);
+    comprobar((await posters.nth(1).getAttribute('src')) === 'modelos/posters/hombro-roja.webp' && (await posters.nth(1).evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))]))),
+      `${tema}: el póster no enseña la banda del color elegido`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
     await movil.click('[data-r="empezar"]');
     await movil.waitForTimeout(1200);
