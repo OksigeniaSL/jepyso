@@ -49,7 +49,7 @@ jobs:
       - name: Walk through the strict-host copy
         run: |
           tools/construir.sh "$RUNNER_TEMP/web"
-          APP="$RUNNER_TEMP/web" PORT=8773 tests/correr.sh "$RUNNER_TEMP/capturas-web"
+          APP="$RUNNER_TEMP/web" PORT=8773 CSP=1 tests/correr.sh "$RUNNER_TEMP/capturas-web"
 
       - name: Keep the screenshots
         if: always()

@@ -398,6 +398,14 @@ const musculosConEjercicios = () => Object.keys(MUSCULOS).filter((mu) => ORDEN.s
 // The body map: Gaudí's body from the front and from the back, a point on every area with exercises and the muscle
 // groups the figure lights. Touching a point or a muscle filters the library; touching it again lets it go. The
 // muscle chosen lights as on the figure, so the map and the list below say the same thing.
+// Places the map's points where their data says, through the style object, which a strict content policy allows.
+function colocarPuntos(raiz) {
+  raiz.querySelectorAll('.mapa-punto[data-x]').forEach((p) => {
+    p.style.left = `${p.dataset.x}%`;
+    p.style.top = `${p.dataset.y}%`;
+  });
+}
+
 function mapaCuerpo(b) {
   const zonas = zonasConEjercicios();
   const musculos = musculosConEjercicios();
@@ -419,9 +427,11 @@ function mapaCuerpo(b) {
     const puntos = zonas
       .flatMap((z) =>
         aqui(z).map(([, x, y], i) => {
-          const sitio = `left:${((x / ancho) * 100).toFixed(2)}%;top:${((y / alto) * 100).toFixed(2)}%`;
+          // Where the point goes, as data: a style attribute would be blocked by a strict host (style-src 'self');
+          // colocarPuntos() sets it from script after the map is drawn.
+          const sitio = `data-x="${((x / ancho) * 100).toFixed(2)}" data-y="${((y / alto) * 100).toFixed(2)}"`;
           const nombre = esc(ZONAS[z]);
-          return `<button type="button" class="mapa-punto" data-accion="zona" data-valor="${z}" data-nombre="${nombre}" aria-pressed="${b.filtro.zona === z}" style="${sitio}" ${
+          return `<button type="button" class="mapa-punto" data-accion="zona" data-valor="${z}" data-nombre="${nombre}" aria-pressed="${b.filtro.zona === z}" ${sitio} ${
             i ? 'aria-hidden="true" tabindex="-1"' : `aria-label="${nombre}"`
           }></button>`;
         }),
@@ -574,6 +584,7 @@ function vistaArmar() {
         <div class="vista-pie"></div>
       </aside>
     </div>`;
+    colocarPuntos(app);
     colocarFigura();
   }
 
@@ -664,6 +675,7 @@ function vistaArmar() {
   // The map and the muscle list say the same filter.
   function refrescarFiltros() {
     app.querySelector('.hueco-mapa').innerHTML = mapaCuerpo(b);
+    colocarPuntos(app.querySelector('.hueco-mapa'));
     app.querySelector('[data-accion="musculo"]').value = b.filtro.musculo;
     refrescarBiblioteca();
   }
