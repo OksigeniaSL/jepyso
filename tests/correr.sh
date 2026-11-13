@@ -15,6 +15,7 @@ mkdir -p "$OUT"
 node "$HERE/archivos-sw.mjs" "$APP"
 node "$HERE/catalogo.mjs" "$APP"
 node "$HERE/personas.mjs" "$APP"
+node "$HERE/sincronia.mjs" "$APP"
 node "$HERE/version.mjs" "$APP" $((PORT + 100))
 python3 -I "$HERE/servir.py" "$PORT" "$APP" ${CSP:+--csp} >/dev/null 2>&1 &
 SERVER=$!
