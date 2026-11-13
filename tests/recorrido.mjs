@@ -251,6 +251,33 @@ try {
     await movil.goto(url(tema));
     await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/armar-movil-${tema}.png` });
+    // On a phone the library is not in the page: «Añadir ejercicio» opens it over the whole screen, with the search on top.
+    comprobar(!(await movil.locator('.biblioteca').isVisible()), `${tema}: en el móvil, la biblioteca sale en la página antes de pedirla`);
+    // With the routine empty, «Añadir ejercicio» is the button of the bar, at the thumb, in the first screen.
+    const enBarra = movil.locator('.barra-crear [data-accion="abrir-biblioteca"]');
+    comprobar((await enBarra.isVisible()) && !(await movil.locator('[data-accion="crear"]').isVisible()), `${tema}: en el móvil, con la rutina vacía, la barra no ofrece «Añadir ejercicio»`);
+    const barraVacia = await movil.evaluate(() => document.querySelector('.barra-crear').getBoundingClientRect().height);
+    comprobar(barraVacia < 90, `${tema}: en el móvil, con la rutina vacía, la barra de abajo crece (${Math.round(barraVacia)} px)`);
+    await enBarra.click();
+    // The sheet slides in: measure once its animation has finished, however busy the machine is.
+    const hoja = await movil.evaluate(async () => {
+      const el = document.querySelector('.biblioteca');
+      await Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished.catch(() => {})));
+      const r = el.getBoundingClientRect();
+      const buscar = document.querySelector('.biblioteca .buscar').getBoundingClientRect();
+      return { arriba: r.top, alto: r.height, buscar: buscar.top, dialogo: document.querySelector('.biblioteca').getAttribute('role') };
+    });
+    comprobar(hoja.arriba <= 1 && hoja.alto >= 840 && hoja.buscar < 200 && hoja.dialogo === 'dialog', `${tema}: en el móvil, la biblioteca no se abre a pantalla completa con el buscador arriba (${JSON.stringify(hoja)})`);
+    comprobar(!(await movil.locator('.hueco-mapa').isVisible()), `${tema}: en el móvil, el mapa se pone antes que la lista`);
+    await movil.screenshot({ path: `${salida}/armar-movil-biblioteca-${tema}.png` });
+    // The phone's «back» closes it, and the page is still the builder.
+    await movil.goBack();
+    await movil.waitForTimeout(300);
+    comprobar(!(await movil.locator('.biblioteca').isVisible()) && (await movil.locator('.armar').count()) === 1, `${tema}: en el móvil, «atrás» no cierra la biblioteca`);
+    await enBarra.click();
+    await movil.click('[data-accion="ver-mapa"]');
+    comprobar(await movil.locator('.hueco-mapa').isVisible(), `${tema}: en el móvil, «En la figura» no abre el mapa`);
+    await movil.click('[data-accion="ver-mapa"]');
     await movil.click('.biblio-fila[data-id="silla"] .biblio-ver');
     await movil.waitForTimeout(1800);
     comprobar((await movil.locator('.biblio-fila.activo[data-id="silla"] .mini-figura canvas').count()) === 1, `${tema}: en el móvil, la fila mirada no enseña la figura`);
@@ -258,7 +285,36 @@ try {
     await movil.screenshot({ path: `${salida}/armar-movil-ver-${tema}.png` });
     await movil.click('.biblio-fila[data-id="puente"] [data-accion="anadir"]');
     await movil.waitForTimeout(1800);
+    // Choosing one goes back to the routine, with its settings open and in sight.
+    comprobar(!(await movil.locator('.biblioteca').isVisible()), `${tema}: en el móvil, añadir no vuelve a la rutina`);
+    const tarjeta = await movil.evaluate(() => {
+      const t = document.querySelector('.ejercicio[data-id="puente"]');
+      const r = t.querySelector('.ejercicio-ajustes').getBoundingClientRect();
+      return { abierta: t.classList.contains('activo'), arriba: r.top, abajo: innerHeight };
+    });
+    comprobar(tarjeta.abierta && tarjeta.arriba > 0 && tarjeta.arriba < tarjeta.abajo * 0.6, `${tema}: en el móvil, el ejercicio añadido no queda abierto a la vista (${JSON.stringify(tarjeta)})`);
+    // And it stays there: the «back» that closes the sheet must not bring the page back to where it was.
+    await movil.waitForTimeout(1200);
+    const sigue = await movil.evaluate(() => document.querySelector('.ejercicio[data-id="puente"] .ejercicio-ajustes').getBoundingClientRect().top);
+    comprobar(sigue > 0 && sigue < tarjeta.abajo * 0.6, `${tema}: en el móvil, el ejercicio añadido se va de la vista al cerrar la biblioteca (${Math.round(sigue)})`);
+    const barra = await movil.evaluate(() => document.querySelector('.barra-crear').getBoundingClientRect().height);
+    comprobar(barra < 90, `${tema}: en el móvil, la barra de abajo crece (${Math.round(barra)} px)`);
     comprobar((await movil.locator('.ejercicio[data-id="puente"] .mini-figura canvas').count()) === 1, `${tema}: en el móvil, la tarjeta añadida no enseña la figura`);
+    await movil.screenshot({ path: `${salida}/armar-movil-anadido-${tema}.png` });
+    // With something in the routine, the bar offers the link again, and «Añadir ejercicio» is the big button under the list.
+    comprobar((await movil.locator('[data-accion="crear"]').isVisible()) && !(await enBarra.isVisible()), `${tema}: en el móvil, con un ejercicio, la barra no vuelve a «Crear enlace»`);
+    comprobar(await movil.locator('.anadir-ejercicio').isVisible(), `${tema}: en el móvil, no hay «Añadir ejercicio» bajo la rutina`);
+    // A second one, and that one opens in front too.
+    await movil.click('.anadir-ejercicio');
+    await movil.click('.biblio-fila[data-id="hombro"] [data-accion="anadir"]');
+    await movil.waitForTimeout(1200);
+    comprobar((await movil.locator('.ejercicio.activo').getAttribute('data-id')) === 'hombro', `${tema}: en el móvil, el segundo añadido no se abre`);
+    // The bar at the top covers the strip above it (the address bar of Safari on the iPhone lets the page show there).
+    const faldon = await movil.evaluate(() => {
+      const cs = getComputedStyle(document.querySelector('.barra-app'), '::before');
+      return cs.content !== 'none' && parseFloat(cs.height) > 100 && cs.backgroundColor === getComputedStyle(document.querySelector('.barra-app')).backgroundColor;
+    });
+    comprobar(faldon, `${tema}: la barra de arriba no tapa la franja de encima`);
     await movil.screenshot({ path: `${salida}/armar-movil-entera-${tema}.png`, fullPage: true });
 
     // A short routine so the walk takes seconds: two sets of two reps, then the shoulder on both sides. Tope 4.

@@ -30,6 +30,7 @@ const ICONO = {
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   volver: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  cuerpo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M5 9l7 1.5L19 9M12 10.5V15m0 0l-3 6m3-6l3 6"/></svg>',
   personas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M15.5 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></svg>',
   plantillas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 4.5h11v14H4z"/><path d="M8 8h11v14H8z"/><path d="M11 12h5M11 15.5h5M11 19h3" stroke-linecap="round"/></svg>',
   abrir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>',
@@ -337,7 +338,7 @@ function seccionRutina(b) {
     ${
       b.orden.length
         ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
-        : '<p class="rutina-vacia">Todavía no tiene ejercicios. Añádelos desde la biblioteca, aquí debajo.</p>'
+        : '<p class="rutina-vacia">Todavía no tiene ejercicios.</p>'
     }
   </section>`;
 }
@@ -463,21 +464,25 @@ function mapaCuerpo(b) {
 function seccionBiblioteca(b) {
   const musculos = musculosConEjercicios();
   return `<section class="biblioteca" aria-labelledby="biblio-titulo">
-    <div class="biblio-cabeza">
-      <h2 id="biblio-titulo">Añadir ejercicios</h2>
-      <span class="biblio-cuenta num" aria-live="polite">${cuentaBiblioteca(b)}</span>
-    </div>
-    <div class="biblio-filtros">
-      <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
+    <div class="biblio-arriba">
+      <div class="biblio-cabeza">
+        <button type="button" class="biblio-cerrar" data-accion="cerrar-biblioteca" aria-label="Volver a la rutina">${ICONO.volver}</button>
+        <h2 id="biblio-titulo" tabindex="-1">Añadir ejercicios</h2>
+        <span class="biblio-cuenta num" aria-live="polite">${cuentaBiblioteca(b)}</span>
+      </div>
+      <div class="biblio-filtros">
+        <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
       <label class="campo-musculo"><span>Músculo</span>
         <select data-accion="musculo">
           <option value="">Todos</option>
           ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(MUSCULOS[mu])}</option>`).join('')}
         </select>
       </label>
+        <button type="button" class="boton secundario biblio-ver-mapa" data-accion="ver-mapa" aria-expanded="false" aria-controls="hueco-mapa">${ICONO.cuerpo}<span>En la figura</span></button>
+      </div>
     </div>
     <div class="biblio-cuerpo">
-      <div class="hueco-mapa">${mapaCuerpo(b)}</div>
+      <div class="hueco-mapa" id="hueco-mapa">${mapaCuerpo(b)}</div>
       <ul class="biblio-lista">${listaBiblioteca(b)}</ul>
     </div>
   </section>`;
@@ -539,7 +544,7 @@ function vistaArmar() {
   };
 
   function pintar() {
-    app.innerHTML = `<div class="armar">
+    app.innerHTML = `<div class="armar${b.orden.length ? '' : ' sin-ejercicios'}">
       <div class="armar-izq">
         ${barraApp('Nueva rutina')}
         <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
@@ -557,6 +562,7 @@ function vistaArmar() {
             <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>Ejercicios</p>
             <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
             <div class="hueco-rutina">${seccionRutina(b)}</div>
+            <button type="button" class="anadir-ejercicio" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}<span>Añadir ejercicio</span></button>
             ${seccionBiblioteca(b)}
           </section>
           <section class="etapa" id="etapa-ajustes" aria-labelledby="etapa-ajustes-t">
@@ -576,6 +582,7 @@ function vistaArmar() {
         <div class="barra-crear" id="etapa-enlace">
           <span class="resumen-corto">${resumenCorto()}</span>
           <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>Crear enlace</button>
+          <button type="button" class="boton anadir-en-barra" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}Añadir ejercicio</button>
         </div>
       </div>
       <aside class="vista">
@@ -638,6 +645,7 @@ function vistaArmar() {
 
   function actualizarBarra() {
     app.querySelector('.resumen-corto').textContent = resumenCorto();
+    app.querySelector('.armar').classList.toggle('sin-ejercicios', !b.orden.length);
     const etapas = app.querySelector('.etapas-app');
     if (etapas) etapas.innerHTML = etapasApp(b);
     app.querySelector('[data-accion="crear"]').disabled = !b.orden.length;
@@ -687,6 +695,57 @@ function vistaArmar() {
     const despues = buscar()?.getBoundingClientRect().top;
     if (antes !== undefined && despues !== undefined && Math.abs(despues - antes) > 1) window.scrollBy(0, despues - antes);
   }
+
+  // On a phone or a tablet (no preview at the side), the library is a sheet over the whole screen: «Añadir ejercicio»
+  // opens it with the search on top, choosing one closes it and leaves that exercise open in the routine, in sight.
+  // The phone's «back» closes it too, as in any app. Enrique, 13 November 2026: «bajar, subir, bajar... hay que adivinar».
+  const estrecho = () => !window.matchMedia('(min-width: 980px)').matches;
+  const hojaAbierta = () => !!app.querySelector('.armar.biblio-abierta');
+  function abrirBiblioteca() {
+    if (hojaAbierta()) return;
+    app.querySelector('.armar').classList.add('biblio-abierta');
+    document.body.classList.add('con-hoja');
+    const hoja = app.querySelector('.biblioteca');
+    hoja.setAttribute('role', 'dialog');
+    hoja.setAttribute('aria-modal', 'true');
+    hoja.scrollTop = 0;
+    history.pushState({ jepysoHoja: 'biblioteca' }, '');
+    app.querySelector('#biblio-titulo').focus({ preventScroll: true });
+  }
+  // Closes the sheet; «sinHistoria» when the history entry is already gone (the «back» of the phone).
+  function cerrarBiblioteca(sinHistoria) {
+    if (!hojaAbierta()) return;
+    app.querySelector('.armar').classList.remove('biblio-abierta');
+    document.body.classList.remove('con-hoja');
+    const hoja = app.querySelector('.biblioteca');
+    hoja.removeAttribute('role');
+    hoja.removeAttribute('aria-modal');
+    if (!sinHistoria && history.state?.jepysoHoja) history.back();
+  }
+  // The exercise just chosen, open and under the bars, with a moment of light so the eye finds it.
+  function enseñarTarjeta(id) {
+    const tarjeta = app.querySelector(`.ejercicio[data-id="${id}"]`);
+    if (!tarjeta) return;
+    const arriba = [...app.querySelectorAll('.barra-app, .etapas-app')].reduce((t, x) => t + x.getBoundingClientRect().height, 0);
+    window.scrollTo(0, window.scrollY + tarjeta.getBoundingClientRect().top - arriba - 12);
+    tarjeta.classList.add('recien');
+    setTimeout(() => tarjeta.classList.remove('recien'), 1400);
+    tarjeta.querySelector('.ejercicio-cabeza').focus({ preventScroll: true });
+  }
+  // Closing with «history.back()» ends in a «popstate», after which the browser would put back the scroll it had: the
+  // card to show waits for it.
+  let mostrarAlVolver = null;
+  const alVolver = () => {
+    cerrarBiblioteca(true);
+    if (mostrarAlVolver) {
+      const id = mostrarAlVolver;
+      mostrarAlVolver = null;
+      requestAnimationFrame(() => enseñarTarjeta(id));
+    }
+  };
+  const alTeclear = (ev) => {
+    if (ev.key === 'Escape' && hojaAbierta()) cerrarBiblioteca();
+  };
 
   function refrescarPlantillas() {
     app.querySelector('.hueco-plantillas').innerHTML = seccionPlantillas(b);
@@ -755,12 +814,30 @@ function vistaArmar() {
       ajustes(id);
       if (!b.orden.includes(id)) b.orden.push(id);
       b.activo = id;
-      // The routine grows above the library: the row just added stays under the pointer.
-      sinSaltar(() => app.querySelector(`.biblio-fila[data-id="${id}"]`), () => {
+      if (hojaAbierta()) {
+        // From the sheet: back to the routine, with this exercise open in front, to set it.
+        if (history.state?.jepysoHoja) mostrarAlVolver = id;
+        cerrarBiblioteca();
         refrescarRutina();
         refrescarBiblioteca();
-      });
+        enseñarTarjeta(id);
+      } else {
+        // The routine grows above the library: the row just added stays under the pointer.
+        sinSaltar(() => app.querySelector(`.biblio-fila[data-id="${id}"]`), () => {
+          refrescarRutina();
+          refrescarBiblioteca();
+        });
+      }
       colocarFigura();
+    } else if (a === 'abrir-biblioteca') {
+      abrirBiblioteca();
+    } else if (a === 'cerrar-biblioteca') {
+      cerrarBiblioteca();
+      [...app.querySelectorAll('[data-accion="abrir-biblioteca"]')].find((x) => x.offsetParent)?.focus({ preventScroll: true });
+    } else if (a === 'ver-mapa') {
+      const abierto = el.getAttribute('aria-expanded') !== 'true';
+      el.setAttribute('aria-expanded', String(abierto));
+      app.querySelector('.biblio-cuerpo').classList.toggle('con-mapa', abierto);
     } else if (a === 'quitar') {
       b.orden = b.orden.filter((x) => x !== id);
       if (b.activo === id) b.activo = b.orden[0] || id;
@@ -906,10 +983,23 @@ function vistaArmar() {
 
   pintar();
   const ancho = window.matchMedia('(min-width: 980px)');
-  const alCambiarAncho = () => colocarFigura();
+  const alCambiarAncho = () => {
+    // Wide, the library is in the page again: no sheet left open behind it.
+    if (!estrecho()) cerrarBiblioteca();
+    colocarFigura();
+  };
   ancho.addEventListener('change', alCambiarAncho);
+  window.addEventListener('popstate', alVolver);
+  document.addEventListener('keydown', alTeclear);
+  // The sheet's entry in the history is not a page: going back must not move the routine.
+  const restaurar = history.scrollRestoration;
+  history.scrollRestoration = 'manual';
   return () => {
+    history.scrollRestoration = restaurar;
     ancho.removeEventListener('change', alCambiarAncho);
+    window.removeEventListener('popstate', alVolver);
+    document.removeEventListener('keydown', alTeclear);
+    document.body.classList.remove('con-hoja');
     if (figura) figura.oyentes = {};
     app.onclick = app.oninput = app.onchange = app.onsubmit = null;
   };

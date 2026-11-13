@@ -875,3 +875,80 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 @media (min-width: 700px) {
   body.pro .nueva-version { left: calc(50% + var(--riel) / 2); }
 }
+
+/* ---------- The builder on a phone or a tablet (Jujol, 13 November 2026) ----------
+   No preview at the side: the routine is the list, «Añadir ejercicio» is a big button under it, and the library opens
+   as a sheet over the whole screen, the search on top. Choosing one closes it and leaves that exercise open in front.
+   Wide, all of this is as it was: the library in the page and the button out of sight. */
+.anadir-ejercicio, .biblio-cerrar, .biblio-ver-mapa, .anadir-en-barra { display: none; }
+@media (max-width: 979px) {
+  .anadir-ejercicio {
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 64px; padding: 0 16px;
+    border: 1.5px dashed var(--tinta); border-radius: var(--radio); background: transparent; color: var(--tinta);
+    font-size: 17px; font-weight: 650; cursor: pointer;
+  }
+  .anadir-ejercicio svg { width: 22px; height: 22px; }
+  .anadir-ejercicio:active { background: var(--superficie); }
+  .anadir-ejercicio:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+  /* Closed, the library is not in the page. Open, it is the sheet. */
+  .armar:not(.biblio-abierta) .biblioteca { display: none; }
+  .armar.biblio-abierta .biblioteca {
+    position: fixed; inset: 0; z-index: 30; display: block; overflow-y: auto; overscroll-behavior: contain;
+    margin: 0; padding: 0 16px calc(24px + env(safe-area-inset-bottom)); border: 0; border-radius: 0; background: var(--fondo);
+    animation: hoja-sube 0.22s ease;
+  }
+  body.con-hoja { overflow: hidden; }
+  /* The head of the sheet stays on top while the list scrolls under it: back, title, count, and the search. */
+  .armar.biblio-abierta .biblio-arriba {
+    position: sticky; top: 0; z-index: 2; display: grid; gap: 10px; margin: 0 -16px; padding: calc(8px + env(safe-area-inset-top)) 16px 12px;
+    background: var(--fondo); border-bottom: 1px solid var(--linea);
+  }
+  .armar.biblio-abierta .biblio-cabeza { align-items: center; justify-content: flex-start; min-height: 48px; }
+  /* The title of the sheet, as the title of any screen of the app: not the drawing label of a section. */
+  .armar.biblio-abierta .biblio-cabeza h2 {
+    flex: 1; min-width: 0; padding: 0; background: none; font-family: inherit; font-size: 20px; font-weight: 500;
+    letter-spacing: -0.015em; text-transform: none; color: var(--tinta); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .armar.biblio-abierta .biblio-cabeza h2:focus { outline: none; }
+  .biblio-cerrar {
+    display: grid; place-items: center; width: 44px; height: 44px; margin-left: -10px; border: 0; background: transparent;
+    color: var(--tinta); cursor: pointer;
+  }
+  .biblio-cerrar svg { width: 24px; height: 24px; }
+  .biblio-cerrar:focus-visible { outline: 2px solid var(--acento); outline-offset: -2px; }
+  .armar.biblio-abierta .buscar { font-size: 17px; }
+  /* The search, the muscle and the map on one or two lines; the map folded until asked for, so the list comes first. */
+  .armar.biblio-abierta .biblio-filtros { grid-template-columns: minmax(0, 1fr) auto; }
+  .armar.biblio-abierta .biblio-filtros .buscar { grid-column: 1 / -1; }
+  .biblio-ver-mapa { display: inline-flex; gap: 6px; min-height: 44px; padding: 0 14px; font-size: 14px; }
+  .biblio-ver-mapa svg { width: 18px; height: 18px; }
+  .biblio-ver-mapa[aria-expanded="true"] { background: var(--tinta); color: var(--fondo); }
+  .armar.biblio-abierta .biblio-cuerpo:not(.con-mapa) .hueco-mapa { display: none; }
+  .armar.biblio-abierta .biblio-cuerpo { padding-top: 8px; }
+  .armar.biblio-abierta .hueco-mapa { position: static; padding: 4px 0 12px; border-bottom: 1px solid var(--linea); }
+
+  /* With the routine still empty, the bar at the thumb says what to do first: add an exercise, not a link out of reach. */
+  .armar.sin-ejercicios .barra-crear [data-accion="crear"] { display: none; }
+  .armar.sin-ejercicios .anadir-en-barra { display: inline-flex; gap: 6px; flex: none; white-space: nowrap; }
+  .armar.sin-ejercicios .barra-crear .resumen-corto { flex: 1 1 auto; min-width: 0; }
+  .anadir-en-barra svg { width: 18px; height: 18px; }
+  .armar.sin-ejercicios .hueco-rutina + .anadir-ejercicio { display: none; }
+
+  /* The card just added: a moment of light, so the eye finds it. */
+  .ejercicio.recien { animation: recien 1.4s ease; }
+}
+@keyframes hoja-sube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes recien { 0%, 35% { box-shadow: 0 0 0 3px var(--tinta); } 100% { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) {
+  .armar.biblio-abierta .biblioteca, .ejercicio.recien { animation: none; }
+}
+
+/* Safari on the iPhone (iOS 26) lays the page under its translucent address bar, and a bar stuck at the top leaves a
+   strip above it where the page shows scrolling past. The bar covers that strip with its own colour. */
+.barra-app::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 100vh; background: var(--fondo); pointer-events: none;
+}
+.armar.biblio-abierta .biblio-arriba::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 100vh; background: var(--fondo); pointer-events: none;
+}
