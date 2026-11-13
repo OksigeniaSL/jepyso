@@ -35,7 +35,10 @@
         "flex": 90
       },
       "fingers_r": {
-        "curl": 1
+        "curl": 1,
+        "pulgar": -0.6,
+        "oposicion": 30,
+        "pulgar_hacia": 30
       }
     },
     "llegada": {

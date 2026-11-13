@@ -30,12 +30,10 @@
     },
     "llegada": {
       "fingers_r": {
-        "curl": 0,
-        "mcp": 88,
-        "pip": 100,
-        "dip": 60,
-        "pulgar": 0.6,
-        "oposicion": 40
+        "curl": 1,
+        "pulgar": -0.6,
+        "oposicion": 30,
+        "pulgar_hacia": 30
       }
     },
     "vuelta": {

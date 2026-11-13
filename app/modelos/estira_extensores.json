@@ -32,14 +32,14 @@
  "angulos": {
   "partida": {
    "codo_izquierda_flexion": 3.6,
-   "hombro_izquierda_flexion": 88.8,
-   "hombro_izquierda_rotacion_externa": -16.4,
+   "hombro_izquierda_flexion": 87.9,
+   "hombro_izquierda_rotacion_externa": -17.1,
    "codo_derecha_flexion": 12.0
   },
   "llegada": {
-   "codo_izquierda_flexion": 32.0,
-   "hombro_izquierda_flexion": 68.8,
-   "hombro_izquierda_rotacion_externa": -3.6,
+   "codo_izquierda_flexion": 26.9,
+   "hombro_izquierda_flexion": 69.6,
+   "hombro_izquierda_rotacion_externa": -6.4,
    "codo_derecha_flexion": 3.0
   }
  },
@@ -55,16 +55,16 @@
  ],
  "camara": {
   "pos": [
-   -1.962,
-   1.655,
-   0.284
+   -1.954,
+   1.652,
+   0.279
   ],
   "mira": [
    -0.09,
    1.056,
-   -0.053
+   -0.057
   ]
  },
  "archivo": "estira_extensores.glb",
- "bytes": 72616
+ "bytes": 72556
 }

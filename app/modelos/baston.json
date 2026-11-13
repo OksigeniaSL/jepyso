@@ -31,18 +31,18 @@
  ],
  "angulos": {
   "partida": {
-   "codo_izquierda_flexion": 91.5,
-   "hombro_izquierda_flexion": 3.4,
-   "hombro_izquierda_abduccion": 20.0,
-   "hombro_izquierda_rotacion_externa": 7.6,
+   "codo_izquierda_flexion": 89.1,
+   "hombro_izquierda_flexion": 4.8,
+   "hombro_izquierda_abduccion": 20.2,
+   "hombro_izquierda_rotacion_externa": 7.8,
    "hombro_derecha_flexion": -0.0,
    "hombro_derecha_rotacion_externa": 4.0
   },
   "llegada": {
-   "codo_izquierda_flexion": 104.8,
-   "hombro_izquierda_flexion": 6.4,
-   "hombro_izquierda_abduccion": 3.8,
-   "hombro_izquierda_rotacion_externa": -31.6,
+   "codo_izquierda_flexion": 102.5,
+   "hombro_izquierda_flexion": 7.6,
+   "hombro_izquierda_abduccion": 3.9,
+   "hombro_izquierda_rotacion_externa": -30.2,
    "hombro_derecha_flexion": -3.1,
    "hombro_derecha_rotacion_externa": 53.7
   }
@@ -61,14 +61,14 @@
   "pos": [
    -1.886,
    3.616,
-   2.548
+   2.555
   ],
   "mira": [
    0.08,
    0.864,
-   0.189
+   0.196
   ]
  },
  "archivo": "baston.glb",
- "bytes": 45676
+ "bytes": 45192
 }

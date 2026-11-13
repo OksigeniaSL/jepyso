@@ -1125,9 +1125,8 @@ export const ORDEN = [
   // sitting: knee, foot, neck and shoulder blades
   'extension_rodilla', 'silla', 'toalla_dedos', 'retraccion', 'cuello_giro', 'cuello_lado', 'iso_cuello', 'trapecio',
   'escapulas',
-  // sitting at a table: the arm slide. The wrist and hand exercises ('muneca', 'prono_supinacion', 'estira_flexores',
-  // 'estira_extensores', 'tendinoso', 'abrir_cerrar', 'pelota') come back with the new hand: in close-up the body's
-  // hand did not read as a hand (Enrique, 12 November 2026).
+  // sitting at a table: wrist and hand (back on 13 November 2026 with Gaudí's modelled hand)
+  'muneca', 'prono_supinacion', 'estira_flexores', 'estira_extensores', 'tendinoso', 'abrir_cerrar', 'pelota',
   'deslizar_mesa',
   // standing by a chair, and on a step
   'talones', 'curl_isquios', 'sentadilla', 'abduccion_pie', 'equilibrio', 'cuadriceps_pie', 'escalon',

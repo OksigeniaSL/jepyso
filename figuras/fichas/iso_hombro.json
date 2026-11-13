@@ -34,7 +34,10 @@
         "pron": 0
       },
       "fingers_r": {
-        "curl": 0.8
+        "curl": 0.8,
+        "pulgar": -0.6,
+        "oposicion": 30,
+        "pulgar_hacia": 30
       }
     },
     "llegada": {
