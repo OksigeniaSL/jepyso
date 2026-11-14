@@ -300,6 +300,22 @@
     ]
    }
   },
+  "caminar": {
+   "glb": "modelos/caminar.glb",
+   "ficha": "modelos/caminar.json",
+   "bytes": 49036,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gemelos"
+    ],
+    "secundarios": [
+     "gluteo_mayor"
+    ]
+   },
+   "pasos": 2
+  },
   "circulos_tobillo": {
    "glb": "modelos/circulos_tobillo.glb",
    "ficha": "modelos/circulos_tobillo.json",

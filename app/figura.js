@@ -342,10 +342,12 @@ export class Figura {
 
   // 'demo' loops forever (preview); 'serie' plays `reps` repetitions and stops. With porPasos, `reps` are steps of a
   // walking clip: it plays the cycles they need and counts each step (a set can end halfway through a cycle).
-  empezar({ modo = 'demo', reps = 0, porPasos = false } = {}) {
+  // With porMinutos, `reps` are minutes: the clip loops and each minute counts as one.
+  empezar({ modo = 'demo', reps = 0, porPasos = false, porMinutos = false } = {}) {
     this.modo = modo;
     this.reps = reps;
     this.porPasos = porPasos && this.pasos > 0;
+    this.porMinutos = porMinutos;
     this.repActual = 0;
     this.t = 0;
     this.faseAnterior = null;
@@ -377,7 +379,7 @@ export class Figura {
       this.t += dt;
       const c = this.ciclo();
       const rep = Math.floor(this.t / c);
-      const hechas = this.porPasos ? Math.floor((this.t / c) * this.pasos) : rep;
+      const hechas = this.porMinutos ? Math.floor(this.t / 60) : this.porPasos ? Math.floor((this.t / c) * this.pasos) : rep;
       if (this.modo === 'serie' && hechas >= this.reps) {
         this.enMarcha = false;
         this.posar(this.fases.reposo[1]);

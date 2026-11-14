@@ -1654,6 +1654,26 @@ export const EJERCICIOS = {
     error: 'Girar también la cadera o los pies. Solo gira el tronco.',
     fuentes: ['Otago Exercise Programme (ACC), calentamiento: «trunk movements»'],
   },
+  caminar: {
+    nombre: 'Caminar',
+    otrosNombres: ['paseo', 'andar a paso normal'],
+    posicion: 'De pie',
+    material: 'Calzado cómodo',
+    unLado: false,
+    unidad: 'minutos',
+    zonas: ['tobillo', 'rodilla', 'cadera'],
+    musculos: { principales: ['cuadriceps', 'gemelos'], secundarios: ['gluteo_mayor'] },
+    porDefecto: { series: 1, reps: 10, tempo: [1, 0, 1] },
+    partida: 'Con calzado cómodo, por un sitio llano y sin obstáculos: la calle, un parque o el pasillo de casa. Si lo usas, con tu bastón o tu andador.',
+    pasos: [
+      'Camina a tu paso, a un ritmo que te deje hablar sin ahogarte.',
+      'Mantén la espalda erguida y la mirada al frente.',
+      'Al terminar, sigue unos pasos más despacio antes de pararte.',
+    ],
+    error: 'Ir tan deprisa que no puedas hablar. Mejor más rato y más tranquilo.',
+    masDificil: 'Más minutos seguidos, o un poco más deprisa.',
+    fuentes: ['Otago Exercise Programme (ACC), el plan de caminar', 'Vivifrail, caminar (pasaportes A a D, Ministerio de Sanidad)'],
+  },
 };
 
 // The library the professional sees, grouped by position: only exercises whose clips exist for both bodies.
@@ -1674,7 +1694,7 @@ export const ORDEN = [
   // standing by a chair, and on a step
   'talones', 'talones_sin_apoyo', 'puntas', 'puntas_sin_apoyo', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'sentadilla_sin_apoyo', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'equilibrio_sin_apoyo', 'cuadriceps_pie', 'escalon', 'extension_espalda_pie', 'rotacion_tronco_pie',
   // walking on the spot, over a running floor tape (counted in steps)
-  'andar_atras', 'andar_lado', 'andar_tandem', 'andar_tandem_atras', 'andar_talones', 'andar_puntillas',
+  'caminar', 'andar_atras', 'andar_lado', 'andar_tandem', 'andar_tandem_atras', 'andar_talones', 'andar_puntillas',
   'andar_ocho', 'andar_obstaculos', 'andar_globo',
   // at a wall
   'sentadilla_pared', 'gemelo_pared', 'flexion_pared', 'iso_hombro',
@@ -1756,9 +1776,13 @@ const UNIDADES = {
   repeticiones: { uno: 'repetición', varios: 'repeticiones', todas: 'todas las repeticiones' },
   pasos: { uno: 'paso', varios: 'pasos', todas: 'todos los pasos' },
   vueltas: { uno: 'vuelta', varios: 'vueltas', todas: 'todas las vueltas' },
+  minutos: { uno: 'minuto', varios: 'minutos', todas: 'todos los minutos' },
 };
 export const unidad = (def) => UNIDADES[def?.unidad] || UNIDADES.repeticiones;
 export const porPasos = (def) => def?.unidad === 'pasos';
+export const porMinutos = (def) => def?.unidad === 'minutos';
+// The most a set can have: minutes of walking go up to an hour; anything else, 30.
+export const topeReps = (def) => (porMinutos(def) ? 60 : 30);
 
 export const TOPE_MOLESTIA = 5;
 export const pasaDelTope = (valor, tope) => typeof valor === 'number' && valor > tope;
@@ -1832,7 +1856,7 @@ export async function decodificar(codigo) {
 export function duracionEjercicio(e, descanso, def = null) {
   const [s, m, b] = e.tempo;
   const lados = e.lado === 'ambos' ? 2 : 1;
-  const serie = porPasos(def) ? e.reps * ((s + b) / 2) : def?.unidad === 'vueltas' ? e.reps * (s + m + b) : e.reps * (s + m + b + 1);
+  const serie = porMinutos(def) ? e.reps * 60 : porPasos(def) ? e.reps * ((s + b) / 2) : def?.unidad === 'vueltas' ? e.reps * (s + m + b) : e.reps * (s + m + b + 1);
   return lados * (e.series * serie + (e.series - 1) * descanso);
 }
 

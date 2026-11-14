@@ -37,6 +37,19 @@ try {
     if (segundos > 6.6) fallos.push(`cinco pasos de un segundo duran ${segundos.toFixed(1)} s: hay pausas entre pasos`);
   }
   for (const n of ['1', '3', '5']) if (!vistos.has(n)) fallos.push(`la cuenta no pasa por ${n} (${[...vistos].join(', ')})`);
+
+  // Caminar goes in minutes: the card and the set say so.
+  const caminar = await pagina.evaluate(async () => (await import('./datos.js')).codificar({
+    v: 1, para: 'Ana', de: 'Luis', d: 30, x: 1, m: 5, c: 'a', f: '2026-11-14', e: [{ i: 'caminar', s: 1, r: 15, t: [1, 0, 1] }],
+  }));
+  await pagina.goto(`${base}/index.html?calidad=baja#r=${caminar}`);
+  const tarjetaCaminar = await pagina.textContent('.tarjeta-dosis');
+  if (!tarjetaCaminar.includes('15 minutos')) fallos.push(`la tarjeta de caminar no habla de minutos (${tarjetaCaminar})`);
+  await pagina.click('[data-r="empezar"]');
+  await pagina.click('[data-r="en-posicion"]');
+  await pagina.waitForSelector('.j-rep');
+  const cuenta = await pagina.textContent('.cuenta .grande');
+  if (!cuenta.includes('de 15 minutos')) fallos.push(`la serie de caminar no cuenta minutos (${cuenta})`);
   if (errores.length) fallos.push(...errores.map((e) => `error: ${e}`));
 } finally {
   await navegador.close();
@@ -45,4 +58,4 @@ if (fallos.length) {
   console.error(`andar, ${fallos.length} fallos:\n  ${fallos.join('\n  ')}`);
   process.exit(1);
 }
-console.log('andar: los pasos se cuentan de uno en uno, sin pausas, y la valoración pregunta por ellos');
+console.log('andar: los pasos se cuentan de uno en uno, sin pausas, y la valoración pregunta por ellos; caminar, por minutos');

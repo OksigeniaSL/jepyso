@@ -1,7 +1,7 @@
 // What comes from outside this page is cleaned here before anything uses it: a routine or a summary from a link, a copy
 // file, the professional's cloud and even this browser's own storage. Only the known fields pass, with their type and
 // range, so a forged link can neither paint markup nor leave a file that no longer opens.
-import { EJERCICIOS, BANDAS, TOPE_MOLESTIA, diaLocal } from './datos.js';
+import { EJERCICIOS, BANDAS, TOPE_MOLESTIA, diaLocal, topeReps } from './datos.js';
 
 // Limits for what comes in a link, from anyone. What the professional keeps (files, copies, the cloud) is checked for
 // type but never cut, and fields a newer version adds are kept as they are.
@@ -45,7 +45,7 @@ export function limpiarRutina(r) {
     if (!objeto(x) || !esEjercicio(x.i)) return [];
     const d = EJERCICIOS[x.i].porDefecto;
     const nota = texto(x.n, NOTA);
-    return [{ i: x.i, s: entero(x.s, 1, 6, d.series), r: entero(x.r, 1, 30, d.reps), t: ritmo(x.t, d.tempo), l: lado(x.l, x.i), b: banda(x.b), n: nota || undefined }];
+    return [{ i: x.i, s: entero(x.s, 1, 6, d.series), r: entero(x.r, 1, topeReps(EJERCICIOS[x.i]), d.reps), t: ritmo(x.t, d.tempo), l: lado(x.l, x.i), b: banda(x.b), n: nota || undefined }];
   });
   return {
     v: 1, para: texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: DESCANSOS.includes(r.d) ? r.d : 45, x: entero(r.x, 1, 3, 1),
@@ -111,7 +111,7 @@ export function limpiarPlantilla(t) {
     const x = objeto(t.ejercicios) && Object.hasOwn(t.ejercicios, i) && objeto(t.ejercicios[i]) ? t.ejercicios[i] : {};
     const d = EJERCICIOS[i].porDefecto;
     ejercicios[i] = {
-      series: entero(x.series, 1, 6, d.series), reps: entero(x.reps, 1, 30, d.reps), tempo: ritmo(x.tempo, d.tempo),
+      series: entero(x.series, 1, 6, d.series), reps: entero(x.reps, 1, topeReps(EJERCICIOS[i]), d.reps), tempo: ritmo(x.tempo, d.tempo),
       lado: lado(x.lado, i), banda: banda(x.banda) || '', nota: texto(x.nota, SIN_TOPE),
     };
   }

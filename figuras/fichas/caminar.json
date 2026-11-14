@@ -1,0 +1,35 @@
+{
+  "id": "caminar",
+  "familia": "andar",
+  "nombre": "Caminar",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "adelante"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Camina",
+    "bajar": "A tu paso"
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps",
+      "gemelos"
+    ],
+    "secundarios": [
+      "gluteo_mayor"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

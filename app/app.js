@@ -2,7 +2,7 @@
 // back a summary link. No server: everything travels inside the links.
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
-  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos,
+  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
@@ -397,11 +397,11 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
       <div class="mini-figura"></div>
       <div class="fila">
         <div class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</div>
-        <div class="ajuste"><span>${mayuscula(unidad(def).varios)}</span>${paso('reps', e.reps, mayuscula(unidad(def).varios), 1, 30)}</div>
+        <div class="ajuste"><span>${mayuscula(unidad(def).varios)}</span>${paso('reps', e.reps, mayuscula(unidad(def).varios), 1, topeReps(def))}</div>
         ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
-      ${def.unidad === 'vueltas' ? '' : porPasos(def) ? `<div class="ajuste">
+      ${def.unidad && !porPasos(def) ? '' : porPasos(def) ? `<div class="ajuste">
         <span>Ritmo del paso</span>
         <div class="ritmo"><div class="ritmo-mini"><span>Cada paso</span>${paso('tp', s, 'Segundos por paso', 1, 4)}</div></div>
       </div>` : `<div class="ajuste">
@@ -976,7 +976,7 @@ function vistaArmar() {
       colocarFigura();
       app.querySelector(`.ejercicio[data-id="${id}"] [data-accion="${a}"]:not(:disabled)`)?.focus();
     } else if (a === 'series' || a === 'reps') {
-      const lim = a === 'series' ? [1, 6] : [1, 30];
+      const lim = a === 'series' ? [1, 6] : [1, topeReps(EJERCICIOS[id])];
       b.ejercicios[id][a] = Math.min(lim[1], Math.max(lim[0], b.ejercicios[id][a] + delta));
       refrescarTarjeta(id);
     } else if (a === 'tp') {
@@ -1697,7 +1697,7 @@ async function vistaRutina(codigo) {
     const { e } = actual();
     const mando = app.querySelector('.j-mando');
     mando.innerHTML = `<div class="cuenta">
-        <div class="grande num"><span class="j-rep">1</span> <small>de ${e.r}</small></div>
+        <div class="grande num"><span class="j-rep">1</span> <small>de ${e.r}${EJERCICIOS[e.i].unidad ? ` ${e.r === 1 ? unidad(EJERCICIOS[e.i]).uno : unidad(EJERCICIOS[e.i]).varios}` : ''}</small></div>
         <div class="fase j-fase">${esc(figura?.textos?.subir || 'Ida')}</div>
       </div>
       ${svgTempo(e.t, { punto: true })}
@@ -1754,7 +1754,7 @@ async function vistaRutina(codigo) {
       vibrar([40, 60, 40]);
       siguiente();
     });
-    f.empezar({ modo: 'serie', reps: e.r, porPasos: porPasos(EJERCICIOS[e.i]) });
+    f.empezar({ modo: 'serie', reps: e.r, porPasos: porPasos(EJERCICIOS[e.i]), porMinutos: porMinutos(EJERCICIOS[e.i]) });
   }
 
   // Each step is kept as soon as it is known where the session goes next (guardarCurso): the set that follows, the

@@ -1,0 +1,94 @@
+{
+ "id": "caminar",
+ "nombre": "Caminar",
+ "fps": 30,
+ "duracion": 1.8,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 0.9,
+   "texto": "Camina"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 0.9,
+   "fin": 0.9,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 0.9,
+   "fin": 1.8,
+   "texto": "A tu paso"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 1.8,
+   "fin": 1.8,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 25.2,
+   "cadera_izquierda_abduccion": -0.2,
+   "rodilla_izquierda_flexion": 9.9,
+   "tobillo_izquierda_flexion": -0.2,
+   "codo_izquierda_flexion": 15.0,
+   "hombro_izquierda_flexion": -12.0,
+   "hombro_izquierda_rotacion_externa": 72.1,
+   "cadera_derecha_flexion": 14.2,
+   "cadera_derecha_abduccion": -3.1,
+   "rodilla_derecha_flexion": 39.8,
+   "tobillo_derecha_flexion": 15.6,
+   "codo_derecha_flexion": 26.9,
+   "hombro_derecha_flexion": 12.0,
+   "hombro_derecha_rotacion_externa": 14.5
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 14.2,
+   "cadera_izquierda_abduccion": -3.1,
+   "rodilla_izquierda_flexion": 39.8,
+   "tobillo_izquierda_flexion": 15.6,
+   "codo_izquierda_flexion": 26.9,
+   "hombro_izquierda_flexion": 12.0,
+   "hombro_izquierda_rotacion_externa": 14.5,
+   "cadera_derecha_flexion": 25.2,
+   "cadera_derecha_abduccion": -0.2,
+   "rodilla_derecha_flexion": 9.9,
+   "tobillo_derecha_flexion": -0.2,
+   "codo_derecha_flexion": 15.0,
+   "hombro_derecha_flexion": -12.0,
+   "hombro_derecha_rotacion_externa": 72.1
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gemelos"
+  ],
+  "secundarios": [
+   "gluteo_mayor"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "cinta"
+ ],
+ "pasos": 2,
+ "camara": {
+  "pos": [
+   -3.745,
+   2.065,
+   0.813
+  ],
+  "mira": [
+   -0.001,
+   0.866,
+   0.139
+  ]
+ },
+ "archivo": "caminar.glb",
+ "bytes": 49036
+}
