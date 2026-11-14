@@ -17,6 +17,7 @@ const ARCHIVOS = [
   'personas.js',
   'entrada.js',
   'inflar.js',
+  'voz.js',
   'sincronia.js',
   'drive.js',
   'figura.js',

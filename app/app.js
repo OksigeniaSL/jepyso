@@ -5,6 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
+import { hayVoz, vozActiva, ponerVoz, decir, callar, numero } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, leerBorradas, apuntarBorrada,
@@ -32,6 +33,8 @@ const ICONO = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  voz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  sinVoz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
   puntos: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
   compartirIos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6v11h12V10h-2"/></svg>',
   volver: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
@@ -1276,6 +1279,7 @@ async function vistaRutina(codigo) {
     app.innerHTML = `<div class="saludo"><h1>Este enlace no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
     return () => {};
   }
+  hayVoz(); // the list of voices fills while the person reads the routine
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
   if (!ejercicios.length) {
     app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
@@ -1522,6 +1526,7 @@ async function vistaRutina(codigo) {
       <div class="jugador-arriba">
         <button type="button" class="redondo" data-r="salir" aria-label="Salir">${ICONO.cerrar}</button>
         <div class="titulo"><h2 class="j-nombre"></h2><div class="sub j-sub num"></div></div>
+        ${hayVoz() ? `<button type="button" class="redondo" data-r="voz" aria-pressed="${vozActiva()}" aria-label="Voz que guía">${vozActiva() ? ICONO.voz : ICONO.sinVoz}</button>` : ''}
       </div>
       <div class="escena">
         <span class="chip lado-etiqueta j-lado oculto"></span>
@@ -1609,6 +1614,7 @@ async function vistaRutina(codigo) {
     mando.innerHTML = `<div class="centro"><p>Prepárate</p><h3 class="num cuenta-atras">${n}</h3><p>${esc(pauta)}</p></div>
       <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><span></span><button type="button" class="boton fantasma" data-r="ya">Empezar ya</button></div>`;
     tono(660, 0.08);
+    if (n <= 3) decir(numero(n));
     clearTimeout(sesion.temporizador);
     sesion.temporizador = setTimeout(() => (n > 1 ? cuentaAtras(n - 1) : jugarSerie()), 1000);
   }
@@ -1651,17 +1657,25 @@ async function vistaRutina(codigo) {
       if (elFase.textContent !== texto) elFase.textContent = texto;
       elFase.classList.toggle('mantener', fase === 'mantener');
     });
+    // The voice: the words of each phase during the first repetition, then only the count (as a coach does).
+    let primeraRep = true;
     f.on('cambio', (fase) => {
       if (fase === 'subir') tono(740);
       if (fase === 'mantener') tono(880, 0.18);
       if (fase === 'bajar') tono(520);
+      if (primeraRep && fase !== 'reposo') decir(nombres[fase]);
     });
     f.on('repeticion', (n) => {
       sesion.hechas[sesion.item][sesion.serie] = n;
       elRep.textContent = Math.min(n + 1, e.r);
       vibrar(25);
+      if (n > 0) {
+        primeraRep = false;
+        decir(numero(n));
+      }
     });
     f.on('fin', () => {
+      decir(`${numero(e.r)}. Hecho`);
       sesion.hechas[sesion.item][sesion.serie] = e.r;
       tono(660, 0.12);
       setTimeout(() => tono(990, 0.25), 130);
@@ -1697,6 +1711,7 @@ async function vistaRutina(codigo) {
   }
 
   function descanso(segundos, cambiaLado = false) {
+    decir(cambiaLado ? 'Descansa. Ahora, el otro lado' : 'Descansa');
     sesion.estado = 'descanso';
     const mando = app.querySelector('.j-mando');
     const { e, lado } = actual();
@@ -1796,6 +1811,7 @@ async function vistaRutina(codigo) {
 
   // parcial: the person left in the middle; what was done is kept and can be sent like any other day.
   function terminar(parcial = false) {
+    callar();
     almacen.guardar(claveCurso, null);
     try {
       bloqueo?.release();
@@ -2018,12 +2034,19 @@ async function vistaRutina(codigo) {
     const a = el.dataset.r || el.dataset.accion;
     if (a === 'empezar') return empezar();
     if (a === 'seguir-donde') return empezar(true);
+    if (a === 'voz') {
+      ponerVoz(!vozActiva());
+      el.setAttribute('aria-pressed', String(vozActiva()));
+      el.innerHTML = vozActiva() ? ICONO.voz : ICONO.sinVoz;
+      return vozActiva() && decir('Voz encendida');
+    }
     if (a === 'mandar') return mandar(el.dataset.canal);
     if (a === 'recordatorio') return recordatorio();
     if (a === 'corregir') return editarDia(Number(el.dataset.k));
     if (a === 'sin-app') return editarDia(-1);
     if (a === 'volver') return intro();
     if (a === 'salir') {
+      callar();
       clearTimeout(sesion?.temporizador);
       clearInterval(sesion?.reloj);
       figura?.parar();
@@ -2051,7 +2074,10 @@ async function vistaRutina(codigo) {
     if (a === 'pausa') {
       // Paused, it shows: the word of the phase says «En pausa», the figure dims and the button says «Seguir».
       const pausar = figura.enMarcha;
-      if (pausar) figura.pausar();
+      if (pausar) {
+        figura.pausar();
+        callar();
+      }
       else figura.seguir();
       el.innerHTML = `${pausar ? ICONO.play : ICONO.pausa}<span>${pausar ? 'Seguir' : 'Pausa'}</span>`;
       el.setAttribute('aria-pressed', String(pausar));
