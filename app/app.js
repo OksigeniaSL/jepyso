@@ -2140,8 +2140,16 @@ function vistaPersona(id) {
     fresca.cambiada = p.cambiada;
     if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
   };
-  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file.
+  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file,
+  // closing or reloading the page.
   let porGuardar = null;
+  const guardarYa = () => {
+    if (!porGuardar) return;
+    clearTimeout(porGuardar);
+    porGuardar = null;
+    guardar();
+  };
+  window.addEventListener('pagehide', guardarYa);
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
     p.notas = ev.target.value;
@@ -2203,10 +2211,8 @@ function vistaPersona(id) {
     }
   };
   return () => {
-    if (porGuardar) {
-      clearTimeout(porGuardar);
-      guardar();
-    }
+    guardarYa();
+    window.removeEventListener('pagehide', guardarYa);
     clearTimeout(confirmar);
     app.oninput = app.onclick = null;
   };
