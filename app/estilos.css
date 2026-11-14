@@ -302,6 +302,17 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
   /* A tall sheet (rating a two-sided exercise, large text) scrolls inside the screen instead of leaving its button below it. */
   min-height: 0; overflow-y: auto; overscroll-behavior: contain;
 }
+/* Getting ready for an exercise: no clock, the starting position read big, and the button the whole width. The
+   buttons stay in sight when the text is long or the letter big: the sheet scrolls under them. */
+.prepara { display: grid; gap: 10px; }
+.prepara-titulo { margin: 0; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+.prepara-partida { margin: 0; font-size: 18px; line-height: 1.45; color: var(--tinta); }
+.prepara-material { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 18px; }
+.prepara-material span { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave); }
+.prepara-material .muestra-banda { width: 28px; height: 12px; }
+.prepara-botones { position: sticky; bottom: calc(-18px - env(safe-area-inset-bottom)); display: grid; gap: 8px; margin: 0 -20px calc(-18px - env(safe-area-inset-bottom)); padding: 10px 20px calc(18px + env(safe-area-inset-bottom)); background: var(--fondo); }
+.prepara-botones .boton { width: 100%; min-height: 56px; font-size: 18px; }
+.prepara-botones .boton.secundario { min-height: 48px; font-size: 16px; }
 .cuenta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 /* What to do now leads: the phase big, the count under it (Kimi K3, 11 November 2026). */
 .cuenta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }

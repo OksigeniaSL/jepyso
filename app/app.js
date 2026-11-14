@@ -1342,7 +1342,33 @@ async function vistaRutina(codigo) {
       return;
     }
     if (sesion.item !== item) return;
-    cuentaAtras(3);
+    // A new exercise waits for the person: from the band on the door to the chair takes longer than any countdown.
+    // Between sets of the same exercise, and when only the side changes, the rest leads into the countdown.
+    const nuevo = sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e);
+    if (nuevo) preparacion();
+    else cuentaAtras(5);
+  }
+
+  // Getting ready for an exercise, with no clock: the figure still in its starting position, how to stand, what is
+  // needed (the band in its colour), and one big «Estoy en posición». Only then the countdown.
+  function preparacion() {
+    sesion.estado = 'prepara';
+    const { e } = actual();
+    const def = EJERCICIOS[e.i];
+    const banda = bandaDe(def, e.b);
+    app.querySelector('.j-sub').textContent = `Ejercicio ${ejercicios.indexOf(e) + 1} de ${ejercicios.length}`;
+    const material = banda
+      ? `${muestraBanda(banda)}${esc(banda.nombre.toLowerCase())}`
+      : def.material && def.material !== 'Sin material' ? esc(def.material[0].toLowerCase() + def.material.slice(1)) : '';
+    app.querySelector('.j-mando').innerHTML = `<div class="prepara">
+        <h3 class="prepara-titulo">Ponte en posición</h3>
+        <p class="prepara-partida">${esc(def.partida)}</p>
+        ${material ? `<p class="prepara-material"><span>Necesitas</span> ${material}</p>` : ''}
+      </div>
+      <div class="prepara-botones">
+        <button type="button" class="boton" data-r="en-posicion">Estoy en posición</button>
+        <button type="button" class="boton secundario" data-r="como">Cómo se hace</button>
+      </div>`;
   }
 
   function cuentaAtras(n) {
@@ -1460,7 +1486,7 @@ async function vistaRutina(codigo) {
       if (quedan <= 3 && quedan > 0) tono(600, 0.06);
       if (quedan <= 0) {
         clearInterval(sesion.reloj);
-        cuentaAtras(3);
+        cuentaAtras(5);
       }
     }, 1000);
     sesion.sumar = () => {
@@ -1555,7 +1581,7 @@ async function vistaRutina(codigo) {
       if (ev.target === capa || ev.target.closest('.boton')) {
         capa.remove();
         if (pausada) figura.seguir();
-        else if (estado === 'cuenta') cuentaAtras(3);
+        else if (estado === 'cuenta') cuentaAtras(5);
       }
     });
   }
@@ -1583,6 +1609,10 @@ async function vistaRutina(codigo) {
     if (a === 'seguir-rutina') return sesion.antes === 'valorar' ? valorar() : prepararSerie();
     if (a === 'dejar') return terminar(true);
     if (a === 'como') return como();
+    if (a === 'en-posicion') {
+      app.querySelector('.j-sub').textContent = subtitulo(actual().e, sesion.serie + 1);
+      return cuentaAtras(5);
+    }
     if (a === 'ya') {
       clearInterval(sesion.reloj);
       return jugarSerie();

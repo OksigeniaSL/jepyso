@@ -365,9 +365,18 @@ try {
       `${tema}: el póster no enseña la banda del color elegido`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
     await movil.click('[data-r="empezar"]');
+    // A new exercise waits for «Estoy en posición», with no clock, and the button stays in sight.
+    await movil.waitForSelector('[data-r="en-posicion"]', { timeout: 20000 });
+    comprobar((await movil.locator('.prepara-partida').count()) === 1, `${tema}: al empezar no dice cómo ponerse`);
+    comprobar(await movil.locator('[data-r="en-posicion"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: «Estoy en posición» se sale de la pantalla`);
+    await movil.waitForTimeout(600);
+    await movil.screenshot({ path: `${salida}/preparate-movil-${tema}.png` });
+    await movil.waitForTimeout(2500);
+    comprobar((await movil.locator('[data-r="en-posicion"]').count()) === 1, `${tema}: la preparación arranca sola sin esperar a la persona`);
+    await movil.click('[data-r="en-posicion"]');
     await movil.waitForTimeout(1200);
     await movil.screenshot({ path: `${salida}/cuenta-movil-${tema}.png` });
-    await movil.waitForTimeout(3900);
+    await movil.waitForTimeout(5900);
     await movil.screenshot({ path: `${salida}/serie-movil-${tema}.png` });
     // The figure is drawn at the shape of its box: the sheet grows from the countdown to the series, and a picture
     // left at the old size would show the body stretched.
@@ -390,7 +399,10 @@ try {
     comprobar((await movil.textContent('.aviso-molestia')) === '', `${tema}: aviso con una molestia de 3 y tope 4`);
     await movil.screenshot({ path: `${salida}/valorar-movil-${tema}.png` });
     await movil.click('[data-r="continuar"]');
-    // Shoulder: right side, then the left after a rest, then rating above the level.
+    // Shoulder: getting ready (with the band in its colour), right side, then the left after a rest, then rating above the level.
+    await movil.waitForSelector('[data-r="en-posicion"]', { timeout: 30000 });
+    comprobar((await movil.textContent('.prepara-material')).includes('banda roja'), `${tema}: la preparación no dice qué banda usar`);
+    await movil.click('[data-r="en-posicion"]');
     await movil.waitForSelector('.anillo', { timeout: 30000 });
     await movil.screenshot({ path: `${salida}/cambio-lado-movil-${tema}.png` });
     await movil.click('[data-r="ya"]');
@@ -486,6 +498,8 @@ try {
       `${tema}: sin conexión, la tarjeta no trae su póster`);
     await sinRed.click('[data-r="empezar"]');
     try {
+      await sinRed.waitForSelector('[data-r="en-posicion"]', { timeout: 15000 });
+      await sinRed.click('[data-r="en-posicion"]');
       await sinRed.waitForSelector('.j-fase', { timeout: 15000 });
       await sinRed.waitForTimeout(1200);
       comprobar((await sinRed.locator('.escena canvas').count()) === 1, `${tema}: sin conexión, la figura no sale`);
