@@ -13,6 +13,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 DEST = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'dist', 'sitio')
 APP = 'https://app.jepyso.com/'
 SITIO = 'https://jepyso.com'
+INDEXNOW = 'a82c52154787ee1d911b4ccb67a68f07'
 ACTUALIZADO = {'es': '14 de noviembre de 2026', 'en': '14 November 2026'}
 PANEL_V = '0.12.0'
 
@@ -305,6 +306,9 @@ def main():
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
         f.writelines(f'  <url><loc>{u}</loc></url>\n' for u in urls)
         f.write('</urlset>\n')
+    # The IndexNow key (public by design): with it, the upload tells Bing and the others what changed.
+    with open(os.path.join(DEST, f'{INDEXNOW}.txt'), 'w', encoding='utf-8') as f:
+        f.write(INDEXNOW)
     print(DEST)
 
 
