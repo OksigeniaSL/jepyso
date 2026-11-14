@@ -20,6 +20,7 @@ const ARCHIVOS = [
   'voz.js',
   'licencia.js',
   'vales.js',
+  'programas.js',
   'sincronia.js',
   'drive.js',
   'figura.js',

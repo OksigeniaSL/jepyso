@@ -17,6 +17,7 @@ import {
   soltarVale, botonGoogle,
 } from './vales.js';
 import { MAPA, PUNTOS } from './mapa.js';
+import { PROGRAMAS } from './programas.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 
 const app = document.getElementById('app');
@@ -294,7 +295,7 @@ function ajustesIniciales(id) {
 
 function borradorInicial() {
   return {
-    para: '', de: '', descanso: 45, veces: 1, tope: TOPE_MOLESTIA, cuerpo: 'a',
+    para: '', de: '', descanso: 45, veces: 1, semana: 0, tope: TOPE_MOLESTIA, cuerpo: 'a',
     activo: ORDEN[0], orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' },
   };
 }
@@ -314,8 +315,8 @@ function ponerAlDia(b) {
   if (!ORDEN.includes(b.activo)) b.activo = b.orden[0] || ORDEN[0];
   // The draft lives in this browser's storage, which other pages of the same origin can write (on the bench): its
   // settings go through the same cleaning as a template.
-  const limpia = limpiarPlantilla({ nombre: 'borrador', d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: Object.keys(b.ejercicios), ejercicios: b.ejercicios });
-  Object.assign(b, { descanso: limpia.d, veces: limpia.x, tope: limpia.m, cuerpo: limpia.c, ejercicios: limpia.ejercicios });
+  const limpia = limpiarPlantilla({ nombre: 'borrador', d: b.descanso, x: b.veces, w: b.semana, m: b.tope, c: b.cuerpo, orden: Object.keys(b.ejercicios), ejercicios: b.ejercicios });
+  Object.assign(b, { descanso: limpia.d, veces: limpia.x, semana: limpia.w || 0, tope: limpia.m, cuerpo: limpia.c, ejercicios: limpia.ejercicios });
   b.para = typeof b.para === 'string' ? b.para : '';
   b.de = typeof b.de === 'string' ? b.de : '';
   return b;
@@ -671,6 +672,7 @@ function vistaArmar() {
               <div class="fila">
                 <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso)}</div>
                 <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces)}</div>
+                <div class="ajuste"><span>Días a la semana</span>${segmentos('semana', [[0, 'Libre'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana)}</div>
                 <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo)}</div>
                 <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
               </div>
@@ -876,7 +878,7 @@ function vistaArmar() {
   function guardarPlantilla(nombre) {
     const lista = leerPlantillas().filter((p) => p.nombre !== nombre);
     lista.unshift({
-      nombre, cambiada: new Date().toISOString(), d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: [...b.orden],
+      nombre, cambiada: new Date().toISOString(), d: b.descanso, x: b.veces, w: b.semana || undefined, m: b.tope, c: b.cuerpo, orden: [...b.orden],
       ejercicios: Object.fromEntries(b.orden.map((id) => [id, JSON.parse(JSON.stringify(b.ejercicios[id]))])),
     });
     almacen.guardar('plantillas', lista.slice(0, 60));
@@ -896,7 +898,7 @@ function vistaArmar() {
   }
 
   function usarPlantilla(p) {
-    Object.assign(b, { descanso: p.d, veces: p.x, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
+    Object.assign(b, { descanso: p.d, veces: p.x, semana: p.w || 0, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
     b.orden = p.orden.filter((id) => ORDEN.includes(id));
     for (const id of b.orden) b.ejercicios[id] = { ...ajustesIniciales(id), ...JSON.parse(JSON.stringify(p.ejercicios[id] || {})) };
     b.activo = b.orden[0] || b.activo;
@@ -1015,7 +1017,7 @@ function vistaArmar() {
     } else if (a === 'tope') {
       b.tope = Math.min(9, Math.max(0, b.tope + delta));
       el.closest('.paso').outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
-    } else if (a === 'descanso' || a === 'veces') {
+    } else if (a === 'descanso' || a === 'veces' || a === 'semana') {
       b[a] = Number(el.dataset.valor);
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
       actualizarBarra();
@@ -1134,6 +1136,13 @@ function vistaArmar() {
     const p = leerPlantillas()[pendiente];
     if (p) usarPlantilla(p);
   }
+  // A reference programme (Otago, Vivifrail), the same way.
+  const programa = almacen.leer('programa-a-usar', null);
+  if (programa !== null) {
+    almacen.guardar('programa-a-usar', null);
+    const p = PROGRAMAS.find((x) => x.id === programa);
+    if (p) usarPlantilla(limpiarPlantilla(p));
+  }
   const ancho = window.matchMedia('(min-width: 980px)');
   const conColumna = window.matchMedia('(min-width: 1280px)');
   const alCambiarAncho = () => {
@@ -1167,6 +1176,7 @@ async function crearEnlace(b, empezarOtra = null) {
     de: b.de.trim(),
     d: b.descanso,
     x: b.veces,
+    w: b.semana || undefined,
     m: b.tope,
     c: b.cuerpo || 'a',
     f: diaLocal(),
@@ -1411,6 +1421,7 @@ async function vistaRutina(codigo) {
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
         ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
         <h1>${r.para ? `Hola, ${esc(r.para)}` : 'Tu rutina'}</h1>
+        ${r.w ? `<p class="semana-rutina">${r.w === 7 ? 'Todos los días' : `${r.w} ${r.w === 1 ? 'día' : 'días'} a la semana${r.w <= 3 ? ', mejor no seguidos' : ''}`}</p>` : ''}
         ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>Hoy: ${Math.min(vecesHoy, r.x)} de ${r.x} veces</p>` : ''}
       </header>
       <section class="lista">
@@ -2892,7 +2903,7 @@ function vistaPersona(id) {
       const r = limpiarRutina(await decodificar(el.dataset.codigo));
       if (!r) return;
       const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
-      Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
+      Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, semana: r.w || 0, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
       b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
       for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, banda: e.b || '', nota: e.n || '' };
       b.activo = b.orden[0] || b.activo;
@@ -3027,6 +3038,16 @@ function vistaPlantillas() {
     ${barraApp('Plantillas', { accion: botonNueva })}
     <div class="armar-cuerpo">
       <ul class="lista-plantillas-app"></ul>
+      <section class="programas">
+        <h2>Programas de referencia</h2>
+        <p class="ayuda">Otago y Vivifrail, dos programas probados para prevenir caídas en personas mayores, con la dosis de partida de cada nivel. Se abren como una plantilla: cambia lo que haga falta antes de mandarla.</p>
+        <ul class="lista-plantillas-app">${PROGRAMAS.map((p) => `<li class="plantilla-fila">
+          <button type="button" class="plantilla-usar" data-accion="programa" data-id="${esc(p.id)}">
+            <span class="nombre">${esc(p.nombre)}</span>
+            <span class="meta">${esc(p.descripcion)} · ${p.orden.length} ejercicios</span>
+          </button>
+        </li>`).join('')}</ul>
+      </section>
       <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Una plantilla guarda los ejercicios y sus ajustes. Al usarla se abre una rutina nueva con ellos, para cambiar lo que haga falta y mandarla. Se guardan en este aparato.</p></details>
     </div>
   </div>`;
@@ -3037,6 +3058,9 @@ function vistaPlantillas() {
     if (!el) return;
     if (el.dataset.accion === 'usar') {
       almacen.guardar('plantilla-a-usar', Number(el.dataset.i));
+      location.hash = '';
+    } else if (el.dataset.accion === 'programa') {
+      almacen.guardar('programa-a-usar', el.dataset.id);
       location.hash = '';
     } else if (el.dataset.accion === 'quitar') {
       // A first touch asks; the second deletes.

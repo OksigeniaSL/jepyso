@@ -10,7 +10,9 @@ const NOTA = 4000;
 const SIN_TOPE = Infinity;
 const otrosCampos = (o, conocidos) => Object.fromEntries(Object.entries(o).filter(([k]) => clavePropia(k) && !conocidos.includes(k)));
 const CAMPOS_PERSONA = ['id', 'nombre', 'notas', 'creada', 'm', 'rutinas', 'dias', 'ultimoResumen', 'cambiada'];
-const CAMPOS_PLANTILLA = ['nombre', 'cambiada', 'd', 'x', 'm', 'c', 'orden', 'ejercicios'];
+const CAMPOS_PLANTILLA = ['nombre', 'cambiada', 'd', 'x', 'w', 'm', 'c', 'orden', 'ejercicios'];
+// Days a week (Otago and Vivifrail set them): 1 to 7, or none, when the professional leaves it free.
+const semana = (w) => (Number.isInteger(w) && w >= 1 && w <= 7 ? w : undefined);
 
 const entero = (v, min, max, porDefecto) => (Number.isInteger(v) ? Math.min(max, Math.max(min, v)) : porDefecto);
 const texto = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
@@ -49,7 +51,7 @@ export function limpiarRutina(r) {
   });
   return {
     v: 1, para: texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: DESCANSOS.includes(r.d) ? r.d : 45, x: entero(r.x, 1, 3, 1),
-    m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: esId(r.p) ? r.p : undefined, e,
+    w: semana(r.w), m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: esId(r.p) ? r.p : undefined, e,
   };
 }
 
@@ -118,7 +120,7 @@ export function limpiarPlantilla(t) {
   return {
     ...otrosCampos(t, CAMPOS_PLANTILLA),
     nombre, cambiada: esMomento(t.cambiada) ? t.cambiada : undefined, d: DESCANSOS.includes(t.d) ? t.d : 45,
-    x: entero(t.x, 1, 3, 1), m: tope(t.m) ?? TOPE_MOLESTIA, c: t.c === 'b' ? 'b' : 'a', orden, ejercicios,
+    x: entero(t.x, 1, 3, 1), w: semana(t.w), m: tope(t.m) ?? TOPE_MOLESTIA, c: t.c === 'b' ? 'b' : 'a', orden, ejercicios,
   };
 }
 

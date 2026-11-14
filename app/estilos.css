@@ -317,6 +317,7 @@ a.boton { text-decoration: none; }
 .mandar-hecho .boton { min-height: 52px; padding: 0 10px; }
 /* The times a day as boxes: «Hoy: 1 de 2 veces». */
 .veces-hoy { display: flex; align-items: center; gap: 10px; }
+.semana-rutina { margin: 0; color: var(--tinta-suave); }
 .casillas { display: inline-flex; gap: 4px; }
 .casillas i { width: 18px; height: 18px; border: 1.5px solid var(--tinta); }
 .casillas i.hecha { background: var(--tinta); }
@@ -1310,3 +1311,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .cuenta-dentro strong { color: var(--tinta); font-weight: 600; }
 .aviso-vales { margin: 0; color: var(--vivo-texto); font-size: 14px; }
 .aviso-vales:empty { display: none; }
+
+/* Reference programmes (programas.js), under the professional's own templates. */
+.programas { display: grid; gap: 10px; margin-top: 24px; }
+.programas h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
