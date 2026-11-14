@@ -1193,14 +1193,16 @@ async function vistaRutina(codigo) {
     pintarPie(hist);
   }
 
+  // What has been done goes back from a card in the list, once there is something done; the foot keeps «Empezar» alone.
   function pintarPie(hist) {
-    const pie = app.querySelector('.pie');
-    if (pie) {
-      pie.innerHTML = `<button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>
-        ${hist.length ? `<div class="mandar-por"><span>Mandar lo hecho a ${quien}</span>
-          <button type="button" class="boton fantasma" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
-          <button type="button" class="boton fantasma" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>` : ''}`;
-    }
+    const sitio = app.querySelector('.mandar-sitio');
+    if (!sitio) return;
+    sitio.innerHTML = hist.length ? `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
+        <h3 id="mandar-titulo">Lo que llevas hecho</h3>
+        <p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
+        <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
+        <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>
+      </section>` : '';
   }
 
   function intro() {
@@ -1212,10 +1214,11 @@ async function vistaRutina(codigo) {
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
         ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
         <h1>${r.para ? `Hola, ${esc(r.para)}` : 'Tu rutina'}</h1>
-        <p>${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'}, ${minutos(totalSeg)}${r.x > 1 ? ` · ${r.x} veces al día` : ''}${vecesHoy ? ` · hoy llevas ${vecesHoy}` : ''}.</p>
+        ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>Hoy: ${Math.min(vecesHoy, r.x)} de ${r.x} veces</p>` : ''}
       </header>
       <section class="lista">
         ${sesionDeAyer(hist) >= 0 ? preguntaManana() : ''}
+        <div class="mandar-sitio"></div>
         ${ejercicios
           .map((e) => {
             const def = EJERCICIOS[e.i];
@@ -1240,7 +1243,10 @@ async function vistaRutina(codigo) {
           .join('')}
         <p class="sin-conexion" aria-live="polite"></p>
       </section>
-      <footer class="pie"></footer>
+      <footer class="pie pie-fijo">
+        <p class="pie-resumen num">${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(totalSeg)}</p>
+        <button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>
+      </footer>
     </div>`;
     pintarPie(hist);
     avisarSinConexion();

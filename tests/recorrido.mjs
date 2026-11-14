@@ -364,6 +364,7 @@ try {
     comprobar((await posters.nth(1).getAttribute('src')) === 'modelos/posters/hombro-roja.webp' && (await posters.nth(1).evaluate((i) => Promise.race([i.decode().then(() => i.naturalWidth > 0, () => false), new Promise((r) => setTimeout(() => r(false), 10000))]))),
       `${tema}: el póster no enseña la banda del color elegido`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
+    comprobar(await movil.locator('[data-r="empezar"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: al abrir el enlace, «Empezar» no se ve sin bajar`);
     await movil.click('[data-r="empezar"]');
     // A new exercise waits for «Estoy en posición», with no clock, and the button stays in sight.
     await movil.waitForSelector('[data-r="en-posicion"]', { timeout: 20000 });

@@ -277,6 +277,25 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .sin-conexion:empty { display: none; }
 .pie { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); display: grid; gap: 8px; }
 .pie .boton { width: 100%; }
+/* The routine's foot stays at the bottom of the screen: «Empezar» is in sight from the first moment, with how long it
+   takes above it, whatever the number of exercises and the size of the letter. */
+.pie-fijo {
+  position: sticky; bottom: 0; z-index: 2; gap: 6px; padding-top: 10px;
+  background: color-mix(in srgb, var(--fondo) 90%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--linea);
+}
+.pie-fijo .boton { min-height: 56px; font-size: 19px; }
+.pie-resumen { margin: 0; text-align: center; color: var(--tinta-suave); font-size: 16px; }
+.mandar-hecho p { margin: 0; color: var(--tinta-suave); }
+.mandar-hecho .boton { min-height: 52px; padding: 0 10px; }
+/* The times a day as boxes: «Hoy: 1 de 2 veces». */
+.veces-hoy { display: flex; align-items: center; gap: 10px; }
+.casillas { display: inline-flex; gap: 4px; }
+.casillas i { width: 18px; height: 18px; border: 1.5px solid var(--tinta); }
+.casillas i.hecha { background: var(--tinta); }
+/* On a narrow phone or with big letter, the still gets smaller and the chips break, so the card never pushes the page
+   sideways. */
+.tarjeta .chip { white-space: normal; }
+@media (max-width: 380px) { .tarjeta-cabeza .tarjeta-poster { width: 84px; } }
 
 /* Player: the figure fills the screen and the controls sit on a sheet at the bottom. */
 .jugador { position: fixed; inset: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--figura-fondo); }
@@ -701,9 +720,6 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .en-ficha { margin: 0; color: var(--tinta-suave); }
 .en-ficha a { color: var(--tinta); font-weight: 600; text-underline-offset: 3px; }
 .saludo .en-ficha { margin-top: 10px; }
-.mandar-por { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; }
-.mandar-por > span { flex-basis: 100%; text-align: center; color: var(--tinta-suave); font-size: 14px; }
-.mandar-por .boton.fantasma { min-height: 40px; padding: 0 10px; }
 
 .personas .armar-cuerpo { padding-bottom: 48px; }
 .lista-personas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
