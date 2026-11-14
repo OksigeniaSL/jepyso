@@ -665,7 +665,8 @@ function vistaArmar() {
       const f = await figuraEn(sitio, b.cuerpo);
       // The professional's two marks over the preview: the path of the movement and, under it, the goniometer.
       f.oyentes = { fase: [alFase], dibujado: [() => pintarRecorrido(f, gonio && gonio.id === f.id ? gonio.k : null)] };
-      await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der', banda: bandaDe(EJERCICIOS[id], e.banda)?.color });
+      // Another exercise tapped meanwhile: that call shows it, this one stops here.
+      if ((await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der', banda: bandaDe(EJERCICIOS[id], e.banda)?.color })) === false) return;
       gonio = await medida(f);
       pintarGonio();
       f.empezar({ modo: 'demo' });
@@ -1133,9 +1134,10 @@ async function crearEnlace(b, empezarOtra = null) {
   if (rutina.para) {
     const iguales = buscarPorNombre(lista, rutina.para);
     persona = (b.persona && lista.find((x) => x.id === b.persona)) || (iguales.length === 1 ? iguales[0] : null);
-    if (!persona && caben(lista)) persona = crearPersona(lista, rutina.para);
+    if (!persona && iguales.length > 1) sinSitio = 'elegir';
+    else if (!persona && caben(lista)) persona = crearPersona(lista, rutina.para);
     if (persona) rutina.p = persona.id;
-    else sinSitio = true;
+    else if (!sinSitio) sinSitio = true;
   }
   const codigo = await codificar(rutina);
   if (persona) {
@@ -1173,6 +1175,7 @@ async function crearEnlace(b, empezarOtra = null) {
       <button type="button" class="redondo" data-h="cerrar" aria-label="Cerrar">${ICONO.cerrar}</button></div>
     ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
     ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
+    ${sinSitio === 'elegir' ? `<p class="en-ficha">Tienes más de una ficha con el nombre ${esc(rutina.para)}: elige cuál en «Para» y vuelve a crear el enlace para guardarla en su ficha. La rutina va igual en este enlace.</p>` : ''}
     ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
     <figure class="burbuja"><figcaption>${nombre ? `Así le llega a ${nombre}` : 'Así llega'}</figcaption><p>${esc(mensaje)} <span class="burbuja-enlace">${esc(location.host)}/…</span></p></figure>
     <div class="hoja-mandar">
@@ -1372,7 +1375,13 @@ async function vistaRutina(codigo) {
       <footer class="pie pie-fijo">
         ${ejercicios[0] ? `<span class="pie-poster" aria-hidden="true"><img src="${poster(ejercicios[0].i, r.c, bandaDe(EJERCICIOS[ejercicios[0].i], ejercicios[0].b)?.clave)}" alt="" width="112" height="84" decoding="async"${ejercicios[0].l === 'izq' ? ' class="espejo"' : ''}></span>` : ''}
         <p class="pie-resumen num">${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(totalSeg)}</p>
-        <button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>
+        ${(() => {
+          const c = enCurso();
+          return c
+            ? `<button type="button" class="boton" data-r="seguir-donde">${ICONO.play}Seguir donde lo dejaste</button>
+               <button type="button" class="boton fantasma" data-r="empezar">Empezar desde el principio</button>`
+            : `<button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>`;
+        })()}
       </footer>
     </div>`;
     pintarPie(hist);
@@ -1413,7 +1422,25 @@ async function vistaRutina(codigo) {
 
   // Sound and the screen lock are extras: the set never waits for them. Without a gesture the browser may keep
   // resume() pending forever (seen on a Pixel), and the person would stay on «Empezar». A later touch unlocks the sound.
-  async function empezar() {
+  // A session halfway is kept as it goes (after each set and each exercise rated): closing the page, the phone locking
+  // or a reload in the middle no longer lose it. It is offered again the same day, starting from the exercise it was at.
+  const claveCurso = `curso:${clave}`;
+  function guardarCurso() {
+    if (!sesion) return;
+    const { item, serie, hechas, molestia, inicio } = sesion;
+    almacen.guardar(claveCurso, { dia: diaDeSesion(inicio), item, serie, hechas, molestia, inicio: new Date(inicio).toISOString() });
+  }
+  function enCurso() {
+    const c = almacen.leer(claveCurso, null);
+    const valido =
+      c && c.dia === diaDeSesion(new Date()) && Number.isInteger(c.item) && c.item >= 0 && c.item < cola.length &&
+      Number.isInteger(c.serie) && c.serie >= 0 && Array.isArray(c.hechas) && c.hechas.length === cola.length &&
+      c.hechas.every((h, i) => Array.isArray(h) && h.length === cola[i].e.s && h.every((v) => Number.isInteger(v) && v >= 0 && v <= 50)) &&
+      c.hechas.some((h) => h.some((v) => v > 0));
+    return valido ? c : null;
+  }
+
+  async function empezar(retomar = false) {
     const unRato = () => new Promise((r) => setTimeout(r, 400));
     try {
       audio = audio || new (window.AudioContext || window.webkitAudioContext)();
@@ -1429,10 +1456,23 @@ async function vistaRutina(codigo) {
     } catch {
       bloqueo = null;
     }
-    sesion = { item: 0, serie: 0, hechas: cola.map((c) => Array(c.e.s).fill(0)), molestia: {}, inicio: new Date() };
+    const c = retomar ? enCurso() : null;
+    sesion = c
+      ? { item: c.item, serie: Math.min(c.serie, cola[c.item].e.s - 1), aValorar: c.serie >= cola[c.item].e.s, hechas: c.hechas, molestia: c.molestia && typeof c.molestia === 'object' ? c.molestia : {}, inicio: new Date(c.inicio), retomada: true }
+      : { item: 0, serie: 0, hechas: cola.map((x) => Array(x.e.s).fill(0)), molestia: {}, inicio: new Date() };
+    if (!c) almacen.guardar(claveCurso, null);
     // «Back» on the phone during the routine asks the same as the ×, instead of leaving the page with the session.
     history.pushState({ jepysoJugador: 1 }, '');
     pintarJugador();
+    if (sesion.aValorar) {
+      // Left while rating the exercise: back to the rating, with the figure loaded for the screen around it.
+      sesion.retomada = false;
+      const { e } = actual();
+      app.querySelector('.j-nombre').textContent = EJERCICIOS[e.i].nombre;
+      app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
+      await figuraEn(app.querySelector('.escena'), r.c).catch(() => {});
+      return valorar();
+    }
     await prepararSerie();
   }
   const alAtras = () => {
@@ -1513,7 +1553,8 @@ async function vistaRutina(codigo) {
     if (sesion.item !== item) return;
     // A new exercise waits for the person: from the band on the door to the chair takes longer than any countdown.
     // Between sets of the same exercise, and when only the side changes, the rest leads into the countdown.
-    const nuevo = sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e);
+    const nuevo = sesion.retomada || (sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e));
+    sesion.retomada = false;
     if (nuevo) preparacion();
     else cuentaAtras(5);
   }
@@ -1610,10 +1651,13 @@ async function vistaRutina(codigo) {
     f.empezar({ modo: 'serie', reps: e.r });
   }
 
+  // Each step is kept as soon as it is known where the session goes next (guardarCurso): the set that follows, the
+  // other side, or the rating (serie past the last one).
   function siguiente() {
     const { e } = actual();
     if (sesion.serie + 1 < e.s) {
       sesion.serie++;
+      guardarCurso();
       descanso(r.d);
       return;
     }
@@ -1622,9 +1666,13 @@ async function vistaRutina(codigo) {
     if (sigue && sigue.e === e) {
       sesion.item++;
       sesion.serie = 0;
+      guardarCurso();
       descanso(r.d, true);
       return;
     }
+    sesion.serie = e.s;
+    guardarCurso();
+    sesion.serie = e.s - 1;
     valorar();
   }
 
@@ -1675,7 +1723,7 @@ async function vistaRutina(codigo) {
     sesion.estado = 'valorar';
     sesion.paso ||= 'reps';
     clearInterval(sesion.reloj);
-    figura.parar();
+    figura?.parar();
     app.querySelector('.jugador')?.classList.add('valorando');
     const { e } = actual();
     app.querySelector('.j-sub').textContent = `Ejercicio ${ejercicios.indexOf(e) + 1} de ${ejercicios.length}`;
@@ -1715,6 +1763,7 @@ async function vistaRutina(codigo) {
 
   // parcial: the person left in the middle; what was done is kept and can be sent like any other day.
   function terminar(parcial = false) {
+    almacen.guardar(claveCurso, null);
     try {
       bloqueo?.release();
     } catch {
@@ -1723,7 +1772,7 @@ async function vistaRutina(codigo) {
     figura?.parar();
     const ahora = new Date();
     const dia = {
-      f: diaLocal(ahora),
+      f: diaDeSesion(sesion.inicio),
       h: ahora.toTimeString().slice(0, 5),
       e: cola
         .map((c, i) => ({ i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: sesion.hechas[i], m: sesion.molestia[c.e.i] }))
@@ -1732,7 +1781,7 @@ async function vistaRutina(codigo) {
     if (parcial && !dia.e.length) return intro();
     const hist = almacen.leer(clave, []);
     hist.push(dia);
-    almacen.guardar(clave, hist.slice(-60));
+    almacen.guardar(clave, hist.slice(-200));
     app.innerHTML = `<div class="rutina">
       <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1><p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
@@ -1766,7 +1815,16 @@ async function vistaRutina(codigo) {
   // professional's side (p), so it lands on the right person even when two share a name.
   async function mandar(canal = 'wa') {
     const hist = almacen.leer(clave, []);
-    const resumen = { v: 1, p: r.p, para: r.para, de: r.de, m: tope, dias: hist.slice(-14) };
+    // What was not sent yet (however long ago) and the last two weeks, at most the 40 latest: a weekly summary of two
+    // routines a day leaves nothing out. Sending marks them, so the next one starts after them.
+    const enviado = almacen.leer(`env:${clave}`, '');
+    const hace14 = new Date();
+    hace14.setDate(hace14.getDate() - 14);
+    const desde = diaLocal(hace14);
+    const marca = (d) => `${d.f} ${d.h || ''}`;
+    const dias = hist.filter((d) => d.f >= desde || marca(d) > enviado).slice(-40);
+    const resumen = { v: 1, p: r.p, para: r.para, de: r.de, m: tope, dias };
+    if (hist.length) almacen.guardar(`env:${clave}`, marca(hist[hist.length - 1]));
     const cod = await codificar(resumen);
     const url = `${location.origin}${location.pathname}#s=${cod}`;
     const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}).`;
@@ -1812,6 +1870,7 @@ async function vistaRutina(codigo) {
     if (!el) return;
     const a = el.dataset.r || el.dataset.accion;
     if (a === 'empezar') return empezar();
+    if (a === 'seguir-donde') return empezar(true);
     if (a === 'mandar') return mandar(el.dataset.canal);
     if (a === 'volver') return intro();
     if (a === 'salir') {
@@ -1913,6 +1972,7 @@ async function vistaRutina(codigo) {
       if (sesion.item + 1 < cola.length) {
         sesion.item++;
         sesion.serie = 0;
+        guardarCurso();
         return prepararSerie();
       }
       return terminar();
@@ -1994,6 +2054,14 @@ function listaDias(fechas) {
     return `el ${new Intl.DateTimeFormat('es', { weekday: 'long' }).format(d)} ${d.getDate()}`;
   });
   return nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0];
+}
+
+// A session belongs to the day it started, and one started before five in the morning to the night before: a routine
+// done from 23:50 to 00:10, or at half past midnight, is that evening's, and the next morning's question finds it.
+function diaDeSesion(inicio) {
+  const d = new Date(inicio);
+  if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+  return diaLocal(d);
 }
 
 // ---------- Summary (the professional) ----------
@@ -2174,7 +2242,7 @@ function vistaPersonas() {
       return pintarLista();
     }
     if (!ev.target.closest('[data-accion="exportar"]')) return;
-    const archivo = new Blob([JSON.stringify(copia(leerPersonas()), null, 1)], { type: 'application/json' });
+    const archivo = new Blob([JSON.stringify(copia(leerPersonas()))], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(archivo);
     a.download = `jepyso-personas-${diaLocal()}.json`;

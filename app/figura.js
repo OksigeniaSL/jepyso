@@ -192,10 +192,16 @@ export class Figura {
   }
 
   // Shows one exercise. `opciones`: tempo [up, hold, down] in seconds, lado 'der' | 'izq'.
+  // Returns false when a later call overtook this one (two exercises tapped in a row): what has to come from the network
+  // comes first, and the scene changes in one go only for the latest call, so the clip and the props always match.
   async poner(id, { tempo, lado = 'der', banda = null } = {}) {
+    const llamada = (this.llamada = (this.llamada || 0) + 1);
     await this.cargarCuerpo();
     const def = this.manifiesto.ejercicios[id];
     if (!def) throw new Error('Ejercicio sin modelo: ' + id);
+    const g = def.glb ? await this.gltf(def.glb) : null;
+    const ficha = (await this.ficha(def.ficha)) || def;
+    if (llamada !== this.llamada) return false;
     this.id = id;
 
     if (this.accesorios) this.grupo.remove(this.accesorios);
@@ -207,8 +213,7 @@ export class Figura {
     this.mixer.uncacheRoot(this.grupo);
 
     let clip;
-    if (def.glb) {
-      const g = await this.gltf(def.glb);
+    if (g) {
       // Only the props node goes into the scene; the file's copy of the skeleton is there just for the tracks.
       if (!this.nodosAccesorios.has(def.glb)) this.nodosAccesorios.set(def.glb, g.scene.getObjectByName('accesorios') || g.scene);
       this.accesorios = this.nodosAccesorios.get(def.glb);
@@ -224,7 +229,6 @@ export class Figura {
     } else {
       clip = this.animacionesCuerpo.find((a) => a.name === def.clip) || this.animacionesCuerpo[0];
     }
-    const ficha = (await this.ficha(def.ficha)) || def;
     this.fases = normalizarFases(ficha, clip.duration);
     // The words of each phase as the exercise sheet writes them («Dobla las rodillas», «Sube despacio»): the player shows
     // these, so a squat never reads «Sube» while the figure goes down.

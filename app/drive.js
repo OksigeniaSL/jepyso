@@ -69,8 +69,10 @@ async function pedir(url, opciones = {}) {
 }
 
 const comillas = (t) => t.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+// Oldest first: if two devices made the folder or the file at the same time the first time, every device keeps using
+// the same one (the oldest) from then on.
 async function buscar(consulta) {
-  const r = await pedir(`${API}/files?q=${encodeURIComponent(consulta)}&spaces=drive&fields=files(id,name)&pageSize=10`);
+  const r = await pedir(`${API}/files?q=${encodeURIComponent(consulta)}&spaces=drive&fields=files(id,name)&orderBy=createdTime&pageSize=10`);
   return (await r.json()).files || [];
 }
 
@@ -86,7 +88,8 @@ async function carpeta() {
 }
 
 async function escribir(idCarpeta, id, datos) {
-  const cuerpo = JSON.stringify(datos, null, 1);
+  // Without indentation: with a year of follow-up it was two and a half times bigger to send and to read.
+  const cuerpo = JSON.stringify(datos);
   if (id) {
     await pedir(`${SUBIDA}/files/${id}?uploadType=media`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: cuerpo });
     return id;
