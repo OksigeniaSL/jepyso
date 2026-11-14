@@ -1282,6 +1282,6 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   }
   .firma-pro .firma-acceso { flex-direction: column; gap: 3px; width: 100%; min-height: 64px; justify-content: center; color: var(--tinta-suave); font-size: 12px; }
   .firma-pro .firma-acceso span { text-decoration: none; }
-  .firma-pro .firma-acceso:hover { color: var(--tinta); }
+  @media (hover: hover) { .firma-pro .firma-acceso:hover { color: var(--tinta); } }
   .firma-pro .firma-linea { font-size: 11px; line-height: 1.35; text-align: center; }
 }
