@@ -45,6 +45,8 @@ const ICONO = {
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
   telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
+  // Oksigenia's accessibility sign, the one the panel's own button wears on every Oksigenia website.
+  acceso: '<svg viewBox="0 0 122.88 122.88" fill="currentColor"><path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0Zm-.39,74.18L52.1,98.91a4.94,4.94,0,0,1-2.58,2.83A5,5,0,0,1,42.7,95.5l6.24-17.28a26.3,26.3,0,0,0,1.17-4,40.64,40.64,0,0,0,.54-4.18c.24-2.53.41-5.27.54-7.9s.22-5.18.29-7.29c.09-2.63-.62-2.8-2.73-3.3l-.44-.1-18-3.39A5,5,0,0,1,27.08,46a5,5,0,0,1,5.05-7.74l19.34,3.63c.77.07,1.52.16,2.31.25a57.64,57.64,0,0,0,7.18.53A81.13,81.13,0,0,0,69.9,42c.9-.1,1.75-.21,2.6-.29l18.25-3.42A5,5,0,0,1,94.5,39a5,5,0,0,1,1.3,7,5,5,0,0,1-3.21,2.09L75.15,51.37c-.58.13-1.1.22-1.56.29-1.82.31-2.72.47-2.61,3.06.08,1.89.31,4.15.61,6.51.35,2.77.81,5.71,1.29,8.4.31,1.77.6,3.19,1,4.55s.79,2.75,1.39,4.42l6.11,16.9a5,5,0,0,1-6.82,6.24,4.94,4.94,0,0,1-2.58-2.83L63,74.23,62,72.4l-1,1.78Zm.39-53.52a8.83,8.83,0,1,1-6.24,2.59,8.79,8.79,0,0,1,6.24-2.59Zm36.35,4.43a51.42,51.42,0,1,0,15,36.35,51.27,51.27,0,0,0-15-36.35Z"/></svg>',
 };
 
 // The two bodies Gaudí made. Named by build, never by sex.
@@ -184,9 +186,23 @@ const enlaceMensaje = (canal, texto, url) =>
 // routine (#r=) has none of it, and no manifest: installed from there, its icon would open the builder, not the routine.
 const PESTANAS = [['#', 'Nueva rutina', 'mas'], ['#personas', 'Personas', 'personas'], ['#plantillas', 'Plantillas', 'plantillas']];
 let pestanas = null;
+let firmaPro = null;
+
+// Oksigenia signs every website it makes (shared/sitios-publicos.md): the line with its link, and beside it the button
+// that opens the accessibility panel (index.html). The professional has it at the foot of the rail, or at the end of
+// the page on a phone; the person, quiet at the end of the list, under the routine and away from «Empezar».
+const FIRMA = '<p class="firma-linea">Jepyso · un producto de <a href="https://oksigenia.com">Oksigenia</a></p>';
+const botonAcceso = `<button type="button" class="firma-acceso" data-acceso aria-haspopup="dialog">${ICONO.acceso}<span>Accesibilidad</span></button>`;
+const firmaPersona = `<div class="firma firma-persona">${botonAcceso}${FIRMA}</div>`;
+document.addEventListener('click', (ev) => {
+  if (ev.target.closest?.('[data-acceso]')) document.querySelector('oksigenia-access-panel')?.open?.();
+});
+
 function marcoApp(h) {
   const pro = !h.startsWith('#r=');
   document.body.classList.toggle('pro', pro);
+  // The builder keeps «Crear enlace» fixed over the tabs on a phone: the signature leaves it room.
+  document.body.classList.toggle('en-armar', pro && !/^#(s=|personas$|plantillas$|persona=)/.test(h));
   if (pro && !pestanas) {
     pestanas = document.createElement('nav');
     pestanas.className = 'pestanas';
@@ -195,7 +211,12 @@ function marcoApp(h) {
       ([href, texto, icono]) => `<a href="${href}" data-pestana="${href}">${ICONO[icono]}<span>${texto}</span></a>`,
     ).join('')}`;
     document.body.append(pestanas);
+    firmaPro = document.createElement('footer');
+    firmaPro.className = 'firma firma-pro';
+    firmaPro.innerHTML = botonAcceso + FIRMA;
+    document.body.append(firmaPro);
   }
+  if (firmaPro) firmaPro.hidden = !pro;
   if (pestanas) {
     pestanas.hidden = !pro;
     const actual = h.startsWith('#persona') ? '#personas' : h === '#plantillas' ? '#plantillas' : h.startsWith('#s=') ? '' : '#';
@@ -1276,13 +1297,13 @@ async function vistaRutina(codigo) {
     // Read below as a link that cannot be opened.
   }
   if (!r) {
-    app.innerHTML = `<div class="saludo"><h1>Este enlace no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
+    app.innerHTML = `<div class="saludo"><h1>Este enlace no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>${firmaPersona}`;
     return () => {};
   }
   hayVoz(); // the list of voices fills while the person reads the routine
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
   if (!ejercicios.length) {
-    app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
+    app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>${firmaPersona}`;
     return () => {};
   }
   const clave = 'hist:' + hashCorto(codigo);
@@ -1390,6 +1411,7 @@ async function vistaRutina(codigo) {
           <p class="recordatorio-hecho" aria-live="polite"></p>
         </section>
         <p class="sin-conexion" aria-live="polite"></p>
+        ${firmaPersona}
       </section>
       <footer class="pie pie-fijo">
         ${ejercicios[0] ? `<span class="pie-poster" aria-hidden="true"><img src="${poster(ejercicios[0].i, r.c, bandaDe(EJERCICIOS[ejercicios[0].i], ejercicios[0].b)?.clave)}" alt="" width="112" height="84" decoding="async"${ejercicios[0].l === 'izq' ? ' class="espejo"' : ''}></span>` : ''}

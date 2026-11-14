@@ -69,6 +69,21 @@ try {
     await ancho.waitForTimeout(2500);
     comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 0, `${tema}: la rutina nueva no empieza vacía`);
     await ancho.screenshot({ path: `${salida}/armar-1366-vacia-${tema}.png` });
+    // The page is as tall as what it shows: nothing hidden in the library's scrolling list may stretch it.
+    const [altoPagina, altoApp, altoVentana] = await ancho.evaluate(() => [document.scrollingElement.scrollHeight, document.getElementById('app').getBoundingClientRect().height, innerHeight]);
+    comprobar(altoPagina <= Math.max(altoApp, altoVentana) + 2, `${tema}: la página del constructor mide ${altoPagina} px y lo que enseña, ${Math.round(altoApp)}`);
+    // Oksigenia's signature at the foot of the rail: its line with the link, and «Accesibilidad», which opens the panel
+    // (its styles allowed by the content policy: a refused one is a console error) and gives the focus back on Escape.
+    const firma = ancho.locator('.firma-pro');
+    comprobar(await firma.isVisible() && (await firma.textContent()).includes('Jepyso · un producto de Oksigenia')
+      && (await firma.locator('a').getAttribute('href')) === 'https://oksigenia.com', `${tema}: el profesional no tiene la firma de Oksigenia`);
+    await firma.locator('[data-acceso]').click();
+    await ancho.waitForTimeout(400);
+    comprobar(await ancho.evaluate(() => { const p = document.querySelector('oksigenia-access-panel')?.shadowRoot?.querySelector('#oks-panel'); return !!p && p.getBoundingClientRect().width > 200; }),
+      `${tema}: «Accesibilidad» no abre el panel`);
+    await ancho.keyboard.press('Escape');
+    await ancho.waitForTimeout(300);
+    comprobar(await ancho.evaluate(() => !!document.activeElement?.closest('[data-acceso]')), `${tema}: al cerrar el panel, el foco no vuelve a «Accesibilidad»`);
     // Every row carries the still of its exercise, of the body chosen for the routine.
     // The stills load lazily: the first one is brought into view, and a still that never loads fails after 10 s instead
     // of holding the walk.
@@ -387,6 +402,10 @@ try {
       `${tema}: el póster no enseña la banda del color elegido`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
     comprobar(await movil.locator('[data-r="empezar"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: al abrir el enlace, «Empezar» no se ve sin bajar`);
+    // The person's signature: at the end of the list, never beside «Empezar»; the tabs' one stays hidden.
+    comprobar((await movil.locator('.lista > .firma-persona').count()) === 1 && (await movil.locator('.pie-fijo .firma').count()) === 0
+      && (await movil.locator('.firma-persona a').getAttribute('href')) === 'https://oksigenia.com' && !(await movil.locator('.firma-pro').isVisible()),
+      `${tema}: la rutina no lleva su firma al final de la lista, o la lleva junto a «Empezar»`);
     comprobar((await movil.locator('.tarjeta-pauta').count()) === 2 && (await movil.locator('.tarjeta .tempo').count()) === 0, `${tema}: la tarjeta de la persona no dice el ritmo en palabras, o trae la curva del profesional`);
     await movil.click('[data-r="empezar"]');
     // A new exercise waits for «Estoy en posición», with no clock, and the button stays in sight.
