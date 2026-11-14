@@ -434,9 +434,13 @@ try {
     await movil.waitForTimeout(400); // the sheet fades in for 0.18 s
     await movil.screenshot({ path: `${salida}/como-movil-${tema}.png` });
     await movil.click('.hoja .boton');
-    await movil.waitForSelector('.anillo', { timeout: 60000 });
-    await movil.screenshot({ path: `${salida}/descanso-movil-${tema}.png` });
-    await movil.click('[data-r="ya"]');
+    // The rest, or straight the rating: on a loaded machine the screenshot above can take longer than the set and the
+    // rest that follow it (they go on while the sheet is open), and the walk must not depend on the clock.
+    await movil.waitForSelector('.anillo, [data-r="todas"]', { timeout: 60000 });
+    if (await movil.locator('.anillo').count()) {
+      await movil.screenshot({ path: `${salida}/descanso-movil-${tema}.png` });
+      await movil.click('[data-r="ya"]');
+    } else console.log(`      ${tema}: el descanso ya había pasado (máquina cargada); sin su captura`);
     // Rating, one question at a time: the repetitions first, and «Hice menos» alone opens the − and +.
     await movil.waitForSelector('[data-r="todas"]', { timeout: 60000 });
     comprobar((await movil.locator('.jugador.valorando .escena').isVisible()) === false, `${tema}: al valorar sigue la figura en 3D`);
