@@ -257,6 +257,34 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
   font-size: 13px; color: var(--tinta-suave); background: var(--superficie-2); padding: 10px 12px; border-radius: var(--radio-sm);
   overflow-wrap: anywhere;
 }
+/* The sheet of the link, a <dialog>: at the bottom on a phone, in the middle wider. */
+dialog.hoja { position: fixed; border: 0; color: var(--tinta); max-width: none; animation: aparecer 0.18s ease; }
+dialog.hoja::backdrop { background: rgb(10 14 13 / 0.45); }
+@media (max-width: 699px) { dialog.hoja { inset: auto 0 0; margin: 0; width: 100%; max-height: 92vh; } }
+@media (min-width: 700px) { dialog.hoja { margin: auto; width: min(560px, 92vw); max-height: 92vh; } }
+.hoja-cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -6px -6px -4px 0; }
+.hoja-cabeza h2:focus { outline: none; }
+a.boton { text-decoration: none; }
+.hoja-mandar { display: grid; gap: 8px; }
+.hoja-mandar .boton { min-height: 52px; white-space: nowrap; }
+@media (min-width: 700px) { .hoja-mandar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .hoja-mandar .boton.secundario { grid-column: 1 / -1; } }
+/* The message as it will arrive: a plain bubble, square at its corner as the rest of the studio. */
+.burbuja { margin: 0; display: grid; gap: 4px; }
+.burbuja figcaption { font-size: 13px; color: var(--tinta-suave); }
+.burbuja p { margin: 0; justify-self: start; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--linea); border-radius: 0 12px 12px 12px; color: var(--tinta); font-size: 15px; }
+.burbuja-enlace { color: var(--tinta-suave); text-decoration: underline; text-underline-offset: 3px; }
+.hoja-ver { justify-self: start; padding: 0 2px; }
+.hoja-mas { border-top: 1px solid var(--linea); padding-top: 6px; display: grid; gap: 12px; }
+.hoja-mas summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; color: var(--tinta); font-weight: 600; }
+.hoja-mas[open] { gap: 12px; }
+.hoja-pie { font-size: 14px; }
+/* «Cómo se hace»: «Entendido» stuck at the foot, in sight however long the explanation. */
+.hoja-como h2:focus { outline: none; }
+.hoja-como-pie {
+  position: sticky; bottom: calc(-22px - env(safe-area-inset-bottom)); margin: 0 -20px calc(-22px - env(safe-area-inset-bottom));
+  padding: 12px 20px calc(22px + env(safe-area-inset-bottom)); background: var(--superficie); border-top: 1px solid var(--linea);
+}
+.hoja-como-pie .boton { width: 100%; min-height: 52px; }
 .botones { display: flex; flex-wrap: wrap; gap: 10px; }
 .botones .boton { flex: 1 1 160px; }
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
