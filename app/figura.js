@@ -132,14 +132,25 @@ export class Figura {
   }
 
   async gltf(ruta) {
-    if (!this.cache.has(ruta)) this.cache.set(ruta, this.cargador.loadAsync(this.base + ruta));
+    // A load that failed (no connection) is not kept: «Probar otra vez» must really try again.
+    if (!this.cache.has(ruta)) {
+      this.cache.set(ruta, this.cargador.loadAsync(this.base + ruta).catch((err) => {
+        this.cache.delete(ruta);
+        throw err;
+      }));
+    }
     return this.cache.get(ruta);
   }
 
   async ficha(ruta) {
     if (!ruta) return null;
     const clave = 'ficha:' + ruta;
-    if (!this.cache.has(clave)) this.cache.set(clave, fetch(this.base + ruta).then((r) => (r.ok ? r.json() : null)));
+    if (!this.cache.has(clave)) {
+      this.cache.set(clave, fetch(this.base + ruta).then((r) => (r.ok ? r.json() : null)).catch(() => {
+        this.cache.delete(clave);
+        return null;
+      }));
+    }
     return this.cache.get(clave);
   }
 

@@ -307,7 +307,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .cuenta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
 .cuenta .grande { font-family: var(--letra-titulo); font-size: 30px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; }
 .cuenta .grande small { font-size: 22px; color: var(--tinta-suave); font-weight: 500; letter-spacing: 0; }
-.fase { order: -1; font-family: var(--letra-titulo); font-size: 44px; font-weight: 600; line-height: 1.05; color: var(--tinta); min-height: 1.1em; }
+.fase { order: -1; font-family: var(--letra-titulo); font-size: 38px; font-weight: 600; line-height: 1.05; color: var(--tinta); min-height: 1.1em; }
 .fase.mantener { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 8px; }
 .mando-botones { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
 .mando-botones .principal { width: 72px; height: 72px; border-radius: 0; border: 0; background: var(--tinta); color: var(--fondo); display: grid; place-items: center; }

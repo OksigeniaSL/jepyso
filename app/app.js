@@ -124,7 +124,15 @@ const textoTempo = ([s, m, b]) => (m ? `Ida en ${s} s, mantén ${m} s, vuelta en
 // ---------- Figure ----------
 async function cargarManifiesto(c = 'a') {
   const ruta = RUTAS[c] || RUTAS.a;
-  manifiestos[ruta] ||= fetch(ruta).then((r) => r.json());
+  manifiestos[ruta] ||= fetch(ruta)
+    .then((r) => {
+      if (!r.ok) throw new Error(ruta);
+      return r.json();
+    })
+    .catch((err) => {
+      delete manifiestos[ruta];
+      throw err;
+    });
   return manifiestos[ruta];
 }
 
@@ -134,10 +142,15 @@ async function cargarManifiesto(c = 'a') {
 let moduloFigura = null;
 let pintarRecorrido = () => {};
 async function cargarFigura() {
-  moduloFigura ??= Promise.all([import('./figura.js'), import('./recorrido.js')]).then(([f, rec]) => {
-    pintarRecorrido = rec.pintarRecorrido;
-    return f;
-  });
+  moduloFigura ??= Promise.all([import('./figura.js'), import('./recorrido.js')])
+    .then(([f, rec]) => {
+      pintarRecorrido = rec.pintarRecorrido;
+      return f;
+    })
+    .catch((err) => {
+      moduloFigura = null;
+      throw err;
+    });
   return moduloFigura;
 }
 
@@ -1063,9 +1076,13 @@ async function crearEnlace(b) {
   const codigo = await codificar(rutina);
   if (persona) {
     apuntarRutina(lista, { id: persona.id, nombre: rutina.para }, rutina, codigo);
-    guardarPersonas(lista);
-    b.persona = persona.id;
-    almacen.guardar('borrador', b);
+    if (guardarPersonas(lista)) {
+      b.persona = persona.id;
+      almacen.guardar('borrador', b);
+    } else {
+      persona = null;
+      sinSitio = 'lleno';
+    }
   }
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
@@ -1087,7 +1104,8 @@ async function crearEnlace(b) {
     <h2 id="hoja-titulo">La rutina, lista</h2>
     <p>Mándale el enlace por WhatsApp o Telegram, o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
     ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
-    ${sinSitio ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
+    ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
+    ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
     <div class="qr">${qr}</div>
     <div class="enlace-texto">${esc(url)}</div>
     <div class="botones">
@@ -1152,6 +1170,10 @@ async function vistaRutina(codigo) {
     return () => {};
   }
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
+  if (!ejercicios.length) {
+    app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
+    return () => {};
+  }
   const clave = 'hist:' + hashCorto(codigo);
   const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d), 0);
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
@@ -1286,7 +1308,7 @@ async function vistaRutina(codigo) {
   // The browser lets the screen lock go whenever the page is hidden (a look at WhatsApp mid-routine): back on it,
   // with a session going, it is asked for again, so the phone does not lock in the middle of a set.
   const alVolver = async () => {
-    if (document.visibilityState !== 'visible' || !sesion || !navigator.wakeLock || (bloqueo && !bloqueo.released)) return;
+    if (document.visibilityState !== 'visible' || !sesion || !document.querySelector('.jugador') || !navigator.wakeLock || (bloqueo && !bloqueo.released)) return;
     try {
       bloqueo = await navigator.wakeLock.request('screen');
     } catch {
@@ -1379,6 +1401,11 @@ async function vistaRutina(codigo) {
     const elFase = mando.querySelector('.j-fase');
     const elRep = mando.querySelector('.j-rep');
     const nombres = { subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos };
+    // The phrases of an exercise have different lengths: the box takes the height of the longest once, so the sheet
+    // (and the figure above it) does not jump from phase to phase.
+    const primera = elFase.textContent;
+    elFase.style.minHeight = `${Math.max(...Object.values(nombres).map((t) => ((elFase.textContent = `${t} 88`), elFase.offsetHeight)))}px`;
+    elFase.textContent = primera;
     const f = figura;
     f.oyentes.fase = [];
     f.oyentes.cambio = [];
@@ -1893,7 +1920,10 @@ function vistaPersonas() {
     try {
       const lista = leerPersonas();
       const r = cargarCopia(lista, JSON.parse(await ev.target.files[0].text()));
-      guardarPersonas(lista);
+      if (!guardarPersonas(lista)) {
+        aviso.textContent = SIN_SITIO;
+        return;
+      }
       aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.${
         r.fuera ? ` ${r.fuera} no ${r.fuera === 1 ? 'cabe' : 'caben'}: la versión gratis guarda hasta ${limite()}.` : ''}`;
       pintarLista();
@@ -2191,7 +2221,15 @@ async function ir() {
   else if (h.startsWith('#s=')) limpiar = await vistaResumen(h.slice(3));
   else if (h === '#personas') limpiar = vistaPersonas();
   else if (h === '#plantillas') limpiar = vistaPlantillas();
-  else if (h.startsWith('#persona=')) limpiar = vistaPersona(decodeURIComponent(h.slice(9)));
+  else if (h.startsWith('#persona=')) {
+    let id = '';
+    try {
+      id = decodeURIComponent(h.slice(9));
+    } catch {
+      // A mistyped address: read as a file that is not here.
+    }
+    limpiar = vistaPersona(id);
+  }
   else limpiar = vistaArmar();
 }
 // The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off.

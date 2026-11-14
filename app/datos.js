@@ -1243,29 +1243,38 @@ function deBase64url(texto) {
   return bytes;
 }
 
-// A routine of a few exercises goes uncompressed (j.): any phone opens it, also those without DecompressionStream
-// (iOS before 16.4). Longer ones go compressed, so the link and its QR stay short.
-const SIN_COMPRIMIR = 1200;
+// Compressed when the browser can (d.), so the link and its QR stay short; plain JSON (j.) otherwise. Phones that
+// cannot decompress (iOS before 16.4) read d. links with inflar.js.
 export async function codificar(obj) {
   const json = new TextEncoder().encode(JSON.stringify(obj));
-  const plano = 'j.' + aBase64url(json);
-  if (plano.length <= SIN_COMPRIMIR || !('CompressionStream' in window)) return plano;
-  try {
-    const flujo = new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'));
-    return 'd.' + aBase64url(new Uint8Array(await new Response(flujo).arrayBuffer()));
-  } catch {
-    // A browser with CompressionStream but without deflate-raw (Chrome 80 to 102).
-    return plano;
+  if ('CompressionStream' in window) {
+    try {
+      const flujo = new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+      return 'd.' + aBase64url(new Uint8Array(await new Response(flujo).arrayBuffer()));
+    } catch {
+      // A browser with CompressionStream but without deflate-raw (Chrome 80 to 102): plain JSON below.
+    }
   }
+  return 'j.' + aBase64url(json);
+}
+
+async function descomprimir(bytes) {
+  if ('DecompressionStream' in window) {
+    try {
+      const flujo = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      return await new Response(flujo).text();
+    } catch {
+      // Without deflate-raw: the decoder of our own below.
+    }
+  }
+  const { inflar } = await import('./inflar.js');
+  return new TextDecoder().decode(inflar(bytes));
 }
 
 export async function decodificar(codigo) {
   const [tipo, cuerpo] = [codigo.slice(0, 2), codigo.slice(2)];
   const bytes = deBase64url(cuerpo);
-  if (tipo === 'd.') {
-    const flujo = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-    return JSON.parse(await new Response(flujo).text());
-  }
+  if (tipo === 'd.') return JSON.parse(await descomprimir(bytes));
   return JSON.parse(new TextDecoder().decode(bytes));
 }
 
