@@ -385,6 +385,7 @@ try {
       `${tema}: el póster no enseña la banda del color elegido`);
     await movil.screenshot({ path: `${salida}/rutina-movil-${tema}.png` });
     comprobar(await movil.locator('[data-r="empezar"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: al abrir el enlace, «Empezar» no se ve sin bajar`);
+    comprobar((await movil.locator('.tarjeta-pauta').count()) === 2 && (await movil.locator('.tarjeta .tempo').count()) === 0, `${tema}: la tarjeta de la persona no dice el ritmo en palabras, o trae la curva del profesional`);
     await movil.click('[data-r="empezar"]');
     // A new exercise waits for «Estoy en posición», with no clock, and the button stays in sight.
     await movil.waitForSelector('[data-r="en-posicion"]', { timeout: 20000 });
@@ -449,6 +450,9 @@ try {
     comprobar((await movil.locator('.dia.marcado').count()) === 1, `${tema}: el día con molestia 6 no sale marcado al terminar`);
     comprobar((await movil.locator('[data-r="mandar"][data-canal="wa"]').count()) === 1 && (await movil.locator('[data-r="mandar"][data-canal="tg"]').count()) === 1, `${tema}: al terminar no se puede mandar por WhatsApp y por Telegram`);
     await movil.screenshot({ path: `${salida}/final-movil-${tema}.png` });
+    comprobar((await movil.locator('.a-mano').count()) === 1, `${tema}: el final no ofrece tener la rutina a mano`);
+    await movil.click('[data-r="ya-la-tengo"]');
+    comprobar((await movil.locator('.a-mano').count()) === 0, `${tema}: «Ya la tengo» no quita la tarjeta`);
 
     // Next day at ten in the morning: the session moves to yesterday and the routine asks about getting up.
     await movil.clock.setFixedTime(new Date(Date.now() + 86400e3).setHours(10, 0, 0, 0));
