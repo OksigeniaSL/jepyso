@@ -58,7 +58,9 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="canonical" href="{SITIO}{r[clave]}">
   <link rel="alternate" hreflang="{lengua}" href="{SITIO}{r[clave]}">
   <link rel="alternate" hreflang="{otra}" href="{SITIO}{RUTAS[otra][hermana]}">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/icono.svg" type="image/svg+xml">
+  <link rel="icon" href="/icono-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/fuentes/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/estilos.css">
@@ -285,7 +287,7 @@ def main():
     os.makedirs(DEST)
     aqui = os.path.dirname(os.path.abspath(__file__))
     app = os.path.join(RAIZ, 'app')
-    for f in ('estilos.css', 'sitio.js', 'robots.txt'):
+    for f in ('estilos.css', 'sitio.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
         shutil.copy(os.path.join(aqui, f), DEST)
     shutil.copytree(os.path.join(app, 'fuentes'), os.path.join(DEST, 'fuentes'))
     os.makedirs(os.path.join(DEST, 'imagenes'))
