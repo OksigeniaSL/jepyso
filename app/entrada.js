@@ -58,9 +58,14 @@ export function limpiarDia(d, guardado = false) {
   const e = lista(d.e, guardado ? SIN_TOPE : 40).flatMap((x) => {
     if (!objeto(x) || !(guardado ? idGuardado(x.i) : esEjercicio(x.i))) return [];
     const p = lista(x.p, 6).map((v) => entero(v, 0, 50, 0));
-    return [{ i: x.i, l: lado(x.l, x.i), s: entero(x.s, 1, 6, p.length || 1), r: entero(x.r, 1, 30, 1), p, m: entero(x.m, 0, 10, undefined) }];
+    const n = texto(x.n, guardado ? SIN_TOPE : 300).trim();
+    return [{
+      i: x.i, l: lado(x.l, x.i), s: entero(x.s, 1, 6, p.length || 1), r: entero(x.r, 1, 30, 1), p, m: entero(x.m, 0, 10, undefined),
+      c: x.c === 'cuesta' || x.c === 'no' ? x.c : undefined, n: n || undefined,
+    }];
   });
-  return { f: d.f, h: esHora(d.h) ? d.h : undefined, e, a: entero(d.a, 0, 10, undefined) };
+  // ed: when the person corrected the day afterwards; a later correction replaces the one kept.
+  return { f: d.f, h: esHora(d.h) ? d.h : undefined, e, a: entero(d.a, 0, 10, undefined), ed: esMomento(d.ed) ? d.ed : undefined, ...(d.sinApp === true ? { sinApp: true } : {}) };
 }
 
 // A summary as the link brings it back: { v, p, para, de, m, dias }.

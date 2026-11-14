@@ -77,6 +77,9 @@ export function apuntarResumen(p, resumen, recibido = true) {
       p.dias.push(d);
       porClave.set(claveDia(d), d);
       nuevos++;
+    } else if ((d.ed || '') > (ya.ed || '')) {
+      // The person corrected that day afterwards (repetitions, discomfort, a note): the corrected one replaces it.
+      Object.assign(ya, d, { a: typeof d.a === 'number' ? d.a : ya.a });
     } else if (ya.a === undefined && typeof d.a === 'number') ya.a = d.a;
   }
   p.dias.sort((x, y) => (x.f + (x.h || '')).localeCompare(y.f + (y.h || '')));

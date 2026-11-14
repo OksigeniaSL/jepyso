@@ -1132,3 +1132,39 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 }
 
 .explicacion .parar { margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--linea); color: var(--tinta-suave); font-size: 14px; }
+
+/* The person's extras when rating an exercise: it cost them, they could not do it, a note. Optional, so quieter. */
+.valorar-extra { display: grid; gap: 10px; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--linea); }
+.pregunta-suave { margin: 0; font-size: 17px; font-weight: 600; }
+.pregunta-suave span { font-weight: 400; color: var(--tinta-suave); font-size: 15px; margin-left: 6px; }
+.chips-elegir { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-elegir {
+  min-height: 48px; padding: 0 16px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  background: var(--superficie); color: var(--tinta); font-weight: 600; font-size: 16px;
+}
+.chip-elegir[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
+.nota-persona { display: grid; gap: 6px; }
+.nota-persona span { font-size: 15px; color: var(--tinta-suave); }
+.nota-persona textarea {
+  font: inherit; font-size: 17px; padding: 10px 12px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  background: var(--superficie); color: var(--tinta); resize: vertical;
+}
+.nota-dia { margin: 0; grid-column: 1 / -1; font-size: 15px; color: var(--tinta); }
+
+/* The person's last days, each with «Corregir», and the reminder in the calendar. */
+.dias-hechos { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.dias-hechos li { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; border-bottom: 1px solid var(--linea); }
+.dias-hechos li span::first-letter { text-transform: uppercase; }
+.mandar-hecho > .enlace, .dias-hechos .enlace { justify-self: start; min-height: 44px; }
+.recordatorio-fila { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.recordatorio .hora { display: grid; gap: 4px; }
+.recordatorio .hora span { font-size: 15px; color: var(--tinta-suave); }
+.recordatorio input[type="time"] {
+  font: inherit; font-size: 18px; min-height: 48px; padding: 0 10px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  background: var(--superficie); color: var(--tinta);
+}
+.recordatorio-hecho { margin: 0; color: var(--tinta-suave); }
+.recordatorio-hecho:empty { display: none; }
+.hoja-corregir { display: grid; gap: 14px; overflow-y: auto; }
+.corregir-ejercicio { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--linea); }
+.corregir-ejercicio h3 { margin: 0; font-size: 18px; }

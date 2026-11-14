@@ -1326,12 +1326,18 @@ async function vistaRutina(codigo) {
   function pintarPie(hist) {
     const sitio = app.querySelector('.mandar-sitio');
     if (!sitio) return;
-    sitio.innerHTML = hist.length ? `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
+    // The last days, each with «Corregir»; and a session done without the app can be noted too.
+    const recientes = hist.map((d, k) => ({ d, k })).slice(-7).reverse();
+    const fila = ({ d, k }) => `<li><span>${esc(fechaCorta(d.f))}${d.h ? ` · ${esc(d.h)}` : ''}${d.sinApp ? ' · sin la app' : ''}</span>
+        <button type="button" class="enlace" data-r="corregir" data-k="${k}">Corregir</button></li>`;
+    sitio.innerHTML = `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
         <h3 id="mandar-titulo">Lo que llevas hecho</h3>
+        ${hist.length ? `<ul class="dias-hechos">${recientes.map(fila).join('')}</ul>
         <p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
         <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
-        <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>
-      </section>` : '';
+        <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>` : '<p>Todavía nada.</p>'}
+        <button type="button" class="enlace" data-r="sin-app">Apuntar una vez que la hice sin la app</button>
+      </section>`;
   }
 
   function intro() {
@@ -1370,6 +1376,15 @@ async function vistaRutina(codigo) {
             </article>`;
           })
           .join('')}
+        <section class="tarjeta recordatorio" aria-labelledby="recordar-titulo">
+          <h3 id="recordar-titulo">Que no se te olvide</h3>
+          <p>Pon un aviso cada día en el calendario de tu teléfono, con el enlace a esta rutina.</p>
+          <div class="recordatorio-fila">
+            <label class="hora"><span>A las</span><input type="time" value="10:00" data-r="hora-recordatorio"></label>
+            <button type="button" class="boton secundario" data-r="recordatorio">Añadir al calendario</button>
+          </div>
+          <p class="recordatorio-hecho" aria-live="polite"></p>
+        </section>
         <p class="sin-conexion" aria-live="polite"></p>
       </section>
       <footer class="pie pie-fijo">
@@ -1427,8 +1442,8 @@ async function vistaRutina(codigo) {
   const claveCurso = `curso:${clave}`;
   function guardarCurso() {
     if (!sesion) return;
-    const { item, serie, hechas, molestia, inicio } = sesion;
-    almacen.guardar(claveCurso, { dia: diaDeSesion(inicio), item, serie, hechas, molestia, inicio: new Date(inicio).toISOString() });
+    const { item, serie, hechas, molestia, extra, inicio } = sesion;
+    almacen.guardar(claveCurso, { dia: diaDeSesion(inicio), item, serie, hechas, molestia, extra, inicio: new Date(inicio).toISOString() });
   }
   function enCurso() {
     const c = almacen.leer(claveCurso, null);
@@ -1458,7 +1473,7 @@ async function vistaRutina(codigo) {
     }
     const c = retomar ? enCurso() : null;
     sesion = c
-      ? { item: c.item, serie: Math.min(c.serie, cola[c.item].e.s - 1), aValorar: c.serie >= cola[c.item].e.s, hechas: c.hechas, molestia: c.molestia && typeof c.molestia === 'object' ? c.molestia : {}, inicio: new Date(c.inicio), retomada: true }
+      ? { item: c.item, serie: Math.min(c.serie, cola[c.item].e.s - 1), aValorar: c.serie >= cola[c.item].e.s, hechas: c.hechas, molestia: c.molestia && typeof c.molestia === 'object' ? c.molestia : {}, extra: c.extra && typeof c.extra === 'object' ? c.extra : {}, inicio: new Date(c.inicio), retomada: true }
       : { item: 0, serie: 0, hechas: cola.map((x) => Array(x.e.s).fill(0)), molestia: {}, inicio: new Date() };
     if (!c) almacen.guardar(claveCurso, null);
     // «Back» on the phone during the routine asks the same as the ×, instead of leaving the page with the session.
@@ -1475,6 +1490,11 @@ async function vistaRutina(codigo) {
     }
     await prepararSerie();
   }
+  app.oninput = (ev) => {
+    if (ev.target.dataset.r !== 'nota-ejercicio' || !sesion) return;
+    ((sesion.extra ||= {})[actual().e.i] ||= {}).n = ev.target.value.slice(0, 300);
+    guardarCurso();
+  };
   const alAtras = () => {
     if (!document.querySelector('.jugador')) return;
     const salir = app.querySelector('[data-r="salir"]');
@@ -1719,6 +1739,18 @@ async function vistaRutina(codigo) {
   // Rating an exercise, one question at a time and without the 3D (its still beside the word «Hecho»): first «¿Hiciste
   // todas las repeticiones?», where «Hice menos» alone opens the − and + of each set; then the discomfort, in two rows
   // of big buttons. The button to go on is always in sight, and says what is missing until the discomfort is marked.
+  // What the person may add about an exercise, for the professional: it cost them, or they could not do it, and a short
+  // note in their own words («me molestó la rodilla al bajar»). Optional; it travels in the summary.
+  function extraValorar(e) {
+    const x = (sesion.extra ||= {})[e.i] || {};
+    const boton = (v, texto) => `<button type="button" class="chip-elegir" data-r="dificultad" data-v="${v}" aria-pressed="${x.c === v}">${texto}</button>`;
+    return `<section class="valorar-extra" aria-labelledby="v-extra">
+        <h4 class="pregunta-suave" id="v-extra">¿Algo más para ${quien}? <span>Si quieres</span></h4>
+        <div class="chips-elegir" role="group" aria-labelledby="v-extra">${boton('cuesta', 'Me ha costado')}${boton('no', 'No he podido hacerlo')}</div>
+        <label class="nota-persona"><span>Una nota</span><textarea data-r="nota-ejercicio" rows="2" maxlength="300" placeholder="Por ejemplo: me molestó la rodilla al bajar">${esc(x.n || '')}</textarea></label>
+      </section>`;
+  }
+
   function valorar() {
     sesion.estado = 'valorar';
     sesion.paso ||= 'reps';
@@ -1754,7 +1786,8 @@ async function vistaRutina(codigo) {
         <section class="valorar-paso" aria-labelledby="v-molestia"><h4 class="pregunta" id="v-molestia" tabindex="-1">¿Cuánta molestia notaste?</h4>
         <div class="escala" role="group" aria-labelledby="v-molestia">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="molestia" data-v="${n}" aria-pressed="${sesion.molestia[e.i] === n}" class="num">${n}</button>`).join('')}</div>
         <div class="escala-pie"><span>0 · nada</span><span>10 · mucha</span></div>
-        <p class="aviso-molestia" aria-live="polite"></p></section>`;
+        <p class="aviso-molestia" aria-live="polite"></p></section>
+        ${extraValorar(e)}`;
       pie = `<button type="button" class="boton" data-r="continuar"${marcada ? '' : ' aria-disabled="true"'} data-seguir="${seguir}">${marcada ? seguir : 'Marca tu molestia para seguir'}</button>
         <button type="button" class="boton fantasma" data-r="sin-molestia">Prefiero no decirlo</button>`;
     }
@@ -1775,7 +1808,11 @@ async function vistaRutina(codigo) {
       f: diaDeSesion(sesion.inicio),
       h: ahora.toTimeString().slice(0, 5),
       e: cola
-        .map((c, i) => ({ i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: sesion.hechas[i], m: sesion.molestia[c.e.i] }))
+        .map((c, i) => {
+          const ultimoLado = cola[i + 1]?.e !== c.e;
+          const x = ultimoLado ? sesion.extra?.[c.e.i] || {} : {};
+          return { i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: sesion.hechas[i], m: sesion.molestia[c.e.i], c: x.c, n: x.n?.trim() || undefined };
+        })
         .filter((x) => !parcial || x.p.some((v) => v > 0)),
     };
     if (parcial && !dia.e.length) return intro();
@@ -1783,7 +1820,9 @@ async function vistaRutina(codigo) {
     hist.push(dia);
     almacen.guardar(clave, hist.slice(-200));
     app.innerHTML = `<div class="rutina">
-      <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1><p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
+      <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1>${
+        parcial ? `<p>Te faltó: ${[...new Set(cola.filter((c) => !dia.e.some((x) => x.i === c.e.i)).map((c) => EJERCICIOS[c.e.i].nombre))].map(esc).join(', ')}.</p>` : ''
+      }<p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
         <button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
@@ -1813,6 +1852,112 @@ async function vistaRutina(codigo) {
 
   // The summary goes back by WhatsApp or Telegram, as the person prefers. It carries the id of their file on the
   // professional's side (p), so it lands on the right person even when two share a name.
+  // Correcting a day after the fact, or noting one done without the app: the repetitions of each set, the discomfort,
+  // «me ha costado» or «no he podido» and the note, in a sheet. The corrected day carries the moment (ed), so the
+  // professional's copy takes it in place of the old one, and the next summary brings it.
+  function editarDia(k) {
+    const hist = almacen.leer(clave, []);
+    const nuevo = k < 0 || !hist[k];
+    const ahora = new Date();
+    const dia = nuevo
+      ? { f: diaDeSesion(ahora), h: ahora.toTimeString().slice(0, 5), sinApp: true, e: cola.map((c, i) => ({ i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: Array(c.e.s).fill(c.e.r), m: undefined })) }
+      : JSON.parse(JSON.stringify(hist[k]));
+    const ayer = diaAnterior();
+    const volverA = document.activeElement;
+    const dialogo = document.createElement('dialog');
+    dialogo.className = 'hoja hoja-corregir';
+    dialogo.setAttribute('aria-labelledby', 'corregir-titulo');
+    const pintar = () => {
+      const nombre = (x) => `${esc(EJERCICIOS[x.i]?.nombre || x.i)}${EJERCICIOS[x.i]?.unLado && x.l ? ` · ${LADOS[x.l].toLowerCase()}` : ''}`;
+      dialogo.innerHTML = `<h2 id="corregir-titulo" tabindex="-1">${nuevo ? 'Apuntar una vez sin la app' : `Corregir el ${esc(fechaCorta(dia.f))}`}</h2>
+        ${nuevo ? `<div class="segmentos" role="group" aria-label="Qué día"><button type="button" data-c="dia" data-v="${diaDeSesion(ahora)}" aria-pressed="${dia.f === diaDeSesion(ahora)}">Hoy</button><button type="button" data-c="dia" data-v="${ayer}" aria-pressed="${dia.f === ayer}">Ayer</button></div>` : ''}
+        ${dia.e.map((x, j) => `<section class="corregir-ejercicio"><h3>${nombre(x)}</h3>
+          <div class="series-lado">${x.p.map((v, n) => `<div class="serie-fila"><span>Serie ${n + 1}</span>${paso(`c-${j}-${n}`, v, `Serie ${n + 1}`, 0, 50)}</div>`).join('')}</div>
+          <p class="pregunta-suave">Molestia</p>
+          <div class="escala" role="group" aria-label="Molestia en ${nombre(x)}">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-c="m" data-j="${j}" data-v="${n}" aria-pressed="${x.m === n}" class="num">${n}</button>`).join('')}</div>
+          <div class="chips-elegir">${[['cuesta', 'Me ha costado'], ['no', 'No he podido hacerlo']].map(([v, t]) => `<button type="button" class="chip-elegir" data-c="dificultad" data-j="${j}" data-v="${v}" aria-pressed="${x.c === v}">${t}</button>`).join('')}</div>
+          <label class="nota-persona"><span>Una nota</span><textarea data-c="nota" data-j="${j}" rows="2" maxlength="300">${esc(x.n || '')}</textarea></label>
+        </section>`).join('')}
+        <div class="hoja-como-pie dos-botones"><button type="button" class="boton" data-c="guardar">Guardar</button><button type="button" class="boton secundario" data-c="cancelar">Cancelar</button></div>`;
+    };
+    pintar();
+    dialogo.addEventListener('input', (ev) => {
+      const t = ev.target;
+      if (t.dataset.c === 'nota') dia.e[Number(t.dataset.j)].n = t.value.slice(0, 300).trim() || undefined;
+    });
+    dialogo.addEventListener('click', (ev) => {
+      const b = ev.target.closest('button');
+      if (!b) return;
+      const c = b.dataset.c;
+      const paso = /^c-(\d+)-(\d+)$/.exec(b.dataset.accion || '');
+      if (paso) {
+        const [, j, n] = paso.map(Number);
+        dia.e[j].p[n] = Math.max(0, Math.min(50, dia.e[j].p[n] + Number(b.dataset.delta)));
+        b.parentElement.querySelector('output').textContent = dia.e[j].p[n];
+        b.parentElement.querySelectorAll('button').forEach((x) => (x.disabled = (x.dataset.delta === '-1' && dia.e[j].p[n] <= 0) || (x.dataset.delta === '1' && dia.e[j].p[n] >= 50)));
+        return;
+      }
+      if (c === 'dia') {
+        dia.f = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      } else if (c === 'm') {
+        const x = dia.e[Number(b.dataset.j)];
+        x.m = x.m === Number(b.dataset.v) ? undefined : Number(b.dataset.v);
+        b.parentElement.querySelectorAll('button').forEach((y) => y.setAttribute('aria-pressed', String(Number(y.dataset.v) === x.m)));
+      } else if (c === 'dificultad') {
+        const x = dia.e[Number(b.dataset.j)];
+        x.c = x.c === b.dataset.v ? undefined : b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach((y) => y.setAttribute('aria-pressed', String(y.dataset.v === x.c)));
+      } else if (c === 'guardar') {
+        dia.ed = new Date().toISOString();
+        const lista = almacen.leer(clave, []);
+        if (nuevo) lista.push(dia);
+        else lista[k] = dia;
+        lista.sort((x, y) => `${x.f} ${x.h || ''}`.localeCompare(`${y.f} ${y.h || ''}`));
+        almacen.guardar(clave, lista.slice(-200));
+        dialogo.close();
+        intro();
+      } else if (c === 'cancelar') dialogo.close();
+    });
+    dialogo.addEventListener('close', () => {
+      dialogo.remove();
+      volverA?.focus?.({ preventScroll: true });
+    });
+    document.body.appendChild(dialogo);
+    dialogo.showModal();
+    dialogo.querySelector('#corregir-titulo').focus({ preventScroll: true });
+  }
+
+  // A daily event in the phone's own calendar, with the link to this routine: an .ics file made here, opened by the
+  // phone's calendar; nothing goes through any server, and no app is needed for the reminder.
+  function recordatorio() {
+    const [hh, mm] = (app.querySelector('[data-r="hora-recordatorio"]')?.value || '10:00').split(':').map(Number);
+    const hoy = new Date();
+    const fecha = `${hoy.getFullYear()}${String(hoy.getMonth() + 1).padStart(2, '0')}${String(hoy.getDate()).padStart(2, '0')}`;
+    const hora = `${String(hh || 0).padStart(2, '0')}${String(mm || 0).padStart(2, '0')}00`;
+    const url = `${location.origin}${location.pathname}#r=${codigo}`;
+    const ahora = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const titulo = r.x > 1 ? `Tu rutina de ejercicios (${r.x} veces al día)` : 'Tu rutina de ejercicios';
+    const aviso = r.de ? `${titulo}, de ${r.de}` : titulo;
+    const ics = archivoCalendario([
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Oksigenia//Jepyso//ES', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'BEGIN:VEVENT', `UID:${hashCorto(codigo)}-${fecha}@jepyso`, `DTSTAMP:${ahora}`, `DTSTART:${fecha}T${hora}`,
+      `DURATION:PT${Math.max(5, Math.round(totalSeg / 60))}M`, 'RRULE:FREQ=DAILY', `SUMMARY:${textoCalendario(aviso)}`,
+      `DESCRIPTION:${textoCalendario(`Ábrela aquí: ${url}`)}`, `URL:${url}`,
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0M', `DESCRIPTION:${textoCalendario(titulo)}`, 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR',
+    ]);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+    a.download = 'rutina.ics';
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+    const hecho = app.querySelector('.recordatorio-hecho');
+    if (hecho) hecho.textContent = `Ábrelo y elige «Añadir» en tu calendario: te avisará cada día a las ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}.`;
+  }
+
   async function mandar(canal = 'wa') {
     const hist = almacen.leer(clave, []);
     // What was not sent yet (however long ago) and the last two weeks, at most the 40 latest: a weekly summary of two
@@ -1822,9 +1967,11 @@ async function vistaRutina(codigo) {
     hace14.setDate(hace14.getDate() - 14);
     const desde = diaLocal(hace14);
     const marca = (d) => `${d.f} ${d.h || ''}`;
-    const dias = hist.filter((d) => d.f >= desde || marca(d) > enviado).slice(-40);
+    const enviadoEn = almacen.leer(`envT:${clave}`, '');
+    const dias = hist.filter((d) => d.f >= desde || marca(d) > enviado || (d.ed && d.ed > enviadoEn)).slice(-40);
     const resumen = { v: 1, p: r.p, para: r.para, de: r.de, m: tope, dias };
     if (hist.length) almacen.guardar(`env:${clave}`, marca(hist[hist.length - 1]));
+    almacen.guardar(`envT:${clave}`, new Date().toISOString());
     const cod = await codificar(resumen);
     const url = `${location.origin}${location.pathname}#s=${cod}`;
     const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}).`;
@@ -1872,6 +2019,9 @@ async function vistaRutina(codigo) {
     if (a === 'empezar') return empezar();
     if (a === 'seguir-donde') return empezar(true);
     if (a === 'mandar') return mandar(el.dataset.canal);
+    if (a === 'recordatorio') return recordatorio();
+    if (a === 'corregir') return editarDia(Number(el.dataset.k));
+    if (a === 'sin-app') return editarDia(-1);
     if (a === 'volver') return intro();
     if (a === 'salir') {
       clearTimeout(sesion?.temporizador);
@@ -1933,6 +2083,12 @@ async function vistaRutina(codigo) {
       valorar();
       // The new question takes the focus, so a screen reader reads it and the keyboard goes on from there.
       return app.querySelector('.valorar .pregunta')?.focus({ preventScroll: true });
+    }
+    if (a === 'dificultad') {
+      const x = ((sesion.extra ||= {})[actual().e.i] ||= {});
+      x.c = x.c === el.dataset.v ? undefined : el.dataset.v;
+      el.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === x.c)));
+      return guardarCurso();
     }
     if (a === 'molestia') {
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
@@ -1999,7 +2155,7 @@ async function vistaRutina(codigo) {
     clearInterval(sesion?.reloj);
     window.removeEventListener('popstate', alAtras);
     document.removeEventListener('visibilitychange', alVolver);
-    app.onclick = null;
+    app.onclick = app.oninput = null;
   };
 }
 
@@ -2031,6 +2187,8 @@ function pintarDia(dia, tope) {
           <span class="nombre">${esc(def.nombre)}${def.unLado ? ` · ${LADOS[x.l].toLowerCase()}` : ''}</span>
           ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">Molestia ${x.m}/10</span>` : '<span></span>'}
           <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${esc(v)} de ${esc(x.r)}"></span>`).join('')}</div>
+          ${x.c === 'cuesta' ? '<span class="chip">Costó</span>' : x.c === 'no' ? '<span class="chip alta">No se pudo hacer</span>' : ''}
+          ${x.n ? `<p class="nota-dia">«${esc(x.n)}»</p>` : ''}
           <span class="detalle num">${
             bien
               ? `${x.p.length} ${x.p.length === 1 ? 'serie' : 'series'} de ${x.r}, ${x.p.length === 1 ? 'completa' : 'completas'}`
@@ -2054,6 +2212,27 @@ function listaDias(fechas) {
     return `el ${new Intl.DateTimeFormat('es', { weekday: 'long' }).format(d)} ${d.getDate()}`;
   });
   return nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0];
+}
+
+// Text in a calendar file: backslash, semicolon, comma and line breaks escaped.
+const textoCalendario = (t) => String(t).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+// Lines of at most 75 bytes, the rest on the next one after a space, joined with CRLF.
+function archivoCalendario(lineas) {
+  const cod = new TextEncoder();
+  const plegar = (linea) => {
+    const trozos = [];
+    let actual = '';
+    for (const c of linea) {
+      if (cod.encode(actual + c).length > (trozos.length ? 74 : 75)) {
+        trozos.push(actual);
+        actual = '';
+      }
+      actual += c;
+    }
+    trozos.push(actual);
+    return trozos.join('\r\n ');
+  };
+  return lineas.map(plegar).join('\r\n') + '\r\n';
 }
 
 // A session belongs to the day it started, and one started before five in the morning to the night before: a routine
@@ -2129,6 +2308,11 @@ function guardarEnFicha(s, destino = '') {
 }
 
 // ---------- The professional's people ----------
+// «jueves, 13 de noviembre», for the person's own days.
+const fechaCorta = (f) => {
+  const d = new Date(f + 'T12:00:00');
+  return Number.isNaN(d.getTime()) ? 'día sin fecha' : new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long' }).format(d);
+};
 const fechaLarga = (f) => {
   const d = new Date(f + 'T12:00:00');
   return Number.isNaN(d.getTime()) ? 'sin fecha' : new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(d);
