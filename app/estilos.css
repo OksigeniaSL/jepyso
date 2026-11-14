@@ -320,6 +320,38 @@ a.boton { text-decoration: none; }
 .casillas { display: inline-flex; gap: 4px; }
 .casillas i { width: 18px; height: 18px; border: 1.5px solid var(--tinta); }
 .casillas i.hecha { background: var(--tinta); }
+/* The person's card (Fable B4): the still, the name, how many, and in words what to do and with what. */
+.tarjeta-dosis { margin: 0; font-size: 18px; font-weight: 650; color: var(--tinta); }
+.tarjeta-pauta { margin: 0; font-size: 17px; line-height: 1.45; color: var(--tinta); }
+.tarjeta-material { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; color: var(--tinta-suave); font-size: 16px; }
+.tarjeta-material .muestra-banda { width: 24px; height: 10px; }
+/* «Tenla a mano»: the two steps as the browser draws them, and «Ya la tengo». */
+.a-mano { margin-top: 8px; }
+.a-mano p { margin: 0; color: var(--tinta-suave); }
+.a-mano-pasos { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: paso; }
+.a-mano-pasos li { display: grid; grid-template-columns: auto 44px minmax(0, 1fr); align-items: center; gap: 10px; counter-increment: paso; font-size: 17px; }
+.a-mano-pasos li::before { content: counter(paso); font-family: var(--letra-cifras); font-weight: 600; }
+.a-mano-icono { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--linea); background: var(--fondo); color: var(--tinta); }
+.a-mano-icono svg { width: 22px; height: 22px; }
+.pie-poster { display: none; }
+/* Wide (the WhatsApp of a computer): the list at the left at the width of a phone's reading, and at the right a panel
+   that stays, with the still of the first exercise, how long it takes and «Empezar». */
+@media (min-width: 980px) {
+  .rutina.rutina-intro {
+    max-width: 1180px; margin: 0 auto; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto 1fr;
+    grid-template-areas: "saludo panel" "lista panel"; column-gap: 28px; padding: 0 24px;
+  }
+  .rutina-intro .saludo { grid-area: saludo; padding-left: 0; padding-right: 0; }
+  .rutina-intro .cabecera-rutina { height: 240px; margin: -32px 0 22px; }
+  .rutina-intro .lista { grid-area: lista; padding-left: 0; padding-right: 0; }
+  .rutina-intro .pie-fijo {
+    grid-area: panel; align-self: start; position: sticky; top: 24px; margin-top: 32px; padding: 16px;
+    background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); backdrop-filter: none;
+  }
+  .pie-poster { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radio-sm); background: var(--figura-fondo); }
+  .pie-poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .pie-poster img.espejo { transform: scaleX(-1); }
+}
 /* On a narrow phone or with big letter, the still gets smaller and the chips break, so the card never pushes the page
    sideways. */
 .tarjeta .chip { white-space: normal; }
@@ -370,6 +402,18 @@ a.boton { text-decoration: none; }
 .mando-botones { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
 .mando-botones .principal { width: 72px; height: 72px; border-radius: 0; border: 0; background: var(--tinta); color: var(--fondo); display: grid; place-items: center; }
 .mando-botones .principal svg { width: 30px; height: 30px; }
+/* The set's controls (Fable B5): three boxes of 56 px and more, the middle one with its word. */
+.mando-serie { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; }
+.mando-serie .boton.secundario { min-height: 56px; padding: 4px 8px; font-size: 16px; line-height: 1.15; white-space: normal; text-align: center; }
+.mando-serie .principal { width: 84px; height: 84px; display: grid; place-items: center; align-content: center; gap: 2px; }
+.mando-serie .principal span { font-size: 14px; font-weight: 700; }
+.mando-serie .principal svg { width: 28px; height: 28px; }
+.jugador.en-pausa .escena canvas { opacity: 0.55; transition: opacity 0.2s ease; }
+.recolocar {
+  position: absolute; top: 8px; right: 8px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
+  border: 1px solid var(--tinta); border-radius: var(--radio-sm); background: var(--fondo); color: var(--tinta); font-weight: 600;
+}
+.recolocar svg { width: 18px; height: 18px; }
 .mando-botones .boton.fantasma { justify-self: start; font-size: 15px; padding: 0 6px; text-align: left; }
 .mando-botones .boton.fantasma:last-child { justify-self: end; text-align: right; }
 

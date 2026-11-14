@@ -32,6 +32,8 @@ const ICONO = {
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  puntos: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+  compartirIos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6v11h12V10h-2"/></svg>',
   volver: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
   cuerpo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M5 9l7 1.5L19 9M12 10.5V15m0 0l-3 6m3-6l3 6"/></svg>',
   personas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M15.5 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></svg>',
@@ -120,6 +122,11 @@ const leerPlantillas = () => limpiarPlantillas(almacen.leer('plantillas', []));
 // Neutral words for the three parts: the first is not always «up» (a squat goes down first). In the player, the exercise
 // names its own phases (figura.textos).
 const textoTempo = ([s, m, b]) => (m ? `Ida en ${s} s, mantén ${m} s, vuelta en ${b} s` : `Ida en ${s} s, vuelta en ${b} s`);
+// The same, with the exercise's own words when its sheet has them («Sube la cadera en 2 s, aguanta arriba 1 s…»).
+const pautaTempo = (t, tempo) => (t?.subir && t?.bajar
+  ? `${t.subir} en ${tempo[0]} s${tempo[1] ? `, ${(t.mantener || 'mantén').toLowerCase()} ${tempo[1]} s` : ''}, ${t.bajar.toLowerCase()} en ${tempo[2]} s`
+  : textoTempo(tempo));
+const textosDeFicha = (ficha) => Object.fromEntries((Array.isArray(ficha?.fases) ? ficha.fases : []).filter((p) => p.texto).map((p) => [p.fase || p.nombre, p.texto]));
 
 // ---------- Figure ----------
 async function cargarManifiesto(c = 'a') {
@@ -1328,7 +1335,7 @@ async function vistaRutina(codigo) {
     const hist = almacen.leer(clave, []);
     const hoy = diaLocal();
     const vecesHoy = hist.filter((d) => d.f === hoy).length;
-    app.innerHTML = `<div class="rutina">
+    app.innerHTML = `<div class="rutina rutina-intro">
       <header class="saludo">
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
         ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
@@ -1342,20 +1349,20 @@ async function vistaRutina(codigo) {
           .map((e) => {
             const def = EJERCICIOS[e.i];
             const banda = bandaDe(def, e.b);
-            // The still of the exercise, of their figure and their side: the left side, in mirror.
-            return `<article class="tarjeta">
+            // The still of the exercise, of their figure and their side (the left side, in mirror), and in words what to
+            // do: how many, at what rhythm with the exercise's own verbs, with what. No curve: that is the professional's.
+            const material = [banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : def.material !== 'Sin material' ? esc(def.material) : '', def.unLado && LADOS[e.l] ? esc(LADOS[e.l]) : '']
+              .filter(Boolean).join(' · ');
+            return `<article class="tarjeta tarjeta-ejercicio" data-i="${e.i}" data-t="${e.t.join(',')}">
               <div class="tarjeta-cabeza">
                 <span class="tarjeta-poster"><img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
                 <div>
                   <h3>${esc(def.nombre)}</h3>
-                  <div class="linea-chips">
-                    <span class="chip num">${e.s} ${e.s === 1 ? 'serie' : 'series'} de ${e.r}</span>
-                    ${def.unLado ? `<span class="chip">${LADOS[e.l]}</span>` : ''}
-                    ${banda ? `<span class="chip con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : `<span class="chip">${esc(def.material)}</span>`}
-                  </div>
+                  <p class="tarjeta-dosis num">${e.s} ${e.s === 1 ? 'serie' : 'series'} · ${e.r} ${e.r === 1 ? 'repetición' : 'repeticiones'}</p>
                 </div>
               </div>
-              ${svgTempo(e.t, { etiquetas: true })}
+              <p class="tarjeta-pauta">${esc(textoTempo(e.t))}</p>
+              ${material ? `<p class="tarjeta-material">${material}</p>` : ''}
               ${e.n ? `<div class="nota">${esc(e.n)}</div>` : ''}
             </article>`;
           })
@@ -1363,12 +1370,31 @@ async function vistaRutina(codigo) {
         <p class="sin-conexion" aria-live="polite"></p>
       </section>
       <footer class="pie pie-fijo">
+        ${ejercicios[0] ? `<span class="pie-poster" aria-hidden="true"><img src="${poster(ejercicios[0].i, r.c, bandaDe(EJERCICIOS[ejercicios[0].i], ejercicios[0].b)?.clave)}" alt="" width="112" height="84" decoding="async"${ejercicios[0].l === 'izq' ? ' class="espejo"' : ''}></span>` : ''}
         <p class="pie-resumen num">${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(totalSeg)}</p>
         <button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>
       </footer>
     </div>`;
     pintarPie(hist);
     avisarSinConexion();
+    ponerPautas();
+  }
+
+  // Each card's rhythm in the exercise's own words, once its sheet arrives (it is small and kept for offline use); until
+  // then, and without it, the neutral words.
+  async function ponerPautas() {
+    try {
+      const m = await cargarManifiesto(r.c);
+      for (const art of app.querySelectorAll('.tarjeta-ejercicio')) {
+        const ruta = m.ejercicios[art.dataset.i]?.ficha;
+        if (!ruta) continue;
+        const ficha = await fetch((m._base || '') + ruta).then((x) => (x.ok ? x.json() : null)).catch(() => null);
+        const pauta = art.querySelector('.tarjeta-pauta');
+        if (ficha && pauta) pauta.textContent = pautaTempo(textosDeFicha(ficha), art.dataset.t.split(',').map(Number));
+      }
+    } catch {
+      // Without the manifest the neutral words stay.
+    }
   }
 
   let guardada = null;
@@ -1430,6 +1456,8 @@ async function vistaRutina(codigo) {
   document.addEventListener('visibilitychange', alVolver);
 
   function pintarJugador() {
+    // The hint goes by itself after a few seconds: it was covering the figure when the scene got small.
+    setTimeout(() => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'), 5000);
     app.innerHTML = `<div class="jugador">
       <div class="jugador-arriba">
         <button type="button" class="redondo" data-r="salir" aria-label="Salir">${ICONO.cerrar}</button>
@@ -1438,6 +1466,7 @@ async function vistaRutina(codigo) {
       <div class="escena">
         <span class="chip lado-etiqueta j-lado oculto"></span>
         <div class="girar-pista">${ICONO.girar} Arrastra para girar la figura</div>
+        <button type="button" class="recolocar oculto" data-r="recolocar">${ICONO.girar}Recolocar</button>
       </div>
       <div class="mando j-mando"></div>
     </div>`;
@@ -1465,7 +1494,12 @@ async function vistaRutina(codigo) {
     try {
       f = await figuraEn(app.querySelector('.escena'), r.c);
       f.oyentes = {};
-      f.on('girado', () => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'));
+      // Turned or pinched by a slip, the figure comes back with one tap: «Recolocar» shows over it until then.
+      f.on('girado', () => {
+        app.querySelector('.girar-pista')?.style.setProperty('opacity', '0');
+        app.querySelector('.recolocar')?.classList.remove('oculto');
+      });
+      app.querySelector('.recolocar')?.classList.add('oculto');
       await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
     } catch {
       // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
@@ -1510,10 +1544,7 @@ async function vistaRutina(codigo) {
     sesion.estado = 'cuenta';
     const mando = app.querySelector('.j-mando');
     const { e } = actual();
-    const t = figura?.textos || {};
-    const pauta = t.subir && t.bajar
-      ? `${t.subir} en ${e.t[0]} s${e.t[1] ? `, ${(t.mantener || 'mantén').toLowerCase()} ${e.t[1]} s` : ''}, ${t.bajar.toLowerCase()} en ${e.t[2]} s`
-      : textoTempo(e.t);
+    const pauta = pautaTempo(figura?.textos, e.t);
     mando.innerHTML = `<div class="centro"><p>Prepárate</p><h3 class="num cuenta-atras">${n}</h3><p>${esc(pauta)}</p></div>
       <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><span></span><button type="button" class="boton fantasma" data-r="ya">Empezar ya</button></div>`;
     tono(660, 0.08);
@@ -1523,6 +1554,7 @@ async function vistaRutina(codigo) {
 
   function jugarSerie() {
     sesion.estado = 'serie';
+    app.querySelector('.jugador')?.classList.remove('en-pausa');
     clearTimeout(sesion.temporizador);
     const { e } = actual();
     const mando = app.querySelector('.j-mando');
@@ -1531,10 +1563,10 @@ async function vistaRutina(codigo) {
         <div class="fase j-fase">${esc(figura?.textos?.subir || 'Ida')}</div>
       </div>
       ${svgTempo(e.t, { punto: true })}
-      <div class="mando-botones">
-        <button type="button" class="boton fantasma" data-r="como">Cómo se hace</button>
-        <button type="button" class="principal" data-r="pausa" aria-label="Pausa">${ICONO.pausa}</button>
-        <button type="button" class="boton fantasma" data-r="saltar">Terminar serie</button>
+      <div class="mando-botones mando-serie">
+        <button type="button" class="boton secundario" data-r="como">Cómo se hace</button>
+        <button type="button" class="principal" data-r="pausa" aria-pressed="false">${ICONO.pausa}<span>Pausa</span></button>
+        <button type="button" class="boton secundario" data-r="saltar">Terminar serie</button>
       </div>`;
     const svg = mando.querySelector('.tempo');
     const elFase = mando.querySelector('.j-fase');
@@ -1708,8 +1740,26 @@ async function vistaRutina(codigo) {
         <button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
         <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
         <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>
+        ${tarjetaAMano()}
       </footer>
     </div>`;
+  }
+
+  // «Tenla a mano» (Fable B6): the routine lives in a message that tomorrow will be buried. On a phone, and until the
+  // person says «Ya la tengo», the two steps to put it on the home screen, drawn as their browser shows them.
+  function tarjetaAMano() {
+    const instalada = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    if (instalada || !window.matchMedia('(pointer: coarse)').matches || almacen.leer('a-mano', false)) return '';
+    const iphone = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const pasos = iphone
+      ? [[ICONO.compartirIos, 'Toca <b>Compartir</b>, abajo, en la barra del navegador.'], [ICONO.mas, 'Toca <b>Añadir a pantalla de inicio</b>.']]
+      : [[ICONO.puntos, 'Toca los <b>tres puntos</b>, arriba a la derecha.'], [ICONO.mas, 'Toca <b>Añadir a pantalla de inicio</b>.']];
+    return `<section class="tarjeta a-mano" aria-labelledby="a-mano-titulo">
+      <h3 id="a-mano-titulo">Tenla a mano</h3>
+      <p>Así mañana no tendrás que buscar el mensaje: ponla en la pantalla de inicio del móvil, como una app.</p>
+      <ol class="a-mano-pasos">${pasos.map(([icono, texto]) => `<li><span class="a-mano-icono" aria-hidden="true">${icono}</span><span>${texto}</span></li>`).join('')}</ol>
+      <button type="button" class="boton secundario" data-r="ya-la-tengo">Ya la tengo</button>
+    </section>`;
   }
 
   // The summary goes back by WhatsApp or Telegram, as the person prefers. It carries the id of their file on the
@@ -1790,16 +1840,28 @@ async function vistaRutina(codigo) {
     }
     if (a === 'mas') return sesion.sumar?.();
     if (a === 'pausa') {
-      if (figura.enMarcha) {
-        figura.pausar();
-        el.innerHTML = ICONO.play;
-        el.setAttribute('aria-label', 'Seguir');
-      } else {
-        figura.seguir();
-        el.innerHTML = ICONO.pausa;
-        el.setAttribute('aria-label', 'Pausa');
-      }
+      // Paused, it shows: the word of the phase says «En pausa», the figure dims and the button says «Seguir».
+      const pausar = figura.enMarcha;
+      if (pausar) figura.pausar();
+      else figura.seguir();
+      el.innerHTML = `${pausar ? ICONO.play : ICONO.pausa}<span>${pausar ? 'Seguir' : 'Pausa'}</span>`;
+      el.setAttribute('aria-pressed', String(pausar));
+      app.querySelector('.jugador')?.classList.toggle('en-pausa', pausar);
+      const fase = app.querySelector('.j-fase');
+      if (fase && pausar) {
+        fase.dataset.antes = fase.textContent;
+        fase.textContent = 'En pausa';
+      } else if (fase?.dataset.antes) fase.textContent = fase.dataset.antes;
       return;
+    }
+    if (a === 'ya-la-tengo') {
+      almacen.guardar('a-mano', true);
+      return app.querySelector('.a-mano')?.remove();
+    }
+    if (a === 'recolocar') {
+      figura.girado = false;
+      figura.encuadrar(figura.camaraFicha);
+      return el.classList.add('oculto');
     }
     if (a === 'saltar') {
       sesion.hechas[sesion.item][sesion.serie] = figura.repActual;
