@@ -5,7 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
-import { hayVoz, vozActiva, ponerVoz, decir, callar, numero } from './voz.js';
+import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, leerBorradas, apuntarBorrada,
@@ -34,6 +34,9 @@ const ICONO = {
   pausa: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>',
   cerrar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   voz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  pantalla: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="12.5"/><path d="M8.5 20h7M12 16.5V20"/></svg>',
+  completa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+  salirCompleta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
   sinVoz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
   puntos: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
   compartirIos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6v11h12V10h-2"/></svg>',
@@ -1345,6 +1348,7 @@ async function vistaRutina(codigo) {
   }
 
   function intro() {
+    if (grupo) salirDeGrupo();
     const hist = almacen.leer(clave, []);
     const hoy = diaLocal();
     const vecesHoy = hist.filter((d) => d.f === hoy).length;
@@ -1401,6 +1405,10 @@ async function vistaRutina(codigo) {
                <button type="button" class="boton fantasma" data-r="empezar">Empezar desde el principio</button>`
             : `<button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>`;
         })()}
+        <div class="a-grupo">
+          <button type="button" class="boton secundario" data-r="grupo">${ICONO.pantalla}Ponerla en pantalla grande</button>
+          <p>Para seguirla en grupo en una tele, un proyector o una pizarra. Sin preguntas a nadie y sin guardar nada.</p>
+        </div>
       </footer>
     </div>`;
     pintarPie(hist);
@@ -1438,6 +1446,9 @@ async function vistaRutina(codigo) {
   for (const e of ejercicios) for (const lado of e.l === 'ambos' && EJERCICIOS[e.i].unLado ? ['der', 'izq'] : [e.l === 'izq' ? 'izq' : 'der']) cola.push({ e, lado });
   let sesion = null;
   let bloqueo = null;
+  // A group following the routine on a big screen (a TV, a projector, a classroom board): the same player, wide and big,
+  // with no one's discomfort or repetitions asked, nothing kept and no summary: the group is not a person.
+  let grupo = false;
 
   // Sound and the screen lock are extras: the set never waits for them. Without a gesture the browser may keep
   // resume() pending forever (seen on a Pixel), and the person would stay on «Empezar». A later touch unlocks the sound.
@@ -1445,7 +1456,7 @@ async function vistaRutina(codigo) {
   // or a reload in the middle no longer lose it. It is offered again the same day, starting from the exercise it was at.
   const claveCurso = `curso:${clave}`;
   function guardarCurso() {
-    if (!sesion) return;
+    if (!sesion || grupo) return;
     const { item, serie, hechas, molestia, extra, inicio } = sesion;
     almacen.guardar(claveCurso, { dia: diaDeSesion(inicio), item, serie, hechas, molestia, extra, inicio: new Date(inicio).toISOString() });
   }
@@ -1479,7 +1490,7 @@ async function vistaRutina(codigo) {
     sesion = c
       ? { item: c.item, serie: Math.min(c.serie, cola[c.item].e.s - 1), aValorar: c.serie >= cola[c.item].e.s, hechas: c.hechas, molestia: c.molestia && typeof c.molestia === 'object' ? c.molestia : {}, extra: c.extra && typeof c.extra === 'object' ? c.extra : {}, inicio: new Date(c.inicio), retomada: true }
       : { item: 0, serie: 0, hechas: cola.map((x) => Array(x.e.s).fill(0)), molestia: {}, inicio: new Date() };
-    if (!c) almacen.guardar(claveCurso, null);
+    if (!c && !grupo) almacen.guardar(claveCurso, null);
     // «Back» on the phone during the routine asks the same as the ×, instead of leaving the page with the session.
     history.pushState({ jepysoJugador: 1 }, '');
     pintarJugador();
@@ -1522,11 +1533,15 @@ async function vistaRutina(codigo) {
   function pintarJugador() {
     // The hint goes by itself after a few seconds: it was covering the figure when the scene got small.
     setTimeout(() => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'), 5000);
-    app.innerHTML = `<div class="jugador">
+    const completa = grupo && document.fullscreenEnabled
+      ? `<button type="button" class="redondo" data-r="completa" aria-pressed="${!!document.fullscreenElement}" aria-label="Pantalla completa">${document.fullscreenElement ? ICONO.salirCompleta : ICONO.completa}</button>`
+      : '';
+    app.innerHTML = `<div class="jugador${grupo ? ' grupo' : ''}">
       <div class="jugador-arriba">
         <button type="button" class="redondo" data-r="salir" aria-label="Salir">${ICONO.cerrar}</button>
         <div class="titulo"><h2 class="j-nombre"></h2><div class="sub j-sub num"></div></div>
         ${hayVoz() ? `<button type="button" class="redondo" data-r="voz" aria-pressed="${vozActiva()}" aria-label="Voz que guía">${vozActiva() ? ICONO.voz : ICONO.sinVoz}</button>` : ''}
+        ${completa}
       </div>
       <div class="escena">
         <span class="chip lado-etiqueta j-lado oculto"></span>
@@ -1596,14 +1611,15 @@ async function vistaRutina(codigo) {
       ? `${muestraBanda(banda)}${esc(banda.nombre.toLowerCase())}`
       : def.material && def.material !== 'Sin material' ? esc(def.material[0].toLowerCase() + def.material.slice(1)) : '';
     app.querySelector('.j-mando').innerHTML = `<div class="prepara">
-        <h3 class="prepara-titulo">Ponte en posición</h3>
+        <h3 class="prepara-titulo">${grupo ? 'Posición de partida' : 'Ponte en posición'}</h3>
         <p class="prepara-partida">${esc(def.partida)}</p>
-        ${material ? `<p class="prepara-material"><span>Necesitas</span> ${material}</p>` : ''}
+        ${material ? `<p class="prepara-material"><span>${grupo ? 'Hace falta' : 'Necesitas'}</span> ${material}</p>` : ''}
       </div>
       <div class="prepara-botones">
-        <button type="button" class="boton" data-r="en-posicion">Estoy en posición</button>
+        <button type="button" class="boton" data-r="en-posicion">${grupo ? 'Todos en posición' : 'Estoy en posición'}</button>
         <button type="button" class="boton secundario" data-r="como">Cómo se hace</button>
       </div>`;
+    if (grupo) decir(def.nombre);
   }
 
   function cuentaAtras(n) {
@@ -1704,11 +1720,82 @@ async function vistaRutina(codigo) {
       descanso(r.d, true);
       return;
     }
+    if (grupo) {
+      if (sesion.item + 1 >= cola.length) return finDeGrupo();
+      sesion.item++;
+      sesion.serie = 0;
+      return prepararSerie();
+    }
     sesion.serie = e.s;
     guardarCurso();
     sesion.serie = e.s - 1;
     valorar();
   }
+
+  // A group: in, wide and with full screen where the screen allows it; out, as the person's routine left it.
+  function empezarGrupo() {
+    grupo = true;
+    modoVoz({ grupo: true });
+    if (document.fullscreenEnabled && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    return empezar(false);
+  }
+  function salirDeGrupo() {
+    grupo = false;
+    modoVoz({ grupo: false });
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  }
+  // The end, for everyone: how long it took, again or out. Nothing is kept.
+  function finDeGrupo() {
+    sesion.estado = 'fin';
+    clearInterval(sesion.reloj);
+    figura?.parar();
+    try {
+      bloqueo?.release();
+    } catch {
+      // Already released.
+    }
+    const duro = minutos((new Date() - sesion.inicio) / 1000);
+    app.querySelector('.j-nombre').textContent = r.de ? `Rutina de ${r.de}` : 'La rutina';
+    app.querySelector('.j-sub').textContent = `${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'}`;
+    app.querySelector('.j-mando').innerHTML = `<div class="grupo-fin">
+        <h3>Rutina terminada</h3>
+        <p class="num">${duro[0].toUpperCase() + duro.slice(1)} de trabajo.</p>
+      </div>
+      <div class="prepara-botones">
+        <button type="button" class="boton" data-r="grupo-otra">${ICONO.play}Otra vez</button>
+        <button type="button" class="boton secundario" data-r="dejar">Salir</button>
+      </div>`;
+    tono(660, 0.12);
+    setTimeout(() => tono(990, 0.25), 130);
+    decir('Rutina terminada. Buen trabajo.');
+  }
+  // Whoever drives it from the computer may have a presenter's remote: → or «Av Pág» goes on (in position, the rest or
+  // the countdown cut short), the space pauses or resumes the set.
+  const alTeclado = (ev) => {
+    if (!grupo || !document.querySelector('.jugador.grupo') || ev.target.closest?.('input, textarea, dialog')) return;
+    if (ev.key === 'ArrowRight' || ev.key === 'PageDown') {
+      const seguir = app.querySelector('[data-r="en-posicion"], [data-r="ya"]');
+      if (seguir) {
+        ev.preventDefault();
+        seguir.click();
+      }
+    } else if (ev.key === ' ' && !ev.target.closest?.('button')) {
+      const pausa = app.querySelector('[data-r="pausa"]');
+      if (pausa) {
+        ev.preventDefault();
+        pausa.click();
+      }
+    }
+  };
+  document.addEventListener('keydown', alTeclado);
+  // Out of full screen with the browser's own Esc: the button says so.
+  const alCambiarCompleta = () => {
+    const b = app.querySelector('[data-r="completa"]');
+    if (!b) return;
+    b.setAttribute('aria-pressed', String(!!document.fullscreenElement));
+    b.innerHTML = document.fullscreenElement ? ICONO.salirCompleta : ICONO.completa;
+  };
+  document.addEventListener('fullscreenchange', alCambiarCompleta);
 
   function descanso(segundos, cambiaLado = false) {
     decir(cambiaLado ? 'Descansa. Ahora, el otro lado' : 'Descansa');
@@ -2035,6 +2122,15 @@ async function vistaRutina(codigo) {
     const a = el.dataset.r || el.dataset.accion;
     if (a === 'empezar') return empezar();
     if (a === 'seguir-donde') return empezar(true);
+    if (a === 'grupo') return empezarGrupo();
+    if (a === 'grupo-otra') {
+      sesion = null;
+      return empezar(false);
+    }
+    if (a === 'completa') {
+      if (document.fullscreenElement) return document.exitFullscreen().catch(() => {});
+      return document.documentElement.requestFullscreen().catch(() => {});
+    }
     if (a === 'voz') {
       ponerVoz(!vozActiva());
       el.setAttribute('aria-pressed', String(vozActiva()));
@@ -2053,15 +2149,18 @@ async function vistaRutina(codigo) {
       figura?.parar();
       // Halfway, the × asks first: leaving keeps what was done, so a slip does not throw the session away.
       const hecho = sesion?.hechas.some((h) => h.some((v) => v > 0));
-      if (!hecho || sesion.estado === 'salir') return intro();
+      if (!hecho || sesion.estado === 'salir' || sesion.estado === 'fin') return intro();
       sesion.antes = sesion.estado;
       sesion.estado = 'salir';
-      app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>Lo que has hecho se guarda y puedes mandarlo.</p></div>
+      app.querySelector('.j-mando').innerHTML = grupo
+        ? `<div class="centro"><p>¿Salir de la rutina?</p><p>El grupo va por el ejercicio ${ejercicios.indexOf(actual().e) + 1} de ${ejercicios.length}.</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Salir</button></div>`
+        : `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>Lo que has hecho se guarda y puedes mandarlo.</p></div>
         <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Dejarla</button></div>`;
       return;
     }
     if (a === 'seguir-rutina') return sesion.antes === 'valorar' ? valorar() : prepararSerie();
-    if (a === 'dejar') return terminar(true);
+    if (a === 'dejar') return grupo ? intro() : terminar(true);
     if (a === 'como') return como();
     if (a === 'en-posicion') {
       app.querySelector('.j-sub').textContent = subtitulo(actual().e, sesion.serie + 1);
@@ -2182,6 +2281,9 @@ async function vistaRutina(codigo) {
     clearInterval(sesion?.reloj);
     window.removeEventListener('popstate', alAtras);
     document.removeEventListener('visibilitychange', alVolver);
+    document.removeEventListener('keydown', alTeclado);
+    document.removeEventListener('fullscreenchange', alCambiarCompleta);
+    if (grupo) salirDeGrupo();
     app.onclick = app.oninput = null;
   };
 }
