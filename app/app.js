@@ -1178,7 +1178,7 @@ async function crearEnlace(b, empezarOtra = null) {
       <div class="qr">${qr}</div>
       <div class="enlace-texto">${esc(url)}</div>
     </details>
-    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace; no se guarda en ningún servidor.</p>
+    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.</p>
     ${empezarOtra ? `<button type="button" class="boton secundario hoja-otra" data-h="otra">Hecho: empezar otra rutina</button>` : ''}`;
   document.body.appendChild(dialogo);
   const volverA = document.activeElement;
@@ -2239,8 +2239,16 @@ function vistaPersona(id) {
     fresca.cambiada = p.cambiada;
     if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
   };
-  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file.
+  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file,
+  // closing or reloading the page.
   let porGuardar = null;
+  const guardarYa = () => {
+    if (!porGuardar) return;
+    clearTimeout(porGuardar);
+    porGuardar = null;
+    guardar();
+  };
+  window.addEventListener('pagehide', guardarYa);
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
     p.notas = ev.target.value;
@@ -2302,10 +2310,8 @@ function vistaPersona(id) {
     }
   };
   return () => {
-    if (porGuardar) {
-      clearTimeout(porGuardar);
-      guardar();
-    }
+    guardarYa();
+    window.removeEventListener('pagehide', guardarYa);
     clearTimeout(confirmar);
     app.oninput = app.onclick = null;
   };
@@ -2342,9 +2348,9 @@ navigator.serviceWorker?.addEventListener('message', (ev) => {
 });
 // The browser's storage is full: said once, on top of whatever screen, with what to do.
 window.addEventListener('jepyso-lleno', () => {
-  if (document.querySelector('.aviso-lleno')) return;
+  if (document.querySelector('.aviso-almacen')) return;
   const aviso = document.createElement('div');
-  aviso.className = 'nueva-version aviso-lleno';
+  aviso.className = 'nueva-version aviso-almacen';
   aviso.setAttribute('role', 'alert');
   aviso.innerHTML = `<p>${SIN_SITIO}</p><button type="button" class="nueva-version-cerrar" aria-label="Cerrar">${ICONO.cerrar}</button>`;
   aviso.querySelector('button').addEventListener('click', () => aviso.remove());
