@@ -552,7 +552,7 @@
   "estrujar_toalla": {
    "glb": "modelos/b/estrujar_toalla.glb",
    "ficha": "modelos/b/estrujar_toalla.json",
-   "bytes": 102184,
+   "bytes": 115224,
    "lado": "ambos",
    "musculos": {
     "principales": [

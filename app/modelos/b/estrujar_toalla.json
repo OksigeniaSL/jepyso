@@ -30,9 +30,36 @@
   }
  ],
  "angulos": {
-  "partida": {},
-  "llegada": {},
-  "vuelta": {}
+  "partida": {
+   "codo_izquierda_flexion": 44.9,
+   "hombro_izquierda_flexion": 45.7,
+   "hombro_izquierda_abduccion": 11.7,
+   "hombro_izquierda_rotacion_externa": -24.8,
+   "codo_derecha_flexion": 44.9,
+   "hombro_derecha_flexion": 45.7,
+   "hombro_derecha_abduccion": 11.7,
+   "hombro_derecha_rotacion_externa": -24.8
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 27.8,
+   "hombro_izquierda_flexion": 57.7,
+   "hombro_izquierda_abduccion": 5.3,
+   "hombro_izquierda_rotacion_externa": -17.3,
+   "codo_derecha_flexion": 18.3,
+   "hombro_derecha_flexion": 47.0,
+   "hombro_derecha_abduccion": 1.9,
+   "hombro_derecha_rotacion_externa": -15.2
+  },
+  "vuelta": {
+   "codo_izquierda_flexion": 18.3,
+   "hombro_izquierda_flexion": 47.0,
+   "hombro_izquierda_abduccion": 1.9,
+   "hombro_izquierda_rotacion_externa": -15.2,
+   "codo_derecha_flexion": 27.8,
+   "hombro_derecha_flexion": 57.7,
+   "hombro_derecha_abduccion": 5.3,
+   "hombro_derecha_rotacion_externa": -17.3
+  }
  },
  "musculos": {
   "principales": [
@@ -47,9 +74,9 @@
  ],
  "camara": {
   "pos": [
-   -1.85,
-   1.461,
-   1.961
+   -1.853,
+   1.462,
+   1.964
   ],
   "mira": [
    0.0,
@@ -58,5 +85,5 @@
   ]
  },
  "archivo": "estrujar_toalla.glb",
- "bytes": 102184
+ "bytes": 115224
 }
