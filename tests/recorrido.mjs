@@ -430,6 +430,9 @@ try {
     comprobar(await movil.locator('[data-r="continuar"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: el botón de seguir se sale de la pantalla al valorar`);
     await movil.click('[data-r="molestia"][data-v="3"]');
     comprobar((await movil.textContent('.aviso-molestia')) === '', `${tema}: aviso con una molestia de 3 y tope 4`);
+    // What the person adds about an exercise lives through the rests that come after it, «+15 s» included.
+    await movil.click('[data-r="dificultad"][data-v="cuesta"]');
+    await movil.fill('[data-r="nota-ejercicio"]', 'Me tiró la rodilla al bajar');
     await movil.screenshot({ path: `${salida}/valorar-movil-${tema}.png` });
     await movil.click('[data-r="continuar"]');
     // Shoulder: getting ready (with the band in its colour), right side, then the left after a rest, then rating above the level.
@@ -439,12 +442,14 @@ try {
     // The countdown of five and a whole set: in CI's software renderer that takes well over half a minute.
     await movil.waitForSelector('.anillo', { timeout: 90000 });
     await movil.screenshot({ path: `${salida}/cambio-lado-movil-${tema}.png` });
+    await movil.click('[data-r="mas"]');
     await movil.click('[data-r="ya"]');
     await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/serie-izquierda-movil-${tema}.png` });
     await movil.waitForSelector('[data-r="todas"]', { timeout: 60000 });
     await movil.click('[data-r="todas"]');
     await movil.click('[data-r="molestia"][data-v="6"]');
+    await movil.fill('[data-r="nota-ejercicio"]', 'La izquierda, mejor');
     comprobar((await movil.textContent('.aviso-molestia')).includes('Es más de 4'), `${tema}: sin aviso con una molestia de 6 y tope 4`);
     await movil.screenshot({ path: `${salida}/valorar-alta-movil-${tema}.png` });
     await movil.click('[data-r="continuar"]');
@@ -452,6 +457,12 @@ try {
     comprobar((await movil.locator('.dia.marcado').count()) === 1, `${tema}: el día con molestia 6 no sale marcado al terminar`);
     comprobar((await movil.locator('[data-r="mandar"][data-canal="wa"]').count()) === 1 && (await movil.locator('[data-r="mandar"][data-canal="tg"]').count()) === 1, `${tema}: al terminar no se puede mandar por WhatsApp y por Telegram`);
     await movil.screenshot({ path: `${salida}/final-movil-${tema}.png` });
+    const notas = await movil.evaluate(() => {
+      const clave = Object.keys(localStorage).find((k) => k.startsWith('hist:'));
+      return JSON.parse(localStorage.getItem(clave)).at(-1).e.filter((x) => x.n || x.c).map((x) => `${x.i}:${x.c || ''}:${x.n || ''}`);
+    });
+    comprobar(notas.some((n) => n.endsWith(':cuesta:Me tiró la rodilla al bajar')) && notas.some((n) => n.endsWith(':La izquierda, mejor')),
+      `${tema}: lo que la persona añade de cada ejercicio no llega al día guardado (${notas.join(' | ')})`);
     comprobar((await movil.locator('.a-mano').count()) === 1, `${tema}: el final no ofrece tener la rutina a mano`);
     await movil.click('[data-r="ya-la-tengo"]');
     comprobar((await movil.locator('.a-mano').count()) === 0, `${tema}: «Ya la tengo» no quita la tarjeta`);

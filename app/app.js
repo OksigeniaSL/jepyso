@@ -1732,12 +1732,13 @@ async function vistaRutina(codigo) {
     figura.parar();
     const anillo = mando.querySelector('.avance');
     const texto = mando.querySelector('text');
-    sesion.extra = 0;
+    // The seconds added with «+15 s» are this rest's own: sesion.extra holds what the person adds about each exercise.
+    let anadidos = 0;
     clearInterval(sesion.reloj);
     sesion.reloj = setInterval(() => {
       quedan--;
       texto.textContent = Math.max(0, quedan);
-      anillo.setAttribute('stroke-dashoffset', String(largo * (1 - Math.max(0, quedan) / (total + sesion.extra))));
+      anillo.setAttribute('stroke-dashoffset', String(largo * (1 - Math.max(0, quedan) / (total + anadidos))));
       if (quedan <= 3 && quedan > 0) tono(600, 0.06);
       if (quedan <= 0) {
         clearInterval(sesion.reloj);
@@ -1746,7 +1747,7 @@ async function vistaRutina(codigo) {
     }, 1000);
     sesion.sumar = () => {
       quedan += 15;
-      sesion.extra += 15;
+      anadidos += 15;
       texto.textContent = quedan;
     };
   }
