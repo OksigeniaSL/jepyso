@@ -1209,3 +1209,13 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   .firma-pro .firma-acceso:hover { color: var(--tinta); }
   .firma-pro .firma-linea { font-size: 11px; line-height: 1.35; text-align: center; }
 }
+
+/* Where a licence is pasted, in Personas: folded, it is one line. */
+.licencia-pegar summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.licencia-fila { display: flex; flex-wrap: wrap; gap: 8px; }
+.licencia-fila input {
+  flex: 1 1 220px; min-height: 48px; padding: 0 12px; font: inherit; font-family: var(--letra-cifras); font-size: 14px;
+  border: 1px solid var(--linea); border-radius: var(--radio-sm); background: var(--superficie); color: var(--tinta);
+}
+.aviso-licencia { margin: 0; color: var(--tinta); }
+.aviso-licencia:empty { display: none; }

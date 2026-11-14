@@ -6,18 +6,18 @@
 // dias: [sessions as the summary brings them: { f, h, e: [...], a }] }.
 import { almacen, TOPE_MOLESTIA, pasaDelTope, diaLocal } from './datos.js';
 import { limpiarPersonas, limpiarBorradas } from './entrada.js';
+import { licenciaActiva } from './licencia.js';
 
 const CLAVE = 'personas';
 
 // The free version keeps up to five people with a file; routines can still go to anyone. The paid version, with the
 // files in the professional's own cloud, has no limit (Enrique, 11-11).
 export const LIMITE_GRATIS = 5;
-// The paid version: no limit, and the files in the professional's own cloud. It has no licence yet (the
-// coordinator's), so it can only be switched on where the app is tried out, this laptop and the device bench, with
-// ?pago=1. Never at its public address: anyone reading the open code would find the switch (Enrique, 14-11).
-export const esEntornoDePruebas = () =>
-  typeof location !== 'undefined' && (['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) || location.pathname.startsWith('/eq/b/'));
-export const esDePago = () => esEntornoDePruebas() && almacen.leer('version', '') === 'pago';
+// The paid version: no limit, and the files in the professional's own cloud. It comes with a licence (licencia.js),
+// tied to the Google account of the professional's Drive. ?pago=1 switches it on without one only on this laptop, for
+// the tests: never on a public address, where anyone reading the open code would find it (the bench is public too).
+export const esEntornoDePruebas = () => typeof location !== 'undefined' && ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+export const esDePago = () => licenciaActiva() || (esEntornoDePruebas() && almacen.leer('version', '') === 'pago');
 export const limite = () => (esDePago() ? Infinity : LIMITE_GRATIS);
 export const caben = (lista) => lista.length < limite();
 

@@ -10,7 +10,8 @@ import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada,
 } from './personas.js';
-import { conectar, sincronizar } from './drive.js';
+import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
+import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive } from './licencia.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 
@@ -2400,13 +2401,31 @@ const ultimaSincronia = () => {
 };
 
 function seccionDrive() {
+  const pendiente = licenciaPendiente();
   return `<section class="general nube">
     <h2>Tu Google Drive</h2>
     <p class="ayuda">Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.</p>
+    ${pendiente ? `<p class="ayuda"><strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta ${esc(licencia().cuenta)}.</p>` : ''}
     <div class="botones"><button type="button" class="boton" data-accion="drive">Sincronizar con Google Drive</button></div>
     <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
   </section>`;
 }
+
+// Where to paste a licence, in Personas, for the free version.
+function seccionLicencia() {
+  return `<details class="general licencia-pegar">
+    <summary>¿Tienes una licencia de Jepyso?</summary>
+    <p class="ayuda">Pégala aquí, o abre el enlace que te llegó con ella. Se activa al conectar tu Drive con la cuenta de la licencia.</p>
+    <div class="licencia-fila"><input type="text" data-accion="licencia" autocomplete="off" spellcheck="false" aria-label="Tu licencia"><button type="button" class="boton secundario" data-accion="guardar-licencia">Guardar</button></div>
+    <p class="aviso-licencia" aria-live="polite"></p>
+  </details>`;
+}
+
+const MOTIVOS_LICENCIA = {
+  formato: 'Eso no es una licencia de Jepyso: cópiala entera, sin espacios.',
+  firma: 'Esa licencia no es válida: no la ha firmado Oksigenia, o ha cambiado al copiarla.',
+  navegador: 'Este navegador no puede comprobar licencias. Actualízalo, o usa Chrome, Edge, Safari o Firefox al día.',
+};
 
 async function sincronizarDrive(boton) {
   const aviso = app.querySelector('.aviso-nube');
@@ -2414,6 +2433,15 @@ async function sincronizarDrive(boton) {
   try {
     aviso.textContent = 'Conectando con Google…';
     await conectar();
+    // With a licence: it counts once the Drive is connected with its account; with another account, nothing is synced.
+    if (licencia().valida) {
+      const cuenta = await cuentaDrive();
+      if (!(await cuentaDelDrive(cuenta))) {
+        olvidar();
+        aviso.textContent = `Tu licencia es de ${licencia().cuenta}, y has conectado el Drive de ${cuenta || 'otra cuenta'}. Conéctalo con la cuenta de la licencia.`;
+        return;
+      }
+    }
     aviso.textContent = 'Sincronizando…';
     const local = { personas: leerPersonas(), plantillas: leerPlantillas(), borradas: leerBorradas() };
     const r = await sincronizar(local, (junto) => {
@@ -2449,7 +2477,7 @@ function vistaPersonas() {
       <div class="hueco-capacidad"></div>
       <ul class="lista-personas"></ul>
       <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.</p></details>
-      ${esDePago() ? seccionDrive() : ''}
+      ${esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
       <section class="general copia">
         <h2>Copia</h2>
         <p class="ayuda">Al cargarla se añade lo que falte; no se borra nada.</p>
@@ -2470,6 +2498,15 @@ function vistaPersonas() {
     buscando = setTimeout(pintarLista, 150);
   };
   app.onclick = async (ev) => {
+    if (ev.target.closest('[data-accion="guardar-licencia"]')) {
+      const aviso = app.querySelector('.aviso-licencia');
+      const l = await guardarLicencia(app.querySelector('[data-accion="licencia"]')?.value);
+      if (!l.valida) {
+        aviso.textContent = MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato;
+        return;
+      }
+      return vistaPersonas();
+    }
     if (ev.target.closest('[data-accion="drive"]')) {
       await sincronizarDrive(ev.target.closest('[data-accion="drive"]'));
       return pintarLista();
@@ -2815,7 +2852,18 @@ function vistaPlantillas() {
 async function ir() {
   limpiar();
   document.querySelectorAll('.capa').forEach((c) => c.remove());
-  const h = location.hash;
+  let h = location.hash;
+  // A licence arriving in its link: kept, and the address cleaned (it is in the fragment, so no server saw it), then
+  // the professional's people, where it says what to do next.
+  if (h.startsWith('#licencia=')) {
+    const l = await guardarLicencia(h.slice(10));
+    history.replaceState(null, '', `${location.pathname}#personas`);
+    h = '#personas';
+    if (!l.valida) setTimeout(() => {
+      const aviso = app.querySelector('.aviso-licencia');
+      if (aviso) aviso.textContent = MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato;
+    }, 0);
+  }
   marcoApp(h);
   if (h.startsWith('#r=')) limpiar = await vistaRutina(h.slice(3));
   else if (h.startsWith('#s=')) limpiar = await vistaResumen(h.slice(3));
@@ -2832,10 +2880,11 @@ async function ir() {
   }
   else limpiar = vistaArmar();
 }
-// The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off,
-// only on this laptop and the device bench (personas.js). At the public address a switch left from before is cleared.
+// The paid version without a licence, for the tests: ?pago=1 switches it on in this browser, ?pago=0 off, only on
+// this laptop (personas.js). Anywhere else a switch left from before is cleared.
 if (!esEntornoDePruebas()) {
   if (almacen.leer('version', '') === 'pago') almacen.guardar('version', '');
 } else if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
 window.addEventListener('hashchange', ir);
-ir();
+// The licence is checked once, before the first view: whether this is the paid version must be known when it paints.
+comprobarLicencia().finally(ir);

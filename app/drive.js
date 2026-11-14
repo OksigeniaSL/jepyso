@@ -57,6 +57,12 @@ export async function conectar() {
   });
 }
 
+// The Google account the Drive is connected with, to tell whether a licence is this professional's.
+export async function cuentaDrive() {
+  const r = await pedir(`${API}/about?fields=user(emailAddress)`);
+  return (await r.json()).user?.emailAddress || '';
+}
+
 async function pedir(url, opciones = {}) {
   if (!conectado()) throw new Error('La conexión con tu Drive ha caducado: vuelve a sincronizar.');
   const r = await fetch(url, { ...opciones, headers: { Authorization: `Bearer ${token.valor}`, ...(opciones.headers || {}) } });
