@@ -1,0 +1,44 @@
+{
+  "id": "tandem_quieto_sin_apoyo",
+  "familia": "de_pie",
+  "nombre": "Pies en tándem, sin apoyo",
+  "lado": "ambos",
+  "accesorios": [],
+  "parametros": {
+    "pies": "tandem"
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 10.0,
+    "bajar": 1.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Un pie delante del otro",
+    "mantener": "Aguanta el equilibrio",
+    "bajar": "Vuelve",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "shoulder_l": {
+        "abd": 18
+      },
+      "shoulder_r": {
+        "abd": 18
+      }
+    },
+    "llegada": {}
+  },
+  "musculos": {
+    "principales": [
+      "gemelos",
+      "tibial_anterior"
+    ],
+    "secundarios": [
+      "gluteo_medio"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.92
+}

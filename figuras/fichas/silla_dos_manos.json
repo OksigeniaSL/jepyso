@@ -1,0 +1,41 @@
+{
+  "id": "silla_dos_manos",
+  "familia": "silla",
+  "nombre": "Levantarse con las manos en los muslos",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Inclínate y levántate",
+    "mantener": "De pie, erguido",
+    "bajar": "Siéntate despacio",
+    "reposo": "Descansa sentado"
+  },
+  "parametros": {
+    "asiento": 0.45,
+    "inclinacion": 40,
+    "pies_atras": 0.06,
+    "cadera_en_asiento": 0.2,
+    "manos": "muslos"
+  },
+  "musculos": {
+    "principales": [
+      "cuadriceps",
+      "gluteo_mayor"
+    ],
+    "secundarios": [
+      "isquiotibiales",
+      "gemelos",
+      "erectores"
+    ]
+  },
+  "margen": 0.86,
+  "camara": "tres_cuartos"
+}

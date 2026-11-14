@@ -127,6 +127,9 @@ try {
   await pagina.waitForFunction(() => location.hash === '#personas');
   await pagina.waitForTimeout(300);
   comprobar(!servidor.get(CORREO).has('viejo2'), 'una ficha borrada con la cuenta a mano no suelta su plaza');
+  // The count on screen follows at once, without leaving Personas (Enrique, 14-11: it kept saying 4 until he left).
+  await pagina.waitForFunction(() => document.querySelector('.cuenta-dentro')?.textContent.includes('queda 1 ficha'), null, { timeout: 5000 })
+    .catch(() => comprobar(false, `tras borrar, la cuenta no se repinta (${''})`));
 
   // The paid version: no tickets, no account section.
   await pagina.evaluate((lista) => localStorage.setItem('personas', JSON.stringify(lista)), [persona('nuevo1', 'Rosa')]);

@@ -136,28 +136,33 @@ function soltarId(id) {
   if (!b.includes(id)) almacen.guardar('vales-bajas', [...b, id]);
   validas.delete(id);
   sinPlaza.delete(id);
-  soltarPendientes();
+  // The count on screen follows as soon as the server answers, without leaving Personas.
+  soltarPendientes().then((soltada) => soltada && alCambiar());
 }
 export function soltarVale(p) {
   if (p?.vale) soltarId(p.id);
 }
+// True when at least one place went back.
 async function soltarPendientes() {
-  if (!cuentaDeVales()) return;
+  let soltada = false;
+  if (!cuentaDeVales()) return soltada;
   for (const id of leerBajas()) {
     let r;
     try {
       r = await llamar('/baja', id);
     } catch {
-      return;
+      return soltada;
     }
     if (r.estado === 401) {
       cuenta = null;
-      return;
+      return soltada;
     }
-    if (r.estado === 429 || r.estado >= 500) return;
+    if (r.estado === 429 || r.estado >= 500) return soltada;
     if (Number.isInteger(r.datos?.quedan)) quedan = r.datos.quedan;
     almacen.guardar('vales-bajas', leerBajas().filter((x) => x !== id));
+    soltada = true;
   }
+  return soltada;
 }
 
 // Google's sign-in (Google Identity Services): its own button, and One Tap for someone who already came in, who then

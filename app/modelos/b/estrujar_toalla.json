@@ -1,0 +1,62 @@
+{
+ "id": "estrujar_toalla",
+ "nombre": "Estrujar una toalla",
+ "fps": 30,
+ "duracion": 4.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Retuerce la toalla"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 2.0,
+   "texto": "Aprieta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 2.0,
+   "fin": 3.5,
+   "texto": "Retuércela al otro lado"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 3.5,
+   "fin": 4.5,
+   "texto": "Suelta"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {},
+  "vuelta": {}
+ },
+ "musculos": {
+  "principales": [
+   "antebrazo"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla",
+  "toalla"
+ ],
+ "camara": {
+  "pos": [
+   -1.85,
+   1.461,
+   1.961
+  ],
+  "mira": [
+   0.0,
+   0.652,
+   -0.121
+  ]
+ },
+ "archivo": "estrujar_toalla.glb",
+ "bytes": 102184
+}

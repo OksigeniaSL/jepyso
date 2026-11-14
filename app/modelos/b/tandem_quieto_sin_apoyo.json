@@ -1,0 +1,61 @@
+{
+ "id": "tandem_quieto_sin_apoyo",
+ "nombre": "Pies en tándem, sin apoyo",
+ "fps": 30,
+ "duracion": 13.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Un pie delante del otro"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 11.0,
+   "texto": "Aguanta el equilibrio"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 11.0,
+   "fin": 12.0,
+   "texto": "Vuelve"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 12.0,
+   "fin": 13.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {},
+  "llegada": {}
+ },
+ "musculos": {
+  "principales": [
+   "gemelos",
+   "tibial_anterior"
+  ],
+  "secundarios": [
+   "gluteo_medio"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [],
+ "camara": {
+  "pos": [
+   -2.172,
+   1.738,
+   2.515
+  ],
+  "mira": [
+   0.0,
+   0.788,
+   0.071
+  ]
+ },
+ "archivo": "tandem_quieto_sin_apoyo.glb",
+ "bytes": 36936
+}

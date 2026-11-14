@@ -1,0 +1,40 @@
+{
+  "id": "tandem_quieto",
+  "familia": "de_pie_silla",
+  "nombre": "Pies en tándem, con apoyo",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "silla": "izquierda",
+    "pies": "tandem"
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 10.0,
+    "bajar": 1.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Un pie delante del otro",
+    "mantener": "Aguanta el equilibrio",
+    "bajar": "Vuelve",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {}
+  },
+  "musculos": {
+    "principales": [
+      "gemelos",
+      "tibial_anterior"
+    ],
+    "secundarios": [
+      "gluteo_medio"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.92
+}

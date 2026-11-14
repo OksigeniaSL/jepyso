@@ -300,6 +300,20 @@
     ]
    }
   },
+  "brazos_silla": {
+   "glb": "modelos/brazos_silla.glb",
+   "ficha": "modelos/brazos_silla.json",
+   "bytes": 85664,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "pectoral"
+    ],
+    "secundarios": [
+     "deltoides_anterior"
+    ]
+   }
+  },
   "caminar": {
    "glb": "modelos/caminar.glb",
    "ficha": "modelos/caminar.json",
@@ -528,6 +542,18 @@
    "ficha": "modelos/estira_flexores.json",
    "bytes": 72812,
    "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "antebrazo"
+    ],
+    "secundarios": []
+   }
+  },
+  "estrujar_toalla": {
+   "glb": "modelos/estrujar_toalla.glb",
+   "ficha": "modelos/estrujar_toalla.json",
+   "bytes": 99292,
+   "lado": "ambos",
    "musculos": {
     "principales": [
      "antebrazo"
@@ -1075,6 +1101,40 @@
     ]
    }
   },
+  "silla_dos_manos": {
+   "glb": "modelos/silla_dos_manos.glb",
+   "ficha": "modelos/silla_dos_manos.json",
+   "bytes": 85784,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "gemelos",
+     "erectores"
+    ]
+   }
+  },
+  "silla_una_mano": {
+   "glb": "modelos/silla_una_mano.glb",
+   "ficha": "modelos/silla_una_mano.json",
+   "bytes": 79192,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "gemelos",
+     "erectores"
+    ]
+   }
+  },
   "talon": {
    "glb": "modelos/talon.glb",
    "ficha": "modelos/talon.json",
@@ -1121,6 +1181,36 @@
      "gemelos"
     ],
     "secundarios": []
+   }
+  },
+  "tandem_quieto": {
+   "glb": "modelos/tandem_quieto.glb",
+   "ficha": "modelos/tandem_quieto.json",
+   "bytes": 64344,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos",
+     "tibial_anterior"
+    ],
+    "secundarios": [
+     "gluteo_medio"
+    ]
+   }
+  },
+  "tandem_quieto_sin_apoyo": {
+   "glb": "modelos/tandem_quieto_sin_apoyo.glb",
+   "ficha": "modelos/tandem_quieto_sin_apoyo.json",
+   "bytes": 36600,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos",
+     "tibial_anterior"
+    ],
+    "secundarios": [
+     "gluteo_medio"
+    ]
    }
   },
   "tendinoso": {

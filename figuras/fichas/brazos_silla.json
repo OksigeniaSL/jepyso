@@ -1,0 +1,58 @@
+{
+  "id": "brazos_silla",
+  "familia": "sentado",
+  "nombre": "Brazos con silla",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "espalda": "libre"
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 10.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva las manos al respaldo",
+    "mantener": "Abre el pecho",
+    "bajar": "Vuelve",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "brazos": "respaldo"
+      },
+      "fingers_l": {
+        "curl": 0.7
+      },
+      "fingers_r": {
+        "curl": 0.7
+      },
+      "spine": {
+        "flex": -6
+      },
+      "neck": {
+        "flex": -4
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "pectoral"
+    ],
+    "secundarios": [
+      "deltoides_anterior"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

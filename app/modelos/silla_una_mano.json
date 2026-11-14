@@ -1,0 +1,73 @@
+{
+ "id": "silla_una_mano",
+ "nombre": "Levantarse con una mano en el muslo",
+ "fps": 30,
+ "duracion": 6.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Inclínate y levántate"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "De pie, erguido"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.5,
+   "texto": "Siéntate despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.5,
+   "fin": 6.5,
+   "texto": "Descansa sentado"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 85.1,
+   "rodilla_derecha_flexion": 93.3,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 4.1,
+   "rodilla_derecha_flexion": 4.0,
+   "tronco_inclinacion": 0.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "gemelos",
+   "erectores"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -2.546,
+   1.947,
+   2.789
+  ],
+  "mira": [
+   -0.072,
+   0.864,
+   0.006
+  ]
+ },
+ "archivo": "silla_una_mano.glb",
+ "bytes": 79192
+}

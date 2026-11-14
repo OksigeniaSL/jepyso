@@ -1,0 +1,59 @@
+{
+  "id": "estrujar_toalla",
+  "familia": "sentado",
+  "nombre": "Estrujar una toalla",
+  "lado": "ambos",
+  "accesorios": [
+    "silla",
+    "toalla"
+  ],
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 1.0,
+    "bajar": 1.5,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Retuerce la toalla",
+    "mantener": "Aprieta",
+    "bajar": "Retuércela al otro lado",
+    "reposo": "Suelta"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "toalla"
+      },
+      "elbow_l": {
+        "pron": 85
+      },
+      "elbow_r": {
+        "pron": 85
+      }
+    },
+    "llegada": {
+      "wrist_l": {
+        "flex": 45
+      },
+      "wrist_r": {
+        "flex": -45
+      }
+    },
+    "vuelta": {
+      "wrist_l": {
+        "flex": -45
+      },
+      "wrist_r": {
+        "flex": 45
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "antebrazo"
+    ],
+    "secundarios": []
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

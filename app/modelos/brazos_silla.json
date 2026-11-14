@@ -1,0 +1,82 @@
+{
+ "id": "brazos_silla",
+ "nombre": "Brazos con silla",
+ "fps": 30,
+ "duracion": 15.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Lleva las manos al respaldo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 12.0,
+   "texto": "Abre el pecho"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 12.0,
+   "fin": 14.0,
+   "texto": "Vuelve"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 14.0,
+   "fin": 15.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 70.8,
+   "hombro_izquierda_flexion": -8.9,
+   "hombro_izquierda_abduccion": 8.0,
+   "hombro_izquierda_rotacion_externa": -24.6,
+   "codo_derecha_flexion": 70.8,
+   "hombro_derecha_flexion": -8.9,
+   "hombro_derecha_abduccion": 8.0,
+   "hombro_derecha_rotacion_externa": -24.6,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 109.8,
+   "hombro_izquierda_flexion": -53.1,
+   "hombro_izquierda_abduccion": 49.1,
+   "hombro_izquierda_rotacion_externa": -88.9,
+   "codo_derecha_flexion": 109.8,
+   "hombro_derecha_flexion": -53.1,
+   "hombro_derecha_abduccion": 49.1,
+   "hombro_derecha_rotacion_externa": -88.9,
+   "tronco_inclinacion": 6.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "pectoral"
+  ],
+  "secundarios": [
+   "deltoides_anterior"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -2.151,
+   1.616,
+   2.381
+  ],
+  "mira": [
+   0.0,
+   0.675,
+   -0.039
+  ]
+ },
+ "archivo": "brazos_silla.glb",
+ "bytes": 85664
+}
