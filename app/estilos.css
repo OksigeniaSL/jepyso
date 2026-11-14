@@ -277,6 +277,25 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .sin-conexion:empty { display: none; }
 .pie { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); display: grid; gap: 8px; }
 .pie .boton { width: 100%; }
+/* The routine's foot stays at the bottom of the screen: «Empezar» is in sight from the first moment, with how long it
+   takes above it, whatever the number of exercises and the size of the letter. */
+.pie-fijo {
+  position: sticky; bottom: 0; z-index: 2; gap: 6px; padding-top: 10px;
+  background: color-mix(in srgb, var(--fondo) 90%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--linea);
+}
+.pie-fijo .boton { min-height: 56px; font-size: 19px; }
+.pie-resumen { margin: 0; text-align: center; color: var(--tinta-suave); font-size: 16px; }
+.mandar-hecho p { margin: 0; color: var(--tinta-suave); }
+.mandar-hecho .boton { min-height: 52px; padding: 0 10px; }
+/* The times a day as boxes: «Hoy: 1 de 2 veces». */
+.veces-hoy { display: flex; align-items: center; gap: 10px; }
+.casillas { display: inline-flex; gap: 4px; }
+.casillas i { width: 18px; height: 18px; border: 1.5px solid var(--tinta); }
+.casillas i.hecha { background: var(--tinta); }
+/* On a narrow phone or with big letter, the still gets smaller and the chips break, so the card never pushes the page
+   sideways. */
+.tarjeta .chip { white-space: normal; }
+@media (max-width: 380px) { .tarjeta-cabeza .tarjeta-poster { width: 84px; } }
 
 /* Player: the figure fills the screen and the controls sit on a sheet at the bottom. */
 .jugador { position: fixed; inset: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--figura-fondo); }
@@ -302,6 +321,17 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
   /* A tall sheet (rating a two-sided exercise, large text) scrolls inside the screen instead of leaving its button below it. */
   min-height: 0; overflow-y: auto; overscroll-behavior: contain;
 }
+/* Getting ready for an exercise: no clock, the starting position read big, and the button the whole width. The
+   buttons stay in sight when the text is long or the letter big: the sheet scrolls under them. */
+.prepara { display: grid; gap: 10px; }
+.prepara-titulo { margin: 0; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+.prepara-partida { margin: 0; font-size: 18px; line-height: 1.45; color: var(--tinta); }
+.prepara-material { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 18px; }
+.prepara-material span { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave); }
+.prepara-material .muestra-banda { width: 28px; height: 12px; }
+.prepara-botones { position: sticky; bottom: calc(-18px - env(safe-area-inset-bottom)); display: grid; gap: 8px; margin: 0 -20px calc(-18px - env(safe-area-inset-bottom)); padding: 10px 20px calc(18px + env(safe-area-inset-bottom)); background: var(--fondo); }
+.prepara-botones .boton { width: 100%; min-height: 56px; font-size: 18px; }
+.prepara-botones .boton.secundario { min-height: 48px; font-size: 16px; }
 .cuenta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 /* What to do now leads: the phase big, the count under it (Kimi K3, 11 November 2026). */
 .cuenta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
@@ -333,6 +363,37 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 }
 .escala button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
 .escala-pie { display: flex; justify-content: space-between; font-size: 14px; color: var(--tinta-suave); }
+/* Rating an exercise: no 3D (its still beside «Hecho»), one question at a time, and the button to go on always in
+   sight at the foot of the sheet, dashed and saying what is missing until the discomfort is marked. */
+.jugador.valorando .escena { display: none; }
+.valorar { display: flex; flex-direction: column; gap: 18px; min-height: 100%; }
+.valorar-cabeza { display: flex; align-items: center; gap: 14px; }
+.valorar-cabeza .tarjeta-poster { flex: none; width: 96px; }
+.valorar-cabeza h3 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
+.valorar-cabeza p { margin: 2px 0 0; color: var(--tinta-suave); font-size: 16px; }
+.valorar-paso { display: grid; gap: 12px; }
+.pregunta { margin: 0; font-family: var(--letra-titulo); font-size: 21px; font-weight: 600; line-height: 1.25; color: var(--tinta); }
+.pregunta:focus { outline: none; }
+.dos-botones { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.dos-botones .boton { min-height: 64px; font-size: 18px; padding: 0 12px; }
+.series-lado { display: grid; }
+.series-lado h5 { margin: 10px 0 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave); }
+.serie-fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; border-bottom: 1px solid var(--linea); font-size: 18px; }
+.serie-fila .paso { height: 50px; }
+.serie-fila .paso button { width: 54px; height: 48px; font-size: 24px; }
+.serie-fila .paso button:disabled { opacity: 0.3; }
+.serie-fila output { min-width: 42px; font-size: 20px; }
+.valorar-hecho { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--linea); color: var(--tinta-suave); font-size: 16px; }
+.enlace { flex: none; min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.valorar .escala button { height: 52px; font-size: 19px; }
+.valorar-pie {
+  position: sticky; bottom: calc(-18px - env(safe-area-inset-bottom)); display: grid; gap: 2px;
+  margin: auto -20px calc(-18px - env(safe-area-inset-bottom)); padding: 12px 20px calc(18px + env(safe-area-inset-bottom));
+  background: var(--fondo); border-top: 1px solid var(--linea);
+}
+.valorar-pie .boton { width: 100%; min-height: 56px; font-size: 18px; }
+.valorar-pie .boton[aria-disabled="true"] { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); border: 0; outline: 1px dashed var(--linea); outline-offset: -5px; cursor: default; }
+.valorar-pie .boton.fantasma { min-height: 44px; font-size: 16px; }
 .series-hechas { display: flex; flex-wrap: wrap; gap: 10px; }
 .series-hechas .ajuste { justify-items: start; }
 
@@ -659,9 +720,6 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .en-ficha { margin: 0; color: var(--tinta-suave); }
 .en-ficha a { color: var(--tinta); font-weight: 600; text-underline-offset: 3px; }
 .saludo .en-ficha { margin-top: 10px; }
-.mandar-por { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; }
-.mandar-por > span { flex-basis: 100%; text-align: center; color: var(--tinta-suave); font-size: 14px; }
-.mandar-por .boton.fantasma { min-height: 40px; padding: 0 10px; }
 
 .personas .armar-cuerpo { padding-bottom: 48px; }
 .lista-personas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
