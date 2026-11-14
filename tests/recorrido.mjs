@@ -412,11 +412,11 @@ try {
     await movil.waitForTimeout(400); // the sheet fades in for 0.18 s
     await movil.screenshot({ path: `${salida}/como-movil-${tema}.png` });
     await movil.click('.hoja .boton');
-    await movil.waitForSelector('.anillo', { timeout: 20000 });
+    await movil.waitForSelector('.anillo', { timeout: 60000 });
     await movil.screenshot({ path: `${salida}/descanso-movil-${tema}.png` });
     await movil.click('[data-r="ya"]');
     // Rating, one question at a time: the repetitions first, and «Hice menos» alone opens the − and +.
-    await movil.waitForSelector('[data-r="todas"]', { timeout: 20000 });
+    await movil.waitForSelector('[data-r="todas"]', { timeout: 60000 });
     comprobar((await movil.locator('.jugador.valorando .escena').isVisible()) === false, `${tema}: al valorar sigue la figura en 3D`);
     await movil.screenshot({ path: `${salida}/valorar-reps-movil-${tema}.png` });
     await movil.click('[data-r="menos"]');
@@ -433,12 +433,13 @@ try {
     await movil.waitForSelector('[data-r="en-posicion"]', { timeout: 30000 });
     comprobar((await movil.textContent('.prepara-material')).includes('banda roja'), `${tema}: la preparación no dice qué banda usar`);
     await movil.click('[data-r="en-posicion"]');
-    await movil.waitForSelector('.anillo', { timeout: 30000 });
+    // The countdown of five and a whole set: in CI's software renderer that takes well over half a minute.
+    await movil.waitForSelector('.anillo', { timeout: 90000 });
     await movil.screenshot({ path: `${salida}/cambio-lado-movil-${tema}.png` });
     await movil.click('[data-r="ya"]');
     await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/serie-izquierda-movil-${tema}.png` });
-    await movil.waitForSelector('[data-r="todas"]', { timeout: 30000 });
+    await movil.waitForSelector('[data-r="todas"]', { timeout: 60000 });
     await movil.click('[data-r="todas"]');
     await movil.click('[data-r="molestia"][data-v="6"]');
     comprobar((await movil.textContent('.aviso-molestia')).includes('Es más de 4'), `${tema}: sin aviso con una molestia de 6 y tope 4`);

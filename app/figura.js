@@ -361,7 +361,9 @@ export class Figura {
   }
 
   cuadro() {
-    const dt = Math.min(this.reloj.getDelta(), 0.1);
+    // The figure keeps the professional's pace on a slow phone too (down to 4 frames a second); only a longer gap, such
+    // as the page coming back from the background, is cut so it does not jump.
+    const dt = Math.min(this.reloj.getDelta(), 0.25);
     if (this.enMarcha && this.accion) {
       this.t += dt;
       const c = this.ciclo();
