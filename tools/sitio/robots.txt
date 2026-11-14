@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jepyso.com/sitemap.xml
