@@ -1,0 +1,45 @@
+{
+  "id": "talones_sentado",
+  "familia": "sentado",
+  "nombre": "Elevación de talones sentado",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube los talones",
+    "mantener": "Aguanta",
+    "bajar": "Bájalos despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "puntillas",
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "ankle_l": {
+        "flex": -35
+      },
+      "ankle_r": {
+        "flex": -35
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.85
+}

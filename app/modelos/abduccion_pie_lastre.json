@@ -1,0 +1,77 @@
+{
+ "id": "abduccion_pie_lastre",
+ "nombre": "Abducción de cadera de pie con tobillera",
+ "fps": 30,
+ "duracion": 9.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Separa la pierna hacia fuera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 4.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 4.0,
+   "fin": 8.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 8.0,
+   "fin": 9.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_abduccion": 0.0,
+   "codo_izquierda_flexion": 30.0,
+   "hombro_izquierda_flexion": -16.1,
+   "hombro_izquierda_abduccion": 21.4,
+   "hombro_izquierda_rotacion_externa": 56.3,
+   "cadera_derecha_abduccion": -0.0,
+   "tobillo_derecha_flexion": 4.2
+  },
+  "llegada": {
+   "cadera_izquierda_abduccion": -9.4,
+   "codo_izquierda_flexion": 58.3,
+   "hombro_izquierda_flexion": -29.2,
+   "hombro_izquierda_abduccion": 9.5,
+   "hombro_izquierda_rotacion_externa": 4.9,
+   "cadera_derecha_abduccion": 35.0,
+   "tobillo_derecha_flexion": 10.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla",
+  "tobillera"
+ ],
+ "camara": {
+  "pos": [
+   -1.231,
+   1.733,
+   4.002
+  ],
+  "mira": [
+   0.153,
+   0.863,
+   0.048
+  ]
+ },
+ "archivo": "abduccion_pie_lastre.glb",
+ "bytes": 90084
+}

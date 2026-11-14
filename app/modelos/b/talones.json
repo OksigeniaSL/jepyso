@@ -31,18 +31,26 @@
  ],
  "angulos": {
   "partida": {
+   "cadera_izquierda_flexion": -0.6,
+   "rodilla_izquierda_flexion": 4.0,
    "tobillo_izquierda_flexion": 4.6,
    "codo_izquierda_flexion": 30.0,
    "hombro_izquierda_flexion": 27.6,
+   "cadera_derecha_flexion": -0.6,
+   "rodilla_derecha_flexion": 4.0,
    "tobillo_derecha_flexion": 4.6,
    "codo_derecha_flexion": 30.0,
    "hombro_derecha_flexion": 27.6
   },
   "llegada": {
-   "tobillo_izquierda_flexion": -25.4,
+   "cadera_izquierda_flexion": 5.0,
+   "rodilla_izquierda_flexion": 15.1,
+   "tobillo_izquierda_flexion": -20.0,
    "codo_izquierda_flexion": 21.1,
    "hombro_izquierda_flexion": 22.7,
-   "tobillo_derecha_flexion": -25.4,
+   "cadera_derecha_flexion": 5.0,
+   "rodilla_derecha_flexion": 15.1,
+   "tobillo_derecha_flexion": -20.0,
    "codo_derecha_flexion": 21.1,
    "hombro_derecha_flexion": 22.7
   }
@@ -59,16 +67,16 @@
  ],
  "camara": {
   "pos": [
-   -3.441,
+   -3.404,
    1.907,
-   0.985
+   0.978
   ],
   "mira": [
    0.0,
-   0.806,
+   0.818,
    0.365
   ]
  },
  "archivo": "talones.glb",
- "bytes": 67424
+ "bytes": 69580
 }

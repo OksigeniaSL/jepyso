@@ -1,0 +1,81 @@
+{
+ "id": "plancha_rodillas",
+ "nombre": "Plancha de rodillas",
+ "fps": 30,
+ "duracion": 22.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la cadera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 17.0,
+   "texto": "Recto de los hombros a las rodillas, respira"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 17.0,
+   "fin": 19.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 19.0,
+   "fin": 22.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 12.1,
+   "hombro_izquierda_flexion": 61.4,
+   "hombro_izquierda_rotacion_externa": -25.5,
+   "cadera_derecha_flexion": 12.1,
+   "hombro_derecha_flexion": 61.4,
+   "hombro_derecha_rotacion_externa": -25.5,
+   "tronco_inclinacion": 59.9,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 0.0,
+   "hombro_izquierda_flexion": 75.4,
+   "hombro_izquierda_rotacion_externa": -40.6,
+   "cadera_derecha_flexion": 0.0,
+   "hombro_derecha_flexion": 75.4,
+   "hombro_derecha_rotacion_externa": -40.6,
+   "tronco_inclinacion": 73.8,
+   "pelvis_basculacion": -16.2
+  }
+ },
+ "musculos": {
+  "principales": [
+   "recto_abdominal"
+  ],
+  "secundarios": [
+   "oblicuos",
+   "gluteo_mayor"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.697,
+   1.423,
+   0.571
+  ],
+  "mira": [
+   0.0,
+   0.239,
+   -0.095
+  ]
+ },
+ "archivo": "plancha_rodillas.glb",
+ "bytes": 43808
+}

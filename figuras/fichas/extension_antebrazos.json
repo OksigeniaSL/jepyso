@@ -1,0 +1,50 @@
+{
+  "id": "extension_antebrazos",
+  "familia": "boca_abajo",
+  "nombre": "Extensión boca abajo sobre los antebrazos",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 5.0,
+    "bajar": 3.0,
+    "reposo": 2.0
+  },
+  "textos": {
+    "subir": "Sube el pecho sobre los antebrazos",
+    "mantener": "La pelvis, en el suelo",
+    "bajar": "Baja despacio",
+    "reposo": "Relaja"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "antebrazos"
+      },
+      "spine": {
+        "flex": -2
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "brazos": "antebrazos"
+      },
+      "spine": {
+        "flex": -14
+      },
+      "neck": {
+        "flex": -5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "erectores"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

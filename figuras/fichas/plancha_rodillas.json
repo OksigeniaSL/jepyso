@@ -1,0 +1,51 @@
+{
+  "id": "plancha_rodillas",
+  "familia": "boca_abajo",
+  "nombre": "Plancha de rodillas",
+  "lado": "ambos",
+  "accesorios": [
+    "esterilla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 15.0,
+    "bajar": 2.0,
+    "reposo": 3.0
+  },
+  "textos": {
+    "subir": "Sube la cadera",
+    "mantener": "Recto de los hombros a las rodillas, respira",
+    "bajar": "Baja despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "antebrazos",
+        "piernas": "esterilla"
+      },
+      "neck": {
+        "flex": -10
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "piernas": "rodillas"
+      },
+      "neck": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "recto_abdominal"
+    ],
+    "secundarios": [
+      "oblicuos",
+      "gluteo_mayor"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

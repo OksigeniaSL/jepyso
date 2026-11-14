@@ -40,6 +40,30 @@
     "secundarios": []
    }
   },
+  "abduccion_pie_lastre": {
+   "glb": "modelos/b/abduccion_pie_lastre.glb",
+   "ficha": "modelos/b/abduccion_pie_lastre.json",
+   "bytes": 90552,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": []
+   }
+  },
+  "abduccion_sentado": {
+   "glb": "modelos/b/abduccion_sentado.glb",
+   "ficha": "modelos/b/abduccion_sentado.json",
+   "bytes": 104512,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": []
+   }
+  },
   "abrir_cerrar": {
    "glb": "modelos/b/abrir_cerrar.glb",
    "ficha": "modelos/b/abrir_cerrar.json",
@@ -220,6 +244,18 @@
     "secundarios": []
    }
   },
+  "curl_isquios_lastre": {
+   "glb": "modelos/b/curl_isquios_lastre.glb",
+   "ficha": "modelos/b/curl_isquios_lastre.json",
+   "bytes": 93092,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "isquiotibiales"
+    ],
+    "secundarios": []
+   }
+  },
   "deslizar_mesa": {
    "glb": "modelos/b/deslizar_mesa.glb",
    "ficha": "modelos/b/deslizar_mesa.json",
@@ -317,10 +353,22 @@
     "secundarios": []
    }
   },
+  "extension_antebrazos": {
+   "glb": "modelos/b/extension_antebrazos.glb",
+   "ficha": "modelos/b/extension_antebrazos.json",
+   "bytes": 45084,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "erectores"
+    ],
+    "secundarios": []
+   }
+  },
   "extension_lumbar": {
    "glb": "modelos/b/extension_lumbar.glb",
    "ficha": "modelos/b/extension_lumbar.json",
-   "bytes": 47752,
+   "bytes": 47960,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -333,6 +381,18 @@
    "glb": "modelos/b/extension_rodilla.glb",
    "ficha": "modelos/b/extension_rodilla.json",
    "bytes": 65480,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": []
+   }
+  },
+  "extension_rodilla_lastre": {
+   "glb": "modelos/b/extension_rodilla_lastre.glb",
+   "ficha": "modelos/b/extension_rodilla_lastre.json",
+   "bytes": 88924,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -450,6 +510,20 @@
     "secundarios": []
    }
   },
+  "marcha_sentado": {
+   "glb": "modelos/b/marcha_sentado.glb",
+   "ficha": "modelos/b/marcha_sentado.json",
+   "bytes": 66744,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps"
+    ],
+    "secundarios": [
+     "recto_abdominal"
+    ]
+   }
+  },
   "muneca": {
    "glb": "modelos/b/muneca.glb",
    "ficha": "modelos/b/muneca.json",
@@ -505,7 +579,7 @@
   "plancha": {
    "glb": "modelos/b/plancha.glb",
    "ficha": "modelos/b/plancha.json",
-   "bytes": 45308,
+   "bytes": 46448,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -528,6 +602,35 @@
     ],
     "secundarios": [
      "gluteo_medio"
+    ]
+   }
+  },
+  "plancha_lateral_rodilla": {
+   "glb": "modelos/b/plancha_lateral_rodilla.glb",
+   "ficha": "modelos/b/plancha_lateral_rodilla.json",
+   "bytes": 46076,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "oblicuos"
+    ],
+    "secundarios": [
+     "gluteo_medio"
+    ]
+   }
+  },
+  "plancha_rodillas": {
+   "glb": "modelos/b/plancha_rodillas.glb",
+   "ficha": "modelos/b/plancha_rodillas.json",
+   "bytes": 43936,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "recto_abdominal"
+    ],
+    "secundarios": [
+     "oblicuos",
+     "gluteo_mayor"
     ]
    }
   },
@@ -720,7 +823,19 @@
   "talones": {
    "glb": "modelos/b/talones.glb",
    "ficha": "modelos/b/talones.json",
-   "bytes": 67424,
+   "bytes": 69580,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
+  "talones_sentado": {
+   "glb": "modelos/b/talones_sentado.glb",
+   "ficha": "modelos/b/talones_sentado.json",
+   "bytes": 69000,
    "lado": "ambos",
    "musculos": {
     "principales": [

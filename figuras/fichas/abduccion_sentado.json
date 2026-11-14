@@ -1,0 +1,44 @@
+{
+  "id": "abduccion_sentado",
+  "familia": "sentado",
+  "nombre": "Abducción de cadera sentado, con banda",
+  "lado": "ambos",
+  "accesorios": [
+    "silla",
+    "banda"
+  ],
+  "parametros": {
+    "banda_muslos": true
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 2.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Separa las rodillas contra la banda",
+    "mantener": "Aguanta",
+    "bajar": "Júntalas despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "hip_l": {
+        "abd": 22
+      },
+      "hip_r": {
+        "abd": 22
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.85
+}

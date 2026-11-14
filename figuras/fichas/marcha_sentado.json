@@ -1,0 +1,73 @@
+{
+  "id": "marcha_sentado",
+  "familia": "sentado",
+  "nombre": "Marcha sentado",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 0.8,
+    "mantener": 0.3,
+    "bajar": 1.6,
+    "reposo": 0.8
+  },
+  "textos": {
+    "subir": "Sube una rodilla",
+    "mantener": "Arriba",
+    "bajar": "Bájala y sube la otra",
+    "reposo": "Bájala"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre"
+      },
+      "hip_r": {
+        "flex": 115
+      },
+      "knee_r": {
+        "flex": 110
+      }
+    },
+    "vuelta": {
+      "apoyos": {
+        "pierna_i": "libre"
+      },
+      "hip_l": {
+        "flex": 115
+      },
+      "knee_l": {
+        "flex": 110
+      }
+    }
+  },
+  "intermedias": [
+    {
+      "fase": "bajar",
+      "en": 0.5,
+      "postura": {
+        "apoyos": {
+          "pierna_d": "pie"
+        },
+        "hip_r": {
+          "flex": 90
+        },
+        "knee_r": {
+          "flex": 90
+        }
+      }
+    }
+  ],
+  "musculos": {
+    "principales": [
+      "cuadriceps"
+    ],
+    "secundarios": [
+      "recto_abdominal"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.85
+}

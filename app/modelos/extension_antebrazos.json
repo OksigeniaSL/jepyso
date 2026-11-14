@@ -1,0 +1,76 @@
+{
+ "id": "extension_antebrazos",
+ "nombre": "Extensión boca abajo sobre los antebrazos",
+ "fps": 30,
+ "duracion": 13.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Sube el pecho sobre los antebrazos"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 8.0,
+   "texto": "La pelvis, en el suelo"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 8.0,
+   "fin": 11.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 11.0,
+   "fin": 13.0,
+   "texto": "Relaja"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 88.4,
+   "hombro_izquierda_flexion": 60.2,
+   "hombro_izquierda_rotacion_externa": -24.7,
+   "codo_derecha_flexion": 88.4,
+   "hombro_derecha_flexion": 60.2,
+   "hombro_derecha_rotacion_externa": -24.7,
+   "tronco_inclinacion": 58.6
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 94.8,
+   "hombro_izquierda_flexion": 41.7,
+   "hombro_izquierda_rotacion_externa": -15.4,
+   "codo_derecha_flexion": 94.8,
+   "hombro_derecha_flexion": 41.7,
+   "hombro_derecha_rotacion_externa": -15.4,
+   "tronco_inclinacion": 46.6
+  }
+ },
+ "musculos": {
+  "principales": [
+   "erectores"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.752,
+   1.488,
+   0.576
+  ],
+  "mira": [
+   0.0,
+   0.287,
+   -0.099
+  ]
+ },
+ "archivo": "extension_antebrazos.glb",
+ "bytes": 44408
+}

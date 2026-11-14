@@ -1,0 +1,53 @@
+{
+  "id": "abduccion_pie_lastre",
+  "familia": "de_pie_silla",
+  "nombre": "Abducción de cadera de pie con tobillera",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "tobillera"
+  ],
+  "parametros": {
+    "silla": "izquierda",
+    "tobillera": {
+      "pierna": "d"
+    }
+  },
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 1.0,
+    "bajar": 4.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Separa la pierna hacia fuera",
+    "mantener": "Aguanta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre"
+      },
+      "hip_r": {
+        "abd": 35
+      },
+      "knee_r": {
+        "flex": 2
+      },
+      "ankle_r": {
+        "flex": 10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.95
+}

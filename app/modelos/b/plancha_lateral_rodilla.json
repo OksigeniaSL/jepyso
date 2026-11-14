@@ -1,0 +1,80 @@
+{
+ "id": "plancha_lateral_rodilla",
+ "nombre": "Plancha lateral con la rodilla apoyada",
+ "fps": 30,
+ "duracion": 17.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la cadera"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 12.0,
+   "texto": "Recto del hombro a la rodilla"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 12.0,
+   "fin": 14.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 14.0,
+   "fin": 17.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "hombro_izquierda_abduccion": 43.8,
+   "hombro_izquierda_rotacion_externa": 10.0,
+   "cadera_derecha_abduccion": -16.5,
+   "codo_derecha_flexion": 126.7,
+   "hombro_derecha_flexion": -75.1,
+   "hombro_derecha_abduccion": 29.9,
+   "hombro_derecha_rotacion_externa": -45.8,
+   "tronco_inclinacion": 44.0
+  },
+  "llegada": {
+   "hombro_izquierda_abduccion": 67.9,
+   "hombro_izquierda_rotacion_externa": 5.2,
+   "cadera_derecha_abduccion": -0.6,
+   "codo_derecha_flexion": 87.3,
+   "hombro_derecha_flexion": -41.5,
+   "hombro_derecha_abduccion": 36.3,
+   "hombro_derecha_rotacion_externa": -67.9,
+   "tronco_inclinacion": 68.2
+  }
+ },
+ "musculos": {
+  "principales": [
+   "oblicuos"
+  ],
+  "secundarios": [
+   "gluteo_medio"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   3.812,
+   1.674,
+   1.21
+  ],
+  "mira": [
+   -0.076,
+   0.313,
+   0.237
+  ]
+ },
+ "archivo": "plancha_lateral_rodilla.glb",
+ "bytes": 46076
+}

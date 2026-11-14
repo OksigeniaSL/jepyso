@@ -1,0 +1,52 @@
+{
+  "id": "curl_isquios_lastre",
+  "familia": "de_pie_silla",
+  "nombre": "Curl de isquios de pie con tobillera",
+  "lado": "derecho",
+  "accesorios": [
+    "silla",
+    "tobillera"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 1.0,
+    "bajar": 4.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Lleva el talón hacia el glúteo",
+    "mantener": "Aguanta",
+    "bajar": "Bájalo despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {},
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "libre"
+      },
+      "knee_r": {
+        "flex": 90
+      },
+      "hip_r": {
+        "flex": 0
+      },
+      "ankle_r": {
+        "flex": 10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "isquiotibiales"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.95,
+  "parametros": {
+    "tobillera": {
+      "pierna": "d"
+    }
+  }
+}

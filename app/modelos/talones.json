@@ -31,11 +31,15 @@
  ],
  "angulos": {
   "partida": {
+   "cadera_izquierda_flexion": -0.2,
+   "rodilla_izquierda_flexion": 4.0,
    "tobillo_izquierda_flexion": 4.2,
    "codo_izquierda_flexion": 30.0,
    "hombro_izquierda_flexion": 10.7,
    "hombro_izquierda_abduccion": 7.7,
    "hombro_izquierda_rotacion_externa": -16.5,
+   "cadera_derecha_flexion": -0.2,
+   "rodilla_derecha_flexion": 4.0,
    "tobillo_derecha_flexion": 4.2,
    "codo_derecha_flexion": 30.0,
    "hombro_derecha_flexion": 10.7,
@@ -43,12 +47,16 @@
    "hombro_derecha_rotacion_externa": -16.5
   },
   "llegada": {
-   "tobillo_izquierda_flexion": -25.7,
+   "cadera_izquierda_flexion": 5.3,
+   "rodilla_izquierda_flexion": 15.0,
+   "tobillo_izquierda_flexion": -20.3,
    "codo_izquierda_flexion": 3.6,
    "hombro_izquierda_flexion": 13.8,
    "hombro_izquierda_abduccion": 0.2,
    "hombro_izquierda_rotacion_externa": -7.2,
-   "tobillo_derecha_flexion": -25.7,
+   "cadera_derecha_flexion": 5.3,
+   "rodilla_derecha_flexion": 15.0,
+   "tobillo_derecha_flexion": -20.3,
    "codo_derecha_flexion": 3.6,
    "hombro_derecha_flexion": 13.8,
    "hombro_derecha_abduccion": 0.2,
@@ -67,16 +75,16 @@
  ],
  "camara": {
   "pos": [
-   -3.617,
+   -3.571,
    2.033,
-   0.967
+   0.959
   ],
   "mira": [
    0.0,
-   0.876,
+   0.89,
    0.316
   ]
  },
  "archivo": "talones.glb",
- "bytes": 68936
+ "bytes": 70396
 }

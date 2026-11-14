@@ -7,7 +7,7 @@
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1'; // the set of the first versions; later sets are named when they are fetched
 const PUNTERO = 'jepyso-activa'; // which set of the app is the current one
-const FIJOS = 'jepyso-fijos-8';
+const FIJOS = 'jepyso-fijos-9';
 const ARCHIVOS = [
   'index.html',
   'estilos.css',

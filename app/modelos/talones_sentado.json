@@ -1,0 +1,78 @@
+{
+ "id": "talones_sentado",
+ "nombre": "Elevación de talones sentado",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube los talones"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Bájalos despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 86.2,
+   "tobillo_izquierda_flexion": -0.1,
+   "codo_izquierda_flexion": 70.8,
+   "hombro_izquierda_flexion": -8.9,
+   "cadera_derecha_flexion": 86.2,
+   "tobillo_derecha_flexion": -0.1,
+   "codo_derecha_flexion": 70.8,
+   "hombro_derecha_flexion": -8.9
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 94.6,
+   "tobillo_izquierda_flexion": -43.6,
+   "codo_izquierda_flexion": 83.7,
+   "hombro_izquierda_flexion": -14.2,
+   "cadera_derecha_flexion": 94.6,
+   "tobillo_derecha_flexion": -43.6,
+   "codo_derecha_flexion": 83.7,
+   "hombro_derecha_flexion": -14.2
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -2.868,
+   1.59,
+   0.437
+  ],
+  "mira": [
+   0.0,
+   0.672,
+   -0.079
+  ]
+ },
+ "archivo": "talones_sentado.glb",
+ "bytes": 68456
+}

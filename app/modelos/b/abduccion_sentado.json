@@ -1,0 +1,67 @@
+{
+ "id": "abduccion_sentado",
+ "nombre": "Abducción de cadera sentado, con banda",
+ "fps": 30,
+ "duracion": 7.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Separa las rodillas contra la banda"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 4.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 4.0,
+   "fin": 6.0,
+   "texto": "Júntalas despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 6.0,
+   "fin": 7.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_abduccion": 3.9,
+   "cadera_derecha_abduccion": 3.9
+  },
+  "llegada": {
+   "cadera_izquierda_abduccion": 15.2,
+   "cadera_derecha_abduccion": 15.2
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla",
+  "banda"
+ ],
+ "camara": {
+  "pos": [
+   -0.948,
+   1.248,
+   2.588
+  ],
+  "mira": [
+   0.0,
+   0.652,
+   -0.121
+  ]
+ },
+ "archivo": "abduccion_sentado.glb",
+ "bytes": 104512
+}

@@ -31,11 +31,13 @@
  ],
  "angulos": {
   "partida": {
-   "rodilla_izquierda_flexion": 0.0,
+   "cadera_izquierda_flexion": 12.3,
+   "rodilla_izquierda_flexion": 14.6,
    "tobillo_izquierda_flexion": -44.9,
    "hombro_izquierda_flexion": 63.8,
    "hombro_izquierda_rotacion_externa": -30.5,
-   "rodilla_derecha_flexion": 0.0,
+   "cadera_derecha_flexion": 12.3,
+   "rodilla_derecha_flexion": 14.6,
    "tobillo_derecha_flexion": -44.9,
    "hombro_derecha_flexion": 63.8,
    "hombro_derecha_rotacion_externa": -30.5,
@@ -43,10 +45,12 @@
    "pelvis_basculacion": -0.0
   },
   "llegada": {
+   "cadera_izquierda_flexion": 1.9,
    "rodilla_izquierda_flexion": 3.6,
    "tobillo_izquierda_flexion": 1.8,
    "hombro_izquierda_flexion": 87.1,
    "hombro_izquierda_rotacion_externa": -73.1,
+   "cadera_derecha_flexion": 1.9,
    "rodilla_derecha_flexion": 3.6,
    "tobillo_derecha_flexion": 1.8,
    "hombro_derecha_flexion": 87.1,
@@ -70,16 +74,16 @@
  ],
  "camara": {
   "pos": [
-   -3.617,
-   1.382,
-   0.505
+   -3.604,
+   1.377,
+   0.499
   ],
   "mira": [
    0.0,
-   0.225,
-   -0.146
+   0.224,
+   -0.15
   ]
  },
  "archivo": "plancha.glb",
- "bytes": 45308
+ "bytes": 46448
 }
