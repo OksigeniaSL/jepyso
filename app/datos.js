@@ -133,7 +133,7 @@ export const EJERCICIOS = {
     porDefecto: { series: 2, reps: 4, tempo: [3, 30, 3] },
     partida: 'Boca arriba, con las piernas estiradas.',
     pasos: [
-      'Dobla una rodilla y llévala hacia el pecho, cogiéndola con las manos por la espinilla.',
+      'Dobla una rodilla y llévala hacia el pecho, sujetándola con las manos por la espinilla.',
       'Acércala con suavidad hasta donde llegue, con la zona lumbar pegada al suelo.',
       'Mantén.',
       'Vuelve despacio a estirar la pierna.',
@@ -393,7 +393,7 @@ export const EJERCICIOS = {
     zonas: ['hombro'],
     musculos: { principales: ['manguito_posterior'], secundarios: [] },
     porDefecto: { series: 1, reps: 4, tempo: [3, 30, 3] },
-    partida: 'De pie, con los codos doblados en ángulo recto y pegados al cuerpo. Coge el bastón con una mano y recoge el otro extremo en la palma de la otra.',
+    partida: 'De pie, con los codos doblados en ángulo recto y pegados al cuerpo. Sujeta el bastón con una mano y apoya el otro extremo en la palma de la otra.',
     pasos: [
       'Con el codo del lado que estiras pegado al costado, empuja el bastón con la otra mano para llevar ese brazo hacia fuera.',
       'Para al notar tirantez, sin dolor, y mantén.',
@@ -1051,7 +1051,7 @@ export const EJERCICIOS = {
     porDefecto: { series: 1, reps: 20, tempo: [1, 2, 1] },
     partida: 'Sentado, con los pies apoyados y una toalla pequeña en el suelo bajo el pie que trabaja.',
     pasos: [
-      'Coge la toalla con los dedos del pie y arrástrala hacia ti.',
+      'Agarra la toalla con los dedos del pie y arrástrala hacia ti.',
       'Mantén el agarre un momento.',
       'Suelta y vuelve a estirar los dedos.',
     ],
@@ -1090,7 +1090,7 @@ export const EJERCICIOS = {
     porDefecto: { series: 1, reps: 3, tempo: [3, 30, 3] },
     partida: 'De pie, con una mano en una encimera, en una mesa pesada o en la pared para mantener el equilibrio.',
     pasos: [
-      'Dobla la rodilla y coge el tobillo con la mano del mismo lado.',
+      'Dobla la rodilla y sujeta el tobillo con la mano del mismo lado.',
       'Acerca el talón al glúteo con suavidad, con las rodillas juntas.',
       'Mantén el estiramiento y suelta despacio.',
     ],

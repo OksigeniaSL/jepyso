@@ -1152,7 +1152,7 @@ async function crearEnlace(b, empezarOtra = null) {
   }
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
-  const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en el móvil y sigue a la figura:`;
+  const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:`;
 
   let qr = '';
   try {
@@ -1411,7 +1411,7 @@ async function vistaRutina(codigo) {
     guardada ||= guardarParaSinConexion(r.c, ejercicios).catch(() => false);
     if (!(await guardada)) return;
     const p = app.querySelector('.sin-conexion');
-    if (p) p.textContent = 'Guardada en este móvil: puedes hacerla aunque no tengas conexión.';
+    if (p) p.textContent = 'Guardada en este teléfono: puedes hacerla aunque no tengas conexión.';
   }
 
   // Queue: every exercise, every side, every set.
@@ -1545,7 +1545,7 @@ async function vistaRutina(codigo) {
       // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
       if (sesion.item !== item) return;
       const sin3d = !document.createElement('canvas').getContext('webgl2');
-      const porque = sin3d ? 'Este móvil no puede mover la figura en 3D.' : 'Revisa la conexión y prueba otra vez.';
+      const porque = sin3d ? 'Este teléfono no puede mover la figura en 3D.' : 'Revisa la conexión y prueba otra vez.';
       app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>No se ha podido cargar la figura.</p><p>${porque}</p></div>
         <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><button type="button" class="boton" data-r="reintentar">Probar otra vez</button><span></span></div>`;
       return;
@@ -1805,7 +1805,7 @@ async function vistaRutina(codigo) {
       : [[ICONO.puntos, 'Toca los <b>tres puntos</b>, arriba a la derecha.'], [ICONO.mas, 'Toca <b>Añadir a pantalla de inicio</b>.']];
     return `<section class="tarjeta a-mano" aria-labelledby="a-mano-titulo">
       <h3 id="a-mano-titulo">Tenla a mano</h3>
-      <p>Así mañana no tendrás que buscar el mensaje: ponla en la pantalla de inicio del móvil, como una app.</p>
+      <p>Así mañana no tendrás que buscar el mensaje: ponla en la pantalla de inicio del teléfono, como una app.</p>
       <ol class="a-mano-pasos">${pasos.map(([icono, texto]) => `<li><span class="a-mano-icono" aria-hidden="true">${icono}</span><span>${texto}</span></li>`).join('')}</ol>
       <button type="button" class="boton secundario" data-r="ya-la-tengo">Ya la tengo</button>
     </section>`;
