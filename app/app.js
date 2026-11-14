@@ -521,7 +521,7 @@ function seccionBiblioteca(b) {
         <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
       <label class="campo-musculo"><span>Músculo</span>
         <select data-accion="musculo">
-          <option value="">Todos</option>
+          <option value="">Todos los músculos</option>
           ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(MUSCULOS[mu])}</option>`).join('')}
         </select>
       </label>
@@ -592,6 +592,7 @@ function vistaArmar() {
 
   function pintar() {
     app.innerHTML = `<div class="armar${b.orden.length ? '' : ' sin-ejercicios'}">
+      <div class="armar-biblio">${seccionBiblioteca(b)}</div>
       <div class="armar-izq">
         ${barraApp('Nueva rutina')}
         <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
@@ -610,7 +611,6 @@ function vistaArmar() {
             <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
             <div class="hueco-rutina">${seccionRutina(b)}</div>
             <button type="button" class="anadir-ejercicio" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}<span>Añadir ejercicio</span></button>
-            ${seccionBiblioteca(b)}
           </section>
           <section class="etapa" id="etapa-ajustes" aria-labelledby="etapa-ajustes-t">
             <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>Ajustes</p>
@@ -743,10 +743,11 @@ function vistaArmar() {
     if (antes !== undefined && despues !== undefined && Math.abs(despues - antes) > 1) window.scrollBy(0, despues - antes);
   }
 
-  // On a phone or a tablet (no preview at the side), the library is a sheet over the whole screen: «Añadir ejercicio»
-  // opens it with the search on top, choosing one closes it and leaves that exercise open in the routine, in sight.
-  // The phone's «back» closes it too, as in any app. Enrique, 13 November 2026: «bajar, subir, bajar... hay que adivinar».
-  const estrecho = () => !window.matchMedia('(min-width: 980px)').matches;
+  // Below 1280 px the library is a sheet over the whole screen: «Añadir ejercicio» opens it with the search on top,
+  // choosing one closes it and leaves that exercise open in the routine, in sight. The phone's «back» closes it too, as
+  // in any app. Enrique, 13 November 2026: «bajar, subir, bajar... hay que adivinar». From 1280 px it is a column of
+  // its own at the left, with its own scroll: the routine in the middle never goes under it.
+  const estrecho = () => !window.matchMedia('(min-width: 1280px)').matches;
   const hojaAbierta = () => !!app.querySelector('.armar.biblio-abierta');
   function abrirBiblioteca() {
     if (hojaAbierta()) return;
@@ -862,11 +863,23 @@ function vistaArmar() {
         refrescarBiblioteca();
         enseñarTarjeta(id);
       } else {
-        // The routine grows above the library: the row just added stays under the pointer.
-        sinSaltar(() => app.querySelector(`.biblio-fila[data-id="${id}"]`), () => {
-          refrescarRutina();
-          refrescarBiblioteca();
-        });
+        // The library is a column of its own: the row stays where it was, and the card just added comes into sight in
+        // the routine, open, with a moment of light; the focus stays in the library to add another.
+        refrescarRutina();
+        const lista = app.querySelector('.biblio-lista');
+        const arriba = lista.scrollTop;
+        refrescarBiblioteca();
+        lista.scrollTop = arriba;
+        const tarjeta = app.querySelector(`.ejercicio[data-id="${id}"]`);
+        if (tarjeta) {
+          const r = tarjeta.getBoundingClientRect();
+          const tapa = [...app.querySelectorAll('.barra-app, .etapas-app')].reduce((t, x) => t + x.getBoundingClientRect().height, 0);
+          const pie = app.querySelector('.barra-crear')?.getBoundingClientRect().height || 0;
+          if (r.top < tapa || r.bottom > innerHeight - pie) window.scrollTo(0, window.scrollY + r.top - tapa - 12);
+          tarjeta.classList.add('recien');
+          setTimeout(() => tarjeta.classList.remove('recien'), 1400);
+        }
+        app.querySelector(`.biblio-fila[data-id="${id}"] .biblio-ver`)?.focus({ preventScroll: true });
       }
       colocarFigura();
     } else if (a === 'abrir-biblioteca') {
@@ -1031,12 +1044,14 @@ function vistaArmar() {
     if (p) usarPlantilla(p);
   }
   const ancho = window.matchMedia('(min-width: 980px)');
+  const conColumna = window.matchMedia('(min-width: 1280px)');
   const alCambiarAncho = () => {
-    // Wide, the library is in the page again: no sheet left open behind it.
+    // Wide, the library is a column again: no sheet left open behind it.
     if (!estrecho()) cerrarBiblioteca();
     colocarFigura();
   };
   ancho.addEventListener('change', alCambiarAncho);
+  conColumna.addEventListener('change', alCambiarAncho);
   window.addEventListener('popstate', alVolver);
   document.addEventListener('keydown', alTeclear);
   // The sheet's entry in the history is not a page: going back must not move the routine.
@@ -1045,6 +1060,7 @@ function vistaArmar() {
   return () => {
     history.scrollRestoration = restaurar;
     ancho.removeEventListener('change', alCambiarAncho);
+    conColumna.removeEventListener('change', alCambiarAncho);
     window.removeEventListener('popstate', alVolver);
     document.removeEventListener('keydown', alTeclear);
     document.body.classList.remove('con-hoja');
@@ -1105,26 +1121,61 @@ async function crearEnlace(b) {
     qr = '<p>El enlace es demasiado largo para un código QR.</p>';
   }
 
-  const capa = document.createElement('div');
-  capa.className = 'capa';
-  capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hoja-titulo">
-    <h2 id="hoja-titulo">La rutina, lista</h2>
-    <p>Mándale el enlace por WhatsApp o Telegram, o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
+  // The sheet of the link: first what sends it (WhatsApp, Telegram, copy), under the message as it will arrive; the
+  // code and the address folded, open by default on a computer, where the person scans it in the consultation. A
+  // <dialog>: its ×, Escape and the phone's «back» close it, and the focus goes back to «Crear enlace».
+  const nombre = rutina.para ? esc(rutina.para) : '';
+  const dialogo = document.createElement('dialog');
+  dialogo.className = 'hoja hoja-enlace';
+  dialogo.setAttribute('aria-labelledby', 'hoja-titulo');
+  dialogo.innerHTML = `<div class="hoja-cabeza"><h2 id="hoja-titulo" tabindex="-1">La rutina, lista</h2>
+      <button type="button" class="redondo" data-h="cerrar" aria-label="Cerrar">${ICONO.cerrar}</button></div>
     ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
     ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
     ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
-    <div class="qr">${qr}</div>
-    <div class="enlace-texto">${esc(url)}</div>
-    <div class="botones">
-      <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Enviar por WhatsApp</a>
-      <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}Enviar por Telegram</a>
+    <figure class="burbuja"><figcaption>${nombre ? `Así le llega a ${nombre}` : 'Así llega'}</figcaption><p>${esc(mensaje)} <span class="burbuja-enlace">${esc(location.host)}/…</span></p></figure>
+    <div class="hoja-mandar">
+      <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Mandar por WhatsApp</a>
+      <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}Mandar por Telegram</a>
       <button type="button" class="boton secundario" data-h="copiar">Copiar enlace</button>
-      <a class="boton fantasma" href="${esc(url)}" target="_blank" rel="noopener">Verla como la persona</a>
     </div>
-  </div>`;
-  document.body.appendChild(capa);
-  capa.addEventListener('click', async (ev) => {
-    if (ev.target === capa || ev.target.closest('.en-ficha a')) capa.remove();
+    <a class="boton fantasma hoja-ver" href="${esc(url)}" target="_blank" rel="noopener">${nombre ? `Ver la rutina como ${nombre}` : 'Ver la rutina como la persona'}</a>
+    <details class="hoja-mas"${window.matchMedia('(min-width: 700px)').matches ? ' open' : ''}><summary>El código QR y el enlace</summary>
+      <div class="qr">${qr}</div>
+      <div class="enlace-texto">${esc(url)}</div>
+    </details>
+    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace; no se guarda en ningún servidor.</p>`;
+  document.body.appendChild(dialogo);
+  const volverA = document.activeElement;
+  let destino = null;
+  const alAtras = () => dialogo.open && dialogo.close();
+  dialogo.addEventListener('close', () => {
+    window.removeEventListener('popstate', alAtras);
+    dialogo.remove();
+    // Closed by its × or Escape: its entry in the history goes too. «Ver su ficha» goes there after it.
+    if (history.state?.jepysoHoja === 'enlace') {
+      if (destino) window.addEventListener('popstate', () => (location.hash = destino), { once: true });
+      history.back();
+    } else if (destino) location.hash = destino;
+    if (!destino) volverA?.focus?.({ preventScroll: true });
+  });
+  dialogo.showModal();
+  history.pushState({ jepysoHoja: 'enlace' }, '');
+  window.addEventListener('popstate', alAtras);
+  dialogo.querySelector('#hoja-titulo').focus({ preventScroll: true });
+  dialogo.addEventListener('click', async (ev) => {
+    // A tap outside the sheet, on the dimmed page, closes it as before.
+    if (ev.target === dialogo) {
+      const r = dialogo.getBoundingClientRect();
+      if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return dialogo.close();
+    }
+    if (ev.target.closest('[data-h="cerrar"]')) return dialogo.close();
+    const ficha = ev.target.closest('.en-ficha a');
+    if (ficha) {
+      ev.preventDefault();
+      destino = ficha.getAttribute('href');
+      return dialogo.close();
+    }
     if (ev.target.closest('[data-h="copiar"]')) {
       try {
         await navigator.clipboard.writeText(url);
@@ -1641,21 +1692,30 @@ async function vistaRutina(codigo) {
     const pausada = estado === 'serie' && figura?.enMarcha;
     if (pausada) figura.pausar();
     if (estado === 'cuenta') clearTimeout(sesion.temporizador);
-    const capa = document.createElement('div');
-    capa.className = 'capa';
-    capa.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="como-titulo"><h2 id="como-titulo">${esc(def.nombre)}</h2>
+    // A <dialog>: Escape and a tap outside close it as «Entendido» does, and the focus goes back where it was.
+    const volverA = document.activeElement;
+    const dialogo = document.createElement('dialog');
+    dialogo.className = 'hoja hoja-como';
+    dialogo.setAttribute('aria-labelledby', 'como-titulo');
+    dialogo.innerHTML = `<h2 id="como-titulo" tabindex="-1">${esc(def.nombre)}</h2>
       ${explicacion(def)}
       ${banda ? `<p class="con-banda">${muestraBanda(banda)}<span>Usa la ${esc(banda.nombre.toLowerCase())}.</span></p>` : ''}
       ${e.n ? `<p class="nota">${esc(e.n)}</p>` : ''}
-      <button type="button" class="boton">Entendido</button></div>`;
-    document.body.appendChild(capa);
-    capa.addEventListener('click', (ev) => {
-      if (ev.target === capa || ev.target.closest('.boton')) {
-        capa.remove();
-        if (pausada) figura.seguir();
-        else if (estado === 'cuenta') cuentaAtras(5);
-      }
+      <div class="hoja-como-pie"><button type="button" class="boton">Entendido</button></div>`;
+    document.body.appendChild(dialogo);
+    dialogo.addEventListener('close', () => {
+      dialogo.remove();
+      if (pausada) figura.seguir();
+      else if (estado === 'cuenta') cuentaAtras(5);
+      volverA?.focus?.({ preventScroll: true });
     });
+    dialogo.addEventListener('click', (ev) => {
+      const r = dialogo.getBoundingClientRect();
+      const fuera = ev.target === dialogo && (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom);
+      if (fuera || ev.target.closest('.boton')) dialogo.close();
+    });
+    dialogo.showModal();
+    dialogo.querySelector('#como-titulo').focus({ preventScroll: true });
   }
 
   app.onclick = async (ev) => {
