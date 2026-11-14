@@ -544,7 +544,9 @@ a.boton { text-decoration: none; }
 .campo-musculo > span { font-size: 13px; color: var(--tinta-suave); }
 .campo-musculo select { min-height: 44px; padding: 8px 12px; }
 .biblio-cuerpo { display: grid; gap: 12px; }
-.biblio-lista { list-style: none; margin: 0; padding: 0; display: grid; align-content: start; }
+/* Positioned, so the rows' hidden words («Añadir», for screen readers) stay inside it: otherwise they belonged to the
+   column and, with the list scrolling inside it, stretched the builder's page to 6,000 px of nothing at 1366. */
+.biblio-lista { position: relative; list-style: none; margin: 0; padding: 0; display: grid; align-content: start; }
 .biblio-grupo {
   display: flex; justify-content: space-between; gap: 12px; padding: 14px 0 6px; border-top: 1px solid var(--linea);
   font-size: 12px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave);
@@ -1243,4 +1245,43 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   .jugador.grupo .cuenta .grande { font-size: 12vw; }
   .jugador.grupo .centro .cuenta-atras { font-size: 24vw; }
   .jugador.grupo .anillo { width: 36vw; height: 36vw; }
+}
+
+/* ---------- Oksigenia's signature ----------
+   The line «Jepyso · un producto de Oksigenia» with its link, and «Accesibilidad», which opens Oksigenia's panel. Quiet
+   graphite under a hairline: it closes the page and never competes with what the page is for. */
+.firma { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 16px; border-top: 1px solid var(--linea); }
+.firma[hidden] { display: none; }
+.firma-linea { margin: 0; color: var(--tinta-suave); font-size: 14px; }
+.firma-linea a { color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.firma-acceso {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 2px; border: 0; background: transparent;
+  color: var(--tinta); font-size: 15px; font-weight: 600;
+}
+.firma-acceso svg { flex: none; width: 22px; height: 22px; }
+.firma-acceso span { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.firma-acceso:focus-visible, .firma-linea a:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+/* The person: the last thing in the list, after the reminder, with the room of a card around it. */
+.firma-persona { flex-direction: row-reverse; margin-top: 12px; padding: 10px 4px 0; }
+.saludo + .firma-persona { margin: 24px 20px 0; }
+@media (max-width: 599px) { .firma-persona { flex-direction: column; align-items: flex-start; gap: 0; } }
+/* The professional, on a phone: the end of the page, clear of the tabs (and of «Crear enlace» in the builder). The
+   room is the signature's own padding: the page's height is the screen's, so a margin under the last thing would
+   not scroll. The builder's own room for its bar comes to the signature. */
+@media (max-width: 699px) {
+  .firma-pro { padding: 10px 16px calc(18px + var(--pestanas, 0px)); }
+  body.en-armar .firma-pro { padding-bottom: calc(18px + var(--pestanas, 0px) + 76px + env(safe-area-inset-bottom)); }
+  body.pro.en-armar .armar-cuerpo { padding-bottom: 24px; }
+}
+/* A tablet, or wider: the foot of the rail, stacked under the tabs as one more of them, and the line under it. */
+@media (min-width: 700px) {
+  .firma-pro {
+    position: fixed; left: 0; bottom: 0; z-index: 16; width: var(--riel);
+    flex-direction: column; flex-wrap: nowrap; gap: 8px; padding: 8px 6px calc(14px + env(safe-area-inset-bottom));
+    background: var(--fondo); border-right: 1px solid var(--linea);
+  }
+  .firma-pro .firma-acceso { flex-direction: column; gap: 3px; width: 100%; min-height: 64px; justify-content: center; color: var(--tinta-suave); font-size: 12px; }
+  .firma-pro .firma-acceso span { text-decoration: none; }
+  .firma-pro .firma-acceso:hover { color: var(--tinta); }
+  .firma-pro .firma-linea { font-size: 11px; line-height: 1.35; text-align: center; }
 }
