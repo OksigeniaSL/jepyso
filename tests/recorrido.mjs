@@ -269,7 +269,8 @@ try {
     const deAntes = await ancho.inputValue('#de');
     const tarjetasAntes = await ancho.locator('.rutina-armada .ejercicio').count();
     await ancho.click('[data-h="otra"]');
-    await ancho.waitForTimeout(400);
+    // The sheet goes on its «close» event, a task later: with the figure drawn on the CPU that can take a while.
+    await ancho.waitForSelector('dialog.hoja-enlace', { state: 'detached', timeout: 10000 }).catch(() => {});
     comprobar((await ancho.locator('dialog.hoja-enlace').count()) === 0, `${tema}: «Hecho: empezar otra» no cierra la hoja`);
     comprobar((await ancho.inputValue('#para')) === '' && (await ancho.locator('.rutina-armada .ejercicio').count()) === 0 && (await ancho.inputValue('#de')) === deAntes,
       `${tema}: «Hecho: empezar otra» no deja la rutina limpia con «De» (${tarjetasAntes} tarjetas antes)`);
