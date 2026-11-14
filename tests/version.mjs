@@ -8,12 +8,23 @@ import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 
 const [app, puerto] = process.argv.slice(2);
+const base = `http://127.0.0.1:${puerto}/index.html`;
+// A server left on this port (a run that crashed) would answer with an old copy and the test would fail for nothing.
+if (await fetch(base).then(() => true, () => false)) {
+  console.error(`versión nueva: el puerto ${puerto} ya está ocupado; ciérralo y vuelve a correr`);
+  process.exit(1);
+}
 const copia = mkdtempSync(join(tmpdir(), 'jepyso-version-'));
 cpSync(app, copia, { recursive: true });
 const servidor = spawn('python3', ['-I', '-m', 'http.server', puerto, '--bind', '127.0.0.1', '--directory', copia], { stdio: 'ignore' });
-const base = `http://127.0.0.1:${puerto}/index.html`;
 const fallos = [];
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_BIN || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const limpiar = () => {
+  servidor.kill();
+  rmSync(copia, { recursive: true, force: true });
+};
+const browser = await chromium
+  .launch({ executablePath: process.env.CHROMIUM_BIN || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  .catch((e) => { limpiar(); throw e; });
 try {
   for (let i = 0; i < 40; i++) {
     try { if ((await fetch(base)).ok) break; } catch { /* not up yet */ }
@@ -45,8 +56,7 @@ try {
   if (errores.length) fallos.push(...errores.map((e) => `error: ${e}`));
 } finally {
   await browser.close();
-  servidor.kill();
-  rmSync(copia, { recursive: true, force: true });
+  limpiar();
 }
 if (fallos.length) {
   console.error(`versión nueva, ${fallos.length} fallos:\n  ${fallos.join('\n  ')}`);
