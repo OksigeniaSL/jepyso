@@ -394,7 +394,16 @@ try {
     await movil.waitForSelector('.anillo', { timeout: 20000 });
     await movil.screenshot({ path: `${salida}/descanso-movil-${tema}.png` });
     await movil.click('[data-r="ya"]');
-    await movil.waitForSelector('[data-r="continuar"]', { timeout: 20000 });
+    // Rating, one question at a time: the repetitions first, and «Hice menos» alone opens the − and +.
+    await movil.waitForSelector('[data-r="todas"]', { timeout: 20000 });
+    comprobar((await movil.locator('.jugador.valorando .escena').isVisible()) === false, `${tema}: al valorar sigue la figura en 3D`);
+    await movil.screenshot({ path: `${salida}/valorar-reps-movil-${tema}.png` });
+    await movil.click('[data-r="menos"]');
+    await movil.click('[data-accion="h-0-0"][data-delta="-1"]');
+    comprobar((await movil.textContent('.serie-fila output')) === '1' && !(await movil.locator('[data-accion="h-0-0"][data-delta="-1"]').isDisabled()), `${tema}: al bajar una serie, el «−» no sigue vivo`);
+    await movil.click('[data-r="reps-listo"]');
+    comprobar((await movil.getAttribute('[data-r="continuar"]', 'aria-disabled')) === 'true', `${tema}: se puede seguir sin marcar la molestia`);
+    comprobar(await movil.locator('[data-r="continuar"]').evaluate((b) => b.getBoundingClientRect().bottom <= innerHeight + 1), `${tema}: el botón de seguir se sale de la pantalla al valorar`);
     await movil.click('[data-r="molestia"][data-v="3"]');
     comprobar((await movil.textContent('.aviso-molestia')) === '', `${tema}: aviso con una molestia de 3 y tope 4`);
     await movil.screenshot({ path: `${salida}/valorar-movil-${tema}.png` });
@@ -408,7 +417,8 @@ try {
     await movil.click('[data-r="ya"]');
     await movil.waitForTimeout(1500);
     await movil.screenshot({ path: `${salida}/serie-izquierda-movil-${tema}.png` });
-    await movil.waitForSelector('[data-r="continuar"]', { timeout: 30000 });
+    await movil.waitForSelector('[data-r="todas"]', { timeout: 30000 });
+    await movil.click('[data-r="todas"]');
     await movil.click('[data-r="molestia"][data-v="6"]');
     comprobar((await movil.textContent('.aviso-molestia')).includes('Es más de 4'), `${tema}: sin aviso con una molestia de 6 y tope 4`);
     await movil.screenshot({ path: `${salida}/valorar-alta-movil-${tema}.png` });

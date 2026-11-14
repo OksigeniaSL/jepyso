@@ -344,6 +344,37 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 }
 .escala button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
 .escala-pie { display: flex; justify-content: space-between; font-size: 14px; color: var(--tinta-suave); }
+/* Rating an exercise: no 3D (its still beside «Hecho»), one question at a time, and the button to go on always in
+   sight at the foot of the sheet, dashed and saying what is missing until the discomfort is marked. */
+.jugador.valorando .escena { display: none; }
+.valorar { display: flex; flex-direction: column; gap: 18px; min-height: 100%; }
+.valorar-cabeza { display: flex; align-items: center; gap: 14px; }
+.valorar-cabeza .tarjeta-poster { flex: none; width: 96px; }
+.valorar-cabeza h3 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
+.valorar-cabeza p { margin: 2px 0 0; color: var(--tinta-suave); font-size: 16px; }
+.valorar-paso { display: grid; gap: 12px; }
+.pregunta { margin: 0; font-family: var(--letra-titulo); font-size: 21px; font-weight: 600; line-height: 1.25; color: var(--tinta); }
+.pregunta:focus { outline: none; }
+.dos-botones { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.dos-botones .boton { min-height: 64px; font-size: 18px; padding: 0 12px; }
+.series-lado { display: grid; }
+.series-lado h5 { margin: 10px 0 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave); }
+.serie-fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; border-bottom: 1px solid var(--linea); font-size: 18px; }
+.serie-fila .paso { height: 50px; }
+.serie-fila .paso button { width: 54px; height: 48px; font-size: 24px; }
+.serie-fila .paso button:disabled { opacity: 0.3; }
+.serie-fila output { min-width: 42px; font-size: 20px; }
+.valorar-hecho { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--linea); color: var(--tinta-suave); font-size: 16px; }
+.enlace { flex: none; min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: var(--tinta); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.valorar .escala button { height: 52px; font-size: 19px; }
+.valorar-pie {
+  position: sticky; bottom: calc(-18px - env(safe-area-inset-bottom)); display: grid; gap: 2px;
+  margin: auto -20px calc(-18px - env(safe-area-inset-bottom)); padding: 12px 20px calc(18px + env(safe-area-inset-bottom));
+  background: var(--fondo); border-top: 1px solid var(--linea);
+}
+.valorar-pie .boton { width: 100%; min-height: 56px; font-size: 18px; }
+.valorar-pie .boton[aria-disabled="true"] { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); border: 0; outline: 1px dashed var(--linea); outline-offset: -5px; cursor: default; }
+.valorar-pie .boton.fantasma { min-height: 44px; font-size: 16px; }
 .series-hechas { display: flex; flex-wrap: wrap; gap: 10px; }
 .series-hechas .ajuste { justify-items: start; }
 

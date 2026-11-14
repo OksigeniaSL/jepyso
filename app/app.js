@@ -1318,6 +1318,7 @@ async function vistaRutina(codigo) {
 
   async function prepararSerie() {
     const item = sesion.item;
+    app.querySelector('.jugador')?.classList.remove('valorando');
     const { e, lado } = actual();
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
@@ -1496,27 +1497,49 @@ async function vistaRutina(codigo) {
     };
   }
 
+  // Rating an exercise, one question at a time and without the 3D (its still beside the word «Hecho»): first «¿Hiciste
+  // todas las repeticiones?», where «Hice menos» alone opens the − and + of each set; then the discomfort, in two rows
+  // of big buttons. The button to go on is always in sight, and says what is missing until the discomfort is marked.
   function valorar() {
     sesion.estado = 'valorar';
+    sesion.paso ||= 'reps';
     clearInterval(sesion.reloj);
     figura.parar();
+    app.querySelector('.jugador')?.classList.add('valorando');
     const { e } = actual();
+    app.querySelector('.j-sub').textContent = `Ejercicio ${ejercicios.indexOf(e) + 1} de ${ejercicios.length}`;
     const def = EJERCICIOS[e.i];
+    const banda = bandaDe(def, e.b);
     const items = cola.map((c, i) => ({ c, i })).filter(({ c }) => c.e === e);
-    const mando = app.querySelector('.j-mando');
-    mando.innerHTML = `<div class="centro"><h3>${esc(def.nombre)}, hecho</h3><p>Corrige si hiciste menos repeticiones.</p></div>
-      ${items
-        .map(
-          ({ c, i }) => `<div class="series-hechas">${def.unLado ? `<span class="chip">${LADOS[c.lado]}</span>` : ''}${sesion.hechas[i]
-            .map((v, s) => `<div class="ajuste"><span>Serie ${s + 1}</span>${paso(`h-${i}-${s}`, v, `Serie ${s + 1}`, 0, 50)}</div>`)
-            .join('')}</div>`,
-        )
-        .join('')}
-      <div class="ajuste"><span>¿Cuánta molestia has notado? (0 es nada; 10, mucha)</span>
-        <div class="escala">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="molestia" data-v="${n}" aria-pressed="false" class="num">${n}</button>`).join('')}</div>
-        <p class="aviso-molestia" aria-live="polite"></p>
-      </div>
-      <button type="button" class="boton" data-r="continuar">${sesion.item + 1 < cola.length ? 'Siguiente ejercicio' : 'Terminar'}</button>`;
+    const dosLados = items.length > 1;
+    const ultimo = sesion.item + 1 >= cola.length;
+    const seguir = ultimo ? 'Terminar' : 'Siguiente ejercicio';
+    const lado = (c) => `<img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${c.lado === 'izq' ? ' class="espejo"' : ''}>`;
+    const cabeza = `<div class="valorar-cabeza"><span class="tarjeta-poster">${lado(items[0].c)}</span>
+      <div><h3>Hecho</h3><p class="num">${e.s} ${e.s === 1 ? 'serie' : 'series'}${dosLados ? ' de cada lado' : ''} · ${e.r} repeticiones</p></div></div>`;
+    let cuerpo = '';
+    let pie = '';
+    if (sesion.paso === 'reps') {
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-reps"><h4 class="pregunta" id="v-reps" tabindex="-1">¿Hiciste todas las repeticiones?</h4>
+        <div class="dos-botones"><button type="button" class="boton" data-r="todas">Sí, todas</button><button type="button" class="boton secundario" data-r="menos">Hice menos</button></div></section>`;
+    } else if (sesion.paso === 'menos') {
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">¿Cuántas hiciste en cada serie?</h4>
+        ${items.map(({ c, i }) => `<div class="series-lado">${dosLados ? `<h5>${LADOS[c.lado]}</h5>` : ''}${sesion.hechas[i]
+          .map((v, n) => `<div class="serie-fila"><span>Serie ${n + 1}</span>${paso(`h-${i}-${n}`, v, `${dosLados ? LADOS[c.lado] + ', s' : 'S'}erie ${n + 1}`, 0, 50)}</div>`)
+          .join('')}</div>`).join('')}</section>`;
+      pie = `<button type="button" class="boton" data-r="reps-listo">Listo</button>`;
+    } else {
+      const todas = items.every(({ i }) => sesion.hechas[i].every((v) => v >= e.r));
+      const marcada = Number.isInteger(sesion.molestia[e.i]);
+      cuerpo = `<p class="valorar-hecho">${todas ? 'Todas las repeticiones' : 'Hiciste menos repeticiones'} <button type="button" class="enlace" data-r="menos">Cambiar</button></p>
+        <section class="valorar-paso" aria-labelledby="v-molestia"><h4 class="pregunta" id="v-molestia" tabindex="-1">¿Cuánta molestia notaste?</h4>
+        <div class="escala" role="group" aria-labelledby="v-molestia">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="molestia" data-v="${n}" aria-pressed="${sesion.molestia[e.i] === n}" class="num">${n}</button>`).join('')}</div>
+        <div class="escala-pie"><span>0 · nada</span><span>10 · mucha</span></div>
+        <p class="aviso-molestia" aria-live="polite"></p></section>`;
+      pie = `<button type="button" class="boton" data-r="continuar"${marcada ? '' : ' aria-disabled="true"'} data-seguir="${seguir}">${marcada ? seguir : 'Marca tu molestia para seguir'}</button>
+        <button type="button" class="boton fantasma" data-r="sin-molestia">Prefiero no decirlo</button>`;
+    }
+    app.querySelector('.j-mando').innerHTML = `<div class="valorar">${cabeza}${cuerpo}${pie ? `<div class="valorar-pie">${pie}</div>` : ''}</div>`;
   }
 
   // parcial: the person left in the middle; what was done is kept and can be sent like any other day.
@@ -1635,10 +1658,22 @@ async function vistaRutina(codigo) {
       figura.pausar();
       return siguiente();
     }
+    if (a === 'todas' || a === 'menos' || a === 'reps-listo') {
+      if (a === 'todas') for (const i of cola.keys()) if (cola[i].e === actual().e) sesion.hechas[i].fill(actual().e.r);
+      sesion.paso = a === 'menos' ? 'menos' : 'molestia';
+      valorar();
+      // The new question takes the focus, so a screen reader reads it and the keyboard goes on from there.
+      return app.querySelector('.valorar .pregunta')?.focus({ preventScroll: true });
+    }
     if (a === 'molestia') {
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
       const v = Number(el.dataset.v);
       sesion.molestia[actual().e.i] = v;
+      const seguir = app.querySelector('[data-r="continuar"]');
+      if (seguir) {
+        seguir.removeAttribute('aria-disabled');
+        seguir.textContent = seguir.dataset.seguir;
+      }
       const aviso = app.querySelector('.aviso-molestia');
       if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: saldrá marcado en el resumen que le mandes a ${r.de || 'quien te dio la rutina'}. La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.` : '';
       return;
@@ -1652,10 +1687,19 @@ async function vistaRutina(codigo) {
       return app.querySelector('.manana')?.remove();
     }
     if (a === 'reintentar') return prepararSerie();
+    if (a === 'sin-molestia') {
+      delete sesion.molestia[actual().e.i];
+      const seguir = app.querySelector('[data-r="continuar"]');
+      seguir?.removeAttribute('aria-disabled');
+      return seguir?.click();
+    }
     if (a === 'continuar') {
+      // Not before the discomfort is marked (or «Prefiero no decirlo»): the button says so.
+      if (el.getAttribute('aria-disabled') === 'true') return app.querySelector('#v-molestia')?.focus();
       // One tap is one exercise: a second tap while the next figure loads must not skip one.
       if (el.disabled) return;
       el.disabled = true;
+      sesion.paso = null;
       if (sesion.item + 1 < cola.length) {
         sesion.item++;
         sesion.serie = 0;
@@ -1668,7 +1712,11 @@ async function vistaRutina(codigo) {
       const [, i, s] = h.map(Number);
       const v = Math.max(0, Math.min(50, sesion.hechas[i][s] + Number(el.dataset.delta)));
       sesion.hechas[i][s] = v;
-      el.parentElement.querySelector('output').textContent = v;
+      // Drawn again, so that «−» comes back to life after rising from 0.
+      const grupo = el.closest('.paso');
+      const boton = Number(el.dataset.delta) > 0 ? 1 : 0;
+      grupo.outerHTML = paso(a, v, grupo.getAttribute('aria-label'), 0, 50);
+      app.querySelectorAll(`[data-accion="${a}"]`)[boton]?.focus({ preventScroll: true });
     }
   };
 
