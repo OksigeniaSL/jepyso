@@ -5,6 +5,7 @@
 // A person: { id, nombre, notas, creada, m (their acceptable discomfort), rutinas: [{ f, codigo, e: [exercise ids] }],
 // dias: [sessions as the summary brings them: { f, h, e: [...], a }] }.
 import { almacen, TOPE_MOLESTIA, pasaDelTope, diaLocal } from './datos.js';
+import { limpiarPersonas, limpiarBorradas } from './entrada.js';
 
 const CLAVE = 'personas';
 
@@ -18,14 +19,16 @@ export const limite = () => (esDePago() ? Infinity : LIMITE_GRATIS);
 export const caben = (lista) => lista.length < limite();
 
 // What was deleted, with its date, so a cloud copy from another device does not bring it back (see sincronia.js).
-export const leerBorradas = () => ({ personas: {}, plantillas: {}, ...almacen.leer('borradas', {}) });
+export const leerBorradas = () => limpiarBorradas(almacen.leer('borradas', {}));
 export function apuntarBorrada(tipo, clave) {
   const b = leerBorradas();
-  b[tipo] = { ...(b[tipo] || {}), [clave]: new Date().toISOString() };
-  almacen.guardar('borradas', b);
+  b[tipo][clave] = new Date().toISOString();
+  return almacen.guardar('borradas', b);
 }
 
-export const leerPersonas = () => almacen.leer(CLAVE, []);
+// Read through entrada.js like anything from outside: a record broken by an older version or by hand must not stop
+// the list from opening. Saving says whether it fit (a full browser storage does not).
+export const leerPersonas = () => limpiarPersonas(almacen.leer(CLAVE, []));
 export const guardarPersonas = (lista) => almacen.guardar(CLAVE, lista);
 
 export function nuevoId() {
@@ -39,8 +42,9 @@ const normal = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/
 // Same name, ignoring case, accents and spaces at the ends. Only an exact match: two «María» stay two people.
 export const buscarPorNombre = (lista, nombre) => lista.filter((p) => normal(p.nombre) === normal(nombre));
 
+// «cambiada» from the start: a file made again after one was deleted on another device must not be taken for it.
 export function crearPersona(lista, nombre, id = nuevoId()) {
-  const p = { id, nombre: String(nombre).trim(), notas: '', creada: diaLocal(), rutinas: [], dias: [] };
+  const p = { id, nombre: String(nombre).trim(), notas: '', creada: diaLocal(), cambiada: new Date().toISOString(), rutinas: [], dias: [] };
   lista.push(p);
   return p;
 }
@@ -76,7 +80,7 @@ export function apuntarResumen(p, resumen, recibido = true) {
     } else if (ya.a === undefined && typeof d.a === 'number') ya.a = d.a;
   }
   p.dias.sort((x, y) => (x.f + (x.h || '')).localeCompare(y.f + (y.h || '')));
-  if (Number.isInteger(resumen.m)) p.m = resumen.m;
+  // The acceptable discomfort is the file's own, set with each routine sent; a summary does not change it.
   if (recibido) p.ultimoResumen = diaLocal();
   return nuevos;
 }
@@ -127,8 +131,7 @@ export function cargarCopia(lista, datos) {
   if (datos?.app !== 'jepyso' || datos?.tipo !== 'personas' || !Array.isArray(datos.personas)) throw new Error('No es una copia de Jepyso');
   let nuevas = 0;
   let fuera = 0;
-  for (const q of datos.personas) {
-    if (!q?.id || !q?.nombre) continue;
+  for (const q of limpiarPersonas(datos.personas)) {
     let p = lista.find((x) => x.id === q.id);
     if (!p && !caben(lista)) {
       fuera++;
@@ -140,7 +143,7 @@ export function cargarCopia(lista, datos) {
       nuevas++;
     }
     for (const r of q.rutinas || []) if (!p.rutinas.some((x) => x.codigo === r.codigo)) p.rutinas.push(r);
-    apuntarResumen(p, { dias: q.dias || [], m: q.m }, false);
+    apuntarResumen(p, { dias: q.dias }, false);
     if (!p.notas && q.notas) p.notas = q.notas;
     p.ultimoResumen = [p.ultimoResumen, q.ultimoResumen].filter(Boolean).sort().at(-1);
   }

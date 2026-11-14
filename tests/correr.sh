@@ -13,6 +13,8 @@ APP=${APP:-$HERE/../app}
 PORT=${PORT:-8772}
 mkdir -p "$OUT"
 node "$HERE/archivos-sw.mjs" "$APP"
+node "$HERE/csp.mjs"
+node "$HERE/entrada.mjs" "$APP"
 node "$HERE/catalogo.mjs" "$APP"
 node "$HERE/personas.mjs" "$APP"
 node "$HERE/sincronia.mjs" "$APP"

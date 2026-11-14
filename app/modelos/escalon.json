@@ -8,7 +8,7 @@
    "fase": "subir",
    "inicio": 0.0,
    "fin": 3.0,
-   "texto": "Sube con la derecha"
+   "texto": "Sube con la pierna que trabaja"
   },
   {
    "fase": "mantener",
@@ -20,7 +20,7 @@
    "fase": "bajar",
    "inicio": 4.0,
    "fin": 7.0,
-   "texto": "Baja con la izquierda primero"
+   "texto": "Baja primero con la otra"
   },
   {
    "fase": "reposo",

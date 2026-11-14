@@ -34,7 +34,7 @@ export const EJERCICIOS = {
     zonas: ['rodilla', 'cadera'],
     musculos: { principales: ['cuadriceps', 'gluteo_mayor'], secundarios: ['isquiotibiales', 'gemelos', 'erectores'] },
     porDefecto: { series: 3, reps: 8, tempo: [2, 1, 3] },
-    partida: 'Sentado en la parte delantera de una silla firme, con los pies apoyados a la anchura de los hombros y los brazos cruzados sobre el pecho.',
+    partida: 'Sentado en la parte delantera de una silla firme, sin ruedas y apoyada en la pared, con los pies apoyados a la anchura de los hombros y los brazos cruzados sobre el pecho.',
     pasos: [
       'Inclina el tronco hacia delante.',
       'Ponte de pie sin ayudarte de las manos, con la espalda recta y la cabeza alta.',
@@ -240,12 +240,12 @@ export const EJERCICIOS = {
   talones: {
     nombre: 'Elevación de talones',
     posicion: 'De pie',
-    material: 'Silla para apoyarse',
+    material: 'Apoyo firme',
     unLado: false,
     zonas: ['tobillo', 'rodilla'],
     musculos: { principales: ['gemelos'], secundarios: [] },
     porDefecto: { series: 2, reps: 10, tempo: [2, 1, 2] },
-    partida: 'De pie, de frente al respaldo de una silla y con las dos manos en él. Los pies, a la anchura de la cadera.',
+    partida: 'De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las dos manos en él. Los pies, a la anchura de la cadera.',
     pasos: ['Sube los talones todo lo que puedas, hasta quedarte de puntillas.', 'Mantén arriba un momento.', 'Baja despacio.'],
     notar: 'En la pantorrilla.',
     error: 'Doblar las rodillas para ayudarte. Se quedan estiradas.',
@@ -255,12 +255,12 @@ export const EJERCICIOS = {
   curl_isquios: {
     nombre: 'Curl de isquios de pie',
     posicion: 'De pie',
-    material: 'Silla para apoyarse',
+    material: 'Apoyo firme',
     unLado: true,
     zonas: ['rodilla'],
     musculos: { principales: ['isquiotibiales'], secundarios: [] },
     porDefecto: { series: 3, reps: 10, tempo: [2, 5, 2] },
-    partida: 'De pie y erguido, de frente al respaldo de una silla, con las dos manos en él y las rodillas juntas.',
+    partida: 'De pie y erguido, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las dos manos en él y las rodillas juntas.',
     pasos: ['Dobla la rodilla y sube el talón hacia atrás, hasta donde puedas sin dolor.', 'Mantén arriba, con el muslo vertical.', 'Baja despacio.'],
     notar: 'En la parte de atrás del muslo.',
     error: 'Adelantar la rodilla. El muslo se queda vertical y las rodillas, juntas.',
@@ -269,12 +269,12 @@ export const EJERCICIOS = {
   sentadilla: {
     nombre: 'Media sentadilla',
     posicion: 'De pie',
-    material: 'Silla para apoyarse',
+    material: 'Apoyo firme',
     unLado: false,
     zonas: ['rodilla', 'cadera'],
     musculos: { principales: ['cuadriceps', 'gluteo_mayor'], secundarios: ['isquiotibiales'] },
     porDefecto: { series: 3, reps: 10, tempo: [2, 5, 2] },
-    partida: 'De pie, de frente al respaldo de una silla con las manos en él, y los pies a la anchura de los hombros.',
+    partida: 'De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las manos en él, y los pies a la anchura de los hombros.',
     pasos: [
       'Con el pecho alto, baja la cadera un palmo, como si fueras a sentarte.',
       'Mantén abajo, con el peso en los talones.',
@@ -287,12 +287,12 @@ export const EJERCICIOS = {
   abduccion_pie: {
     nombre: 'Abducción de cadera de pie',
     posicion: 'De pie',
-    material: 'Silla para apoyarse',
+    material: 'Apoyo firme',
     unLado: true,
     zonas: ['cadera'],
     musculos: { principales: ['gluteo_medio'], secundarios: [] },
     porDefecto: { series: 1, reps: 10, tempo: [2, 1, 2] },
-    partida: 'De pie y de lado a una silla, con la mano más cercana en el respaldo y la otra en la cadera.',
+    partida: 'De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él y la otra en la cadera.',
     pasos: ['Con la pierna estirada, llévala hacia el lado todo lo que puedas.', 'Vuelve despacio.'],
     error: 'Inclinar el tronco hacia el otro lado. El tronco se queda erguido.',
     fuentes: ['Sandwell and West Birmingham (NHS), prótesis de cadera'],
@@ -300,12 +300,12 @@ export const EJERCICIOS = {
   equilibrio: {
     nombre: 'Equilibrio a una pierna',
     posicion: 'De pie',
-    material: 'Silla o encimera',
+    material: 'Apoyo firme',
     unLado: true,
     zonas: ['tobillo', 'rodilla'],
     musculos: { principales: ['gemelos', 'tibial_anterior'], secundarios: [] },
     porDefecto: { series: 1, reps: 3, tempo: [1, 30, 1] },
-    partida: 'De pie junto a una silla o una encimera, con las dos manos apoyadas. Mejor con calzado cómodo.',
+    partida: 'De pie junto a una encimera o una mesa pesada, con las dos manos apoyadas. Mejor con calzado cómodo.',
     pasos: [
       'Levanta un pie y quédate sobre la otra pierna, con la rodilla estirada.',
       'Suelta las manos del apoyo y vuelve a ponerlas cuando lo necesites.',
@@ -525,6 +525,7 @@ export const EJERCICIOS = {
   },
   cuello_giro: {
     nombre: 'Rotación de cuello',
+    cuidado: 'Para si te mareas o se te nubla la vista.',
     otrosNombres: ['mirar por encima del hombro', 'rotación cervical'],
     posicion: 'Sentado',
     material: 'Silla',
@@ -543,6 +544,7 @@ export const EJERCICIOS = {
   },
   cuello_lado: {
     nombre: 'Inclinación de cuello',
+    cuidado: 'Para si te mareas o se te nubla la vista.',
     otrosNombres: ['oreja al hombro', 'inclinación cervical'],
     posicion: 'Sentado',
     material: 'Silla',
@@ -791,7 +793,7 @@ export const EJERCICIOS = {
     ],
     notar: 'En la pantorrilla de la pierna de atrás, hasta el talón.',
     error: 'Levantar el talón de atrás o arquear la espalda.',
-    ayuda: 'Si no tienes pared a mano, apóyate en el respaldo de una silla.',
+    ayuda: 'Si no tienes pared a mano, apóyate en una encimera o una mesa pesada.',
     fuentes: ['AAOS, programas de rodilla y de tobillo y pie (ejercicio 1)', 'Calderdale and Huddersfield (NHS), prótesis de rodilla'],
   },
   flexion_pared: {
@@ -835,6 +837,7 @@ export const EJERCICIOS = {
   },
   extension_lumbar: {
     nombre: 'Extensión boca abajo con los brazos',
+    cuidado: 'Para si el dolor baja hacia la pierna o notas hormigueo.',
     otrosNombres: ['McKenzie', 'press-up', 'cobra suave'],
     posicion: 'Boca abajo',
     material: 'Esterilla',
@@ -894,6 +897,7 @@ export const EJERCICIOS = {
   },
   retraccion: {
     nombre: 'Meter el mentón',
+    cuidado: 'Para si te mareas o se te nubla la vista.',
     otrosNombres: ['retracción cervical', 'chin tuck', 'doble papada'],
     posicion: 'Sentado',
     material: 'Silla',
@@ -913,6 +917,7 @@ export const EJERCICIOS = {
   },
   iso_cuello: {
     nombre: 'Isométricos de cuello',
+    cuidado: 'Para si te mareas o se te nubla la vista.',
     otrosNombres: ['isométricos cervicales', 'mano contra la cabeza'],
     posicion: 'Sentado',
     material: 'Silla',
@@ -932,6 +937,7 @@ export const EJERCICIOS = {
   },
   trapecio: {
     nombre: 'Estiramiento del trapecio',
+    cuidado: 'Para si te mareas o se te nubla la vista.',
     otrosNombres: ['estiramiento de trapecio superior', 'estiramiento del cuello'],
     posicion: 'Sentado',
     material: 'Silla',
@@ -1077,12 +1083,12 @@ export const EJERCICIOS = {
     nombre: 'Estiramiento de cuádriceps de pie',
     otrosNombres: ['estiramiento de cuádriceps', 'talón al glúteo'],
     posicion: 'De pie',
-    material: 'Silla para apoyarse',
+    material: 'Apoyo firme',
     unLado: true,
     zonas: ['rodilla', 'cadera'],
     musculos: { principales: ['cuadriceps'], secundarios: [] },
     porDefecto: { series: 1, reps: 3, tempo: [3, 30, 3] },
-    partida: 'De pie, con una mano en el respaldo de una silla o en la pared para mantener el equilibrio.',
+    partida: 'De pie, con una mano en una encimera, en una mesa pesada o en la pared para mantener el equilibrio.',
     pasos: [
       'Dobla la rodilla y coge el tobillo con la mano del mismo lado.',
       'Acerca el talón al glúteo con suavidad, con las rodillas juntas.',
@@ -1237,13 +1243,20 @@ function deBase64url(texto) {
   return bytes;
 }
 
+// A routine of a few exercises goes uncompressed (j.): any phone opens it, also those without DecompressionStream
+// (iOS before 16.4). Longer ones go compressed, so the link and its QR stay short.
+const SIN_COMPRIMIR = 1200;
 export async function codificar(obj) {
   const json = new TextEncoder().encode(JSON.stringify(obj));
-  if ('CompressionStream' in window) {
+  const plano = 'j.' + aBase64url(json);
+  if (plano.length <= SIN_COMPRIMIR || !('CompressionStream' in window)) return plano;
+  try {
     const flujo = new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'));
     return 'd.' + aBase64url(new Uint8Array(await new Response(flujo).arrayBuffer()));
+  } catch {
+    // A browser with CompressionStream but without deflate-raw (Chrome 80 to 102).
+    return plano;
   }
-  return 'j.' + aBase64url(json);
 }
 
 export async function decodificar(codigo) {
@@ -1268,7 +1281,8 @@ export function minutos(segundos) {
   return m === 1 ? 'un minuto' : `unos ${m} minutos`;
 }
 
-// Small persistent store; private windows or blocked storage must not break the app.
+// Small persistent store; private windows or blocked storage must not break the app. Saving returns whether it
+// worked: a full storage throws, and whoever said «Guardado» has to say otherwise.
 export const almacen = {
   leer(clave, porDefecto) {
     try {
@@ -1281,8 +1295,12 @@ export const almacen = {
   guardar(clave, valor) {
     try {
       localStorage.setItem(clave, JSON.stringify(valor));
+      return true;
     } catch {
-      // Storage unavailable: the routine still works, only the history is lost.
+      // Storage unavailable or full: the routine still works; the caller tells what was not kept.
+      return false;
     }
   },
 };
+
+export const SIN_SITIO = 'No se ha podido guardar: este aparato no tiene más sitio para Jepyso. Guarda una copia en un archivo (en Personas) y borra lo que ya no uses.';

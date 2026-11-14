@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <!-- The content policy travels with the page, so every copy of the app carries it. The hash is the import map's
+       (tests/csp.mjs checks it); a copy without the import map (tools/construir.sh) needs nothing more. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Fr0fF0sjU47PxvRygowzV9fmZP537864zpBdG8tWPmc=' https://accounts.google.com/gsi/client; style-src 'self' https://accounts.google.com/gsi/style; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#e4e6e3" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121517" media="(prefers-color-scheme: dark)">
@@ -15,7 +18,7 @@
   <script type="importmap">
     { "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
   </script>
-  <script src="vendor/qrcode/qrcode.js"></script>
+  <script src="vendor/qrcode/qrcode.js" defer></script>
   <script src="tema.js"></script>
 </head>
 <body>

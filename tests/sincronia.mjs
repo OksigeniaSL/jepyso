@@ -56,4 +56,16 @@ const paquete = empaquetar(r);
 assert.ok(esDatos(paquete) && paquete.borradas.personas.luis, 'el paquete no se reconoce o pierde lo borrado');
 assert.ok(!esDatos({ app: 'jepyso', tipo: 'personas', personas: [] }), 'una copia de personas pasa por datos de la nube');
 
+// A file deleted on one device stays deleted for the others, but one made again later with the same id stays.
+{
+  const borradas = { personas: { rosa: '2026-11-10T10:00:00.000Z' }, plantillas: {} };
+  const vieja = fusionar({ personas: [persona('rosa')], borradas }, { personas: [] });
+  assert.equal(vieja.personas.length, 0, 'una ficha borrada vuelve desde otro aparato');
+  const rehecha = fusionar({ personas: [persona('rosa', { cambiada: '2026-11-12T09:00:00.000Z' })], borradas }, { personas: [] });
+  assert.equal(rehecha.personas.length, 1, 'una ficha hecha otra vez después de borrarla desaparece al sincronizar');
+  const raro = fusionar({ personas: [persona('__proto__'), { id: 7 }], plantillas: [{ nombre: 'constructor' }] }, JSON.parse('{"personas":[],"borradas":{"plantillas":{"__proto__":"2026-11-10T00:00:00Z"}}}'));
+  assert.equal(raro.personas.length + raro.plantillas.length, 0, 'claves de objeto pasan como fichas o plantillas');
+  assert.equal({}.polluted, undefined);
+}
+
 console.log('sincronía: dos aparatos se juntan sin perder ni resucitar nada');

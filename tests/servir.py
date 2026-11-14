@@ -6,9 +6,11 @@ import functools
 import http.server
 import sys
 
-CSP = ("default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self'; img-src 'self' data: blob:; "
-       "media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'; form-action 'none'; "
-       "frame-ancestors 'none'; base-uri 'none'")
+CSP = ("default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; "
+       "style-src 'self' https://accounts.google.com/gsi/style; img-src 'self' data: blob:; "
+       "media-src 'self' blob:; worker-src 'self' blob:; "
+       "connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/; "
+       "frame-src https://accounts.google.com/gsi/; form-action 'none'; frame-ancestors 'none'; base-uri 'none'")
 
 
 class Manejador(http.server.SimpleHTTPRequestHandler):

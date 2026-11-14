@@ -2,9 +2,9 @@
 // back a summary link. No server: everything travels inside the links.
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
-  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe,
+  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
 } from './datos.js';
-import { Figura } from './figura.js';
+import { limpiarRutina, limpiarResumen, limpiarPlantillas } from './entrada.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, leerBorradas, apuntarBorrada,
@@ -12,7 +12,6 @@ import {
 import { conectar, sincronizar } from './drive.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
-import { pintarRecorrido } from './recorrido.js';
 
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
@@ -70,7 +69,7 @@ function svgTempo(tempo, { ancho = 240, alto = 46, etiquetas = false, punto = fa
         [p.x(s + m / 2), m ? `${m} s` : ''],
         [p.x(s + m + b / 2), `${b} s`],
       ]
-        .map(([x, t]) => (t ? `<text x="${x}" y="${alto + 14}" text-anchor="middle">${t}</text>` : ''))
+        .map(([x, t]) => (t ? `<text x="${x}" y="${alto + 14}" text-anchor="middle">${esc(t)}</text>` : ''))
         .join('')
     : '';
   const datos = esc(JSON.stringify({ tempo, alto, etiquetas, punto }));
@@ -115,7 +114,12 @@ function medirTempos(raiz = document) {
 new MutationObserver(() => medirTempos()).observe(document.body, { childList: true, subtree: true });
 window.addEventListener('resize', () => medirTempos());
 
-const textoTempo = ([s, m, b]) => (m ? `Sube en ${s} s, mantén ${m} s, baja en ${b} s` : `Sube en ${s} s, baja en ${b} s`);
+// Templates come from this browser, a copy or the cloud: read through entrada.js like any outside data.
+const leerPlantillas = () => limpiarPlantillas(almacen.leer('plantillas', []));
+
+// Neutral words for the three parts: the first is not always «up» (a squat goes down first). In the player, the exercise
+// names its own phases (figura.textos).
+const textoTempo = ([s, m, b]) => (m ? `Ida en ${s} s, mantén ${m} s, vuelta en ${b} s` : `Ida en ${s} s, vuelta en ${b} s`);
 
 // ---------- Figure ----------
 async function cargarManifiesto(c = 'a') {
@@ -125,8 +129,20 @@ async function cargarManifiesto(c = 'a') {
 }
 
 // One figure for the whole app; it moves between containers and swaps body when the routine asks for the other one.
+// The figure and three.js (850 KB) load when a figure is first needed: the routine's list and the builder show before
+// that, instead of a blank page for half a minute on a slow connection. recorrido.js comes with them.
+let moduloFigura = null;
+let pintarRecorrido = () => {};
+async function cargarFigura() {
+  moduloFigura ??= Promise.all([import('./figura.js'), import('./recorrido.js')]).then(([f, rec]) => {
+    pintarRecorrido = rec.pintarRecorrido;
+    return f;
+  });
+  return moduloFigura;
+}
+
 async function figuraEn(contenedor, c = 'a') {
-  const manifiesto = await cargarManifiesto(c);
+  const [{ Figura }, manifiesto] = await Promise.all([cargarFigura(), cargarManifiesto(c)]);
   if (!figura) figura = new Figura(contenedor, manifiesto, { calidad });
   else await figura.cambiarCuerpo(manifiesto);
   if (figura.renderer.domElement.parentElement !== contenedor) figura.mover(contenedor);
@@ -242,7 +258,7 @@ function ponerAlDia(b) {
 function paso(accion, valor, etiqueta, min, max) {
   return `<div class="paso" role="group" aria-label="${esc(etiqueta)}">
     <button type="button" data-accion="${accion}" data-delta="-1" aria-label="Menos" ${valor <= min ? 'disabled' : ''}>−</button>
-    <output class="num">${valor}</output>
+    <output class="num">${esc(valor)}</output>
     <button type="button" data-accion="${accion}" data-delta="1" aria-label="Más" ${valor >= max ? 'disabled' : ''}>+</button>
   </div>`;
 }
@@ -263,8 +279,14 @@ function explicacion(def) {
     ${def.para ? `<p><strong>Para qué.</strong> ${esc(def.para)}</p>` : ''}
     ${def.ayuda ? `<p><strong>Más fácil.</strong> ${esc(def.ayuda)}</p>` : ''}
     ${def.masDificil ? `<p><strong>Para más.</strong> ${esc(def.masDificil)}</p>` : ''}
+    ${def.cuidado ? `<p class="cuidado"><strong>Cuidado.</strong> ${esc(def.cuidado)}</p>` : ''}
+    <p class="parar">${PARAR}</p>
   </div>`;
 }
+
+// When to stop, the same for every exercise (the guides behind the library and the Otago programme): it completes the
+// pain-monitoring model, which only covers the expected discomfort.
+const PARAR = 'Para y avisa a quien te dio la rutina si notas un dolor fuerte o distinto del de siempre, mareo, dolor en el pecho, falta de aire, u hormigueo o dolor que baja por un brazo o una pierna.';
 
 // The colour of the band, as a small strip of it beside its name.
 const muestraBanda = (banda) => `<i class="muestra-banda banda-${banda.clave}" aria-hidden="true"></i>`;
@@ -307,17 +329,17 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
     <div class="ejercicio-ajustes">
       <div class="mini-figura"></div>
       <div class="fila">
-        <label class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</label>
-        <label class="ajuste"><span>Repeticiones</span>${paso('reps', e.reps, 'Repeticiones', 1, 30)}</label>
+        <div class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</div>
+        <div class="ajuste"><span>Repeticiones</span>${paso('reps', e.reps, 'Repeticiones', 1, 30)}</div>
         ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
       <div class="ajuste">
         <span>Ritmo de cada repetición</span>
         <div class="ritmo">
-          <div class="ritmo-mini"><span>Sube</span>${paso('t0', s, 'Segundos subiendo', 1, 6)}</div>
+          <div class="ritmo-mini"><span>Ida</span>${paso('t0', s, 'Segundos de ida', 1, 6)}</div>
           <div class="ritmo-mini"><span>Mantén</span>${paso('t1', m, 'Segundos manteniendo', 0, 30)}</div>
-          <div class="ritmo-mini"><span>Baja</span>${paso('t2', b, 'Segundos bajando', 1, 6)}</div>
+          <div class="ritmo-mini"><span>Vuelta</span>${paso('t2', b, 'Segundos de vuelta', 1, 6)}</div>
           ${svgTempo(e.tempo, { ancho: 200, alto: 44 })}
         </div>
       </div>
@@ -496,7 +518,7 @@ function seccionBiblioteca(b) {
 // Templates live in this browser. A template keeps the exercises, their settings and the settings for the whole
 // routine; never who it was for.
 function seccionPlantillas(b) {
-  const lista = almacen.leer('plantillas', []);
+  const lista = leerPlantillas();
   return `<section class="plantillas" aria-labelledby="plantillas-titulo">
     <div class="plantillas-cabeza">
       <h2 id="plantillas-titulo">Plantillas</h2>
@@ -776,7 +798,7 @@ function vistaArmar() {
   }
 
   function guardarPlantilla(nombre) {
-    const lista = almacen.leer('plantillas', []).filter((p) => p.nombre !== nombre);
+    const lista = leerPlantillas().filter((p) => p.nombre !== nombre);
     lista.unshift({
       nombre, cambiada: new Date().toISOString(), d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: [...b.orden],
       ejercicios: Object.fromEntries(b.orden.map((id) => [id, JSON.parse(JSON.stringify(b.ejercicios[id]))])),
@@ -792,13 +814,6 @@ function vistaArmar() {
     b.activo = b.orden[0] || b.activo;
     apartarLienzo(app);
     pintar();
-  // A template chosen in the Plantillas tab arrives here, once.
-  const pendiente = almacen.leer('plantilla-a-usar', null);
-  if (pendiente !== null) {
-    almacen.guardar('plantilla-a-usar', null);
-    const p = almacen.leer('plantillas', [])[pendiente];
-    if (p) usarPlantilla(p);
-  }
   }
 
   let deshacerBorrar = null;
@@ -901,13 +916,13 @@ function vistaArmar() {
     } else if (a === 'cancelar-plantilla') {
       app.querySelector('.plantilla-nueva').hidden = true;
     } else if (a === 'usar-plantilla') {
-      const p = almacen.leer('plantillas', [])[Number(el.dataset.i)];
+      const p = leerPlantillas()[Number(el.dataset.i)];
       if (p) usarPlantilla(p);
     } else if (a === 'borrar-plantilla') {
       // A first touch asks; the second one deletes. Touching anything else, or waiting, leaves it as it was.
       if (el.dataset.confirmar) {
         deshacerBorrar = null;
-        const lista = almacen.leer('plantillas', []);
+        const lista = leerPlantillas();
         const [borrada] = lista.splice(Number(el.dataset.i), 1);
         if (borrada) apuntarBorrada('plantillas', borrada.nombre);
         almacen.guardar('plantillas', lista);
@@ -988,6 +1003,13 @@ function vistaArmar() {
   };
 
   pintar();
+  // A template chosen in the Plantillas tab arrives here, once.
+  const pendiente = almacen.leer('plantilla-a-usar', null);
+  if (pendiente !== null) {
+    almacen.guardar('plantilla-a-usar', null);
+    const p = leerPlantillas()[pendiente];
+    if (p) usarPlantilla(p);
+  }
   const ancho = window.matchMedia('(min-width: 980px)');
   const alCambiarAncho = () => {
     // Wide, the library is in the page again: no sheet left open behind it.
@@ -1045,7 +1067,7 @@ async function crearEnlace(b) {
     b.persona = persona.id;
     almacen.guardar('borrador', b);
   }
-  const url = `${location.origin}${location.pathname}${location.search}#r=${codigo}`;
+  const url = `${location.origin}${location.pathname}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
   const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en el móvil y sigue a la figura:`;
 
@@ -1119,10 +1141,13 @@ const vibrar = (ms) => {
 };
 
 async function vistaRutina(codigo) {
-  let r;
+  let r = null;
   try {
-    r = await decodificar(codigo);
+    r = limpiarRutina(await decodificar(codigo));
   } catch {
+    // Read below as a link that cannot be opened.
+  }
+  if (!r) {
     app.innerHTML = `<div class="saludo"><h1>Este enlace no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
     return () => {};
   }
@@ -1258,6 +1283,18 @@ async function vistaRutina(codigo) {
     await prepararSerie();
   }
 
+  // The browser lets the screen lock go whenever the page is hidden (a look at WhatsApp mid-routine): back on it,
+  // with a session going, it is asked for again, so the phone does not lock in the middle of a set.
+  const alVolver = async () => {
+    if (document.visibilityState !== 'visible' || !sesion || !navigator.wakeLock || (bloqueo && !bloqueo.released)) return;
+    try {
+      bloqueo = await navigator.wakeLock.request('screen');
+    } catch {
+      bloqueo = null;
+    }
+  };
+  document.addEventListener('visibilitychange', alVolver);
+
   function pintarJugador() {
     app.innerHTML = `<div class="jugador">
       <div class="jugador-arriba">
@@ -1280,6 +1317,7 @@ async function vistaRutina(codigo) {
   };
 
   async function prepararSerie() {
+    const item = sesion.item;
     const { e, lado } = actual();
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
@@ -1288,10 +1326,22 @@ async function vistaRutina(codigo) {
     const etiquetaLado = app.querySelector('.j-lado');
     etiquetaLado.textContent = LADOS[lado];
     etiquetaLado.classList.toggle('oculto', !def.unLado);
-    const f = await figuraEn(app.querySelector('.escena'), r.c);
-    f.oyentes = {};
-    f.on('girado', () => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'));
-    await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
+    let f;
+    try {
+      f = await figuraEn(app.querySelector('.escena'), r.c);
+      f.oyentes = {};
+      f.on('girado', () => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'));
+      await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
+    } catch {
+      // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
+      if (sesion.item !== item) return;
+      const sin3d = !document.createElement('canvas').getContext('webgl2');
+      const porque = sin3d ? 'Este móvil no puede mover la figura en 3D.' : 'Revisa la conexión y prueba otra vez.';
+      app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>No se ha podido cargar la figura.</p><p>${porque}</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><button type="button" class="boton" data-r="reintentar">Probar otra vez</button><span></span></div>`;
+      return;
+    }
+    if (sesion.item !== item) return;
     cuentaAtras(3);
   }
 
@@ -1299,7 +1349,11 @@ async function vistaRutina(codigo) {
     sesion.estado = 'cuenta';
     const mando = app.querySelector('.j-mando');
     const { e } = actual();
-    mando.innerHTML = `<div class="centro"><p>Prepárate</p><h3 class="num cuenta-atras">${n}</h3><p>${textoTempo(e.t)}</p></div>
+    const t = figura?.textos || {};
+    const pauta = t.subir && t.bajar
+      ? `${t.subir} en ${e.t[0]} s${e.t[1] ? `, ${(t.mantener || 'mantén').toLowerCase()} ${e.t[1]} s` : ''}, ${t.bajar.toLowerCase()} en ${e.t[2]} s`
+      : textoTempo(e.t);
+    mando.innerHTML = `<div class="centro"><p>Prepárate</p><h3 class="num cuenta-atras">${n}</h3><p>${esc(pauta)}</p></div>
       <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><span></span><button type="button" class="boton fantasma" data-r="ya">Empezar ya</button></div>`;
     tono(660, 0.08);
     clearTimeout(sesion.temporizador);
@@ -1313,7 +1367,7 @@ async function vistaRutina(codigo) {
     const mando = app.querySelector('.j-mando');
     mando.innerHTML = `<div class="cuenta">
         <div class="grande num"><span class="j-rep">1</span> <small>de ${e.r}</small></div>
-        <div class="fase j-fase">Sube</div>
+        <div class="fase j-fase">${esc(figura?.textos?.subir || 'Ida')}</div>
       </div>
       ${svgTempo(e.t, { punto: true })}
       <div class="mando-botones">
@@ -1324,7 +1378,7 @@ async function vistaRutina(codigo) {
     const svg = mando.querySelector('.tempo');
     const elFase = mando.querySelector('.j-fase');
     const elRep = mando.querySelector('.j-rep');
-    const nombres = { subir: 'Sube', mantener: 'Mantén', bajar: 'Baja', reposo: 'Respira' };
+    const nombres = { subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos };
     const f = figura;
     f.oyentes.fase = [];
     f.oyentes.cambio = [];
@@ -1428,7 +1482,7 @@ async function vistaRutina(codigo) {
       ${items
         .map(
           ({ c, i }) => `<div class="series-hechas">${def.unLado ? `<span class="chip">${LADOS[c.lado]}</span>` : ''}${sesion.hechas[i]
-            .map((v, s) => `<label class="ajuste"><span>Serie ${s + 1}</span>${paso(`h-${i}-${s}`, v, `Serie ${s + 1}`, 0, 50)}</label>`)
+            .map((v, s) => `<div class="ajuste"><span>Serie ${s + 1}</span>${paso(`h-${i}-${s}`, v, `Serie ${s + 1}`, 0, 50)}</div>`)
             .join('')}</div>`,
         )
         .join('')}
@@ -1439,7 +1493,8 @@ async function vistaRutina(codigo) {
       <button type="button" class="boton" data-r="continuar">${sesion.item + 1 < cola.length ? 'Siguiente ejercicio' : 'Terminar'}</button>`;
   }
 
-  function terminar() {
+  // parcial: the person left in the middle; what was done is kept and can be sent like any other day.
+  function terminar(parcial = false) {
     try {
       bloqueo?.release();
     } catch {
@@ -1450,13 +1505,16 @@ async function vistaRutina(codigo) {
     const dia = {
       f: diaLocal(ahora),
       h: ahora.toTimeString().slice(0, 5),
-      e: cola.map((c, i) => ({ i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: sesion.hechas[i], m: sesion.molestia[c.e.i] })),
+      e: cola
+        .map((c, i) => ({ i: c.e.i, l: c.lado, s: c.e.s, r: c.e.r, p: sesion.hechas[i], m: sesion.molestia[c.e.i] }))
+        .filter((x) => !parcial || x.p.some((v) => v > 0)),
     };
+    if (parcial && !dia.e.length) return intro();
     const hist = almacen.leer(clave, []);
     hist.push(dia);
     almacen.guardar(clave, hist.slice(-60));
     app.innerHTML = `<div class="rutina">
-      <header class="saludo"><div class="de">Hecho</div><h1>Rutina de hoy, completa</h1><p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
+      <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1><p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
         <button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
@@ -1472,7 +1530,7 @@ async function vistaRutina(codigo) {
     const hist = almacen.leer(clave, []);
     const resumen = { v: 1, p: r.p, para: r.para, de: r.de, m: tope, dias: hist.slice(-14) };
     const cod = await codificar(resumen);
-    const url = `${location.origin}${location.pathname}${location.search}#s=${cod}`;
+    const url = `${location.origin}${location.pathname}#s=${cod}`;
     const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}).`;
     window.open(enlaceMensaje(canal, texto, url), '_blank', 'noopener');
   }
@@ -1513,8 +1571,17 @@ async function vistaRutina(codigo) {
       clearTimeout(sesion?.temporizador);
       clearInterval(sesion?.reloj);
       figura?.parar();
-      return intro();
+      // Halfway, the × asks first: leaving keeps what was done, so a slip does not throw the session away.
+      const hecho = sesion?.hechas.some((h) => h.some((v) => v > 0));
+      if (!hecho || sesion.estado === 'salir') return intro();
+      sesion.antes = sesion.estado;
+      sesion.estado = 'salir';
+      app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>Lo que has hecho se guarda y puedes mandarlo.</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Dejarla</button></div>`;
+      return;
     }
+    if (a === 'seguir-rutina') return sesion.antes === 'valorar' ? valorar() : prepararSerie();
+    if (a === 'dejar') return terminar(true);
     if (a === 'como') return como();
     if (a === 'ya') {
       clearInterval(sesion.reloj);
@@ -1543,7 +1610,7 @@ async function vistaRutina(codigo) {
       const v = Number(el.dataset.v);
       sesion.molestia[actual().e.i] = v;
       const aviso = app.querySelector('.aviso-molestia');
-      if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: saldrá marcado en el resumen que le mandes a ${r.de || 'quien te dio la rutina'}.` : '';
+      if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: saldrá marcado en el resumen que le mandes a ${r.de || 'quien te dio la rutina'}. La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.` : '';
       return;
     }
     if (a === 'manana') {
@@ -1554,7 +1621,11 @@ async function vistaRutina(codigo) {
       mananaOmitida = true;
       return app.querySelector('.manana')?.remove();
     }
+    if (a === 'reintentar') return prepararSerie();
     if (a === 'continuar') {
+      // One tap is one exercise: a second tap while the next figure loads must not skip one.
+      if (el.disabled) return;
+      el.disabled = true;
       if (sesion.item + 1 < cola.length) {
         sesion.item++;
         sesion.serie = 0;
@@ -1582,22 +1653,31 @@ async function vistaRutina(codigo) {
 // A session is marked when the discomfort went above the professional's level during an exercise or the next morning.
 const diaMarcado = (dia, tope) => pasaDelTope(dia.a, tope) || dia.e.some((x) => pasaDelTope(x.m, tope));
 
+// One day that cannot be read must not take the whole file down with it (nor its «Borrar su ficha»).
 function resumenDia(dia, tope = TOPE_MOLESTIA) {
+  try {
+    return pintarDia(dia, tope);
+  } catch {
+    return '<article class="tarjeta dia"><p>Este día no se puede leer.</p></article>';
+  }
+}
+
+function pintarDia(dia, tope) {
   const fecha = new Date(dia.f + 'T12:00:00');
   const titulo = new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long' }).format(fecha);
   const marcado = diaMarcado(dia, tope);
-  return `<article class="tarjeta dia ${marcado ? 'marcado' : ''}"><h3>${titulo.charAt(0).toUpperCase() + titulo.slice(1)}${dia.h ? ` · ${dia.h}` : ''}${
+  return `<article class="tarjeta dia ${marcado ? 'marcado' : ''}"><h3>${titulo.charAt(0).toUpperCase() + titulo.slice(1)}${dia.h ? ` · ${esc(dia.h)}` : ''}${
     marcado ? ` <span class="marca-dia">Pasa de ${tope}</span>` : ''
   }</h3>
     ${dia.e
       .map((x) => {
-        const def = EJERCICIOS[x.i];
+        const def = Object.hasOwn(EJERCICIOS, x.i) ? EJERCICIOS[x.i] : null;
         if (!def) return '';
         const bien = x.p.every((v) => v >= x.r);
         return `<div class="hecho">
           <span class="nombre">${esc(def.nombre)}${def.unLado ? ` · ${LADOS[x.l].toLowerCase()}` : ''}</span>
           ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">Molestia ${x.m}/10</span>` : '<span></span>'}
-          <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${v} de ${x.r}"></span>`).join('')}</div>
+          <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${esc(v)} de ${esc(x.r)}"></span>`).join('')}</div>
           <span class="detalle num">${
             bien
               ? `${x.p.length} ${x.p.length === 1 ? 'serie' : 'series'} de ${x.r}, ${x.p.length === 1 ? 'completa' : 'completas'}`
@@ -1625,11 +1705,14 @@ function listaDias(fechas) {
 
 // ---------- Summary (the professional) ----------
 async function vistaResumen(codigo) {
-  let s;
+  let s = null;
   try {
-    s = await decodificar(codigo);
+    s = limpiarResumen(await decodificar(codigo));
   } catch {
-    app.innerHTML = `<div class="saludo"><h1>Este resumen no se puede abrir</h1></div>`;
+    // Read below as a summary that cannot be opened.
+  }
+  if (!s) {
+    app.innerHTML = `<div class="saludo"><h1>Este resumen no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
     return () => {};
   }
   const dias = [...s.dias].reverse();
@@ -1649,32 +1732,37 @@ async function vistaResumen(codigo) {
     <section class="lista">${dias.map((d) => resumenDia(d, tope)).join('')}</section>
   </div>`;
   app.onclick = (ev) => {
-    if (!ev.target.closest('[data-accion="guardar-resumen"]')) return;
-    app.querySelector('.en-ficha').innerHTML = guardarEnFicha(s, true);
+    const boton = ev.target.closest('[data-accion="guardar-resumen"]');
+    if (!boton) return;
+    app.querySelector('.en-ficha').innerHTML = guardarEnFicha(s, boton.dataset.destino);
   };
   return () => {
     app.onclick = null;
   };
 }
 
-// The summary joins the person's file: by the id it brings (routines sent from this browser), or by the only person
-// with that name. On the professional's browser (one with people or a draft) a person not yet here gets a new file;
-// anywhere else it waits for a tap, so a person opening their own summary does not start a list of people.
-function guardarEnFicha(s, aMano = false) {
+// The summary joins the person's file on its own only when it brings that file's id (p): the routine was sent from
+// this browser to that person. Anything else waits for a tap that says where it goes, the only person with that name or
+// a new file, so a link from anyone cannot fill or change a file by itself. A new file never takes an id from the link.
+function guardarEnFicha(s, destino = '') {
   const lista = leerPersonas();
+  const suya = s.p ? lista.find((x) => x.id === s.p) : null;
   const iguales = s.para ? buscarPorNombre(lista, s.para) : [];
-  let p = (s.p && lista.find((x) => x.id === s.p)) || (iguales.length === 1 ? iguales[0] : null);
-  const profesional = lista.length > 0 || almacen.leer('borrador', null) !== null;
-  if (!p && !aMano && !profesional) {
-    return `<button type="button" class="boton secundario" data-accion="guardar-resumen">Guardar en mis personas</button>`;
+  const porNombre = !suya && iguales.length === 1 ? iguales[0] : null;
+  let p = suya || (destino === 'nombre' ? porNombre : null);
+  if (!p && destino !== 'nueva') {
+    if (porNombre) {
+      return `<button type="button" class="boton secundario" data-accion="guardar-resumen" data-destino="nombre">Guardar en la ficha de ${esc(porNombre.nombre)}</button>`;
+    }
+    if (!caben(lista)) return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
+    const texto = lista.length ? `Guardar en una ficha nueva para ${esc(s.para || 'esta persona')}` : 'Guardar en mis personas';
+    return `<button type="button" class="boton secundario" data-accion="guardar-resumen" data-destino="nueva">${texto}</button>`;
   }
-  if (!p && !caben(lista)) {
-    return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
-  }
+  if (!p && !caben(lista)) return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
   const nueva = !p;
-  if (!p) p = crearPersona(lista, s.para || 'Sin nombre', s.p || undefined);
+  if (!p) p = crearPersona(lista, s.para || 'Sin nombre');
   const n = apuntarResumen(p, s);
-  guardarPersonas(lista);
+  if (!guardarPersonas(lista)) return SIN_SITIO;
   const que = nueva ? `Ficha nueva para ${esc(p.nombre)}` : n ? `Guardado en la ficha de ${esc(p.nombre)}` : `Ya estaba en la ficha de ${esc(p.nombre)}`;
   return `${que}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
 }
@@ -1730,11 +1818,10 @@ async function sincronizarDrive(boton) {
     aviso.textContent = 'Conectando con Google…';
     await conectar();
     aviso.textContent = 'Sincronizando…';
-    const local = { personas: leerPersonas(), plantillas: almacen.leer('plantillas', []), borradas: leerBorradas() };
+    const local = { personas: leerPersonas(), plantillas: leerPlantillas(), borradas: leerBorradas() };
     const r = await sincronizar(local, (junto) => {
-      guardarPersonas(junto.personas);
-      almacen.guardar('plantillas', junto.plantillas);
-      almacen.guardar('borradas', junto.borradas);
+      const bien = guardarPersonas(junto.personas) && almacen.guardar('plantillas', junto.plantillas) && almacen.guardar('borradas', junto.borradas);
+      if (!bien) throw new Error(SIN_SITIO);
     });
     almacen.guardar('drive-ultima', new Date().toISOString());
     aviso.textContent = `Hecho: ${r.personas} ${r.personas === 1 ? 'persona' : 'personas'} y ${r.plantillas} ${r.plantillas === 1 ? 'plantilla' : 'plantillas'} en tu Drive y en este aparato.`;
@@ -1903,10 +1990,14 @@ function vistaPersona(id) {
   </div>`;
 
   const guardar = () => {
+    // Only the notes change here, on the file as it is now: a summary kept from another tab meanwhile (WhatsApp Web
+    // opens each link in a new one) must stay.
     const todas = leerPersonas();
-    const i = todas.findIndex((x) => x.id === id);
-    if (i >= 0) todas[i] = p;
-    guardarPersonas(todas);
+    const fresca = todas.find((x) => x.id === id);
+    if (!fresca) return;
+    fresca.notas = p.notas;
+    fresca.cambiada = p.cambiada;
+    if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
   };
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
@@ -1931,7 +2022,8 @@ function vistaPersona(id) {
       location.hash = '';
     } else if (a === 'abrir-rutina') {
       // The routine as it was sent, back in the builder for this person, to change it and send it again.
-      const r = await decodificar(el.dataset.codigo);
+      const r = limpiarRutina(await decodificar(el.dataset.codigo));
+      if (!r) return;
       const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
       Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
       b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
@@ -1940,7 +2032,7 @@ function vistaPersona(id) {
       almacen.guardar('borrador', b);
       location.hash = '';
     } else if (a === 'copiar-rutina') {
-      const url = `${location.origin}${location.pathname}${location.search}#r=${el.dataset.codigo}`;
+      const url = `${location.origin}${location.pathname}#r=${el.dataset.codigo}`;
       try {
         await navigator.clipboard.writeText(url);
         el.textContent = 'Copiado';
@@ -1998,6 +2090,8 @@ navigator.serviceWorker?.addEventListener('message', (ev) => {
   clearTimeout(avisoVersion);
   avisoVersion = setTimeout(mostrarVersionNueva, 1500);
 });
+// A new set may have taken over while this page was still loading, before it listened: it asks once.
+navigator.serviceWorker?.controller?.postMessage({ tipo: 'version' });
 function mostrarVersionNueva() {
   if (document.querySelector('.nueva-version')) return;
   if (document.querySelector('.jugador')) {
@@ -2037,7 +2131,7 @@ async function guardarParaSinConexion(c, ejercicios) {
 // ---------- Templates, as a tab of their own ----------
 function vistaPlantillas() {
   const pintarLista = () => {
-    const lista = almacen.leer('plantillas', []);
+    const lista = leerPlantillas();
     app.querySelector('.lista-plantillas-app').innerHTML = lista.length
       ? lista.map((p, i) => `<li class="plantilla-fila">
           <button type="button" class="plantilla-usar" data-accion="usar" data-i="${i}">
@@ -2066,7 +2160,7 @@ function vistaPlantillas() {
     } else if (el.dataset.accion === 'quitar') {
       // A first touch asks; the second deletes.
       if (el.dataset.confirmar) {
-        const lista = almacen.leer('plantillas', []);
+        const lista = leerPlantillas();
         const [borrada] = lista.splice(Number(el.dataset.i), 1);
         if (borrada) apuntarBorrada('plantillas', borrada.nombre);
         almacen.guardar('plantillas', lista);

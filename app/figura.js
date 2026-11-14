@@ -215,6 +215,9 @@ export class Figura {
     }
     const ficha = (await this.ficha(def.ficha)) || def;
     this.fases = normalizarFases(ficha, clip.duration);
+    // The words of each phase as the exercise sheet writes them («Dobla las rodillas», «Sube despacio»): the player shows
+    // these, so a squat never reads «Sube» while the figure goes down.
+    this.textos = Object.fromEntries((Array.isArray(ficha?.fases) ? ficha.fases : []).filter((p) => p.texto).map((p) => [p.fase || p.nombre, p.texto]));
     this.accion = this.mixer.clipAction(clip);
     this.accion.play();
     this.accion.paused = true;
