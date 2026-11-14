@@ -501,7 +501,7 @@ function seccionBiblioteca(b) {
         <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
       <label class="campo-musculo"><span>Músculo</span>
         <select data-accion="musculo">
-          <option value="">Todos</option>
+          <option value="">Todos los músculos</option>
           ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(MUSCULOS[mu])}</option>`).join('')}
         </select>
       </label>
@@ -572,6 +572,7 @@ function vistaArmar() {
 
   function pintar() {
     app.innerHTML = `<div class="armar${b.orden.length ? '' : ' sin-ejercicios'}">
+      <div class="armar-biblio">${seccionBiblioteca(b)}</div>
       <div class="armar-izq">
         ${barraApp('Nueva rutina')}
         <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
@@ -590,7 +591,6 @@ function vistaArmar() {
             <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
             <div class="hueco-rutina">${seccionRutina(b)}</div>
             <button type="button" class="anadir-ejercicio" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}<span>Añadir ejercicio</span></button>
-            ${seccionBiblioteca(b)}
           </section>
           <section class="etapa" id="etapa-ajustes" aria-labelledby="etapa-ajustes-t">
             <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>Ajustes</p>
@@ -723,10 +723,11 @@ function vistaArmar() {
     if (antes !== undefined && despues !== undefined && Math.abs(despues - antes) > 1) window.scrollBy(0, despues - antes);
   }
 
-  // On a phone or a tablet (no preview at the side), the library is a sheet over the whole screen: «Añadir ejercicio»
-  // opens it with the search on top, choosing one closes it and leaves that exercise open in the routine, in sight.
-  // The phone's «back» closes it too, as in any app. Enrique, 13 November 2026: «bajar, subir, bajar... hay que adivinar».
-  const estrecho = () => !window.matchMedia('(min-width: 980px)').matches;
+  // Below 1280 px the library is a sheet over the whole screen: «Añadir ejercicio» opens it with the search on top,
+  // choosing one closes it and leaves that exercise open in the routine, in sight. The phone's «back» closes it too, as
+  // in any app. Enrique, 13 November 2026: «bajar, subir, bajar... hay que adivinar». From 1280 px it is a column of
+  // its own at the left, with its own scroll: the routine in the middle never goes under it.
+  const estrecho = () => !window.matchMedia('(min-width: 1280px)').matches;
   const hojaAbierta = () => !!app.querySelector('.armar.biblio-abierta');
   function abrirBiblioteca() {
     if (hojaAbierta()) return;
@@ -842,11 +843,23 @@ function vistaArmar() {
         refrescarBiblioteca();
         enseñarTarjeta(id);
       } else {
-        // The routine grows above the library: the row just added stays under the pointer.
-        sinSaltar(() => app.querySelector(`.biblio-fila[data-id="${id}"]`), () => {
-          refrescarRutina();
-          refrescarBiblioteca();
-        });
+        // The library is a column of its own: the row stays where it was, and the card just added comes into sight in
+        // the routine, open, with a moment of light; the focus stays in the library to add another.
+        refrescarRutina();
+        const lista = app.querySelector('.biblio-lista');
+        const arriba = lista.scrollTop;
+        refrescarBiblioteca();
+        lista.scrollTop = arriba;
+        const tarjeta = app.querySelector(`.ejercicio[data-id="${id}"]`);
+        if (tarjeta) {
+          const r = tarjeta.getBoundingClientRect();
+          const tapa = [...app.querySelectorAll('.barra-app, .etapas-app')].reduce((t, x) => t + x.getBoundingClientRect().height, 0);
+          const pie = app.querySelector('.barra-crear')?.getBoundingClientRect().height || 0;
+          if (r.top < tapa || r.bottom > innerHeight - pie) window.scrollTo(0, window.scrollY + r.top - tapa - 12);
+          tarjeta.classList.add('recien');
+          setTimeout(() => tarjeta.classList.remove('recien'), 1400);
+        }
+        app.querySelector(`.biblio-fila[data-id="${id}"] .biblio-ver`)?.focus({ preventScroll: true });
       }
       colocarFigura();
     } else if (a === 'abrir-biblioteca') {
@@ -1011,12 +1024,14 @@ function vistaArmar() {
     if (p) usarPlantilla(p);
   }
   const ancho = window.matchMedia('(min-width: 980px)');
+  const conColumna = window.matchMedia('(min-width: 1280px)');
   const alCambiarAncho = () => {
-    // Wide, the library is in the page again: no sheet left open behind it.
+    // Wide, the library is a column again: no sheet left open behind it.
     if (!estrecho()) cerrarBiblioteca();
     colocarFigura();
   };
   ancho.addEventListener('change', alCambiarAncho);
+  conColumna.addEventListener('change', alCambiarAncho);
   window.addEventListener('popstate', alVolver);
   document.addEventListener('keydown', alTeclear);
   // The sheet's entry in the history is not a page: going back must not move the routine.
@@ -1025,6 +1040,7 @@ function vistaArmar() {
   return () => {
     history.scrollRestoration = restaurar;
     ancho.removeEventListener('change', alCambiarAncho);
+    conColumna.removeEventListener('change', alCambiarAncho);
     window.removeEventListener('popstate', alVolver);
     document.removeEventListener('keydown', alTeclear);
     document.body.classList.remove('con-hoja');

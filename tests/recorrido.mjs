@@ -85,6 +85,12 @@ try {
     await ancho.click('[data-accion="cuerpo"][data-valor="a"]');
     for (const id of ['puente', 'silla', 'hombro']) await ancho.click(`.biblio-fila[data-id="${id}"] [data-accion="anadir"]`);
     await ancho.waitForTimeout(1200);
+    // From 1280 px, three columns: the library in sight at the left, the card just added in sight in the middle, and
+    // «Crear enlace» at the foot of the screen; nothing to find by scrolling down and up again.
+    const enVista = (sel) => ancho.locator(sel).first().evaluate((e) => { const r = e.getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight && r.bottom <= innerHeight + 1; });
+    comprobar(await enVista('[data-accion="crear"]'), `${tema}: en el ordenador, «Crear enlace» no se ve sin bajar`);
+    comprobar(await ancho.locator('.biblio-fila').first().evaluate((e) => e.getBoundingClientRect().top < innerHeight), `${tema}: en el ordenador, la biblioteca no se ve`);
+    comprobar(await ancho.locator('.ejercicio[data-id="hombro"] .ejercicio-cabeza').evaluate((e) => { const r = e.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; }), `${tema}: en el ordenador, el ejercicio recién añadido queda fuera de la vista`);
     const orden = () => ancho.$$eval('.rutina-armada .ejercicio', (t) => t.map((x) => x.dataset.id).join(','));
     comprobar((await orden()) === 'puente,silla,hombro', `${tema}: los añadidos no salen en su orden (${await orden()})`);
     comprobar((await ancho.locator('.biblio-dentro').count()) === 3, `${tema}: la biblioteca no marca lo que ya está en la rutina`);

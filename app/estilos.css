@@ -939,12 +939,13 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   body.pro .nueva-version { left: calc(50% + var(--riel) / 2); }
 }
 
-/* ---------- The builder on a phone or a tablet (Jujol, 13 November 2026) ----------
-   No preview at the side: the routine is the list, «Añadir ejercicio» is a big button under it, and the library opens
-   as a sheet over the whole screen, the search on top. Choosing one closes it and leaves that exercise open in front.
-   Wide, all of this is as it was: the library in the page and the button out of sight. */
+/* ---------- The builder below 1280 px (Jujol, 13 and 14 November 2026) ----------
+   The routine is the list, «Añadir ejercicio» is a big button under it, and the library opens as a sheet over the
+   whole screen, the search on top. Choosing one closes it and leaves that exercise open in front. From 1280 px the
+   library is a column of its own (below). */
 .anadir-ejercicio, .biblio-cerrar, .biblio-ver-mapa, .anadir-en-barra { display: none; }
-@media (max-width: 979px) {
+@media (max-width: 1279px) {
+  .armar-biblio { display: contents; }
   .anadir-ejercicio {
     display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 64px; padding: 0 16px;
     border: 1.5px dashed var(--tinta); border-radius: var(--radio); background: transparent; color: var(--tinta);
@@ -1001,6 +1002,41 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   /* The card just added: a moment of light, so the eye finds it. */
   .ejercicio.recien { animation: recien 1.4s ease; }
 }
+/* ---------- The builder from 1280 px: three columns (Jujol, 14 November 2026) ----------
+   The library at the left with its own scroll (search and map fixed on top, the list under them), the routine in the
+   middle with «Crear enlace» stuck at its foot, the movement at the right. Nothing of the routine goes under the
+   library, so adding never means going down and up again. */
+@media (min-width: 1280px) {
+  .armar { grid-template-columns: minmax(330px, 0.85fr) minmax(0, 1.15fr) minmax(340px, 0.8fr); }
+  .armar-biblio {
+    grid-column: 1; grid-row: 1; position: sticky; top: 0; height: 100vh; min-height: 0; display: flex; flex-direction: column;
+    border-right: 1px solid var(--linea); background: var(--fondo);
+  }
+  .armar-izq { grid-column: 2; grid-row: 1; min-width: 0; }
+  .vista { grid-column: 3; grid-row: 1; }
+  .armar-biblio .biblioteca {
+    flex: 1; min-height: 0; display: flex; flex-direction: column; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent;
+  }
+  .armar-biblio .biblio-arriba { flex: none; display: grid; gap: 10px; padding: 14px 16px 12px; border-bottom: 1px solid var(--linea); }
+  .armar-biblio .biblio-cabeza { align-items: center; min-height: 32px; }
+  .armar-biblio .biblio-filtros { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: 8px; }
+  /* The select says «Todos los músculos»: its word goes to the screen reader only, and the search keeps its width. */
+  .armar-biblio .campo-musculo { grid-template-columns: minmax(0, 1fr); }
+  .armar-biblio .campo-musculo > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .armar-biblio .biblio-cuerpo { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 0; }
+  .armar-biblio .hueco-mapa { flex: none; position: static; --mapa-alto: 176px; padding: 8px 16px 0; border-bottom: 1px solid var(--linea); }
+  .armar-biblio .mapa-pie { min-height: 30px; }
+  .armar-biblio .biblio-lista { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px 24px; }
+  .anadir-ejercicio, .anadir-en-barra { display: none !important; }
+}
+/* From 980 px, «Crear enlace» and how long the routine takes stay stuck at the foot of the routine. */
+@media (min-width: 980px) {
+  .barra-crear {
+    position: sticky; bottom: 0; z-index: 3; padding: 12px 20px; margin-top: 8px;
+    background: color-mix(in srgb, var(--fondo) 90%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--linea);
+  }
+}
+.ejercicio.recien { animation: recien 1.4s ease; }
 @keyframes hoja-sube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes recien { 0%, 35% { box-shadow: 0 0 0 3px var(--tinta); } 100% { box-shadow: 0 0 0 0 transparent; } }
 @media (prefers-reduced-motion: reduce) {
