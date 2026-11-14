@@ -32,9 +32,10 @@ export const DESCANSOS = [30, 45, 60, 90];
 const tope = (m) => entero(m, 0, 9, undefined);
 const lado = (l, i) => (l === 'der' || l === 'izq' || l === 'ambos' ? l : EJERCICIOS[i]?.unLado ? 'der' : null);
 const banda = (b) => (clavePropia(b) && Object.hasOwn(BANDAS, b) ? b : undefined);
+// Up to 12 s up and down: the builder offers 1 to 6, and the figure of eight takes about 9 s for each half.
 const ritmo = (t, d = [2, 1, 2]) => {
   const x = Array.isArray(t) ? t : [];
-  return [entero(x[0], 1, 6, d[0]), entero(x[1], 0, 30, d[1]), entero(x[2], 1, 6, d[2])];
+  return [entero(x[0], 1, 12, d[0]), entero(x[1], 0, 30, d[1]), entero(x[2], 1, 12, d[2])];
 };
 
 // A routine as the link carries it: { v, para, de, d, x, m, c, f, p, e: [{ i, s, r, t, l, b, n }] }.

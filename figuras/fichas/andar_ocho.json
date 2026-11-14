@@ -1,0 +1,39 @@
+{
+  "id": "andar_ocho",
+  "familia": "andar",
+  "nombre": "Andar en ocho",
+  "lado": "ambos",
+  "accesorios": [
+    "conos",
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "ocho"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Rodea el primer cono",
+    "bajar": "Rodea el segundo"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "gemelos"
+    ]
+  },
+  "camara": [
+    -1.0,
+    -0.3,
+    0.68
+  ],
+  "margen": 0.98
+}

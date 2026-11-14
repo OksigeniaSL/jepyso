@@ -1522,6 +1522,66 @@ export const EJERCICIOS = {
     error: 'Doblar las rodillas o dejar caer los talones. Arriba todo el camino.',
     fuentes: ['Otago Exercise Programme (ACC), equilibrio: «toe walk»'],
   },
+  andar_ocho: {
+    nombre: 'Andar en ocho',
+    otrosNombres: ['vuelta en ocho', 'ocho entre dos conos'],
+    posicion: 'De pie',
+    material: 'Dos objetos en el suelo, como dos botellas o dos conos',
+    unLado: false,
+    unidad: 'vueltas',
+    zonas: ['tobillo', 'cadera'],
+    musculos: { principales: ['gluteo_medio'], secundarios: ['gemelos'] },
+    porDefecto: { series: 1, reps: 2, tempo: [9, 0, 9] },
+    partida: 'De pie, con dos objetos en el suelo separados unos dos pasos largos (dos botellas de agua o dos conos) y sitio libre alrededor.',
+    pasos: [
+      'Anda alrededor del primer objeto, a tu paso.',
+      'Cruza por el medio y rodea el segundo, dibujando un ocho.',
+      'Vuelve al punto de partida: eso es una vuelta.',
+    ],
+    error: 'Girar de golpe o mirar al suelo. Gira despacio, con la mirada al frente.',
+    masDificil: 'Un poco más deprisa, o con los objetos más juntos.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «walking and turning around»', 'Vivifrail, ochos (pasaportes C y D)'],
+  },
+  andar_obstaculos: {
+    nombre: 'Andar pasando obstáculos',
+    otrosNombres: ['pasar obstáculos', 'andar sobre obstáculos bajos'],
+    posicion: 'De pie',
+    material: 'Obstáculos bajos, como libros o toallas enrolladas',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['cadera', 'rodilla'],
+    musculos: { principales: ['gluteo_mayor', 'cuadriceps'], secundarios: ['tibial_anterior'] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 0, 2] },
+    partida: 'De pie junto a una mesa larga o una encimera, con unos obstáculos bajos en el suelo (libros, cajas de zapatos o toallas enrolladas, de un palmo como mucho), separados un paso.',
+    pasos: [
+      'Levanta bien un pie y pásalo por encima del primer obstáculo.',
+      'Haz lo mismo con el otro pie en el siguiente.',
+      'Sigue hasta el final, date la vuelta despacio y vuelve.',
+    ],
+    error: 'Arrastrar los pies o mirar abajo todo el rato. Levanta la rodilla y mira un poco por delante.',
+    masDificil: 'Obstáculos un poco más altos, o sin agarrarte.',
+    fuentes: ['Vivifrail, obstáculos (pasaporte C, Ministerio de Sanidad)'],
+  },
+  andar_globo: {
+    nombre: 'Andar dando toques a un globo',
+    otrosNombres: ['globo de mano a mano'],
+    posicion: 'De pie',
+    material: 'Un globo',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo', 'cadera', 'hombro'],
+    musculos: { principales: ['gluteo_medio'], secundarios: ['deltoides_anterior'] },
+    porDefecto: { series: 2, reps: 10, tempo: [1, 0, 1] },
+    partida: 'De pie, con un globo en las manos y sitio libre para andar, sin muebles ni alfombras en el camino.',
+    pasos: [
+      'Anda despacio mientras das toques al globo, de una mano a la otra.',
+      'Sigue el globo con la mirada, sin dejar de andar.',
+      'Si se cae, recógelo con calma y sigue.',
+    ],
+    error: 'Pararte para dar el toque. Se sigue andando.',
+    masDificil: 'Un poco más deprisa, o con toques más altos.',
+    fuentes: ['Vivifrail, globo (pasaporte D, Ministerio de Sanidad)'],
+  },
 };
 
 // The library the professional sees, grouped by position: only exercises whose clips exist for both bodies.
@@ -1543,6 +1603,7 @@ export const ORDEN = [
   'talones', 'talones_sin_apoyo', 'puntas', 'puntas_sin_apoyo', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'sentadilla_sin_apoyo', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'equilibrio_sin_apoyo', 'cuadriceps_pie', 'escalon',
   // walking on the spot, over a running floor tape (counted in steps)
   'andar_atras', 'andar_lado', 'andar_tandem', 'andar_tandem_atras', 'andar_talones', 'andar_puntillas',
+  'andar_ocho', 'andar_obstaculos', 'andar_globo',
   // at a wall
   'sentadilla_pared', 'gemelo_pared', 'flexion_pared', 'iso_hombro',
   // shoulder, standing
@@ -1699,7 +1760,7 @@ export async function decodificar(codigo) {
 export function duracionEjercicio(e, descanso, def = null) {
   const [s, m, b] = e.tempo;
   const lados = e.lado === 'ambos' ? 2 : 1;
-  const serie = porPasos(def) ? e.reps * ((s + b) / 2) : e.reps * (s + m + b + 1);
+  const serie = porPasos(def) ? e.reps * ((s + b) / 2) : def?.unidad === 'vueltas' ? e.reps * (s + m + b) : e.reps * (s + m + b + 1);
   return lados * (e.series * serie + (e.series - 1) * descanso);
 }
 

@@ -1,0 +1,94 @@
+{
+ "id": "andar_globo",
+ "nombre": "Andar golpeando un globo",
+ "fps": 30,
+ "duracion": 2.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.0,
+   "texto": "Toca el globo con una mano"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.0,
+   "fin": 1.0,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 1.0,
+   "fin": 2.0,
+   "texto": "Y con la otra"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 2.0,
+   "fin": 2.0,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 22.1,
+   "cadera_izquierda_abduccion": 1.0,
+   "rodilla_izquierda_flexion": 10.1,
+   "tobillo_izquierda_flexion": 1.0,
+   "codo_izquierda_flexion": 47.9,
+   "hombro_izquierda_flexion": 26.0,
+   "hombro_izquierda_rotacion_externa": -7.5,
+   "cadera_derecha_flexion": 13.0,
+   "cadera_derecha_abduccion": -1.9,
+   "rodilla_derecha_flexion": 32.5,
+   "tobillo_derecha_flexion": 14.2,
+   "codo_derecha_flexion": 84.7,
+   "hombro_derecha_flexion": 51.8,
+   "hombro_derecha_rotacion_externa": -36.2
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 13.0,
+   "cadera_izquierda_abduccion": -1.9,
+   "rodilla_izquierda_flexion": 32.5,
+   "tobillo_izquierda_flexion": 14.2,
+   "codo_izquierda_flexion": 84.7,
+   "hombro_izquierda_flexion": 51.8,
+   "hombro_izquierda_rotacion_externa": -36.2,
+   "cadera_derecha_flexion": 22.1,
+   "cadera_derecha_abduccion": 1.0,
+   "rodilla_derecha_flexion": 10.1,
+   "tobillo_derecha_flexion": 1.0,
+   "codo_derecha_flexion": 47.9,
+   "hombro_derecha_flexion": 26.0,
+   "hombro_derecha_rotacion_externa": -7.5
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": [
+   "deltoides_anterior"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "globo",
+  "cinta"
+ ],
+ "pasos": 2,
+ "camara": {
+  "pos": [
+   -2.33,
+   1.813,
+   2.762
+  ],
+  "mira": [
+   0.0,
+   0.793,
+   0.14
+  ]
+ },
+ "archivo": "andar_globo.glb",
+ "bytes": 74884
+}

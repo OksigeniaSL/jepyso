@@ -1,0 +1,68 @@
+{
+ "id": "andar_ocho",
+ "nombre": "Andar en ocho",
+ "fps": 30,
+ "duracion": 18.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 9.0,
+   "texto": "Rodea el primer cono"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 9.0,
+   "fin": 9.0,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 9.0,
+   "fin": 18.0,
+   "texto": "Rodea el segundo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 18.0,
+   "fin": 18.0,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "pelvis_basculacion": -2.4
+  },
+  "llegada": {
+   "pelvis_basculacion": 2.6
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": [
+   "gemelos"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "conos",
+  "cinta"
+ ],
+ "pasos": 20,
+ "camara": {
+  "pos": [
+   -5.867,
+   4.785,
+   1.758
+  ],
+  "mira": [
+   -0.004,
+   0.799,
+   -0.001
+  ]
+ },
+ "archivo": "andar_ocho.glb",
+ "bytes": 160912
+}

@@ -106,6 +106,21 @@
    },
    "pasos": 2
   },
+  "andar_globo": {
+   "glb": "modelos/b/andar_globo.glb",
+   "ficha": "modelos/b/andar_globo.json",
+   "bytes": 74884,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "deltoides_anterior"
+    ]
+   },
+   "pasos": 2
+  },
   "andar_lado": {
    "glb": "modelos/b/andar_lado.glb",
    "ficha": "modelos/b/andar_lado.json",
@@ -120,6 +135,37 @@
     ]
    },
    "pasos": 2
+  },
+  "andar_obstaculos": {
+   "glb": "modelos/b/andar_obstaculos.glb",
+   "ficha": "modelos/b/andar_obstaculos.json",
+   "bytes": 59036,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor",
+     "cuadriceps"
+    ],
+    "secundarios": [
+     "tibial_anterior"
+    ]
+   },
+   "pasos": 2
+  },
+  "andar_ocho": {
+   "glb": "modelos/b/andar_ocho.glb",
+   "ficha": "modelos/b/andar_ocho.json",
+   "bytes": 160912,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "gemelos"
+    ]
+   },
+   "pasos": 20
   },
   "andar_puntillas": {
    "glb": "modelos/b/andar_puntillas.glb",

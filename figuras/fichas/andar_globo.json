@@ -1,0 +1,35 @@
+{
+  "id": "andar_globo",
+  "familia": "andar",
+  "nombre": "Andar golpeando un globo",
+  "lado": "ambos",
+  "accesorios": [
+    "globo",
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "globo"
+    }
+  },
+  "ritmo": {
+    "subir": 1.0,
+    "mantener": 0.0,
+    "bajar": 1.0,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Toca el globo con una mano",
+    "bajar": "Y con la otra"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "deltoides_anterior"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

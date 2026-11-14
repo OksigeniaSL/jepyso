@@ -21,7 +21,10 @@ for (const [id, e] of Object.entries(EJERCICIOS)) {
   if (musculos.some((m) => !MUSCULOS[m])) mal(id, `músculos desconocidos: ${musculos}`);
   const d = e.porDefecto || {};
   const [s, m, b] = d.tempo || [];
-  if (!entre(d.series, 1, 6) || !entre(d.reps, 1, 30) || !entre(s, 1, 6) || !entre(m, 0, 30) || !entre(b, 1, 6)) {
+  // Laps (the figure of eight) show no pace in the builder: each half takes as long as the figure walks it (up to 12 s,
+  // what a link carries).
+  const tope = e.unidad === 'vueltas' ? 12 : 6;
+  if (!entre(d.series, 1, 6) || !entre(d.reps, 1, 30) || !entre(s, 1, tope) || !entre(m, 0, 30) || !entre(b, 1, tope)) {
     mal(id, `ajustes por defecto fuera de lo que el constructor enseña: ${JSON.stringify(d)}`);
   }
 }

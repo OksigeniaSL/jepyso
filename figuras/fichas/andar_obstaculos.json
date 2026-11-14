@@ -1,0 +1,36 @@
+{
+  "id": "andar_obstaculos",
+  "familia": "andar",
+  "nombre": "Pasar obstáculos",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta",
+    "obstaculos"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "obstaculos"
+    }
+  },
+  "ritmo": {
+    "subir": 1.3,
+    "mantener": 0.0,
+    "bajar": 1.3,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Pasa por encima",
+    "bajar": "Y con el otro pie"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_mayor",
+      "cuadriceps"
+    ],
+    "secundarios": [
+      "tibial_anterior"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

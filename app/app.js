@@ -372,7 +372,7 @@ const chipsEjercicio = (def) =>
 // What a folded card says: sets and repetitions, the tempo line, the side and the band.
 function dosis(def, e) {
   const banda = bandaDe(def, e.banda);
-  const tempo = porPasos(def) ? `<span>${unidad(def).varios}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
+  const tempo = def.unidad ? `<span>${unidad(def).varios}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
   return `<span class="num">${e.series} × ${e.reps}</span>${tempo}${
     def.unLado && LADOS[e.lado] ? `<span>${esc(LADOS[e.lado])}</span>` : ''
   }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : ''}`;
@@ -401,7 +401,7 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
         ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
-      ${porPasos(def) ? `<div class="ajuste">
+      ${def.unidad === 'vueltas' ? '' : porPasos(def) ? `<div class="ajuste">
         <span>Ritmo del paso</span>
         <div class="ritmo"><div class="ritmo-mini"><span>Cada paso</span>${paso('tp', s, 'Segundos por paso', 1, 4)}</div></div>
       </div>` : `<div class="ajuste">
