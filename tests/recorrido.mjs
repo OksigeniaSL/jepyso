@@ -371,7 +371,9 @@ try {
     const espejo = movil.locator('.tarjeta-poster img').first();
     comprobar((await espejo.getAttribute('src')) === 'modelos/b/posters/hombro.webp', `${tema}: la rutina no trae el póster de su figura`);
     comprobar((await espejo.getAttribute('class')) === 'espejo', `${tema}: el lado izquierdo no sale en espejo`);
-    await movil.goto(url(tema, `#r=${codigo}`));
+    // In CI the person's player runs at the app's low quality: on a slow runner, the full-quality figure at double density
+    // in the software renderer nearly stops (13-11: a set never ended in 60 s). Locally it is walked at full quality.
+    await movil.goto(url(tema, `${process.env.CI ? '&calidad=baja' : ''}#r=${codigo}`));
     await movil.evaluate(() => localStorage.clear());
     await movil.reload();
     await movil.waitForTimeout(800);
