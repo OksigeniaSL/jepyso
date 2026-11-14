@@ -3,6 +3,15 @@
 // range, so a forged link can neither paint markup nor leave a file that no longer opens.
 import { EJERCICIOS, BANDAS, TOPE_MOLESTIA, diaLocal } from './datos.js';
 
+// Limits for what comes in a link, from anyone. What the professional keeps (files, copies, the cloud) is checked for
+// type but never cut, and fields a newer version adds are kept as they are.
+const NOMBRE = 200;
+const NOTA = 4000;
+const SIN_TOPE = Infinity;
+const otrosCampos = (o, conocidos) => Object.fromEntries(Object.entries(o).filter(([k]) => clavePropia(k) && !conocidos.includes(k)));
+const CAMPOS_PERSONA = ['id', 'nombre', 'notas', 'creada', 'm', 'rutinas', 'dias', 'ultimoResumen', 'cambiada'];
+const CAMPOS_PLANTILLA = ['nombre', 'cambiada', 'd', 'x', 'm', 'c', 'orden', 'ejercicios'];
+
 const entero = (v, min, max, porDefecto) => (Number.isInteger(v) ? Math.min(max, Math.max(min, v)) : porDefecto);
 const texto = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
 const lista = (v, max) => (Array.isArray(v) ? v.slice(0, max) : []);
@@ -34,11 +43,11 @@ export function limpiarRutina(r) {
   const e = lista(r.e, 40).flatMap((x) => {
     if (!objeto(x) || !esEjercicio(x.i)) return [];
     const d = EJERCICIOS[x.i].porDefecto;
-    const nota = texto(x.n, 500);
+    const nota = texto(x.n, NOTA);
     return [{ i: x.i, s: entero(x.s, 1, 6, d.series), r: entero(x.r, 1, 30, d.reps), t: ritmo(x.t, d.tempo), l: lado(x.l, x.i), b: banda(x.b), n: nota || undefined }];
   });
   return {
-    v: 1, para: texto(r.para, 80), de: texto(r.de, 80), d: DESCANSOS.includes(r.d) ? r.d : 45, x: entero(r.x, 1, 3, 1),
+    v: 1, para: texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: DESCANSOS.includes(r.d) ? r.d : 45, x: entero(r.x, 1, 3, 1),
     m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: esId(r.p) ? r.p : undefined, e,
   };
 }
@@ -46,7 +55,7 @@ export function limpiarRutina(r) {
 // One session: { f, h, e: [{ i, l, s, r, p: [reps of each set], m }], a (discomfort the next morning) }.
 export function limpiarDia(d, guardado = false) {
   if (!objeto(d) || !esFecha(d.f) || !Array.isArray(d.e)) return null;
-  const e = lista(d.e, 40).flatMap((x) => {
+  const e = lista(d.e, guardado ? SIN_TOPE : 40).flatMap((x) => {
     if (!objeto(x) || !(guardado ? idGuardado(x.i) : esEjercicio(x.i))) return [];
     const p = lista(x.p, 6).map((v) => entero(v, 0, 50, 0));
     return [{ i: x.i, l: lado(x.l, x.i), s: entero(x.s, 1, 6, p.length || 1), r: entero(x.r, 1, 30, 1), p, m: entero(x.m, 0, 10, undefined) }];
@@ -58,7 +67,7 @@ export function limpiarDia(d, guardado = false) {
 export function limpiarResumen(s) {
   if (!objeto(s) || !Array.isArray(s.dias)) return null;
   return {
-    v: 1, p: esId(s.p) ? s.p : undefined, para: texto(s.para, 80), de: texto(s.de, 80), m: tope(s.m),
+    v: 1, p: esId(s.p) ? s.p : undefined, para: texto(s.para, NOMBRE), de: texto(s.de, NOMBRE), m: tope(s.m),
     dias: s.dias.slice(-60).map((d) => limpiarDia(d)).filter(Boolean),
   };
 }
@@ -66,27 +75,29 @@ export function limpiarResumen(s) {
 // A person's file, as kept here, in a copy or in the cloud.
 export function limpiarPersona(p) {
   if (!objeto(p) || !esId(p.id)) return null;
+  const creada = esFecha(p.creada) ? p.creada : diaLocal();
   return {
+    ...otrosCampos(p, CAMPOS_PERSONA),
     id: p.id,
-    nombre: texto(p.nombre, 80).trim() || 'Sin nombre',
-    notas: texto(p.notas, 5000),
-    creada: esFecha(p.creada) ? p.creada : diaLocal(),
+    nombre: texto(p.nombre, SIN_TOPE).trim() || 'Sin nombre',
+    notas: texto(p.notas, SIN_TOPE),
+    creada,
     m: tope(p.m),
-    rutinas: lista(p.rutinas, 500).flatMap((r) =>
-      objeto(r) && esCodigo(r.codigo) ? [{ f: esFecha(r.f) ? r.f : undefined, codigo: r.codigo, e: lista(r.e, 40).filter(idGuardado) }] : [],
+    rutinas: lista(p.rutinas, SIN_TOPE).flatMap((r) =>
+      objeto(r) && esCodigo(r.codigo) ? [{ f: esFecha(r.f) ? r.f : creada, codigo: r.codigo, e: lista(r.e, SIN_TOPE).filter(idGuardado) }] : [],
     ),
-    dias: lista(p.dias, 5000).map((d) => limpiarDia(d, true)).filter(Boolean),
+    dias: lista(p.dias, SIN_TOPE).map((d) => limpiarDia(d, true)).filter(Boolean),
     ultimoResumen: esFecha(p.ultimoResumen) ? p.ultimoResumen : undefined,
     cambiada: esMomento(p.cambiada) ? p.cambiada : undefined,
   };
 }
 
-export const limpiarPersonas = (v) => lista(v, 5000).map(limpiarPersona).filter(Boolean);
+export const limpiarPersonas = (v) => lista(v, SIN_TOPE).map(limpiarPersona).filter(Boolean);
 
 // A template: the routine settings and the exercises with theirs, under a name.
 export function limpiarPlantilla(t) {
   if (!objeto(t) || !clavePropia(t.nombre)) return null;
-  const nombre = texto(t.nombre, 80).trim();
+  const nombre = texto(t.nombre, SIN_TOPE).trim();
   if (!nombre) return null;
   const orden = [...new Set(lista(t.orden, 40).filter(esEjercicio))];
   const ejercicios = {};
@@ -95,16 +106,17 @@ export function limpiarPlantilla(t) {
     const d = EJERCICIOS[i].porDefecto;
     ejercicios[i] = {
       series: entero(x.series, 1, 6, d.series), reps: entero(x.reps, 1, 30, d.reps), tempo: ritmo(x.tempo, d.tempo),
-      lado: lado(x.lado, i), banda: banda(x.banda) || '', nota: texto(x.nota, 500),
+      lado: lado(x.lado, i), banda: banda(x.banda) || '', nota: texto(x.nota, SIN_TOPE),
     };
   }
   return {
+    ...otrosCampos(t, CAMPOS_PLANTILLA),
     nombre, cambiada: esMomento(t.cambiada) ? t.cambiada : undefined, d: DESCANSOS.includes(t.d) ? t.d : 45,
     x: entero(t.x, 1, 3, 1), m: tope(t.m) ?? TOPE_MOLESTIA, c: t.c === 'b' ? 'b' : 'a', orden, ejercicios,
   };
 }
 
-export const limpiarPlantillas = (v) => lista(v, 200).map(limpiarPlantilla).filter(Boolean);
+export const limpiarPlantillas = (v) => lista(v, SIN_TOPE).map(limpiarPlantilla).filter(Boolean);
 
 // What was deleted, with its date: { personas: { id: moment }, plantillas: { name: moment } }. Objects without a
 // prototype, so a name like «constructor» is just a name.
@@ -112,8 +124,8 @@ export function limpiarBorradas(b) {
   const r = { personas: Object.create(null), plantillas: Object.create(null) };
   for (const tipo of ['personas', 'plantillas']) {
     const de = objeto(b) && objeto(b[tipo]) ? b[tipo] : {};
-    for (const [k, f] of Object.entries(de).slice(0, 5000)) {
-      if ((tipo === 'personas' ? esId(k) : clavePropia(k) && k.length <= 80) && esMomento(f)) r[tipo][k] = f;
+    for (const [k, f] of Object.entries(de)) {
+      if ((tipo === 'personas' ? esId(k) : clavePropia(k)) && esMomento(f)) r[tipo][k] = f;
     }
   }
   return r;

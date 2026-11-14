@@ -4,7 +4,7 @@ import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
 } from './datos.js';
-import { limpiarRutina, limpiarResumen, limpiarPlantillas } from './entrada.js';
+import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, leerBorradas, apuntarBorrada,
@@ -124,7 +124,15 @@ const textoTempo = ([s, m, b]) => (m ? `Ida en ${s} s, mantén ${m} s, vuelta en
 // ---------- Figure ----------
 async function cargarManifiesto(c = 'a') {
   const ruta = RUTAS[c] || RUTAS.a;
-  manifiestos[ruta] ||= fetch(ruta).then((r) => r.json());
+  manifiestos[ruta] ||= fetch(ruta)
+    .then((r) => {
+      if (!r.ok) throw new Error(ruta);
+      return r.json();
+    })
+    .catch((err) => {
+      delete manifiestos[ruta];
+      throw err;
+    });
   return manifiestos[ruta];
 }
 
@@ -134,10 +142,15 @@ async function cargarManifiesto(c = 'a') {
 let moduloFigura = null;
 let pintarRecorrido = () => {};
 async function cargarFigura() {
-  moduloFigura ??= Promise.all([import('./figura.js'), import('./recorrido.js')]).then(([f, rec]) => {
-    pintarRecorrido = rec.pintarRecorrido;
-    return f;
-  });
+  moduloFigura ??= Promise.all([import('./figura.js'), import('./recorrido.js')])
+    .then(([f, rec]) => {
+      pintarRecorrido = rec.pintarRecorrido;
+      return f;
+    })
+    .catch((err) => {
+      moduloFigura = null;
+      throw err;
+    });
   return moduloFigura;
 }
 
@@ -242,6 +255,7 @@ function borradorInicial() {
 
 // Drafts saved before the library had an order kept every exercise with an «incluido» flag.
 function ponerAlDia(b) {
+  if (!b || typeof b !== 'object') b = borradorInicial();
   b.tope ??= TOPE_MOLESTIA;
   b.filtro ??= { zona: '', musculo: '', texto: '' };
   b.ejercicios ??= {};
@@ -252,6 +266,12 @@ function ponerAlDia(b) {
     else delete b.ejercicios[id];
   }
   if (!ORDEN.includes(b.activo)) b.activo = b.orden[0] || ORDEN[0];
+  // The draft lives in this browser's storage, which other pages of the same origin can write (on the bench): its
+  // settings go through the same cleaning as a template.
+  const limpia = limpiarPlantilla({ nombre: 'borrador', d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: Object.keys(b.ejercicios), ejercicios: b.ejercicios });
+  Object.assign(b, { descanso: limpia.d, veces: limpia.x, tope: limpia.m, cuerpo: limpia.c, ejercicios: limpia.ejercicios });
+  b.para = typeof b.para === 'string' ? b.para : '';
+  b.de = typeof b.de === 'string' ? b.de : '';
   return b;
 }
 
@@ -1079,9 +1099,13 @@ async function crearEnlace(b) {
   const codigo = await codificar(rutina);
   if (persona) {
     apuntarRutina(lista, { id: persona.id, nombre: rutina.para }, rutina, codigo);
-    guardarPersonas(lista);
-    b.persona = persona.id;
-    almacen.guardar('borrador', b);
+    if (guardarPersonas(lista)) {
+      b.persona = persona.id;
+      almacen.guardar('borrador', b);
+    } else {
+      persona = null;
+      sinSitio = 'lleno';
+    }
   }
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
@@ -1103,7 +1127,8 @@ async function crearEnlace(b) {
     <h2 id="hoja-titulo">La rutina, lista</h2>
     <p>Mándale el enlace por WhatsApp o Telegram, o que escanee el código con su móvil. Todo va dentro del enlace: no se guarda en ningún servidor.</p>
     ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
-    ${sinSitio ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
+    ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
+    ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
     <div class="qr">${qr}</div>
     <div class="enlace-texto">${esc(url)}</div>
     <div class="botones">
@@ -1168,6 +1193,10 @@ async function vistaRutina(codigo) {
     return () => {};
   }
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
+  if (!ejercicios.length) {
+    app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
+    return () => {};
+  }
   const clave = 'hist:' + hashCorto(codigo);
   const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d), 0);
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
@@ -1301,14 +1330,23 @@ async function vistaRutina(codigo) {
       bloqueo = null;
     }
     sesion = { item: 0, serie: 0, hechas: cola.map((c) => Array(c.e.s).fill(0)), molestia: {}, inicio: new Date() };
+    // «Back» on the phone during the routine asks the same as the ×, instead of leaving the page with the session.
+    history.pushState({ jepysoJugador: 1 }, '');
     pintarJugador();
     await prepararSerie();
   }
+  const alAtras = () => {
+    if (!document.querySelector('.jugador')) return;
+    const salir = app.querySelector('[data-r="salir"]');
+    if (sesion?.estado !== 'salir') history.pushState({ jepysoJugador: 1 }, '');
+    salir?.click();
+  };
+  window.addEventListener('popstate', alAtras);
 
   // The browser lets the screen lock go whenever the page is hidden (a look at WhatsApp mid-routine): back on it,
   // with a session going, it is asked for again, so the phone does not lock in the middle of a set.
   const alVolver = async () => {
-    if (document.visibilityState !== 'visible' || !sesion || !navigator.wakeLock || (bloqueo && !bloqueo.released)) return;
+    if (document.visibilityState !== 'visible' || !sesion || !document.querySelector('.jugador') || !navigator.wakeLock || (bloqueo && !bloqueo.released)) return;
     try {
       bloqueo = await navigator.wakeLock.request('screen');
     } catch {
@@ -1428,6 +1466,11 @@ async function vistaRutina(codigo) {
     const elFase = mando.querySelector('.j-fase');
     const elRep = mando.querySelector('.j-rep');
     const nombres = { subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos };
+    // The phrases of an exercise have different lengths: the box takes the height of the longest once, so the sheet
+    // (and the figure above it) does not jump from phase to phase.
+    const primera = elFase.textContent;
+    elFase.style.minHeight = `${Math.max(...Object.values(nombres).map((t) => ((elFase.textContent = `${t} 88`), elFase.offsetHeight)))}px`;
+    elFase.textContent = primera;
     const f = figura;
     f.oyentes.fase = [];
     f.oyentes.cambio = [];
@@ -1743,9 +1786,14 @@ async function vistaRutina(codigo) {
   };
 
   intro();
+  // The figure's code starts coming while the person reads the list: it is ready by «Empezar», and comes from the same
+  // version of the app as the page.
+  cargarFigura().catch(() => {});
   return () => {
     clearTimeout(sesion?.temporizador);
     clearInterval(sesion?.reloj);
+    window.removeEventListener('popstate', alAtras);
+    document.removeEventListener('visibilitychange', alVolver);
     app.onclick = null;
   };
 }
@@ -1868,7 +1916,10 @@ function guardarEnFicha(s, destino = '') {
 }
 
 // ---------- The professional's people ----------
-const fechaLarga = (f) => new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(new Date(f + 'T12:00:00'));
+const fechaLarga = (f) => {
+  const d = new Date(f + 'T12:00:00');
+  return Number.isNaN(d.getTime()) ? 'sin fecha' : new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(d);
+};
 const ultimaFecha = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
 
 // A day that passed the person's level in the last two weeks, the latest one, to see at a glance who needs a look.
@@ -1934,6 +1985,7 @@ async function sincronizarDrive(boton) {
 
 function vistaPersonas() {
   let texto = '';
+  let buscando = null;
   const pintarLista = () => {
     const todas = leerPersonas().sort((x, y) => ultimaFecha(y).localeCompare(ultimaFecha(x)));
     const lista = todas.filter((p) => !texto || p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(texto));
@@ -1967,7 +2019,9 @@ function vistaPersonas() {
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'buscar-persona') return;
     texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-    pintarLista();
+    // With hundreds of files, painting on every key made typing lag: the list follows a moment after the last one.
+    clearTimeout(buscando);
+    buscando = setTimeout(pintarLista, 150);
   };
   app.onclick = async (ev) => {
     if (ev.target.closest('[data-accion="drive"]')) {
@@ -1993,7 +2047,10 @@ function vistaPersonas() {
     try {
       const lista = leerPersonas();
       const r = cargarCopia(lista, JSON.parse(await ev.target.files[0].text()));
-      guardarPersonas(lista);
+      if (!guardarPersonas(lista)) {
+        aviso.textContent = SIN_SITIO;
+        return;
+      }
       aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.${
         r.fuera ? ` ${r.fuera} no ${r.fuera === 1 ? 'cabe' : 'caben'}: la versión gratis guarda hasta ${limite()}.` : ''}`;
       pintarLista();
@@ -2099,11 +2156,17 @@ function vistaPersona(id) {
     fresca.cambiada = p.cambiada;
     if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
   };
+  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file.
+  let porGuardar = null;
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
     p.notas = ev.target.value;
     p.cambiada = new Date().toISOString();
-    guardar();
+    clearTimeout(porGuardar);
+    porGuardar = setTimeout(() => {
+      porGuardar = null;
+      guardar();
+    }, 400);
   };
   let confirmar = null;
   app.onclick = async (ev) => {
@@ -2156,6 +2219,10 @@ function vistaPersona(id) {
     }
   };
   return () => {
+    if (porGuardar) {
+      clearTimeout(porGuardar);
+      guardar();
+    }
     clearTimeout(confirmar);
     app.oninput = app.onclick = null;
   };
@@ -2190,6 +2257,17 @@ navigator.serviceWorker?.addEventListener('message', (ev) => {
   clearTimeout(avisoVersion);
   avisoVersion = setTimeout(mostrarVersionNueva, 1500);
 });
+// The browser's storage is full: said once, on top of whatever screen, with what to do.
+window.addEventListener('jepyso-lleno', () => {
+  if (document.querySelector('.aviso-lleno')) return;
+  const aviso = document.createElement('div');
+  aviso.className = 'nueva-version aviso-lleno';
+  aviso.setAttribute('role', 'alert');
+  aviso.innerHTML = `<p>${SIN_SITIO}</p><button type="button" class="nueva-version-cerrar" aria-label="Cerrar">${ICONO.cerrar}</button>`;
+  aviso.querySelector('button').addEventListener('click', () => aviso.remove());
+  document.body.append(aviso);
+});
+
 // A new set may have taken over while this page was still loading, before it listened: it asks once.
 navigator.serviceWorker?.controller?.postMessage({ tipo: 'version' });
 function mostrarVersionNueva() {
@@ -2291,7 +2369,15 @@ async function ir() {
   else if (h.startsWith('#s=')) limpiar = await vistaResumen(h.slice(3));
   else if (h === '#personas') limpiar = vistaPersonas();
   else if (h === '#plantillas') limpiar = vistaPlantillas();
-  else if (h.startsWith('#persona=')) limpiar = vistaPersona(decodeURIComponent(h.slice(9)));
+  else if (h.startsWith('#persona=')) {
+    let id = '';
+    try {
+      id = decodeURIComponent(h.slice(9));
+    } catch {
+      // A mistyped address: read as a file that is not here.
+    }
+    limpiar = vistaPersona(id);
+  }
   else limpiar = vistaArmar();
 }
 // The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off.
