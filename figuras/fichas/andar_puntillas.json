@@ -1,0 +1,32 @@
+{
+  "id": "andar_puntillas",
+  "familia": "andar",
+  "nombre": "Andar de puntillas",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "puntillas"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

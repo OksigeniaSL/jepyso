@@ -1,0 +1,77 @@
+{
+ "id": "andar_lado",
+ "nombre": "Andar de lado",
+ "fps": 30,
+ "duracion": 1.8,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 0.9,
+   "texto": "Un paso"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 0.9,
+   "fin": 0.9,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 0.9,
+   "fin": 1.8,
+   "texto": "Otro paso"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 1.8,
+   "fin": 1.8,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_abduccion": -1.8,
+   "codo_izquierda_flexion": 15.0,
+   "hombro_izquierda_rotacion_externa": 42.4,
+   "cadera_derecha_abduccion": -1.8,
+   "codo_derecha_flexion": 26.9,
+   "hombro_derecha_rotacion_externa": 26.2
+  },
+  "llegada": {
+   "cadera_izquierda_abduccion": 9.7,
+   "codo_izquierda_flexion": 26.9,
+   "hombro_izquierda_rotacion_externa": 26.2,
+   "cadera_derecha_abduccion": 9.7,
+   "codo_derecha_flexion": 15.0,
+   "hombro_derecha_rotacion_externa": 42.4
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": [
+   "aductores"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "cinta"
+ ],
+ "pasos": 2,
+ "camara": {
+  "pos": [
+   -1.151,
+   1.52,
+   3.349
+  ],
+  "mira": [
+   -0.002,
+   0.798,
+   0.066
+  ]
+ },
+ "archivo": "andar_lado.glb",
+ "bytes": 47608
+}

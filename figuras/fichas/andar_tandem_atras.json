@@ -1,0 +1,35 @@
+{
+  "id": "andar_tandem_atras",
+  "familia": "andar",
+  "nombre": "Andar en tándem hacia atrás",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "tandem_atras"
+    }
+  },
+  "ritmo": {
+    "subir": 1.3,
+    "mantener": 0.0,
+    "bajar": 1.3,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "gemelos",
+      "tibial_anterior"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

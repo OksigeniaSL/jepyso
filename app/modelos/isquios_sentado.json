@@ -1,0 +1,88 @@
+{
+ "id": "isquios_sentado",
+ "nombre": "Estiramiento de isquios sentado",
+ "fps": 30,
+ "duracion": 15.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Estira la pierna con el talón en el suelo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 12.0,
+   "texto": "Inclínate con la espalda recta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 12.0,
+   "fin": 14.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 14.0,
+   "fin": 15.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 86.2,
+   "rodilla_izquierda_flexion": 86.0,
+   "codo_izquierda_flexion": 70.8,
+   "hombro_izquierda_flexion": -8.9,
+   "hombro_izquierda_abduccion": 8.0,
+   "cadera_derecha_flexion": 86.2,
+   "rodilla_derecha_flexion": 86.0,
+   "tobillo_derecha_flexion": -0.1,
+   "codo_derecha_flexion": 70.8,
+   "hombro_derecha_flexion": -8.9,
+   "hombro_derecha_abduccion": 8.0,
+   "tronco_inclinacion": 0.0,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 94.4,
+   "rodilla_izquierda_flexion": 78.2,
+   "codo_izquierda_flexion": 86.2,
+   "hombro_izquierda_flexion": -14.9,
+   "hombro_izquierda_abduccion": 10.9,
+   "cadera_derecha_flexion": 69.8,
+   "rodilla_derecha_flexion": 3.0,
+   "tobillo_derecha_flexion": 15.0,
+   "codo_derecha_flexion": 41.8,
+   "hombro_derecha_flexion": 3.6,
+   "hombro_derecha_abduccion": 2.7,
+   "tronco_inclinacion": 23.0,
+   "pelvis_basculacion": 15.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "isquiotibiales"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.332,
+   1.739,
+   0.757
+  ],
+  "mira": [
+   0.004,
+   0.672,
+   0.157
+  ]
+ },
+ "archivo": "isquios_sentado.glb",
+ "bytes": 71288
+}

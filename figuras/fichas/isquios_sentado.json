@@ -1,0 +1,56 @@
+{
+  "id": "isquios_sentado",
+  "familia": "sentado",
+  "nombre": "Estiramiento de isquios sentado",
+  "lado": "derecho",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "borde": true
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 10.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Estira la pierna con el talón en el suelo",
+    "mantener": "Inclínate con la espalda recta",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "pierna_d": "talon"
+      },
+      "knee_r": {
+        "flex": 3
+      },
+      "ankle_r": {
+        "flex": 15
+      },
+      "pelvis": {
+        "flex": 15
+      },
+      "spine": {
+        "flex": 8
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "isquiotibiales"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.85
+}

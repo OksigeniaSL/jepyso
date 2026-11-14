@@ -230,6 +230,9 @@ export class Figura {
       clip = this.animacionesCuerpo.find((a) => a.name === def.clip) || this.animacionesCuerpo[0];
     }
     this.fases = normalizarFases(ficha, clip.duration);
+    // Walking (Gaudí's «andar»): one clip is «pasos» steps on a running floor, with no rest between one and the next.
+    this.pasos = Number.isInteger(ficha?.pasos) && ficha.pasos > 0 ? ficha.pasos : 0;
+    this.reposo = this.pasos ? 0 : REPOSO_S;
     // The words of each phase as the exercise sheet writes them («Dobla las rodillas», «Sube despacio»): the player shows
     // these, so a squat never reads «Sube» while the figure goes down.
     this.textos = Object.fromEntries((Array.isArray(ficha?.fases) ? ficha.fases : []).filter((p) => p.texto).map((p) => [p.fase || p.nombre, p.texto]));
@@ -309,12 +312,12 @@ export class Figura {
   // Seconds of one full repetition at the current tempo.
   ciclo() {
     const [s, m, b] = this.tempo;
-    return s + m + b + REPOSO_S;
+    return s + m + b + (this.reposo ?? REPOSO_S);
   }
 
   // Real time inside one repetition -> phase name, seconds left in it and clip time.
   mapear(tc) {
-    const dur = [...this.tempo, REPOSO_S];
+    const dur = [...this.tempo, this.reposo ?? REPOSO_S];
     let acumulado = 0;
     for (let i = 0; i < 4; i++) {
       const d = dur[i];
@@ -337,10 +340,12 @@ export class Figura {
     this.mixer.update(0);
   }
 
-  // 'demo' loops forever (preview); 'serie' plays `reps` repetitions and stops.
-  empezar({ modo = 'demo', reps = 0 } = {}) {
+  // 'demo' loops forever (preview); 'serie' plays `reps` repetitions and stops. With porPasos, `reps` are steps of a
+  // walking clip: it plays the cycles they need and counts each step (a set can end halfway through a cycle).
+  empezar({ modo = 'demo', reps = 0, porPasos = false } = {}) {
     this.modo = modo;
     this.reps = reps;
+    this.porPasos = porPasos && this.pasos > 0;
     this.repActual = 0;
     this.t = 0;
     this.faseAnterior = null;
@@ -372,15 +377,16 @@ export class Figura {
       this.t += dt;
       const c = this.ciclo();
       const rep = Math.floor(this.t / c);
-      if (this.modo === 'serie' && rep >= this.reps) {
+      const hechas = this.porPasos ? Math.floor((this.t / c) * this.pasos) : rep;
+      if (this.modo === 'serie' && hechas >= this.reps) {
         this.enMarcha = false;
         this.posar(this.fases.reposo[1]);
         this.emitir('fase', null);
         this.emitir('fin');
       } else {
-        if (rep !== this.repActual) {
-          this.repActual = rep;
-          this.emitir('repeticion', rep);
+        if (hechas !== this.repActual) {
+          this.repActual = hechas;
+          this.emitir('repeticion', hechas);
         }
         const tc = this.t - rep * c;
         const m = this.mapear(tc);

@@ -1,0 +1,48 @@
+{
+  "id": "puntas_sin_apoyo",
+  "familia": "de_pie_silla",
+  "nombre": "Elevación de puntas sin apoyo",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "parametros": {
+    "silla": "izquierda"
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Levanta las puntas",
+    "mantener": "Sobre los talones",
+    "bajar": "Bájalas despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "talones",
+        "brazos": "libre"
+      }
+    },
+    "llegada": {
+      "ankle_l": {
+        "flex": 20
+      },
+      "ankle_r": {
+        "flex": 20
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

@@ -1,0 +1,70 @@
+{
+ "id": "puntas",
+ "nombre": "Elevación de puntas",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Levanta las puntas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Sobre los talones"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Bájalas despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_izquierda_flexion": -1.7,
+   "codo_izquierda_flexion": 30.0,
+   "hombro_izquierda_flexion": -17.5,
+   "tobillo_derecha_flexion": -1.7
+  },
+  "llegada": {
+   "tobillo_izquierda_flexion": 18.3,
+   "codo_izquierda_flexion": 22.3,
+   "hombro_izquierda_flexion": -9.0,
+   "tobillo_derecha_flexion": 18.3
+  }
+ },
+ "musculos": {
+  "principales": [
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.401,
+   1.98,
+   0.635
+  ],
+  "mira": [
+   0.289,
+   0.799,
+   -0.029
+  ]
+ },
+ "archivo": "puntas.glb",
+ "bytes": 65980
+}

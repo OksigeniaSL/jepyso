@@ -1,0 +1,66 @@
+{
+ "id": "puntas_sin_apoyo",
+ "nombre": "Elevación de puntas sin apoyo",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Levanta las puntas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Sobre los talones"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Bájalas despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "tobillo_izquierda_flexion": -1.7,
+   "tobillo_derecha_flexion": -1.7
+  },
+  "llegada": {
+   "tobillo_izquierda_flexion": 18.3,
+   "tobillo_derecha_flexion": 18.3
+  }
+ },
+ "musculos": {
+  "principales": [
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.297,
+   1.957,
+   0.622
+  ],
+  "mira": [
+   0.323,
+   0.799,
+   -0.029
+  ]
+ },
+ "archivo": "puntas_sin_apoyo.glb",
+ "bytes": 65452
+}

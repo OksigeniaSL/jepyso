@@ -1,0 +1,74 @@
+{
+ "id": "talones_sin_apoyo",
+ "nombre": "Elevación de talones sin apoyo",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube de puntillas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -0.6,
+   "rodilla_izquierda_flexion": 4.0,
+   "tobillo_izquierda_flexion": 4.6,
+   "cadera_derecha_flexion": -0.6,
+   "rodilla_derecha_flexion": 4.0,
+   "tobillo_derecha_flexion": 4.6
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 5.0,
+   "rodilla_izquierda_flexion": 15.1,
+   "tobillo_izquierda_flexion": -20.0,
+   "cadera_derecha_flexion": 5.0,
+   "rodilla_derecha_flexion": 15.1,
+   "tobillo_derecha_flexion": -20.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.426,
+   1.914,
+   0.982
+  ],
+  "mira": [
+   0.0,
+   0.818,
+   0.365
+  ]
+ },
+ "archivo": "talones_sin_apoyo.glb",
+ "bytes": 67648
+}

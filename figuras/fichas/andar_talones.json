@@ -1,0 +1,32 @@
+{
+  "id": "andar_talones",
+  "familia": "andar",
+  "nombre": "Andar de talones",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "talones"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "tibial_anterior"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

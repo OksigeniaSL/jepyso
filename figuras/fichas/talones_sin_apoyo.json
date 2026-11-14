@@ -1,0 +1,45 @@
+{
+  "id": "talones_sin_apoyo",
+  "familia": "de_pie_silla",
+  "nombre": "Elevación de talones sin apoyo",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube de puntillas",
+    "mantener": "Aguanta",
+    "bajar": "Baja despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "piernas": "puntillas",
+        "brazos": "libre"
+      }
+    },
+    "llegada": {
+      "ankle_l": {
+        "flex": -30
+      },
+      "ankle_r": {
+        "flex": -30
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "gemelos"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

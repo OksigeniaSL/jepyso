@@ -1,0 +1,34 @@
+{
+  "id": "andar_lado",
+  "familia": "andar",
+  "nombre": "Andar de lado",
+  "lado": "derecho",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "lado"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "aductores"
+    ]
+  },
+  "camara": "frente",
+  "margen": 0.9
+}

@@ -1,0 +1,35 @@
+{
+  "id": "andar_atras",
+  "familia": "andar",
+  "nombre": "Andar hacia atrás",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "atras"
+    }
+  },
+  "ritmo": {
+    "subir": 0.9,
+    "mantener": 0.0,
+    "bajar": 0.9,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_mayor",
+      "isquiotibiales"
+    ],
+    "secundarios": [
+      "gemelos"
+    ]
+  },
+  "camara": "lado",
+  "margen": 0.9
+}

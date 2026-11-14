@@ -1,0 +1,90 @@
+{
+ "id": "andar_tandem_atras",
+ "nombre": "Andar en tándem hacia atrás",
+ "fps": 30,
+ "duracion": 2.6,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.3,
+   "texto": "Un paso"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.3,
+   "fin": 1.3,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 1.3,
+   "fin": 2.6,
+   "texto": "Otro paso"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 2.6,
+   "fin": 2.6,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 21.2,
+   "rodilla_izquierda_flexion": 8.5,
+   "tobillo_izquierda_flexion": -0.9,
+   "codo_izquierda_flexion": 15.0,
+   "hombro_izquierda_flexion": -3.0,
+   "hombro_izquierda_rotacion_externa": 63.5,
+   "cadera_derecha_flexion": 13.1,
+   "rodilla_derecha_flexion": 28.1,
+   "tobillo_derecha_flexion": 14.3,
+   "codo_derecha_flexion": 26.9,
+   "hombro_derecha_flexion": 3.0,
+   "hombro_derecha_rotacion_externa": 38.8
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 13.1,
+   "rodilla_izquierda_flexion": 28.1,
+   "tobillo_izquierda_flexion": 14.3,
+   "codo_izquierda_flexion": 26.9,
+   "hombro_izquierda_flexion": 3.0,
+   "hombro_izquierda_rotacion_externa": 38.8,
+   "cadera_derecha_flexion": 21.2,
+   "rodilla_derecha_flexion": 8.5,
+   "tobillo_derecha_flexion": -0.9,
+   "codo_derecha_flexion": 15.0,
+   "hombro_derecha_flexion": -3.0,
+   "hombro_derecha_rotacion_externa": 63.5
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_medio"
+  ],
+  "secundarios": [
+   "gemelos",
+   "tibial_anterior"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "cinta"
+ ],
+ "pasos": 2,
+ "camara": {
+  "pos": [
+   -2.417,
+   1.852,
+   2.816
+  ],
+  "mira": [
+   -0.001,
+   0.794,
+   0.098
+  ]
+ },
+ "archivo": "andar_tandem_atras.glb",
+ "bytes": 50324
+}

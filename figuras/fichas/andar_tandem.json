@@ -1,0 +1,35 @@
+{
+  "id": "andar_tandem",
+  "familia": "andar",
+  "nombre": "Andar en tándem",
+  "lado": "ambos",
+  "accesorios": [
+    "cinta"
+  ],
+  "parametros": {
+    "andar": {
+      "modo": "tandem"
+    }
+  },
+  "ritmo": {
+    "subir": 1.2,
+    "mantener": 0.0,
+    "bajar": 1.2,
+    "reposo": 0.0
+  },
+  "textos": {
+    "subir": "Un paso",
+    "bajar": "Otro paso"
+  },
+  "musculos": {
+    "principales": [
+      "gluteo_medio"
+    ],
+    "secundarios": [
+      "gemelos",
+      "tibial_anterior"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

@@ -90,6 +90,95 @@
     ]
    }
   },
+  "andar_atras": {
+   "glb": "modelos/b/andar_atras.glb",
+   "ficha": "modelos/b/andar_atras.json",
+   "bytes": 49800,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor",
+     "isquiotibiales"
+    ],
+    "secundarios": [
+     "gemelos"
+    ]
+   },
+   "pasos": 2
+  },
+  "andar_lado": {
+   "glb": "modelos/b/andar_lado.glb",
+   "ficha": "modelos/b/andar_lado.json",
+   "bytes": 47608,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "aductores"
+    ]
+   },
+   "pasos": 2
+  },
+  "andar_puntillas": {
+   "glb": "modelos/b/andar_puntillas.glb",
+   "ficha": "modelos/b/andar_puntillas.json",
+   "bytes": 49288,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   },
+   "pasos": 2
+  },
+  "andar_talones": {
+   "glb": "modelos/b/andar_talones.glb",
+   "ficha": "modelos/b/andar_talones.json",
+   "bytes": 49756,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   },
+   "pasos": 2
+  },
+  "andar_tandem": {
+   "glb": "modelos/b/andar_tandem.glb",
+   "ficha": "modelos/b/andar_tandem.json",
+   "bytes": 49588,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "gemelos",
+     "tibial_anterior"
+    ]
+   },
+   "pasos": 2
+  },
+  "andar_tandem_atras": {
+   "glb": "modelos/b/andar_tandem_atras.glb",
+   "ficha": "modelos/b/andar_tandem_atras.json",
+   "bytes": 50324,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gluteo_medio"
+    ],
+    "secundarios": [
+     "gemelos",
+     "tibial_anterior"
+    ]
+   },
+   "pasos": 2
+  },
   "arco_corto": {
    "glb": "modelos/b/arco_corto.glb",
    "ficha": "modelos/b/arco_corto.json",
@@ -284,6 +373,19 @@
    "glb": "modelos/b/equilibrio.glb",
    "ficha": "modelos/b/equilibrio.json",
    "bytes": 68632,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gemelos",
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "equilibrio_sin_apoyo": {
+   "glb": "modelos/b/equilibrio_sin_apoyo.glb",
+   "ficha": "modelos/b/equilibrio_sin_apoyo.json",
+   "bytes": 66892,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -498,6 +600,18 @@
     "secundarios": []
    }
   },
+  "isquios_sentado": {
+   "glb": "modelos/b/isquios_sentado.glb",
+   "ficha": "modelos/b/isquios_sentado.json",
+   "bytes": 74532,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "isquiotibiales"
+    ],
+    "secundarios": []
+   }
+  },
   "isquios_toalla": {
    "glb": "modelos/b/isquios_toalla.glb",
    "ficha": "modelos/b/isquios_toalla.json",
@@ -673,6 +787,30 @@
     ]
    }
   },
+  "puntas": {
+   "glb": "modelos/b/puntas.glb",
+   "ficha": "modelos/b/puntas.json",
+   "bytes": 65980,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
+  "puntas_sin_apoyo": {
+   "glb": "modelos/b/puntas_sin_apoyo.glb",
+   "ficha": "modelos/b/puntas_sin_apoyo.json",
+   "bytes": 65452,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "tibial_anterior"
+    ],
+    "secundarios": []
+   }
+  },
   "remo": {
    "glb": "modelos/b/remo.glb",
    "ficha": "modelos/b/remo.json",
@@ -791,6 +929,21 @@
     ]
    }
   },
+  "sentadilla_sin_apoyo": {
+   "glb": "modelos/b/sentadilla_sin_apoyo.glb",
+   "ficha": "modelos/b/sentadilla_sin_apoyo.json",
+   "bytes": 68088,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales"
+    ]
+   }
+  },
   "silla": {
    "glb": "modelos/b/silla.glb",
    "ficha": "modelos/b/silla.json",
@@ -836,6 +989,18 @@
    "glb": "modelos/b/talones_sentado.glb",
    "ficha": "modelos/b/talones_sentado.json",
    "bytes": 69000,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
+  "talones_sin_apoyo": {
+   "glb": "modelos/b/talones_sin_apoyo.glb",
+   "ficha": "modelos/b/talones_sin_apoyo.json",
+   "bytes": 67648,
    "lado": "ambos",
    "musculos": {
     "principales": [

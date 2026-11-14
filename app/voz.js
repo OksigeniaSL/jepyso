@@ -59,4 +59,5 @@ export function callar() {
 
 const NUMEROS = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce',
   'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte'];
-export const numero = (n) => NUMEROS[n] || String(n);
+// Steps and laps are counted «uno», repetitions «una».
+export const numero = (n, masculino = false) => (n === 1 && masculino ? 'uno' : NUMEROS[n] || String(n));

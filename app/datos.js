@@ -1297,6 +1297,231 @@ export const EJERCICIOS = {
     masDificil: 'Cuando hagas dos series de 10 bien, sube el peso de la tobillera.',
     fuentes: ['Otago Exercise Programme (ACC), fuerza: «side hip strengthening»'],
   },
+  puntas: {
+    nombre: 'Elevación de puntas',
+    otrosNombres: ['subir las puntas de los pies', 'sobre los talones'],
+    posicion: 'De pie',
+    material: 'Apoyo firme',
+    unLado: false,
+    zonas: ['tobillo'],
+    musculos: { principales: ['tibial_anterior'], secundarios: [] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 1, 2] },
+    partida: 'De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él y los pies a la anchura de la cadera.',
+    pasos: ['Sube las puntas de los pies todo lo que puedas, quedándote sobre los talones.', 'Mantén un momento.', 'Bájalas despacio.'],
+    notar: 'En la parte de delante de la pierna, bajo la rodilla.',
+    error: 'Echar la cadera hacia atrás para subir las puntas. El cuerpo, recto.',
+    masDificil: 'Cuando te resulte fácil, hazlo sin agarrarte, con el apoyo al alcance de la mano.',
+    fuentes: ['Otago Exercise Programme (ACC), fuerza: «toe raises»'],
+  },
+  puntas_sin_apoyo: {
+    nombre: 'Elevación de puntas sin apoyo',
+    otrosNombres: ['subir las puntas sin agarrarse'],
+    posicion: 'De pie',
+    material: 'Apoyo firme, al alcance',
+    unLado: false,
+    zonas: ['tobillo'],
+    musculos: { principales: ['tibial_anterior'], secundarios: [] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 1, 2] },
+    partida: 'De pie junto a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), sin agarrarte pero con él al alcance de la mano, y los pies a la anchura de la cadera.',
+    pasos: ['Sube las puntas de los pies todo lo que puedas, quedándote sobre los talones.', 'Mantén un momento.', 'Bájalas despacio.'],
+    notar: 'En la parte de delante de la pierna, bajo la rodilla.',
+    error: 'Alejarte del apoyo. Si pierdes el equilibrio, agárrate y sigue.',
+    fuentes: ['Otago Exercise Programme (ACC), fuerza: «toe raises», nivel D'],
+  },
+  isquios_sentado: {
+    nombre: 'Estiramiento de isquios sentado',
+    otrosNombres: ['estiramiento de piernas sentado', 'isquiotibiales en la silla'],
+    posicion: 'Sentado',
+    material: 'Silla firme',
+    unLado: true,
+    zonas: ['rodilla', 'cadera'],
+    musculos: { principales: ['isquiotibiales'], secundarios: [] },
+    porDefecto: { series: 1, reps: 3, tempo: [2, 12, 2] },
+    partida: 'Sentado en el borde de una silla firme, sin ruedas y apoyada en la pared, con la espalda recta, los pies en el suelo y las manos en los muslos.',
+    pasos: [
+      'Estira una pierna hacia delante, con el talón en el suelo y la punta hacia arriba.',
+      'Inclínate un poco hacia delante con la espalda recta, hasta notar el estiramiento, y mantén.',
+      'Vuelve despacio y recoge la pierna.',
+    ],
+    notar: 'En la parte de atrás del muslo y detrás de la rodilla.',
+    error: 'Redondear la espalda para llegar más lejos. Se inclina la cadera, con la espalda recta.',
+    fuentes: ['Vivifrail, estiramiento de piernas (Ministerio de Sanidad)'],
+  },
+  talones_sin_apoyo: {
+    nombre: 'Elevación de talones sin apoyo',
+    otrosNombres: ['de puntillas sin agarrarse'],
+    posicion: 'De pie',
+    material: 'Apoyo firme, al alcance',
+    unLado: false,
+    zonas: ['tobillo', 'rodilla'],
+    musculos: { principales: ['gemelos'], secundarios: [] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 1, 2] },
+    partida: 'De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), sin agarrarte pero con las manos cerca, por si acaso. Los pies, a la anchura de la cadera.',
+    pasos: ['Sube los talones todo lo que puedas, hasta quedarte de puntillas.', 'Mantén arriba un momento.', 'Baja despacio.'],
+    notar: 'En la pantorrilla.',
+    error: 'Doblar las rodillas para ayudarte, o alejarte del apoyo. Las rodillas, estiradas.',
+    masDificil: 'Apoyado en una sola pierna, con el apoyo al alcance.',
+    fuentes: ['Otago Exercise Programme (ACC), fuerza: «calf raises», nivel D'],
+  },
+  sentadilla_sin_apoyo: {
+    nombre: 'Media sentadilla sin apoyo',
+    otrosNombres: ['flexión de rodillas sin agarrarse'],
+    posicion: 'De pie',
+    material: 'Apoyo firme, al alcance',
+    unLado: false,
+    zonas: ['rodilla', 'cadera'],
+    musculos: { principales: ['cuadriceps', 'gluteo_mayor'], secundarios: ['isquiotibiales'] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 0, 2] },
+    partida: 'De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), sin agarrarte pero con él al alcance de la mano, y los pies a la anchura de los hombros.',
+    pasos: [
+      'Con el pecho alto, baja la cadera un palmo, como si fueras a sentarte.',
+      'Abajo, sin pararte, con el peso en los talones.',
+      'Sube empujando con los talones.',
+    ],
+    notar: 'Delante y detrás de los muslos, y en los glúteos.',
+    error: 'Doblarte por la cintura. El pecho, alto, y la espalda, recta.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «knee bends», niveles B a D'],
+  },
+  equilibrio_sin_apoyo: {
+    nombre: 'Equilibrio a una pierna sin apoyo',
+    otrosNombres: ['a la pata coja sin agarrarse'],
+    posicion: 'De pie',
+    material: 'Apoyo firme, al alcance',
+    unLado: true,
+    zonas: ['tobillo', 'rodilla'],
+    musculos: { principales: ['gemelos', 'tibial_anterior'], secundarios: [] },
+    porDefecto: { series: 1, reps: 2, tempo: [1, 10, 1] },
+    partida: 'De pie junto a una encimera o una mesa pesada, sin agarrarte pero con ella al alcance de la mano. Mejor con calzado cómodo.',
+    pasos: [
+      'Levanta un pie y quédate sobre la otra pierna, con la rodilla estirada y los brazos sueltos.',
+      'Mantén el equilibrio. Si lo pierdes, agárrate y vuelve a empezar.',
+      'Baja el pie.',
+    ],
+    error: 'Alejarte del apoyo. Tenlo siempre al alcance de la mano.',
+    masDificil: 'Hasta 30 segundos. Descalzo cuesta más.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «one leg stand», niveles C y D'],
+  },
+  andar_atras: {
+    nombre: 'Andar hacia atrás',
+    otrosNombres: ['marcha atrás', 'pasos hacia atrás'],
+    posicion: 'De pie',
+    material: 'Sin material',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo', 'cadera'],
+    musculos: { principales: ['gluteo_mayor', 'isquiotibiales'], secundarios: ['gemelos'] },
+    porDefecto: { series: 4, reps: 10, tempo: [1, 0, 1] },
+    partida: 'De pie y erguido, junto a una encimera o una mesa larga, con una mano en ella si la necesitas. Detrás de ti, el suelo despejado, sin alfombras ni cables.',
+    pasos: [
+      'Da un paso hacia atrás, apoyando primero la punta.',
+      'Sigue con la otra pierna, paso a paso, con el cuerpo erguido.',
+      'Al terminar, date la vuelta despacio y vuelve de la misma manera.',
+    ],
+    notar: 'En los glúteos y en la parte de atrás de los muslos.',
+    error: 'Mirarte los pies o echarte hacia delante. La mirada, al frente, y el cuerpo, erguido.',
+    masDificil: 'Sin agarrarte, con la encimera al lado.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «backwards walking»'],
+  },
+  andar_lado: {
+    nombre: 'Andar de lado',
+    otrosNombres: ['pasos laterales', 'marcha lateral'],
+    posicion: 'De pie',
+    material: 'Sin material',
+    unLado: true,
+    unidad: 'pasos',
+    zonas: ['cadera'],
+    musculos: { principales: ['gluteo_medio'], secundarios: ['aductores'] },
+    porDefecto: { series: 4, reps: 10, tempo: [1, 0, 1] },
+    partida: 'De pie y erguido, con los brazos sueltos y la mirada al frente, con sitio libre a un lado y algo firme cerca por si lo necesitas.',
+    pasos: [
+      'Da un paso hacia el lado, con las puntas de los pies al frente.',
+      'Junta el otro pie.',
+      'Sigue así, y luego vuelve hacia el otro lado.',
+    ],
+    notar: 'En el lado de las caderas.',
+    error: 'Girar los pies o el cuerpo. Las puntas y el pecho, al frente.',
+    masDificil: 'Pasos más largos, o un poco más deprisa.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «sideways walking»'],
+  },
+  andar_tandem: {
+    nombre: 'Andar en tándem',
+    otrosNombres: ['andar en línea', 'talón con punta'],
+    posicion: 'De pie',
+    material: 'Apoyo firme',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo', 'cadera'],
+    musculos: { principales: ['gluteo_medio'], secundarios: ['gemelos', 'tibial_anterior'] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 0, 2] },
+    partida: 'De pie y erguido junto a una encimera o una mesa larga, con la mano cerca de ella por si la necesitas. Mira al frente, no a los pies.',
+    pasos: [
+      'Pon un pie justo delante del otro, con el talón tocando la punta, como si anduvieras por una línea.',
+      'Sigue así, paso a paso, con los brazos algo abiertos para el equilibrio.',
+      'Al terminar, date la vuelta despacio y vuelve de la misma manera.',
+    ],
+    error: 'Separar los pies a los lados para no perder el equilibrio. Un pie justo delante del otro.',
+    masDificil: 'Sin agarrarte, con la encimera al lado.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «tandem walk»'],
+  },
+  andar_tandem_atras: {
+    nombre: 'Andar en tándem hacia atrás',
+    otrosNombres: ['andar en línea hacia atrás', 'punta con talón hacia atrás'],
+    posicion: 'De pie',
+    material: 'Apoyo firme',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo', 'cadera'],
+    musculos: { principales: ['gluteo_medio'], secundarios: ['gemelos', 'tibial_anterior'] },
+    porDefecto: { series: 2, reps: 10, tempo: [2, 0, 2] },
+    partida: 'De pie y erguido junto a una encimera o una mesa larga, con una mano cerca de ella. Detrás de ti, el suelo despejado.',
+    pasos: [
+      'Lleva un pie justo detrás del otro, con la punta tocando el talón, como si anduvieras hacia atrás por una línea.',
+      'Sigue así, paso a paso, con los brazos algo abiertos.',
+      'Al terminar, date la vuelta despacio y vuelve de la misma manera.',
+    ],
+    error: 'Mirarte los pies o separarlos a los lados. La mirada, al frente.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «heel toe walking backwards»'],
+  },
+  andar_talones: {
+    nombre: 'Andar de talones',
+    otrosNombres: ['andar sobre los talones'],
+    posicion: 'De pie',
+    material: 'Apoyo firme',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo'],
+    musculos: { principales: ['tibial_anterior'], secundarios: [] },
+    porDefecto: { series: 4, reps: 10, tempo: [1, 0, 1] },
+    partida: 'De pie y erguido junto a una encimera o una mesa larga, con una mano en ella si la necesitas.',
+    pasos: [
+      'Sube las puntas de los pies y quédate sobre los talones.',
+      'Anda así, paso a paso, con las puntas arriba.',
+      'Al terminar, date la vuelta despacio y vuelve de la misma manera.',
+    ],
+    notar: 'En la parte de delante de las piernas, bajo las rodillas.',
+    error: 'Echar la cadera hacia atrás. El cuerpo, erguido.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «heel walking»'],
+  },
+  andar_puntillas: {
+    nombre: 'Andar de puntillas',
+    otrosNombres: ['andar sobre las puntas'],
+    posicion: 'De pie',
+    material: 'Apoyo firme',
+    unLado: false,
+    unidad: 'pasos',
+    zonas: ['tobillo'],
+    musculos: { principales: ['gemelos'], secundarios: [] },
+    porDefecto: { series: 4, reps: 10, tempo: [1, 0, 1] },
+    partida: 'De pie y erguido junto a una encimera o una mesa larga, con una mano en ella si la necesitas.',
+    pasos: [
+      'Sube los talones y quédate de puntillas.',
+      'Anda así, paso a paso, sin bajar los talones.',
+      'Al terminar, date la vuelta despacio y vuelve de la misma manera.',
+    ],
+    notar: 'En las pantorrillas.',
+    error: 'Doblar las rodillas o dejar caer los talones. Arriba todo el camino.',
+    fuentes: ['Otago Exercise Programme (ACC), equilibrio: «toe walk»'],
+  },
 };
 
 // The library the professional sees, grouped by position: only exercises whose clips exist for both bodies.
@@ -1309,13 +1534,15 @@ export const ORDEN = [
   // sitting on the floor: the ankle
   'circulos_tobillo', 'dorsal_banda', 'plantar_banda', 'inversion_banda', 'eversion_banda',
   // sitting: knee, foot, neck and shoulder blades
-  'extension_rodilla', 'extension_rodilla_lastre', 'marcha_sentado', 'abduccion_sentado', 'talones_sentado', 'silla', 'toalla_dedos', 'retraccion', 'cuello_giro', 'cuello_lado', 'iso_cuello', 'trapecio',
+  'extension_rodilla', 'extension_rodilla_lastre', 'marcha_sentado', 'abduccion_sentado', 'talones_sentado', 'isquios_sentado', 'silla', 'toalla_dedos', 'retraccion', 'cuello_giro', 'cuello_lado', 'iso_cuello', 'trapecio',
   'escapulas',
   // sitting at a table: wrist and hand (back on 13 November 2026 with Gaudí's modelled hand)
   'muneca', 'prono_supinacion', 'estira_flexores', 'estira_extensores', 'tendinoso', 'abrir_cerrar', 'pelota',
   'deslizar_mesa',
   // standing by a chair, and on a step
-  'talones', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'cuadriceps_pie', 'escalon',
+  'talones', 'talones_sin_apoyo', 'puntas', 'puntas_sin_apoyo', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'sentadilla_sin_apoyo', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'equilibrio_sin_apoyo', 'cuadriceps_pie', 'escalon',
+  // walking on the spot, over a running floor tape (counted in steps)
+  'andar_atras', 'andar_lado', 'andar_tandem', 'andar_tandem_atras', 'andar_talones', 'andar_puntillas',
   // at a wall
   'sentadilla_pared', 'gemelo_pared', 'flexion_pared', 'iso_hombro',
   // shoulder, standing
@@ -1391,6 +1618,15 @@ export const bandaDe = (def, clave) => (conBanda(def) && Object.hasOwn(BANDAS, c
 // Pain-monitoring model (Thomeé, Phys Ther 1997; Silbernagel et al., Am J Sports Med 2007): discomfort during the
 // exercise may reach a set level, should be gone by the next morning and should not grow from week to week. The
 // professional sets the level for each routine; 5 out of 10 when nothing is said. Values above it get marked.
+// What one repetition is: a repetition, a step (walking, counted step by step) or a lap (the figure of eight).
+const UNIDADES = {
+  repeticiones: { uno: 'repetición', varios: 'repeticiones', todas: 'todas las repeticiones' },
+  pasos: { uno: 'paso', varios: 'pasos', todas: 'todos los pasos' },
+  vueltas: { uno: 'vuelta', varios: 'vueltas', todas: 'todas las vueltas' },
+};
+export const unidad = (def) => UNIDADES[def?.unidad] || UNIDADES.repeticiones;
+export const porPasos = (def) => def?.unidad === 'pasos';
+
 export const TOPE_MOLESTIA = 5;
 export const pasaDelTope = (valor, tope) => typeof valor === 'number' && valor > tope;
 
@@ -1459,10 +1695,12 @@ export async function decodificar(codigo) {
 }
 
 // Seconds one exercise takes: every repetition is up + hold + down + one second at rest.
-export function duracionEjercicio(e, descanso) {
+// Seconds of an exercise. Walking (counted in steps) goes step after step, with no rest: each step takes its own time.
+export function duracionEjercicio(e, descanso, def = null) {
   const [s, m, b] = e.tempo;
   const lados = e.lado === 'ambos' ? 2 : 1;
-  return lados * (e.series * e.reps * (s + m + b + 1) + (e.series - 1) * descanso);
+  const serie = porPasos(def) ? e.reps * ((s + b) / 2) : e.reps * (s + m + b + 1);
+  return lados * (e.series * serie + (e.series - 1) * descanso);
 }
 
 export function minutos(segundos) {

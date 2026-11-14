@@ -1,0 +1,69 @@
+{
+ "id": "equilibrio_sin_apoyo",
+ "nombre": "Equilibrio a una pierna sin apoyo",
+ "fps": 30,
+ "duracion": 15.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Levanta el otro pie"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 11.5,
+   "texto": "Aguanta el equilibrio"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 11.5,
+   "fin": 13.0,
+   "texto": "Bájalo"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 13.0,
+   "fin": 15.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "rodilla_izquierda_flexion": 4.0,
+   "tobillo_izquierda_flexion": 4.2,
+   "cadera_derecha_abduccion": -0.0
+  },
+  "llegada": {
+   "rodilla_izquierda_flexion": 40.0,
+   "tobillo_izquierda_flexion": 0.0,
+   "cadera_derecha_abduccion": -6.7
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos",
+   "tibial_anterior"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.873,
+   2.073,
+   0.882
+  ],
+  "mira": [
+   -0.049,
+   0.849,
+   0.194
+  ]
+ },
+ "archivo": "equilibrio_sin_apoyo.glb",
+ "bytes": 66592
+}

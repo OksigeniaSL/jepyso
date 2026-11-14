@@ -1,0 +1,91 @@
+{
+ "id": "andar_puntillas",
+ "nombre": "Andar de puntillas",
+ "fps": 30,
+ "duracion": 1.8,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 0.9,
+   "texto": "Un paso"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 0.9,
+   "fin": 0.9,
+   "texto": ""
+  },
+  {
+   "fase": "bajar",
+   "inicio": 0.9,
+   "fin": 1.8,
+   "texto": "Otro paso"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 1.8,
+   "fin": 1.8,
+   "texto": ""
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 25.3,
+   "cadera_izquierda_abduccion": 0.6,
+   "rodilla_izquierda_flexion": 12.0,
+   "tobillo_izquierda_flexion": -34.2,
+   "codo_izquierda_flexion": 15.0,
+   "hombro_izquierda_flexion": -8.0,
+   "hombro_izquierda_rotacion_externa": 64.8,
+   "cadera_derecha_flexion": 16.3,
+   "cadera_derecha_abduccion": -2.6,
+   "rodilla_derecha_flexion": 33.5,
+   "tobillo_derecha_flexion": -3.8,
+   "codo_derecha_flexion": 26.9,
+   "hombro_derecha_flexion": 8.0,
+   "hombro_derecha_rotacion_externa": 24.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 16.3,
+   "cadera_izquierda_abduccion": -2.6,
+   "rodilla_izquierda_flexion": 33.5,
+   "tobillo_izquierda_flexion": -3.8,
+   "codo_izquierda_flexion": 26.9,
+   "hombro_izquierda_flexion": 8.0,
+   "hombro_izquierda_rotacion_externa": 24.0,
+   "cadera_derecha_flexion": 25.3,
+   "cadera_derecha_abduccion": 0.6,
+   "rodilla_derecha_flexion": 12.0,
+   "tobillo_derecha_flexion": -34.2,
+   "codo_derecha_flexion": 15.0,
+   "hombro_derecha_flexion": -8.0,
+   "hombro_derecha_rotacion_externa": 64.8
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "cinta"
+ ],
+ "pasos": 2,
+ "camara": {
+  "pos": [
+   -3.807,
+   2.107,
+   0.829
+  ],
+  "mira": [
+   -0.0,
+   0.889,
+   0.143
+  ]
+ },
+ "archivo": "andar_puntillas.glb",
+ "bytes": 49004
+}

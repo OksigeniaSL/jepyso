@@ -1,0 +1,81 @@
+{
+ "id": "sentadilla_sin_apoyo",
+ "nombre": "Media sentadilla sin apoyo",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Dobla las rodillas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Sube despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -0.6,
+   "rodilla_izquierda_flexion": 4.0,
+   "tobillo_izquierda_flexion": 4.6,
+   "cadera_derecha_flexion": -0.6,
+   "rodilla_derecha_flexion": 4.0,
+   "tobillo_derecha_flexion": 4.6,
+   "tronco_inclinacion": 0.0,
+   "pelvis_basculacion": -0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 43.6,
+   "rodilla_izquierda_flexion": 55.0,
+   "tobillo_izquierda_flexion": 23.4,
+   "cadera_derecha_flexion": 43.6,
+   "rodilla_derecha_flexion": 55.0,
+   "tobillo_derecha_flexion": 23.4,
+   "tronco_inclinacion": 17.0,
+   "pelvis_basculacion": 12.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.416,
+   1.888,
+   0.945
+  ],
+  "mira": [
+   0.0,
+   0.795,
+   0.331
+  ]
+ },
+ "archivo": "sentadilla_sin_apoyo.glb",
+ "bytes": 68088
+}

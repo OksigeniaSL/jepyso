@@ -2,7 +2,7 @@
 // back a summary link. No server: everything travels inside the links.
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
-  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
+  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
@@ -61,6 +61,7 @@ const ICONO = {
 // The two bodies Gaudí made. Named by build, never by sex.
 const FIGURAS = [['a', 'Figura 1'], ['b', 'Figura 2']];
 
+const mayuscula = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 // ---------- Tempo line ----------
@@ -371,7 +372,8 @@ const chipsEjercicio = (def) =>
 // What a folded card says: sets and repetitions, the tempo line, the side and the band.
 function dosis(def, e) {
   const banda = bandaDe(def, e.banda);
-  return `<span class="num">${e.series} × ${e.reps}</span>${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>${
+  const tempo = porPasos(def) ? `<span>${unidad(def).varios}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
+  return `<span class="num">${e.series} × ${e.reps}</span>${tempo}${
     def.unLado && LADOS[e.lado] ? `<span>${esc(LADOS[e.lado])}</span>` : ''
   }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : ''}`;
 }
@@ -395,11 +397,14 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
       <div class="mini-figura"></div>
       <div class="fila">
         <div class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</div>
-        <div class="ajuste"><span>Repeticiones</span>${paso('reps', e.reps, 'Repeticiones', 1, 30)}</div>
+        <div class="ajuste"><span>${mayuscula(unidad(def).varios)}</span>${paso('reps', e.reps, mayuscula(unidad(def).varios), 1, 30)}</div>
         ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
-      <div class="ajuste">
+      ${porPasos(def) ? `<div class="ajuste">
+        <span>Ritmo del paso</span>
+        <div class="ritmo"><div class="ritmo-mini"><span>Cada paso</span>${paso('tp', s, 'Segundos por paso', 1, 4)}</div></div>
+      </div>` : `<div class="ajuste">
         <span>Ritmo de cada repetición</span>
         <div class="ritmo">
           <div class="ritmo-mini"><span>Ida</span>${paso('t0', s, 'Segundos de ida', 1, 6)}</div>
@@ -407,7 +412,7 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
           <div class="ritmo-mini"><span>Vuelta</span>${paso('t2', b, 'Segundos de vuelta', 1, 6)}</div>
           ${svgTempo(e.tempo, { ancho: 200, alto: 44 })}
         </div>
-      </div>
+      </div>`}
       <details class="detalle">
         <summary>Cómo se explica a la persona</summary>
         ${explicacion(def)}
@@ -633,7 +638,7 @@ function vistaArmar() {
 
   const resumenCorto = () => {
     if (!b.orden.length) return 'Elige al menos un ejercicio';
-    const seg = b.orden.reduce((t, id) => t + duracionEjercicio(b.ejercicios[id], b.descanso), 0);
+    const seg = b.orden.reduce((t, id) => t + duracionEjercicio(b.ejercicios[id], b.descanso, EJERCICIOS[id]), 0);
     return `${b.orden.length} ${b.orden.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(seg)}`;
   };
 
@@ -974,6 +979,12 @@ function vistaArmar() {
       const lim = a === 'series' ? [1, 6] : [1, 30];
       b.ejercicios[id][a] = Math.min(lim[1], Math.max(lim[0], b.ejercicios[id][a] + delta));
       refrescarTarjeta(id);
+    } else if (a === 'tp') {
+      // A walking exercise: each step takes the same, and there is no hold.
+      const v = Math.min(4, Math.max(1, b.ejercicios[id].tempo[0] + delta));
+      b.ejercicios[id].tempo = [v, 0, v];
+      refrescarTarjeta(id);
+      actualizarTempo(id);
     } else if (/^t[012]$/.test(a)) {
       const i = Number(a[1]);
       const lim = i === 1 ? [0, 30] : [1, 6];
@@ -1332,7 +1343,7 @@ async function vistaRutina(codigo) {
     return () => {};
   }
   const clave = 'hist:' + hashCorto(codigo);
-  const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d), 0);
+  const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d, EJERCICIOS[e.i]), 0);
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
   const quien = r.de ? esc(r.de) : 'quien te dio la rutina';
   let mananaOmitida = false;
@@ -1418,7 +1429,7 @@ async function vistaRutina(codigo) {
                 <span class="tarjeta-poster"><img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
                 <div>
                   <h3>${esc(def.nombre)}</h3>
-                  <p class="tarjeta-dosis num">${e.s} ${e.s === 1 ? 'serie' : 'series'} · ${e.r} ${e.r === 1 ? 'repetición' : 'repeticiones'}</p>
+                  <p class="tarjeta-dosis num">${e.s} ${e.s === 1 ? 'serie' : 'series'} · ${e.r} ${e.r === 1 ? unidad(def).uno : unidad(def).varios}</p>
                 </div>
               </div>
               <p class="tarjeta-pauta">${esc(textoTempo(e.t))}</p>
@@ -1725,24 +1736,25 @@ async function vistaRutina(codigo) {
       if (fase === 'bajar') tono(520);
       if (primeraRep && fase !== 'reposo') decir(nombres[fase]);
     });
+    const masculino = unidad(EJERCICIOS[e.i]).uno !== 'repetición' && unidad(EJERCICIOS[e.i]).uno !== 'vuelta';
     f.on('repeticion', (n) => {
       sesion.hechas[sesion.item][sesion.serie] = n;
       elRep.textContent = Math.min(n + 1, e.r);
       vibrar(25);
       if (n > 0) {
         primeraRep = false;
-        decir(numero(n));
+        decir(numero(n, masculino));
       }
     });
     f.on('fin', () => {
-      decir(`${numero(e.r)}. Hecho`);
+      decir(`${numero(e.r, masculino)}. Hecho`);
       sesion.hechas[sesion.item][sesion.serie] = e.r;
       tono(660, 0.12);
       setTimeout(() => tono(990, 0.25), 130);
       vibrar([40, 60, 40]);
       siguiente();
     });
-    f.empezar({ modo: 'serie', reps: e.r });
+    f.empezar({ modo: 'serie', reps: e.r, porPasos: porPasos(EJERCICIOS[e.i]) });
   }
 
   // Each step is kept as soon as it is known where the session goes next (guardarCurso): the set that follows, the
@@ -1914,14 +1926,14 @@ async function vistaRutina(codigo) {
     const seguir = ultimo ? 'Terminar' : 'Siguiente ejercicio';
     const lado = (c) => `<img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${c.lado === 'izq' ? ' class="espejo"' : ''}>`;
     const cabeza = `<div class="valorar-cabeza"><span class="tarjeta-poster">${lado(items[0].c)}</span>
-      <div><h3>Hecho</h3><p class="num">${e.s} ${e.s === 1 ? 'serie' : 'series'}${dosLados ? ' de cada lado' : ''} · ${e.r} repeticiones</p></div></div>`;
+      <div><h3>Hecho</h3><p class="num">${e.s} ${e.s === 1 ? 'serie' : 'series'}${dosLados ? ' de cada lado' : ''} · ${e.r} ${e.r === 1 ? unidad(def).uno : unidad(def).varios}</p></div></div>`;
     let cuerpo = '';
     let pie = '';
     if (sesion.paso === 'reps') {
-      cuerpo = `<section class="valorar-paso" aria-labelledby="v-reps"><h4 class="pregunta" id="v-reps" tabindex="-1">¿Hiciste todas las repeticiones?</h4>
-        <div class="dos-botones"><button type="button" class="boton" data-r="todas">Sí, todas</button><button type="button" class="boton secundario" data-r="menos">Hice menos</button></div></section>`;
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-reps"><h4 class="pregunta" id="v-reps" tabindex="-1">¿Hiciste ${unidad(def).todas}?</h4>
+        <div class="dos-botones"><button type="button" class="boton" data-r="todas">Sí, ${unidad(def).todas.split(' ')[0]}</button><button type="button" class="boton secundario" data-r="menos">Hice menos</button></div></section>`;
     } else if (sesion.paso === 'menos') {
-      cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">¿Cuántas hiciste en cada serie?</h4>
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">¿${unidad(def).todas.startsWith('todos') ? 'Cuántos' : 'Cuántas'} hiciste en cada serie?</h4>
         ${items.map(({ c, i }) => `<div class="series-lado">${dosLados ? `<h5>${LADOS[c.lado]}</h5>` : ''}${sesion.hechas[i]
           .map((v, n) => `<div class="serie-fila"><span>Serie ${n + 1}</span>${paso(`h-${i}-${n}`, v, `${dosLados ? LADOS[c.lado] + ', s' : 'S'}erie ${n + 1}`, 0, 50)}</div>`)
           .join('')}</div>`).join('')}</section>`;
@@ -1929,7 +1941,7 @@ async function vistaRutina(codigo) {
     } else {
       const todas = items.every(({ i }) => sesion.hechas[i].every((v) => v >= e.r));
       const marcada = Number.isInteger(sesion.molestia[e.i]);
-      cuerpo = `<p class="valorar-hecho">${todas ? 'Todas las repeticiones' : 'Hiciste menos repeticiones'} <button type="button" class="enlace" data-r="menos">Cambiar</button></p>
+      cuerpo = `<p class="valorar-hecho">${todas ? mayuscula(unidad(def).todas) : `Hiciste menos ${unidad(def).varios}`} <button type="button" class="enlace" data-r="menos">Cambiar</button></p>
         <section class="valorar-paso" aria-labelledby="v-molestia"><h4 class="pregunta" id="v-molestia" tabindex="-1">¿Cuánta molestia notaste?</h4>
         <div class="escala" role="group" aria-labelledby="v-molestia">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="molestia" data-v="${n}" aria-pressed="${sesion.molestia[e.i] === n}" class="num">${n}</button>`).join('')}</div>
         <div class="escala-pie"><span>0 · nada</span><span>10 · mucha</span></div>
@@ -2365,7 +2377,7 @@ function pintarDia(dia, tope) {
           <span class="detalle num">${
             bien
               ? `${x.p.length} ${x.p.length === 1 ? 'serie' : 'series'} de ${x.r}, ${x.p.length === 1 ? 'completa' : 'completas'}`
-              : `Repeticiones por serie: ${x.p.slice(0, -1).join(', ')}${x.p.length > 1 ? ' y ' : ''}${x.p.at(-1)} de ${x.r}`
+              : `${mayuscula(unidad(def).varios)} por serie: ${x.p.slice(0, -1).join(', ')}${x.p.length > 1 ? ' y ' : ''}${x.p.at(-1)} de ${x.r}`
           }</span>
         </div>`;
       })
