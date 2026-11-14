@@ -9,25 +9,25 @@ import { almacen } from './datos.js';
 const CLAVE_PUBLICA = 'WyU9AFvH45c_mKFK4-E4Qj2BZ4mRChFm6BNOVS5n8Z0';
 const deBase64url = (t) => Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
 
-// What a key says, once its signature is checked: { valida, cuenta, fecha, pedido } or { valida: false, motivo }.
-// motivo: «formato» (not a key), «firma» (not signed by Oksigenia, or changed), «navegador» (this browser cannot check
-// Ed25519 signatures).
-export async function leerLicencia(clave) {
+// Whatever Oksigenia signs with this key (a licence, a free file's ticket): its payload once the signature is checked,
+// { datos } or { motivo }. motivo: «formato» (not a signed key), «firma» (not signed by Oksigenia, or changed),
+// «navegador» (this browser cannot check Ed25519 signatures).
+export async function verificarFirma(clave) {
   const partes = String(clave || '').trim().split('.');
-  if (partes.length !== 2 || !partes[0] || !partes[1]) return { valida: false, motivo: 'formato' };
+  if (partes.length !== 2 || !partes[0] || !partes[1]) return { motivo: 'formato' };
   let carga;
   let firma;
   try {
     carga = deBase64url(partes[0]);
     firma = deBase64url(partes[1]);
   } catch {
-    return { valida: false, motivo: 'formato' };
+    return { motivo: 'formato' };
   }
   let clavePublica;
   try {
     clavePublica = await crypto.subtle.importKey('raw', deBase64url(CLAVE_PUBLICA), { name: 'Ed25519' }, false, ['verify']);
   } catch {
-    return { valida: false, motivo: 'navegador' };
+    return { motivo: 'navegador' };
   }
   let bien = false;
   try {
@@ -35,13 +35,18 @@ export async function leerLicencia(clave) {
   } catch {
     bien = false;
   }
-  if (!bien) return { valida: false, motivo: 'firma' };
-  let datos;
+  if (!bien) return { motivo: 'firma' };
   try {
-    datos = JSON.parse(new TextDecoder().decode(carga));
+    return { datos: JSON.parse(new TextDecoder().decode(carga)) };
   } catch {
-    return { valida: false, motivo: 'formato' };
+    return { motivo: 'formato' };
   }
+}
+
+// What a key says, once its signature is checked: { valida, cuenta, fecha, pedido } or { valida: false, motivo }.
+export async function leerLicencia(clave) {
+  const { datos, motivo } = await verificarFirma(clave);
+  if (motivo) return { valida: false, motivo };
   if (datos?.p !== 'jepyso' || datos?.s !== 'consulta' || typeof datos?.c !== 'string' || !datos.c.includes('@')) return { valida: false, motivo: 'formato' };
   return { valida: true, cuenta: datos.c.trim().toLowerCase(), fecha: String(datos.f || ''), pedido: String(datos.n || '') };
 }

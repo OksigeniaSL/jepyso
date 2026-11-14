@@ -34,8 +34,9 @@ export function apuntarBorrada(tipo, clave) {
 export const leerPersonas = () => limpiarPersonas(almacen.leer(CLAVE, []));
 export const guardarPersonas = (lista) => almacen.guardar(CLAVE, lista);
 
+// Twelve characters from 14-11-2026 (six before, still valid): the free files' server takes six to sixty-four.
 export function nuevoId() {
-  const b = new Uint8Array(6);
+  const b = new Uint8Array(12);
   crypto.getRandomValues(b);
   return [...b].map((x) => (x % 36).toString(36)).join('');
 }

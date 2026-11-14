@@ -8,10 +8,14 @@ import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } fr
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
-  esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada,
+  esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS,
 } from './personas.js';
 import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
 import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive } from './licencia.js';
+import {
+  valesEnMarcha, fichaAbierta, fichaSinPlaza, cuentaDeVales, fichasQuedan, avisoVales, alCambiarVales, comprobarVales, pedirVale, pedirVales,
+  soltarVale, botonGoogle,
+} from './vales.js';
 import { MAPA, PUNTOS } from './mapa.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 
@@ -45,6 +49,7 @@ const ICONO = {
   cuerpo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M5 9l7 1.5L19 9M12 10.5V15m0 0l-3 6m3-6l3 6"/></svg>',
   personas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M15.5 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></svg>',
   plantillas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 4.5h11v14H4z"/><path d="M8 8h11v14H8z"/><path d="M11 12h5M11 15.5h5M11 19h3" stroke-linecap="round"/></svg>',
+  candado: '<svg class="candado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></svg>',
   abrir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>',
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
   telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
@@ -250,6 +255,11 @@ function capacidad(lista) {
   const marcas = Array.from({ length: max }, (_, i) => `<i${i < n ? ' class="usada"' : ''}></i>`).join('');
   return `<p class="capacidad${n >= max ? ' llena' : ''}"><span class="capacidad-marcas" aria-hidden="true">${marcas}</span>
     <span><b>${Math.min(n, max)} de ${max}</b> personas con ficha${n >= max ? '. Las rutinas para alguien nuevo van igual, sin ficha' : ''} · la versión de pago no tiene límite</span></p>`;
+}
+// The line of the link sheet about the file. A free file whose ticket waits for the Google sign-in says so.
+function enFicha(p, esperaCuenta) {
+  if (esperaCuenta) return `Guardada en la ficha de ${esc(p.nombre)}. Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.`;
+  return `Guardada en la ficha de ${esc(p.nombre)}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
 }
 function avisoLleno(b) {
   const lista = leerPersonas();
@@ -1178,6 +1188,9 @@ async function crearEnlace(b, empezarOtra = null) {
       sinSitio = 'lleno';
     }
   }
+  // The free version: a file needs its ticket to open (vales.js). With the Google sign-in at hand it is asked now, while
+  // the sheet opens; without it, the file waits locked until the professional signs in at Personas.
+  const sinVale = persona && !fichaAbierta(persona);
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
   const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
   const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:`;
@@ -1201,7 +1214,7 @@ async function crearEnlace(b, empezarOtra = null) {
   dialogo.setAttribute('aria-labelledby', 'hoja-titulo');
   dialogo.innerHTML = `<div class="hoja-cabeza"><h2 id="hoja-titulo" tabindex="-1">La rutina, lista</h2>
       <button type="button" class="redondo" data-h="cerrar" aria-label="Cerrar">${ICONO.cerrar}</button></div>
-    ${persona ? `<p class="en-ficha">Guardada en la ficha de ${esc(persona.nombre)}. <a href="#persona=${esc(persona.id)}">Ver su ficha</a></p>` : ''}
+    ${persona ? `<p class="en-ficha">${enFicha(persona, sinVale && !cuentaDeVales())}</p>` : ''}
     ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
     ${sinSitio === 'elegir' ? `<p class="en-ficha">Tienes más de una ficha con el nombre ${esc(rutina.para)}: elige cuál en «Para» y vuelve a crear el enlace para guardarla en su ficha. La rutina va igual en este enlace.</p>` : ''}
     ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
@@ -1233,6 +1246,14 @@ async function crearEnlace(b, empezarOtra = null) {
     if (!destino) volverA?.focus?.({ preventScroll: true });
   });
   dialogo.showModal();
+  if (sinVale && cuentaDeVales()) {
+    pedirVale(persona.id).then((bien) => {
+      const linea = dialogo.querySelector('.en-ficha');
+      if (!linea) return;
+      if (bien) linea.innerHTML = enFicha(persona, false);
+      else if (fichaSinPlaza(persona.id)) linea.textContent = `Guardada en la ficha de ${persona.nombre}, pero tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis: esta no se abrirá hasta que borres otra. La rutina va igual en el enlace.`;
+    });
+  }
   history.pushState({ jepysoHoja: 'enlace' }, '');
   window.addEventListener('popstate', alAtras);
   dialogo.querySelector('#hoja-titulo').focus({ preventScroll: true });
@@ -2456,6 +2477,10 @@ function guardarEnFicha(s, destino = '') {
   const n = apuntarResumen(p, s);
   if (!guardarPersonas(lista)) return SIN_SITIO;
   const que = nueva ? `Ficha nueva para ${esc(p.nombre)}` : n ? `Guardado en la ficha de ${esc(p.nombre)}` : `Ya estaba en la ficha de ${esc(p.nombre)}`;
+  if (!fichaAbierta(p)) {
+    if (cuentaDeVales()) pedirVale(p.id);
+    else return `${que}. Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.`;
+  }
   return `${que}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
 }
 
@@ -2482,6 +2507,14 @@ function ultimoMarcado(p) {
 }
 
 function filaPersona(p) {
+  // A free file without its ticket: its name, and what opens it. Nothing of its content until then.
+  if (!fichaAbierta(p)) {
+    const sinPlaza = fichaSinPlaza(p.id);
+    return `<li><a class="persona-fila cerrada" href="#persona=${esc(p.id)}">
+    <span class="nombre">${ICONO.candado}${esc(p.nombre)}</span>
+    <span class="meta">${sinPlaza ? `Tu cuenta de Google ya tiene ${LIMITE_GRATIS} fichas` : 'Entra con tu cuenta de Google para abrirla'}</span>
+  </a></li>`;
+  }
   const marcado = ultimoMarcado(p);
   const rutinas = p.rutinas.length ? `${p.rutinas.length} ${p.rutinas.length === 1 ? 'rutina' : 'rutinas'}` : 'sin rutinas';
   const resumen = p.ultimoResumen ? `último resumen el ${fechaLarga(p.ultimoResumen)}` : 'sin resúmenes todavía';
@@ -2510,6 +2543,23 @@ function seccionDrive() {
     ${pendiente ? `<p class="ayuda"><strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta ${esc(licencia().cuenta)}.</p>` : ''}
     <div class="botones"><button type="button" class="boton" data-accion="drive">Sincronizar con Google Drive</button></div>
     <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
+  </section>`;
+}
+
+// The free version's Google account (vales.js): who is in and how many files are left, or Google's own button. Said
+// plainly what goes to the server and what does not.
+function seccionCuenta() {
+  const correo = cuentaDeVales();
+  const quedan = fichasQuedan();
+  const cerradas = leerPersonas().filter((p) => !fichaAbierta(p)).length;
+  const estado = correo
+    ? `<p class="cuenta-dentro">Con la cuenta <strong>${esc(correo)}</strong>${Number.isInteger(quedan) ? ` · ${quedan === 0 ? 'no le quedan fichas nuevas' : `le ${quedan === 1 ? 'queda 1 ficha nueva' : `quedan ${quedan} fichas nuevas`}`}` : ''}</p>`
+    : '<div class="hueco-google"></div>';
+  return `<section class="general cuenta-fichas${cerradas && !correo ? ' pide' : ''}">
+    <h2>Tus fichas, con tu cuenta de Google</h2>
+    ${correo ? '' : `<p class="ayuda">La versión gratis tiene ${LIMITE_GRATIS} fichas por cuenta de Google. Entra con la tuya para abrirlas y para hacer fichas nuevas. Oksigenia solo guarda una huella de tu cuenta y el código de cada ficha: los nombres, las rutinas y los resúmenes se quedan en este aparato.</p>`}
+    ${estado}
+    <p class="aviso-vales" aria-live="polite">${esc(avisoVales())}</p>
   </section>`;
 }
 
@@ -2577,6 +2627,7 @@ function vistaPersonas() {
     <div class="armar-cuerpo">
       <input type="search" class="buscar" data-accion="buscar-persona" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar personas por nombre">
       <div class="hueco-capacidad"></div>
+      ${valesEnMarcha() ? seccionCuenta() : ''}
       <ul class="lista-personas"></ul>
       <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.</p></details>
       ${esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
@@ -2592,6 +2643,8 @@ function vistaPersonas() {
     </div>
   </div>`;
   pintarLista();
+  const huecoGoogle = app.querySelector('.hueco-google');
+  if (huecoGoogle) botonGoogle(huecoGoogle);
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'buscar-persona') return;
     texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
@@ -2638,7 +2691,9 @@ function vistaPersonas() {
       }
       aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.${
         r.fuera ? ` ${r.fuera} no ${r.fuera === 1 ? 'cabe' : 'caben'}: la versión gratis guarda hasta ${limite()}.` : ''}`;
+      await comprobarVales();
       pintarLista();
+      if (cuentaDeVales()) pedirVales().then(() => location.hash === '#personas' && pintarLista());
     } catch {
       aviso.textContent = 'Ese archivo no es una copia de Jepyso.';
     }
@@ -2684,6 +2739,49 @@ function tablaSemanas(p) {
   </section>`;
 }
 
+// A free file without its ticket: its name, Google's button and, if it has no room on the account, the way to delete
+// it. What is inside stays kept, but out of sight, until it opens.
+function vistaFichaCerrada(p) {
+  const sinPlaza = fichaSinPlaza(p.id);
+  app.innerHTML = `<div class="personas persona ficha-cerrada">
+    ${barraApp(esc(p.nombre), { volver: '#personas' })}
+    <div class="armar-cuerpo">
+      <section class="general cuenta-fichas pide">
+        <h2>${ICONO.candado}${sinPlaza ? 'Esta ficha no cabe en tu cuenta' : 'Entra para abrir esta ficha'}</h2>
+        <p class="ayuda">${sinPlaza
+          ? `Tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis. Borra una que ya no uses, aquí o en otro aparato, o pasa a la versión de pago, que no tiene límite.`
+          : `En la versión gratis, cada ficha va con tu cuenta de Google: ${LIMITE_GRATIS} por cuenta. Entra con la tuya y la ficha se abre en este aparato, también sin conexión.`}</p>
+        ${cuentaDeVales() ? '' : '<div class="hueco-google"></div>'}
+        <p class="aviso-vales" aria-live="polite">${esc(avisoVales())}</p>
+      </section>
+      ${sinPlaza ? '<div class="botones"><button type="button" class="boton fantasma" data-accion="borrar-cerrada">Borrar esta ficha</button></div>' : ''}
+    </div>
+  </div>`;
+  const hueco = app.querySelector('.hueco-google');
+  if (hueco) botonGoogle(hueco);
+  let confirmar = null;
+  app.onclick = (ev) => {
+    const el = ev.target.closest('[data-accion="borrar-cerrada"]');
+    if (!el) return;
+    if (!confirmar) {
+      el.textContent = `¿Borrar la ficha de ${p.nombre}? Toca otra vez`;
+      confirmar = setTimeout(() => {
+        confirmar = null;
+        if (el.isConnected) el.textContent = 'Borrar esta ficha';
+      }, 4000);
+      return;
+    }
+    clearTimeout(confirmar);
+    apuntarBorrada('personas', p.id);
+    guardarPersonas(leerPersonas().filter((x) => x.id !== p.id));
+    location.hash = '#personas';
+  };
+  return () => {
+    clearTimeout(confirmar);
+    app.onclick = null;
+  };
+}
+
 function vistaPersona(id) {
   const lista = leerPersonas();
   const p = lista.find((x) => x.id === id);
@@ -2691,6 +2789,7 @@ function vistaPersona(id) {
     app.innerHTML = `<div class="personas"><header class="armar-cabecera"><a class="ir-personas" href="#personas">Mis personas</a><h1>Esta ficha no está en este navegador</h1><p>Si la tienes en otro aparato, trae su copia desde Mis personas.</p></header></div>`;
     return () => {};
   }
+  if (!fichaAbierta(p)) return vistaFichaCerrada(p);
   const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
   const dias = [...p.dias].reverse();
   app.innerHTML = `<div class="personas persona">
@@ -2808,6 +2907,7 @@ function vistaPersona(id) {
       clearTimeout(confirmar);
       apuntarBorrada('personas', id);
       guardarPersonas(leerPersonas().filter((x) => x.id !== id));
+      soltarVale(p);
       location.hash = '#personas';
     }
   };
@@ -2986,7 +3086,16 @@ async function ir() {
 // this laptop (personas.js). Anywhere else a switch left from before is cleared.
 if (!esEntornoDePruebas()) {
   if (almacen.leer('version', '') === 'pago') almacen.guardar('version', '');
-} else if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
+} else {
+  if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
+  // The free files' tickets, on this laptop only when a test asks for them (?vales=1): on a public address, always.
+  if (parametros.has('vales')) almacen.guardar('vales', parametros.get('vales') === '1' ? 'si' : '');
+}
 window.addEventListener('hashchange', ir);
-// The licence is checked once, before the first view: whether this is the paid version must be known when it paints.
-comprobarLicencia().finally(ir);
+// After the Google sign-in, the files that opened: the professional's people, painted again where they are on view.
+alCambiarVales(() => {
+  if (location.hash === '#personas' || location.hash.startsWith('#persona=')) ir();
+});
+// The licence and the free files' tickets are checked once, before the first view: what is open must be known when it
+// paints.
+comprobarLicencia().then(comprobarVales).finally(ir);

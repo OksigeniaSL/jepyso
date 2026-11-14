@@ -1295,3 +1295,18 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 }
 .aviso-licencia { margin: 0; color: var(--tinta); }
 .aviso-licencia:empty { display: none; }
+
+/* The free files' Google account (vales.js). A file without its ticket: its name behind a padlock, quieter than the
+   open ones; the section that opens them is marked with the live colour while some wait. Google's own button sits in
+   its space as Google draws it. */
+.candado { width: 16px; height: 16px; flex: none; }
+.persona-fila.cerrada { background: transparent; border-style: dashed; }
+.persona-fila.cerrada .nombre { display: inline-flex; align-items: center; gap: 8px; color: var(--tinta-suave); }
+.cuenta-fichas.pide { border-color: var(--vivo); }
+.cuenta-fichas h2 { display: flex; align-items: center; gap: 8px; }
+.cuenta-fichas .ayuda { font-size: 14px; }
+.hueco-google { min-height: 44px; }
+.cuenta-dentro { margin: 0; font-size: 14px; color: var(--tinta-suave); overflow-wrap: anywhere; }
+.cuenta-dentro strong { color: var(--tinta); font-weight: 600; }
+.aviso-vales { margin: 0; color: var(--vivo-texto); font-size: 14px; }
+.aviso-vales:empty { display: none; }

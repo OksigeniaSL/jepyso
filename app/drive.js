@@ -16,7 +16,7 @@ const CARPETA_TIPO = 'application/vnd.google-apps.folder';
 let token = null; // { valor, caduca }
 let guion = null;
 
-function cargarGoogle() {
+export function cargarGoogle() {
   if (window.google?.accounts?.oauth2) return Promise.resolve(window.google);
   guion ||= new Promise((ok, mal) => {
     const s = document.createElement('script');
