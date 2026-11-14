@@ -250,6 +250,20 @@ try {
     await ancho.waitForSelector('.hoja .enlace-texto');
     comprobar((await ancho.textContent('.hoja')).includes('el máximo de la versión gratis'), `${tema}: con 5 fichas no avisa del máximo de la versión gratis`);
     comprobar((await ancho.evaluate(() => JSON.parse(localStorage.getItem('personas')).length)) === 5, `${tema}: con 5 fichas se crea una sexta`);
+    // «Hecho: empezar otra»: the next routine starts clean, keeping «De» and the settings for the whole routine.
+    const deAntes = await ancho.inputValue('#de');
+    const tarjetasAntes = await ancho.locator('.rutina-armada .ejercicio').count();
+    await ancho.click('[data-h="otra"]');
+    await ancho.waitForTimeout(400);
+    comprobar((await ancho.locator('dialog.hoja-enlace').count()) === 0, `${tema}: «Hecho: empezar otra» no cierra la hoja`);
+    comprobar((await ancho.inputValue('#para')) === '' && (await ancho.locator('.rutina-armada .ejercicio').count()) === 0 && (await ancho.inputValue('#de')) === deAntes,
+      `${tema}: «Hecho: empezar otra» no deja la rutina limpia con «De» (${tarjetasAntes} tarjetas antes)`);
+    // «Vaciar» with «Deshacer».
+    for (const id of ['puente', 'silla']) await ancho.click(`.biblio-fila[data-id="${id}"] [data-accion="anadir"]`);
+    await ancho.click('[data-accion="vaciar"]');
+    comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 0, `${tema}: «Vaciar» no vacía la rutina`);
+    await ancho.click('[data-accion="deshacer-vaciar"]');
+    comprobar((await ancho.locator('.rutina-armada .ejercicio').count()) === 2, `${tema}: «Deshacer» no devuelve la rutina vaciada`);
     await ancho.close();
 
     if (tema === 'claro') {

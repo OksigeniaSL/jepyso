@@ -379,9 +379,11 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
   </article>`;
 }
 
-function seccionRutina(b) {
+function seccionRutina(b, vaciada = null) {
   return `<section class="rutina-armada" aria-labelledby="rutina-titulo">
     <h2 id="rutina-titulo">La rutina</h2>
+    ${b.orden.length ? '<button type="button" class="boton fantasma vaciar" data-accion="vaciar">Vaciar</button>' : ''}
+    ${vaciada ? `<p class="vaciada" role="status">Rutina vaciada. <button type="button" class="enlace" data-accion="deshacer-vaciar">Deshacer</button></p>` : ''}
     ${
       b.orden.length
         ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
@@ -713,10 +715,12 @@ function vistaArmar() {
     actualizarBarra();
   }
 
+  // Emptied a moment ago: «Deshacer» stays until something else is touched.
+  let vaciada = null;
   function refrescarRutina() {
     const hueco = app.querySelector('.hueco-rutina');
     apartarLienzo(hueco);
-    hueco.innerHTML = seccionRutina(b);
+    hueco.innerHTML = seccionRutina(b, vaciada);
     actualizarBarra();
   }
 
@@ -828,6 +832,18 @@ function vistaArmar() {
     refrescarPlantillas();
   }
 
+  // «Hecho: empezar otra», from the sheet of the link: a clean routine for the next person. Their name, their file and
+  // the exercises go; «De» and the settings for the whole routine stay, as they are the professional's.
+  function empezarOtra() {
+    Object.assign(b, { para: '', persona: undefined, orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' } });
+    vaciada = null;
+    guardar();
+    apartarLienzo(app);
+    pintar();
+    window.scrollTo(0, 0);
+    app.querySelector('#para')?.focus({ preventScroll: true });
+  }
+
   function usarPlantilla(p) {
     Object.assign(b, { descanso: p.d, veces: p.x, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
     b.orden = p.orden.filter((id) => ORDEN.includes(id));
@@ -844,6 +860,10 @@ function vistaArmar() {
     const sitio = ev.target.closest('.ejercicio, .biblio-fila');
     const id = sitio?.dataset.id;
     if (a !== 'borrar-plantilla' && deshacerBorrar) deshacerBorrar();
+    if (vaciada && a && a !== 'vaciar' && a !== 'deshacer-vaciar') {
+      vaciada = null;
+      app.querySelector('.vaciada')?.remove();
+    }
     if (sitio && id !== b.activo && a !== 'anadir' && a !== 'quitar') {
       // Choosing a card or a row only moves the preview; it never re-draws, so a text field keeps its focus.
       sinSaltar(() => sitio, () => elegir(id));
@@ -988,7 +1008,21 @@ function vistaArmar() {
         if (tope) tope.outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
       }
     } else if (a === 'crear') {
-      crearEnlace(b);
+      crearEnlace(b, empezarOtra);
+    } else if (a === 'vaciar') {
+      // Emptying keeps each exercise's settings, so «Deshacer» brings the routine back exactly.
+      vaciada = { orden: [...b.orden], activo: b.activo };
+      b.orden = [];
+      refrescarRutina();
+      refrescarBiblioteca();
+      colocarFigura();
+      app.querySelector('[data-accion="deshacer-vaciar"]')?.focus({ preventScroll: true });
+    } else if (a === 'deshacer-vaciar') {
+      if (vaciada) Object.assign(b, vaciada);
+      vaciada = null;
+      refrescarRutina();
+      refrescarBiblioteca();
+      colocarFigura();
     } else if (a === 'ir-etapa') {
       app.querySelector(`#etapa-${el.dataset.etapa}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (el.dataset.etapa === 'enlace') app.querySelector('[data-accion="crear"]')?.focus({ preventScroll: true });
@@ -1069,7 +1103,7 @@ function vistaArmar() {
   };
 }
 
-async function crearEnlace(b) {
+async function crearEnlace(b, empezarOtra = null) {
   const rutina = {
     v: 1,
     para: b.para.trim(),
@@ -1144,7 +1178,8 @@ async function crearEnlace(b) {
       <div class="qr">${qr}</div>
       <div class="enlace-texto">${esc(url)}</div>
     </details>
-    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace; no se guarda en ningún servidor.</p>`;
+    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace; no se guarda en ningún servidor.</p>
+    ${empezarOtra ? `<button type="button" class="boton secundario hoja-otra" data-h="otra">Hecho: empezar otra rutina</button>` : ''}`;
   document.body.appendChild(dialogo);
   const volverA = document.activeElement;
   let destino = null;
@@ -1170,6 +1205,10 @@ async function crearEnlace(b) {
       if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return dialogo.close();
     }
     if (ev.target.closest('[data-h="cerrar"]')) return dialogo.close();
+    if (ev.target.closest('[data-h="otra"]')) {
+      dialogo.close();
+      return empezarOtra?.();
+    }
     const ficha = ev.target.closest('.en-ficha a');
     if (ficha) {
       ev.preventDefault();

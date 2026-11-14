@@ -475,6 +475,11 @@ a.boton { text-decoration: none; }
 /* ---------- The routine being built, the library and the templates ---------- */
 .rutina-armada, .biblioteca, .plantillas { display: grid; gap: 12px; }
 .rutina-armada h2, .biblioteca h2, .plantillas h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
+/* «Vaciar» at the right of «La rutina», and «Rutina vaciada. Deshacer» while it can be undone. */
+.rutina-armada { position: relative; }
+.rutina-armada .vaciar { position: absolute; top: -12px; right: -6px; min-height: 40px; font-size: 14px; }
+.vaciada { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 8px 12px; border-left: 2px solid var(--tinta); color: var(--tinta); }
+.hoja-otra { width: 100%; min-height: 52px; }
 .rutina-vacia {
   margin: 0; padding: 18px 16px; border: 1px dashed var(--tinta-suave); border-radius: var(--radio); color: var(--tinta-suave);
 }
