@@ -49,4 +49,7 @@ const b = limpiarBorradas(JSON.parse('{"personas":{"__proto__":"2026-11-10T00:00
 assert.deepEqual(Object.keys(b.personas), ['ab12']);
 assert.deepEqual(Object.keys(b.plantillas), []);
 assert.equal(Object.getPrototypeOf({}).polluted, undefined);
+// Fields a newer version adds survive an older one reading and saving the file.
+assert.deepEqual(limpiarPersonas([{ id: 'x2', nombre: 'Ana', etiquetas: ['rodilla'] }])[0].etiquetas, ['rodilla']);
+assert.equal(limpiarPlantillas([{ nombre: 'R', orden: [], color: 'azul' }])[0].color, 'azul');
 console.log('entrada: bien');

@@ -4,7 +4,7 @@ import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO,
 } from './datos.js';
-import { limpiarRutina, limpiarResumen, limpiarPlantillas } from './entrada.js';
+import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, leerBorradas, apuntarBorrada,
@@ -255,6 +255,7 @@ function borradorInicial() {
 
 // Drafts saved before the library had an order kept every exercise with an «incluido» flag.
 function ponerAlDia(b) {
+  if (!b || typeof b !== 'object') b = borradorInicial();
   b.tope ??= TOPE_MOLESTIA;
   b.filtro ??= { zona: '', musculo: '', texto: '' };
   b.ejercicios ??= {};
@@ -265,6 +266,12 @@ function ponerAlDia(b) {
     else delete b.ejercicios[id];
   }
   if (!ORDEN.includes(b.activo)) b.activo = b.orden[0] || ORDEN[0];
+  // The draft lives in this browser's storage, which other pages of the same origin can write (on the bench): its
+  // settings go through the same cleaning as a template.
+  const limpia = limpiarPlantilla({ nombre: 'borrador', d: b.descanso, x: b.veces, m: b.tope, c: b.cuerpo, orden: Object.keys(b.ejercicios), ejercicios: b.ejercicios });
+  Object.assign(b, { descanso: limpia.d, veces: limpia.x, tope: limpia.m, cuerpo: limpia.c, ejercicios: limpia.ejercicios });
+  b.para = typeof b.para === 'string' ? b.para : '';
+  b.de = typeof b.de === 'string' ? b.de : '';
   return b;
 }
 
@@ -1301,9 +1308,18 @@ async function vistaRutina(codigo) {
       bloqueo = null;
     }
     sesion = { item: 0, serie: 0, hechas: cola.map((c) => Array(c.e.s).fill(0)), molestia: {}, inicio: new Date() };
+    // «Back» on the phone during the routine asks the same as the ×, instead of leaving the page with the session.
+    history.pushState({ jepysoJugador: 1 }, '');
     pintarJugador();
     await prepararSerie();
   }
+  const alAtras = () => {
+    if (!document.querySelector('.jugador')) return;
+    const salir = app.querySelector('[data-r="salir"]');
+    if (sesion?.estado !== 'salir') history.pushState({ jepysoJugador: 1 }, '');
+    salir?.click();
+  };
+  window.addEventListener('popstate', alAtras);
 
   // The browser lets the screen lock go whenever the page is hidden (a look at WhatsApp mid-routine): back on it,
   // with a session going, it is asked for again, so the phone does not lock in the middle of a set.
@@ -1670,9 +1686,14 @@ async function vistaRutina(codigo) {
   };
 
   intro();
+  // The figure's code starts coming while the person reads the list: it is ready by «Empezar», and comes from the same
+  // version of the app as the page.
+  cargarFigura().catch(() => {});
   return () => {
     clearTimeout(sesion?.temporizador);
     clearInterval(sesion?.reloj);
+    window.removeEventListener('popstate', alAtras);
+    document.removeEventListener('visibilitychange', alVolver);
     app.onclick = null;
   };
 }
@@ -1795,7 +1816,10 @@ function guardarEnFicha(s, destino = '') {
 }
 
 // ---------- The professional's people ----------
-const fechaLarga = (f) => new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(new Date(f + 'T12:00:00'));
+const fechaLarga = (f) => {
+  const d = new Date(f + 'T12:00:00');
+  return Number.isNaN(d.getTime()) ? 'sin fecha' : new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(d);
+};
 const ultimaFecha = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
 
 // A day that passed the person's level in the last two weeks, the latest one, to see at a glance who needs a look.
@@ -1861,6 +1885,7 @@ async function sincronizarDrive(boton) {
 
 function vistaPersonas() {
   let texto = '';
+  let buscando = null;
   const pintarLista = () => {
     const todas = leerPersonas().sort((x, y) => ultimaFecha(y).localeCompare(ultimaFecha(x)));
     const lista = todas.filter((p) => !texto || p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(texto));
@@ -1894,7 +1919,9 @@ function vistaPersonas() {
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'buscar-persona') return;
     texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-    pintarLista();
+    // With hundreds of files, painting on every key made typing lag: the list follows a moment after the last one.
+    clearTimeout(buscando);
+    buscando = setTimeout(pintarLista, 150);
   };
   app.onclick = async (ev) => {
     if (ev.target.closest('[data-accion="drive"]')) {
@@ -2029,11 +2056,17 @@ function vistaPersona(id) {
     fresca.cambiada = p.cambiada;
     if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
   };
+  // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file.
+  let porGuardar = null;
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'notas') return;
     p.notas = ev.target.value;
     p.cambiada = new Date().toISOString();
-    guardar();
+    clearTimeout(porGuardar);
+    porGuardar = setTimeout(() => {
+      porGuardar = null;
+      guardar();
+    }, 400);
   };
   let confirmar = null;
   app.onclick = async (ev) => {
@@ -2086,6 +2119,10 @@ function vistaPersona(id) {
     }
   };
   return () => {
+    if (porGuardar) {
+      clearTimeout(porGuardar);
+      guardar();
+    }
     clearTimeout(confirmar);
     app.oninput = app.onclick = null;
   };
@@ -2120,6 +2157,17 @@ navigator.serviceWorker?.addEventListener('message', (ev) => {
   clearTimeout(avisoVersion);
   avisoVersion = setTimeout(mostrarVersionNueva, 1500);
 });
+// The browser's storage is full: said once, on top of whatever screen, with what to do.
+window.addEventListener('jepyso-lleno', () => {
+  if (document.querySelector('.aviso-lleno')) return;
+  const aviso = document.createElement('div');
+  aviso.className = 'nueva-version aviso-lleno';
+  aviso.setAttribute('role', 'alert');
+  aviso.innerHTML = `<p>${SIN_SITIO}</p><button type="button" class="nueva-version-cerrar" aria-label="Cerrar">${ICONO.cerrar}</button>`;
+  aviso.querySelector('button').addEventListener('click', () => aviso.remove());
+  document.body.append(aviso);
+});
+
 // A new set may have taken over while this page was still loading, before it listened: it asks once.
 navigator.serviceWorker?.controller?.postMessage({ tipo: 'version' });
 function mostrarVersionNueva() {

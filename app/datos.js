@@ -1305,8 +1305,10 @@ export const almacen = {
     try {
       localStorage.setItem(clave, JSON.stringify(valor));
       return true;
-    } catch {
-      // Storage unavailable or full: the routine still works; the caller tells what was not kept.
+    } catch (err) {
+      // Storage unavailable or full: the routine still works; the caller tells what was not kept, and a full one is
+      // announced once for the whole page (app.js), whatever was being saved.
+      if (err?.name === 'QuotaExceededError' || err?.code === 22) globalThis.dispatchEvent?.(new Event('jepyso-lleno'));
       return false;
     }
   },
