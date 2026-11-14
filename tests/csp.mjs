@@ -9,4 +9,12 @@ if (!mapa || !politica) throw new Error('index.html: falta el import map o la po
 const huella = `'sha256-${createHash('sha256').update(mapa).digest('base64')}'`;
 if (!politica.includes(huella)) throw new Error(`index.html: la política no lleva la huella del import map (${huella})`);
 if (/unsafe-inline|unsafe-eval/.test(politica)) throw new Error('index.html: la política no debe llevar unsafe-inline ni unsafe-eval');
+// The accessibility panel's style hashes: the test server's strict policy (servir.py --csp) must allow the same styles
+// as the page, or the walk on the strict copy would see the panel refused.
+const estilos = (texto) => texto.match(/style-src ([^;"]+)/)?.[1].trim().split(/\s+/).sort().join(' ');
+const servir = readFileSync(new URL('./servir.py', import.meta.url), 'utf8').match(/CSP = \(([\s\S]*?)\)\n/)?.[1];
+const politicaServir = servir && [...servir.matchAll(/"([^"]*)"/g)].map((m) => m[1]).join('');
+if (!politicaServir || estilos(politicaServir) !== estilos(politica)) {
+  throw new Error(`servir.py: su style-src no es el de index.html\n  index.html: ${estilos(politica)}\n  servir.py:  ${politicaServir && estilos(politicaServir)}`);
+}
 console.log('política de contenido: bien');

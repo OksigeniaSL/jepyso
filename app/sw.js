@@ -39,6 +39,7 @@ const ARCHIVOS = [
   'modelos/ejercicios.json',
   'modelos/b/ejercicios.json',
   'vendor/qrcode/qrcode.js',
+  'vendor/oksigenia-access-panel/oksigenia-access-panel.js',
 ];
 
 const base = new URL('./', self.location).href;
