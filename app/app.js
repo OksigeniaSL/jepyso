@@ -8,7 +8,7 @@ import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } fr
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
-  esDePago, leerBorradas, apuntarBorrada,
+  esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada,
 } from './personas.js';
 import { conectar, sincronizar } from './drive.js';
 import { MAPA, PUNTOS } from './mapa.js';
@@ -2832,7 +2832,10 @@ async function ir() {
   }
   else limpiar = vistaArmar();
 }
-// The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off.
-if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
+// The paid version, for testing until the licence is settled: ?pago=1 switches it on in this browser, ?pago=0 off,
+// only on this laptop and the device bench (personas.js). At the public address a switch left from before is cleared.
+if (!esEntornoDePruebas()) {
+  if (almacen.leer('version', '') === 'pago') almacen.guardar('version', '');
+} else if (parametros.has('pago')) almacen.guardar('version', parametros.get('pago') === '1' ? 'pago' : '');
 window.addEventListener('hashchange', ir);
 ir();
