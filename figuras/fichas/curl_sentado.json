@@ -1,0 +1,66 @@
+{
+  "id": "curl_sentado",
+  "familia": "sentado",
+  "nombre": "Curl de bíceps sentado",
+  "lado": "ambos",
+  "accesorios": [
+    "silla",
+    "peso"
+  ],
+  "parametros": {
+    "peso": {
+      "mano": "ambas"
+    }
+  },
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube los pesos",
+    "mantener": "Arriba",
+    "bajar": "Bájalos despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "libre"
+      },
+      "shoulder_l": {
+        "flex": 0,
+        "abd": 12
+      },
+      "shoulder_r": {
+        "flex": 0,
+        "abd": 12
+      },
+      "elbow_l": {
+        "flex": 10
+      },
+      "elbow_r": {
+        "flex": 10
+      }
+    },
+    "llegada": {
+      "elbow_l": {
+        "flex": 125
+      },
+      "elbow_r": {
+        "flex": 125
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "biceps"
+    ],
+    "secundarios": [
+      "antebrazo"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.9
+}

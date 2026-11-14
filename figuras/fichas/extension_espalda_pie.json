@@ -1,0 +1,42 @@
+{
+  "id": "extension_espalda_pie",
+  "familia": "de_pie",
+  "nombre": "Extensión de espalda de pie",
+  "lado": "ambos",
+  "accesorios": [],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Arquea la espalda hacia atrás",
+    "mantener": "Un momento",
+    "bajar": "Vuelve despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "cadera"
+      }
+    },
+    "llegada": {
+      "spine": {
+        "flex": -18
+      },
+      "neck": {
+        "flex": -8
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "erectores"
+    ],
+    "secundarios": []
+  },
+  "camara": "lado",
+  "margen": 0.95
+}

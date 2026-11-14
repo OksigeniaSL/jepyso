@@ -1,0 +1,76 @@
+{
+ "id": "brazos_arriba",
+ "nombre": "Brazos arriba sentado",
+ "fps": 30,
+ "duracion": 17.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 3.0,
+   "texto": "Sube los brazos por encima de la cabeza"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 3.0,
+   "fin": 13.0,
+   "texto": "Estírate hacia arriba"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 13.0,
+   "fin": 16.0,
+   "texto": "Bájalos despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 16.0,
+   "fin": 17.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 70.8,
+   "hombro_izquierda_flexion": -8.9,
+   "hombro_izquierda_rotacion_externa": -24.6,
+   "codo_derecha_flexion": 70.8,
+   "hombro_derecha_flexion": -8.9,
+   "hombro_derecha_rotacion_externa": -24.6
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 5.0,
+   "hombro_izquierda_flexion": 170.0,
+   "hombro_izquierda_rotacion_externa": 61.4,
+   "codo_derecha_flexion": 5.0,
+   "hombro_derecha_flexion": 170.0,
+   "hombro_derecha_rotacion_externa": 61.4
+  }
+ },
+ "musculos": {
+  "principales": [
+   "dorsal_ancho"
+  ],
+  "secundarios": [
+   "pectoral"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -2.303,
+   1.824,
+   2.534
+  ],
+  "mira": [
+   0.0,
+   0.817,
+   -0.057
+  ]
+ },
+ "archivo": "brazos_arriba.glb",
+ "bytes": 72104
+}

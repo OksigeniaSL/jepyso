@@ -1,0 +1,78 @@
+{
+ "id": "extension_espalda_pie",
+ "nombre": "Extensión de espalda de pie",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Arquea la espalda hacia atrás"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Un momento"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -0.6,
+   "tobillo_izquierda_flexion": 4.6,
+   "codo_izquierda_flexion": 87.3,
+   "hombro_izquierda_flexion": -41.5,
+   "cadera_derecha_flexion": -0.6,
+   "tobillo_derecha_flexion": 4.6,
+   "codo_derecha_flexion": 87.3,
+   "hombro_derecha_flexion": -41.5,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": -2.8,
+   "tobillo_izquierda_flexion": 6.7,
+   "codo_izquierda_flexion": 91.2,
+   "hombro_izquierda_flexion": -45.7,
+   "cadera_derecha_flexion": -2.8,
+   "tobillo_derecha_flexion": 6.7,
+   "codo_derecha_flexion": 91.2,
+   "hombro_derecha_flexion": -45.7,
+   "tronco_inclinacion": 18.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "erectores"
+  ],
+  "secundarios": []
+ },
+ "lado": "ambos",
+ "accesorios": [],
+ "camara": {
+  "pos": [
+   -3.145,
+   1.803,
+   0.58
+  ],
+  "mira": [
+   0.0,
+   0.797,
+   0.014
+  ]
+ },
+ "archivo": "extension_espalda_pie.glb",
+ "bytes": 39732
+}

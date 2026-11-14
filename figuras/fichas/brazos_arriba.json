@@ -1,0 +1,57 @@
+{
+  "id": "brazos_arriba",
+  "familia": "sentado",
+  "nombre": "Brazos arriba sentado",
+  "lado": "ambos",
+  "accesorios": [
+    "silla"
+  ],
+  "ritmo": {
+    "subir": 3.0,
+    "mantener": 10.0,
+    "bajar": 3.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Sube los brazos por encima de la cabeza",
+    "mantener": "Estírate hacia arriba",
+    "bajar": "Bájalos despacio",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "muslos"
+      }
+    },
+    "llegada": {
+      "apoyos": {
+        "brazos": "libre"
+      },
+      "shoulder_l": {
+        "flex": 170,
+        "abd": 5
+      },
+      "shoulder_r": {
+        "flex": 170,
+        "abd": 5
+      },
+      "elbow_l": {
+        "flex": 5
+      },
+      "elbow_r": {
+        "flex": 5
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "dorsal_ancho"
+    ],
+    "secundarios": [
+      "pectoral"
+    ]
+  },
+  "camara": "tres_cuartos",
+  "margen": 0.85
+}

@@ -1,0 +1,42 @@
+{
+  "id": "rotacion_tronco_pie",
+  "familia": "de_pie",
+  "nombre": "Rotación de tronco de pie",
+  "lado": "derecho",
+  "accesorios": [],
+  "ritmo": {
+    "subir": 2.0,
+    "mantener": 1.0,
+    "bajar": 2.0,
+    "reposo": 1.0
+  },
+  "textos": {
+    "subir": "Gira el tronco",
+    "mantener": "Un momento",
+    "bajar": "Vuelve al frente",
+    "reposo": "Descansa"
+  },
+  "posturas": {
+    "partida": {
+      "apoyos": {
+        "brazos": "cadera"
+      }
+    },
+    "llegada": {
+      "spine": {
+        "rot": 35
+      },
+      "neck": {
+        "rot": 10
+      }
+    }
+  },
+  "musculos": {
+    "principales": [
+      "oblicuos"
+    ],
+    "secundarios": []
+  },
+  "camara": "frente",
+  "margen": 0.95
+}

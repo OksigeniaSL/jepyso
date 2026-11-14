@@ -1,0 +1,76 @@
+{
+ "id": "rotacion_tronco_pie",
+ "nombre": "Rotación de tronco de pie",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Gira el tronco"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Un momento"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Vuelve al frente"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 92.6,
+   "hombro_izquierda_flexion": -44.0,
+   "hombro_izquierda_abduccion": 37.0,
+   "hombro_izquierda_rotacion_externa": -68.2,
+   "codo_derecha_flexion": 92.6,
+   "hombro_derecha_flexion": -44.0,
+   "hombro_derecha_abduccion": 37.0,
+   "hombro_derecha_rotacion_externa": -68.2
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 95.0,
+   "hombro_izquierda_flexion": 5.3,
+   "hombro_izquierda_abduccion": 46.3,
+   "hombro_izquierda_rotacion_externa": -85.4,
+   "codo_derecha_flexion": 79.9,
+   "hombro_derecha_flexion": -63.6,
+   "hombro_derecha_abduccion": 9.7,
+   "hombro_derecha_rotacion_externa": -64.8
+  }
+ },
+ "musculos": {
+  "principales": [
+   "oblicuos"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [],
+ "camara": {
+  "pos": [
+   -1.176,
+   1.604,
+   3.372
+  ],
+  "mira": [
+   0.001,
+   0.864,
+   0.01
+  ]
+ },
+ "archivo": "rotacion_tronco_pie.glb",
+ "bytes": 40616
+}

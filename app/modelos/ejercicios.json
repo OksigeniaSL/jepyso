@@ -286,6 +286,20 @@
     "secundarios": []
    }
   },
+  "brazos_arriba": {
+   "glb": "modelos/brazos_arriba.glb",
+   "ficha": "modelos/brazos_arriba.json",
+   "bytes": 72104,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "dorsal_ancho"
+    ],
+    "secundarios": [
+     "pectoral"
+    ]
+   }
+  },
   "circulos_tobillo": {
    "glb": "modelos/circulos_tobillo.glb",
    "ficha": "modelos/circulos_tobillo.json",
@@ -389,6 +403,20 @@
      "isquiotibiales"
     ],
     "secundarios": []
+   }
+  },
+  "curl_sentado": {
+   "glb": "modelos/curl_sentado.glb",
+   "ficha": "modelos/curl_sentado.json",
+   "bytes": 110464,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "biceps"
+    ],
+    "secundarios": [
+     "antebrazo"
+    ]
    }
   },
   "deslizar_mesa": {
@@ -505,6 +533,18 @@
    "glb": "modelos/extension_antebrazos.glb",
    "ficha": "modelos/extension_antebrazos.json",
    "bytes": 44408,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "erectores"
+    ],
+    "secundarios": []
+   }
+  },
+  "extension_espalda_pie": {
+   "glb": "modelos/extension_espalda_pie.glb",
+   "ficha": "modelos/extension_espalda_pie.json",
+   "bytes": 39192,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -929,6 +969,18 @@
     "secundarios": [
      "deltoides_posterior"
     ]
+   }
+  },
+  "rotacion_tronco_pie": {
+   "glb": "modelos/rotacion_tronco_pie.glb",
+   "ficha": "modelos/rotacion_tronco_pie.json",
+   "bytes": 40616,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "oblicuos"
+    ],
+    "secundarios": []
    }
   },
   "scaption": {
