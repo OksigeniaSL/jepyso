@@ -335,8 +335,9 @@ a.boton { text-decoration: none; }
 .a-mano-icono svg { width: 22px; height: 22px; }
 .pie-poster { display: none; }
 /* Wide (the WhatsApp of a computer): the list at the left at the width of a phone's reading, and at the right a panel
-   that stays, with the still of the first exercise, how long it takes and «Empezar». */
-@media (min-width: 980px) {
+   that stays, with the still of the first exercise, how long it takes and «Empezar». Also a TV or a board lying wide
+   from 900 px (a 1920×1080 screen at double density is 960×540), where «Ponerla en pantalla grande» goes in the panel. */
+@media (min-width: 980px), (min-width: 900px) and (orientation: landscape) {
   .rutina.rutina-intro {
     max-width: 1180px; margin: 0 auto; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto 1fr;
     grid-template-areas: "saludo panel" "lista panel"; column-gap: 28px; padding: 0 24px;
@@ -1171,6 +1172,81 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .corregir-ejercicio { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--linea); }
 .corregir-ejercicio h3 { margin: 0; font-size: 18px; }
 
+/* ---------- A group on a big screen ----------
+   The person's player, wide: the figure big at the left and, at the right, what to do now, read from four or five
+   metres (a TV in a care home, a projector or a classroom board in PE). Every size goes with the height of the
+   screen, so the same page fills a 1280×600 board and a 1920×1080 TV alike and a cable plugged mid-routine only
+   rescales it. Nothing here asks for :has(), container queries, color-mix() or dvh, which some classroom boards'
+   browsers lack (shared/pizarras-en-el-aula.md); no hover either. */
+.a-grupo { display: none; }
+@media (min-width: 900px) and (orientation: landscape) {
+  .a-grupo { display: grid; gap: 6px; margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--linea); }
+  .a-grupo .boton { width: 100%; min-height: 48px; font-size: 16px; }
+  .a-grupo .boton svg { width: 22px; height: 22px; }
+  .a-grupo p { margin: 0; color: var(--tinta-suave); font-size: 14px; line-height: 1.4; text-align: center; }
+  /* A short screen (a TV at double density is 540 px high) keeps the whole panel in sight, without the still. */
+  @media (max-height: 580px) { .rutina-intro .pie-poster { display: none; } }
+}
+
+.jugador.grupo { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+.jugador.grupo .jugador-arriba {
+  grid-column: 1 / -1; gap: 2vh; padding: 1.6vh 2.4vh; background: var(--fondo); border-bottom: 1px solid var(--linea);
+}
+.jugador.grupo .jugador-arriba h2 { font-size: 5.4vh; line-height: 1.1; letter-spacing: -0.015em; }
+.jugador.grupo .jugador-arriba .sub { font-size: 3vh; }
+.jugador.grupo .redondo { width: 8vh; height: 8vh; min-width: 48px; min-height: 48px; }
+.jugador.grupo .redondo svg { width: 3.6vh; height: 3.6vh; min-width: 22px; min-height: 22px; }
+.jugador.grupo .escena { grid-column: 1; grid-row: 2; }
+.jugador.grupo .lado-etiqueta { top: 2vh; font-size: 3.2vh; padding: 0.6vh 1.6vh; }
+.jugador.grupo .girar-pista { font-size: 2.2vh; }
+.jugador.grupo .recolocar { top: 2vh; right: 2vh; min-height: max(6vh, 44px); font-size: 2.4vh; }
+.jugador.grupo .mando {
+  grid-column: 2; grid-row: 2; align-content: space-between; gap: 2.6vh; padding: 3.4vh 3.4vh 3.6vh;
+  border-top: 0; border-left: 1px solid var(--linea); overflow: hidden;
+}
+/* The set: the phase word fills the panel, the count under it, the rhythm line, and the three buttons. */
+.jugador.grupo .cuenta { gap: 1vh; align-content: center; }
+.jugador.grupo .fase { font-size: 13vh; line-height: 1; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.jugador.grupo .fase.mantener { text-decoration-thickness: 0.8vh; text-underline-offset: 2vh; }
+.jugador.grupo .cuenta .grande { font-size: 15vh; line-height: 1; letter-spacing: -0.02em; }
+.jugador.grupo .cuenta .grande small { font-size: 6vh; }
+.jugador.grupo .tempo text { font-size: 13px; }
+.jugador.grupo .mando-serie { gap: 2vh; }
+.jugador.grupo .mando-serie .boton.secundario { min-height: max(10vh, 56px); font-size: 2.8vh; padding: 0 1.6vh; }
+.jugador.grupo .mando-serie .principal { width: 15vh; height: 15vh; min-width: 72px; min-height: 72px; gap: 0.6vh; }
+.jugador.grupo .mando-serie .principal svg { width: 5vh; height: 5vh; min-width: 26px; min-height: 26px; }
+.jugador.grupo .mando-serie .principal span { font-size: 2.6vh; }
+/* Getting ready, the countdown, the rest and the end: the same panel, read big. */
+.jugador.grupo .prepara { gap: 2vh; }
+.jugador.grupo .prepara-titulo { font-size: 6.4vh; line-height: 1.05; }
+.jugador.grupo .prepara-partida { font-size: 3.6vh; line-height: 1.35; }
+.jugador.grupo .prepara-material { font-size: 3.4vh; gap: 1vh 1.4vh; }
+.jugador.grupo .prepara-material span { font-size: 2.2vh; }
+.jugador.grupo .prepara-material .muestra-banda { width: 5vh; height: 2.2vh; }
+.jugador.grupo .prepara-botones { position: static; margin: 0; padding: 0; gap: 1.6vh; background: transparent; }
+.jugador.grupo .prepara-botones .boton { min-height: max(11vh, 56px); font-size: 3.8vh; }
+.jugador.grupo .prepara-botones .boton.secundario { min-height: max(8vh, 48px); font-size: 3vh; }
+.jugador.grupo .prepara-botones .boton svg { width: 4vh; height: 4vh; }
+.jugador.grupo .centro { gap: 1.4vh; align-content: center; }
+.jugador.grupo .centro h3 { font-size: 7vh; line-height: 1.05; }
+.jugador.grupo .centro p { font-size: 3.6vh; line-height: 1.3; }
+.jugador.grupo .centro .cuenta-atras { font-size: 32vh; line-height: 0.9; }
+.jugador.grupo .anillo { width: 44vh; height: 44vh; max-width: 100%; }
+.jugador.grupo .mando-botones { gap: 2vh; }
+.jugador.grupo .mando-botones .boton.fantasma { min-height: max(9vh, 48px); font-size: 3.4vh; padding: 0 1vh; }
+.jugador.grupo .grupo-fin { display: grid; gap: 2vh; align-content: center; text-align: center; }
+.jugador.grupo .grupo-fin h3 { margin: 0; font-size: 9vh; line-height: 1.05; letter-spacing: -0.02em; }
+.jugador.grupo .grupo-fin p { margin: 0; color: var(--tinta-suave); font-size: 4vh; }
+/* A window made narrow (or a screen turned upright): the figure on top and the panel under it, sized by the width. */
+@media (max-aspect-ratio: 1/1) {
+  .jugador.grupo { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .jugador.grupo .mando { grid-column: 1; grid-row: 3; border-left: 0; border-top: 1px solid var(--linea); overflow-y: auto; }
+  .jugador.grupo .fase { font-size: 11vw; }
+  .jugador.grupo .cuenta .grande { font-size: 12vw; }
+  .jugador.grupo .centro .cuenta-atras { font-size: 24vw; }
+  .jugador.grupo .anillo { width: 36vw; height: 36vw; }
+}
+
 /* ---------- Oksigenia's signature ----------
    The line «Jepyso · un producto de Oksigenia» with its link, and «Accesibilidad», which opens Oksigenia's panel. Quiet
    graphite under a hairline: it closes the page and never competes with what the page is for. */
@@ -1206,7 +1282,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   }
   .firma-pro .firma-acceso { flex-direction: column; gap: 3px; width: 100%; min-height: 64px; justify-content: center; color: var(--tinta-suave); font-size: 12px; }
   .firma-pro .firma-acceso span { text-decoration: none; }
-  .firma-pro .firma-acceso:hover { color: var(--tinta); }
+  @media (hover: hover) { .firma-pro .firma-acceso:hover { color: var(--tinta); } }
   .firma-pro .firma-linea { font-size: 11px; line-height: 1.35; text-align: center; }
 }
 

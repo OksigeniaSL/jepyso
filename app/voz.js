@@ -6,6 +6,14 @@ import { almacen } from './datos.js';
 
 let voz = null;
 let buscada = false;
+// A group in front of a big screen (modo de grupo) hears it on by default with its own switch, and a little slower: a
+// room of people follows one voice from metres away.
+let claveVoz = 'voz';
+let ritmo = 1.05;
+export function modoVoz({ grupo = false } = {}) {
+  claveVoz = grupo ? 'voz-grupo' : 'voz';
+  ritmo = grupo ? 0.9 : 1.05;
+}
 
 function elegirVoz() {
   if (!('speechSynthesis' in window)) return null;
@@ -27,9 +35,9 @@ export const hayVoz = () => {
   prepararVoz();
   return !!voz;
 };
-export const vozActiva = () => almacen.leer('voz', true) !== false;
+export const vozActiva = () => almacen.leer(claveVoz, true) !== false;
 export const ponerVoz = (si) => {
-  almacen.guardar('voz', !!si);
+  almacen.guardar(claveVoz, !!si);
   if (!si) callar();
 };
 
@@ -41,7 +49,7 @@ export function decir(texto, { interrumpir = true } = {}) {
   const u = new SpeechSynthesisUtterance(texto);
   u.voice = voz;
   u.lang = voz.lang;
-  u.rate = 1.05;
+  u.rate = ritmo;
   speechSynthesis.speak(u);
 }
 
