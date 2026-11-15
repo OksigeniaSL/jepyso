@@ -20,7 +20,10 @@ const recorrer = (dir) => {
 };
 recorrer(app);
 
-const faltan = todos.filter((r) => r !== 'sw.js' && !/(^|\/)(LICENSE|.*\.md)$/.test(r) && !fijo(r) && !lista.includes(r));
+// Not the app's: the file that vouches for the Android app (.well-known/), and the recorded voice (voz/), which the
+// player asks for when it needs it and the worker keeps then.
+const fuera = (ruta) => ruta.startsWith('.well-known/') || ruta.startsWith('voz/');
+const faltan = todos.filter((r) => r !== 'sw.js' && !/(^|\/)(LICENSE|.*\.md)$/.test(r) && !fijo(r) && !fuera(r) && !lista.includes(r));
 const sobran = lista.filter((r) => !todos.includes(r));
 if (faltan.length || sobran.length) {
   if (faltan.length) console.error(`sw.js no guarda: ${faltan.join(', ')}`);
