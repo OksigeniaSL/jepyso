@@ -5,6 +5,7 @@
 #  - No worker and no manifest of its own: the plugin serves the app and the course keeps the sessions.
 #  - The models of the free sample only (MUESTRA, below), or all of them with --todo; the two lists of clips
 #    (modelos/ejercicios.json and modelos/b/ejercicios.json) say just those.
+#  - modelos/LICENSE-FIGURES.md: the terms of the figures, which are not GPL.
 #  - catalogo.json: every exercise of the library with its name and its unit, and whether this copy brings it. The
 #    plugin's PHP reads it to describe the routine and to warn about exercises the site does not have.
 # Usage: tools/construir-moodle.sh <plugin folder> [--todo]
@@ -21,6 +22,8 @@ trap 'rm -rf "$TMP"' EXIT
 W=$TMP/web
 mv "$W/vendor" "$W/libs"
 rm -f "$W/sw.js" "$W/manifest.json"
+# The figures travel with their own terms.
+cp "$ROOT/LICENSE-FIGURES.md" "$W/modelos/LICENSE-FIGURES.md"
 python3 -I - "$W" "$TODO" $MUESTRA <<'PY'
 import json, os, re, sys
 w, todo, muestra = sys.argv[1], sys.argv[2] == '--todo', set(sys.argv[3:])
