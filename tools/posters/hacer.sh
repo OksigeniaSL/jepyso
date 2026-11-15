@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Makes the still of every exercise that the library shows in its rows (app/modelos/posters/ and
 # app/modelos/b/posters/), with the app's own figure. Run it again when a clip, a body or the figure changes, and then
-# raise FIJOS in app/sw.js: phones keep the stills under the same name, like the clips.
+# raise FIJOS in app/sw.js: phones keep the stills under the same name, like the clips. It also makes the still of each
+# body standing, for the builder's «Figura» choice (app/imagenes/figura-a.webp and figura-b.webp, among the app files).
 # Usage: tools/posters/hacer.sh     PORT (default 8774), CHROMIUM_BIN as in tests/correr.sh
 set -euo pipefail
 AQUI=$(cd "$(dirname "$0")" && pwd)
@@ -12,3 +13,4 @@ SERVER=$!
 trap 'kill "$SERVER" 2>/dev/null || true' EXIT
 curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127.0.0.1:$PORT/tools/posters/render.html"
 node "$AQUI/render.mjs" "http://127.0.0.1:$PORT"
+node "$AQUI/figuras.mjs" "http://127.0.0.1:$PORT"

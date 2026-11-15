@@ -32,6 +32,8 @@ const ARCHIVOS = [
   'fuentes/red-hat-mono.woff2',
   'imagenes/yeso-puente.webp',
   'imagenes/yeso-silla.webp',
+  'imagenes/figura-a.webp',
+  'imagenes/figura-b.webp',
   'iconos/icono.svg',
   'iconos/icono-32.png',
   'iconos/icono-192.png',

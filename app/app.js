@@ -62,6 +62,16 @@ const ICONO = {
 
 // The two bodies Gaudí made. Named by build, never by sex.
 const FIGURAS = [['a', 'Figura 1'], ['b', 'Figura 2']];
+// The figure at ease, with nothing in the hands: the first frame of this exercise.
+const DE_PIE = 'extension_espalda_pie';
+
+// The choice of body with the still of each one standing (tools/posters/figuras.mjs): the names alone did not say how
+// they differ.
+function eleccionFigura(actual) {
+  return `<div class="segmentos figuras" role="group" aria-label="Figura">${FIGURAS.map(
+    ([v, t]) => `<button type="button" data-accion="cuerpo" data-valor="${v}" aria-pressed="${v === actual}"><img src="imagenes/figura-${v}.webp" alt="" width="36" height="48">${t}</button>`,
+  ).join('')}</div>`;
+}
 
 const mayuscula = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -135,6 +145,43 @@ window.addEventListener('resize', () => medirTempos());
 
 // Templates come from this browser, a copy or the cloud: read through entrada.js like any outside data.
 const leerPlantillas = () => limpiarPlantillas(almacen.leer('plantillas', []));
+
+// The professional's first use: no link made yet, nobody in Personas and no template. Until then the builder opens with
+// the way (build it and send it, the person does it, the summary comes back) and a routine to try.
+const primerUso = () => !almacen.leer('estrenada', false) && !leerPersonas().length && !leerPlantillas().length;
+
+// The routine to try, as the person will see it: three of the first exercises, one short set each, in the figure the
+// professional has chosen. Made once per figure; the link is ready by the time the button is reached.
+const NOTA_EJEMPLO = 'Esta es una rutina de ejemplo: una serie corta de cada ejercicio, para verla entera en un par de minutos.';
+const ejemplos = {};
+const ejemplosListos = {};
+function enlaceEjemplo(c) {
+  ejemplos[c] ??= codificar({
+    v: 1, para: '', de: '', d: 30, x: 1, m: TOPE_MOLESTIA, c,
+    e: [['silla', 5], ['puente', 5], ['hombro', 6]].map(([id, reps], k) => {
+      const d = EJERCICIOS[id].porDefecto;
+      return { i: id, s: 1, r: reps, t: [...d.tempo], l: EJERCICIOS[id].unLado ? 'der' : null, n: k ? undefined : NOTA_EJEMPLO };
+    }),
+  }).then((codigo) => (ejemplosListos[c] = `${location.origin}${location.pathname}#r=${codigo}`));
+  return ejemplos[c];
+}
+
+// «Así funciona», on top of the builder the first time: the way from the routine to its summary in three steps, where it
+// is seen on arrival, and the routine to try.
+function primerUsoBanda(b) {
+  if (!primerUso()) return '';
+  const url = ejemplosListos[b.cuerpo];
+  return `<section class="primer-uso" aria-labelledby="primer-uso-t">
+    <h2 id="primer-uso-t">Así funciona</h2>
+    <ol class="camino">
+      <li><strong>Armas la rutina</strong> y se la mandas por WhatsApp o Telegram.</li>
+      <li><strong>La persona la hace</strong> en su móvil, con la figura, sin instalar nada.</li>
+      <li><strong>Te vuelve su resumen</strong>: lo que hizo y la molestia que notó.</li>
+    </ol>
+    <p class="probar"><a class="boton secundario probar-ejemplo"${url ? ` href="${esc(url)}"` : ''} target="_blank" rel="noopener">Probar con una rutina de ejemplo</a>
+      <span>Se abre aparte, tal como la verá la persona.</span></p>
+  </section>`;
+}
 
 // Neutral words for the three parts: the first is not always «up» (a squat goes down first). In the player, the exercise
 // names its own phases (figura.textos).
@@ -341,7 +388,7 @@ function ajustesIniciales(id) {
 function borradorInicial() {
   return {
     para: '', de: '', descanso: 45, veces: 1, semana: 0, tope: TOPE_MOLESTIA, cuerpo: 'a',
-    activo: ORDEN[0], orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' },
+    activo: ORDEN[0], orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' }, mirado: false,
   };
 }
 
@@ -358,6 +405,8 @@ function ponerAlDia(b) {
     else delete b.ejercicios[id];
   }
   if (!ORDEN.includes(b.activo)) b.activo = b.orden[0] || ORDEN[0];
+  // Whether the professional has looked at an exercise since the routine was last empty: until then the preview waits.
+  b.mirado = b.mirado === true;
   // The draft lives in this browser's storage, which other pages of the same origin can write (on the bench): its
   // settings go through the same cleaning as a template.
   const limpia = limpiarPlantilla({ nombre: 'borrador', d: b.descanso, x: b.veces, w: b.semana, m: b.tope, c: b.cuerpo, orden: Object.keys(b.ejercicios), ejercicios: b.ejercicios });
@@ -483,7 +532,7 @@ function seccionRutina(b, vaciada = null) {
     ${
       b.orden.length
         ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
-        : '<p class="rutina-vacia">Todavía no tiene ejercicios.</p>'
+        : '<div class="rutina-vacia"><p>Todavía no tiene ejercicios.</p></div>'
     }
   </section>`;
 }
@@ -494,7 +543,7 @@ function filaBiblioteca(id, b) {
   const def = EJERCICIOS[id];
   const dentro = b.orden.includes(id);
   const musculos = def.musculos.principales.map((mu) => `<span class="vivo">${esc(MUSCULOS[mu] || mu)}</span>`).join(', ');
-  return `<li class="biblio-fila ${id === b.activo && !dentro ? 'activo' : ''}" data-id="${id}">
+  return `<li class="biblio-fila ${id === b.activo && !dentro && b.mirado ? 'activo' : ''}" data-id="${id}">
     <button type="button" class="biblio-ver" data-accion="ver">
       <span class="biblio-poster"><img src="${poster(id, b.cuerpo)}" alt="" width="96" height="72" loading="lazy" decoding="async"></span>
       <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="biblio-meta">${esc(def.posicion)} · ${esc(def.material)}${musculos ? ` · ${musculos}` : ''}</span></span>
@@ -695,11 +744,12 @@ function vistaArmar() {
         ${barraApp('Nueva rutina')}
         <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
         <div class="armar-cuerpo">
+          ${primerUsoBanda(b)}
           <section class="etapa" id="etapa-para" aria-labelledby="etapa-para-t">
             <p class="etapa-titulo" id="etapa-para-t"><b>1</b>Para quién</p>
             <div class="campos">
-              <div class="campo"><label for="para">Para</label><input id="para" data-accion="para" autocomplete="off" placeholder="Su nombre" value="${esc(b.para)}"></div>
-              <div class="campo"><label for="de">De</label><input id="de" data-accion="de" autocomplete="off" placeholder="Tu nombre" value="${esc(b.de)}"></div>
+              <div class="campo"><label for="para">Nombre de la persona</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
+              <div class="campo"><label for="de">Tu nombre</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
             </div>
             <div class="hueco-recientes">${personasRecientes(b)}</div>
             <div class="hueco-lleno">${avisoLleno(b)}</div>
@@ -718,7 +768,7 @@ function vistaArmar() {
                 <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso, 'Descanso entre series')}</div>
                 <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces, 'Veces al día')}</div>
                 <div class="ajuste"><span>Días a la semana</span>${segmentos('semana', [[0, 'Libre'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana, 'Días a la semana')}</div>
-                <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo, 'Figura')}</div>
+                <div class="ajuste"><span>Figura</span>${eleccionFigura(b.cuerpo)}</div>
                 <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
               </div>
               <p class="ayuda">Si la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
@@ -739,10 +789,15 @@ function vistaArmar() {
     </div>`;
     colocarPuntos(app);
     colocarFigura();
+    ponerEjemplo();
   }
 
   // The preview: in the side panel on wide screens; on a phone, inside the active card or library row.
   async function colocarFigura() {
+    // Nothing in the routine and nothing looked at in the library: the preview waits with its own words, not with the
+    // library's first exercise.
+    if (!b.orden.length && !b.mirado) return vistaVacia();
+    app.querySelector('.vista')?.classList.remove('vacia');
     const ancho = window.matchMedia('(min-width: 980px)').matches;
     const id = b.activo;
     const e = ajustes(id);
@@ -763,6 +818,29 @@ function vistaArmar() {
       f.empezar({ modo: 'demo' });
     } catch (err) {
       sitio.innerHTML = `<p class="chip">La figura de este ejercicio aún no está</p>`;
+      console.warn(err);
+    }
+  }
+
+  // The side panel before anything is chosen: the figure of the routine standing at ease, with no exercise on it, and
+  // what will move there. Changing «Figura» shows the other body at once.
+  async function vistaVacia() {
+    const vista = app.querySelector('.vista');
+    if (!vista) return;
+    vista.classList.add('vacia');
+    vista.querySelector('.vista-pie').innerHTML = '<div class="tarjeta"><p>Cuando elijas un ejercicio, aquí lo verás moverse como lo verá la persona, al ritmo que le pongas.</p></div>';
+    const sitio = vista.querySelector('.vista-figura');
+    for (const c of [...sitio.children]) if (c.tagName !== 'CANVAS') c.remove();
+    if (!window.matchMedia('(min-width: 980px)').matches) return;
+    try {
+      const f = await figuraEn(sitio, b.cuerpo);
+      f.oyentes = {};
+      if ((await f.poner(DE_PIE)) === false || b.orden.length || b.mirado) return;
+      f.parar();
+      f.posar(f.fases.subir[0]);
+      f.musculos?.fuerza(0);
+      f.renderer.domElement.setAttribute('aria-label', 'La figura, de pie, a la espera de un ejercicio');
+    } catch (err) {
       console.warn(err);
     }
   }
@@ -821,6 +899,13 @@ function vistaArmar() {
     apartarLienzo(hueco);
     hueco.innerHTML = seccionRutina(b, vaciada);
     actualizarBarra();
+    ponerEjemplo();
+  }
+
+  // The link of the routine to try, in the figure chosen, on its button as soon as it is made.
+  function ponerEjemplo() {
+    const boton = app.querySelector('.probar-ejemplo');
+    if (boton) enlaceEjemplo(b.cuerpo).then((url) => boton.isConnected && (boton.href = url));
   }
 
   function refrescarBiblioteca() {
@@ -913,6 +998,7 @@ function vistaArmar() {
 
   function elegir(id) {
     b.activo = id;
+    b.mirado = true;
     app.querySelectorAll('.ejercicio').forEach((t) => {
       t.classList.toggle('activo', t.dataset.id === id);
       t.querySelector('.ejercicio-cabeza').setAttribute('aria-expanded', String(t.dataset.id === id));
@@ -934,7 +1020,7 @@ function vistaArmar() {
   // «Hecho: empezar otra», from the sheet of the link: a clean routine for the next person. Their name, their file and
   // the exercises go; «De» and the settings for the whole routine stay, as they are the professional's.
   function empezarOtra() {
-    Object.assign(b, { para: '', persona: undefined, orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' } });
+    Object.assign(b, { para: '', persona: undefined, orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' }, mirado: false });
     vaciada = null;
     guardar();
     apartarLienzo(app);
@@ -963,7 +1049,7 @@ function vistaArmar() {
       vaciada = null;
       app.querySelector('.vaciada')?.remove();
     }
-    if (sitio && id !== b.activo && a !== 'anadir' && a !== 'quitar') {
+    if (sitio && (id !== b.activo || !b.mirado) && a !== 'anadir' && a !== 'quitar') {
       // Choosing a card or a row only moves the preview; it never re-draws, so a text field keeps its focus.
       sinSaltar(() => sitio, () => elegir(id));
       if (a === 'elegir' || a === 'ver' || !a) return guardar();
@@ -974,6 +1060,7 @@ function vistaArmar() {
       ajustes(id);
       if (!b.orden.includes(id)) b.orden.push(id);
       b.activo = id;
+      b.mirado = true;
       if (hojaAbierta()) {
         // From the sheet: back to the routine, with this exercise open in front, to set it.
         if (history.state?.jepysoHoja) mostrarAlVolver = id;
@@ -1013,6 +1100,7 @@ function vistaArmar() {
     } else if (a === 'quitar') {
       b.orden = b.orden.filter((x) => x !== id);
       if (b.activo === id) b.activo = b.orden[0] || id;
+      if (!b.orden.length) b.mirado = false;
       refrescarRutina();
       refrescarBiblioteca();
       colocarFigura();
@@ -1060,6 +1148,7 @@ function vistaArmar() {
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
       refrescarBiblioteca();
       colocarFigura();
+      ponerEjemplo();
     } else if (a === 'tope') {
       b.tope = Math.min(9, Math.max(0, b.tope + delta));
       el.closest('.paso').outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
@@ -1114,16 +1203,18 @@ function vistaArmar() {
       }
     } else if (a === 'crear') {
       crearEnlace(b, empezarOtra);
+      app.querySelector('.primer-uso')?.remove();
     } else if (a === 'vaciar') {
       // Emptying keeps each exercise's settings, so «Deshacer» brings the routine back exactly.
       vaciada = { orden: [...b.orden], activo: b.activo };
       b.orden = [];
+      b.mirado = false;
       refrescarRutina();
       refrescarBiblioteca();
       colocarFigura();
       app.querySelector('[data-accion="deshacer-vaciar"]')?.focus({ preventScroll: true });
     } else if (a === 'deshacer-vaciar') {
-      if (vaciada) Object.assign(b, vaciada);
+      if (vaciada) Object.assign(b, vaciada, { mirado: true });
       vaciada = null;
       refrescarRutina();
       refrescarBiblioteca();
@@ -1216,6 +1307,8 @@ function vistaArmar() {
 }
 
 async function crearEnlace(b, empezarOtra = null) {
+  // The first link made: from now on the empty routine no longer explains the way.
+  almacen.guardar('estrenada', true);
   const rutina = {
     v: 1,
     para: b.para.trim(),

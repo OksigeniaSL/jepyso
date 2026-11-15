@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>The two bodies</title>
+<script type="importmap">{ "imports": { "three": "../../app/vendor/three/three.module.js", "three/addons/": "../../app/vendor/three/addons/" } }</script>
+<style>body { margin: 0; } #caja { width: 240px; height: 320px; }</style>
+</head>
+<body>
+<div id="caja"></div>
+<script type="module">
+// The still of each body for the builder's «Figura» choice: the app's own figure standing at ease, seen from the
+// front and a little from the side, with no muscle lit, so the two builds can be told apart at a glance. Cut close
+// around the body and fitted into 72 x 96, drawn at four times the size and brought down. figuras.mjs collects
+// window.FIGURAS ({ a: data URL, b: data URL }).
+import { Figura } from '../../app/figura.js';
+
+const ANCHO = 72;
+const ALTO = 96;
+const MARGEN = 0.04;
+// A standing exercise with nothing in the hands, at its first frame: the body at ease.
+const EJERCICIO = 'extension_espalda_pie';
+const CAMARA = { pos: [0.35, 0.15, 1], mira: [0, 0, 0] };
+
+const lienzo = document.createElement('canvas');
+lienzo.width = ANCHO;
+lienzo.height = ALTO;
+const ctx = lienzo.getContext('2d');
+ctx.imageSmoothingQuality = 'high';
+const copia = document.createElement('canvas');
+const ctxCopia = copia.getContext('2d', { willReadFrequently: true });
+
+function cajaDibujada(c) {
+  const { width: w, height: h } = c;
+  const datos = ctxCopia.getImageData(0, 0, w, h).data;
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (datos[(y * w + x) * 4 + 3] > 90) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+    }
+  }
+  return x1 < 0 ? { x: 0, y: 0, w, h } : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+}
+
+const figuras = {};
+let figura = null;
+for (const cuerpo of ['a', 'b']) {
+  const manifiesto = await (await fetch(`../../app/modelos/${cuerpo === 'b' ? 'b/' : ''}ejercicios.json`)).json();
+  manifiesto._base = '../../app/';
+  if (!figura) {
+    figura = new Figura(document.getElementById('caja'), manifiesto, { calidad: 'alta' });
+    figura.renderer.setAnimationLoop(null);
+  } else await figura.cambiarCuerpo(manifiesto);
+  await figura.poner(EJERCICIO);
+  figura.posar(figura.fases.subir[0]);
+  figura.encuadrar(CAMARA);
+  // Only the body: the mat or the floor under it would make the still a scene.
+  figura.escena.traverse((o) => {
+    if (o.isMesh && !figura.cuerpo.getObjectById(o.id)) o.visible = false;
+  });
+  figura.musculos?.fuerza(0);
+  figura.controles.update();
+  figura.renderer.render(figura.escena, figura.camara);
+  const origen = figura.renderer.domElement;
+  copia.width = origen.width;
+  copia.height = origen.height;
+  ctxCopia.drawImage(origen, 0, 0);
+  const caja = cajaDibujada(copia);
+  const escala = Math.min((ANCHO * (1 - 2 * MARGEN)) / caja.w, (ALTO * (1 - 2 * MARGEN)) / caja.h);
+  ctx.clearRect(0, 0, ANCHO, ALTO);
+  // Standing on the bottom edge of the still, centred across.
+  const fuenteAncho = ANCHO / escala;
+  const fuenteAlto = ALTO / escala;
+  ctx.drawImage(copia, caja.x - (fuenteAncho - caja.w) / 2, caja.y + caja.h + MARGEN * fuenteAlto - fuenteAlto, fuenteAncho, fuenteAlto, 0, 0, ANCHO, ALTO);
+  figuras[cuerpo] = lienzo.toDataURL('image/webp', 0.86);
+}
+window.FIGURAS = figuras;
+window.LISTO = true;
+</script>
+</body>
+</html>
