@@ -1,0 +1,23 @@
+# Builds and Gradle state
+.gradle/
+build/
+app/build/
+*.aab
+*.apk
+*.apks
+*.idsig
+
+# This machine only
+local.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing: the upload key and its password never enter the repository
+*.jks
+*.keystore
+*.p12
+*.pass
+keystore.properties

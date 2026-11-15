@@ -1,0 +1,47 @@
+{
+  "packageId": "com.oksigenia.jepyso",
+  "host": "app.jepyso.com",
+  "name": "Jepyso",
+  "launcherName": "Jepyso",
+  "display": "standalone",
+  "themeColor": "#E4E6E3",
+  "themeColorDark": "#121517",
+  "navigationColor": "#E4E6E3",
+  "navigationColorDark": "#121517",
+  "navigationDividerColor": "#E4E6E3",
+  "navigationDividerColorDark": "#121517",
+  "backgroundColor": "#E4E6E3",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://app.jepyso.com/iconos/icono-512.png",
+  "maskableIconUrl": "https://app.jepyso.com/iconos/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "jepyso-upload.jks",
+    "alias": "oksigenia-jepyso"
+  },
+  "appVersionCode": 1,
+  "appVersion": "1.0.0",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://app.jepyso.com/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://app.jepyso.com/",
+  "minSdkVersion": 24,
+  "orientation": "default",
+  "fingerprints": [
+    {
+      "name": "upload",
+      "value": "31:ED:AC:B0:6F:52:A8:51:A4:12:0C:C6:AF:FE:18:49:C8:8F:25:51:B8:CD:DC:A0:2A:05:48:8B:D0:CC:33:E6"
+    }
+  ],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}
