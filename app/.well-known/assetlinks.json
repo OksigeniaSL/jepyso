@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.oksigenia.jepyso",
+      "sha256_cert_fingerprints": [
+        "31:ED:AC:B0:6F:52:A8:51:A4:12:0C:C6:AF:FE:18:49:C8:8F:25:51:B8:CD:DC:A0:2A:05:48:8B:D0:CC:33:E6"
+      ]
+    }
+  }
+]
