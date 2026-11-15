@@ -79,6 +79,13 @@ img { max-width: 100%; height: auto; display: block; }
 .pasos h3 { font-size: 21px; }
 .dos { display: grid; gap: 16px; }
 @media (min-width: 760px) { .dos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* The plans (precios): three cards side by side on a wide screen, one under another on a phone. */
+.tres { display: grid; gap: 16px; }
+@media (min-width: 900px) { .tres { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.plan .precio { font-family: var(--letra-titulo); font-size: 40px; font-weight: 500; letter-spacing: -0.02em; margin: 0; }
+.plan ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.plan .boton { justify-self: start; margin-top: 6px; }
+
 .tarjeta { position: relative; background: var(--superficie); border: 1px solid var(--linea); border-radius: 3px; padding: 24px; display: grid; gap: 10px; align-content: start; }
 .tarjeta h3 { font-size: 22px; }
 .cierre { justify-items: start; }

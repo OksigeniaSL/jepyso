@@ -29,13 +29,13 @@ EMPRESA = {
 }
 
 RUTAS = {
-    'es': {'inicio': '/', 'privacidad': '/privacidad/', 'condiciones': '/condiciones/', 'aviso': '/aviso-legal/'},
-    'en': {'inicio': '/en/', 'privacidad': '/en/privacy/', 'condiciones': '/en/terms/', 'aviso': '/en/legal/'},
+    'es': {'inicio': '/', 'precios': '/precios/', 'privacidad': '/privacidad/', 'condiciones': '/condiciones/', 'aviso': '/aviso-legal/'},
+    'en': {'inicio': '/en/', 'precios': '/en/pricing/', 'privacidad': '/en/privacy/', 'condiciones': '/en/terms/', 'aviso': '/en/legal/'},
 }
 PIE = {
-    'es': {'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
+    'es': {'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
            'firma': 'Jepyso · un producto de Oksigenia', 'otra': 'English', 'abrir': 'Abrir la app'},
-    'en': {'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
+    'en': {'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
            'firma': 'Jepyso · an Oksigenia product', 'otra': 'Español', 'abrir': 'Open the app'},
 }
 
@@ -80,6 +80,7 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   </main>
   <footer class="pie">
     <nav class="pie-enlaces" aria-label="{'Textos legales' if lengua == 'es' else 'Legal'}">
+      <a href="{r['precios']}">{p['precios']}</a>
       <a href="{r['privacidad']}">{p['privacidad']}</a>
       <a href="{r['condiciones']}">{p['condiciones']}</a>
       <a href="{r['aviso']}">{p['aviso']}</a>
@@ -92,6 +93,63 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
 </body>
 </html>
 '''
+
+
+# --- Plans and pricing (Enrique, 15-11-2026, docs/decisiones.md of hq). Sold only here, on the web: the app of Google
+# Play sells nothing. The payment links are the coordinator's (Stripe); each one asks for the Google account the licence
+# goes to.
+PAGO = {
+    'profesional': 'https://buy.stripe.com/cNieVe4k4c0Q8Xc3gXbAs0q',
+    'centro': 'https://buy.stripe.com/8x2dRa6sc5CsddsdVBbAs0r',
+    'ampliar': 'https://buy.stripe.com/5kQaEY9Eo4yoehwdVBbAs0s',
+}
+PRECIOS = {
+    'es': ('Planes y precios', 'Gratis hasta 5 personas con ficha. Profesional, hasta 50, por 59 €; Centro, hasta 300, por 149 €. Pago único, de por vida.', f'''    <section class="legal precios">
+      <h1>Planes y precios</h1>
+      <p class="entradilla">Pago único, de por vida y sin cuotas. Para quien hace la rutina, Jepyso es siempre gratis: no instala nada ni crea ninguna cuenta.</p>
+      <div class="tres">
+        <div class="tarjeta plan"><h2>Gratis</h2><p class="precio">0 €</p><ul><li>Rutinas por enlace, todas las que quieras</li><li>Fichas y seguimiento de hasta <strong>5 personas</strong></li><li>En tu navegador, con copia en un archivo</li></ul><a class="boton secundario" href="{APP}">Empezar gratis</a></div>
+        <div class="tarjeta plan"><h2>Profesional</h2><p class="precio">59 €</p><ul><li>Fichas y seguimiento de hasta <strong>50 personas</strong></li><li>En tu Google Drive, en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['profesional']}">Comprar Profesional</a></div>
+        <div class="tarjeta plan"><h2>Centro</h2><p class="precio">149 €</p><ul><li>Fichas y seguimiento de hasta <strong>300 personas</strong></li><li>En tu Google Drive, en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['centro']}">Comprar Centro</a></div>
+      </div>
+      <p>¿Ya tienes Profesional? <a href="{PAGO['ampliar']}">Pasa a Centro pagando la diferencia: 90 €</a>.</p>
+      <h2>Antes de pagar</h2>
+      <p><strong>Escribe en el pago la cuenta de Google con la que entras en Jepyso.</strong> La licencia va ligada a esa cuenta y a su Google Drive: con otra cuenta no se activa.</p>
+      <h2>Después de pagar</h2>
+      <p>En unos minutos te llega un correo con el enlace que activa tu licencia y, aparte, la factura. Abre el enlace en el aparato donde usas Jepyso y conecta tu Google Drive con esa misma cuenta. Si lo usas en más aparatos, ábrelo también en cada uno.</p>
+      <h2>Condiciones</h2>
+      <ul>
+        <li>La licencia es de por vida: no caduca ni se renueva.</li>
+        <li>Jepyso puede dejar de mantenerse algún día. Su código es libre, así que quien quiera puede seguirlo, y tu licencia sigue funcionando con la última versión publicada.</li>
+        <li>Si cambias de cuenta de Google, escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> y te mandamos la licencia para la cuenta nueva. Las fichas se llevan con el archivo de copia.</li>
+        <li>El pago lo procesa Stripe: Oksigenia no ve los datos de tu tarjeta.</li>
+        <li>El uso de Jepyso se rige por sus <a href="/condiciones/">condiciones de uso</a>, y los datos, por su <a href="/privacidad/">política de privacidad</a>.</li>
+      </ul>
+    </section>'''),
+    'en': ('Plans and pricing', 'Free for up to 5 people with a file. Professional, up to 50, for €59; Centre, up to 300, for €149. One payment, for life.', f'''    <section class="legal precios">
+      <h1>Plans and pricing</h1>
+      <p class="entradilla">One payment, for life, no subscription. For the person who does the routine, Jepyso is always free: nothing to install and no account to create.</p>
+      <p class="nota-lengua">The app is in Spanish for now; more languages are coming.</p>
+      <div class="tres">
+        <div class="tarjeta plan"><h2>Free</h2><p class="precio">€0</p><ul><li>Routines as a link, as many as you like</li><li>Files and follow-up of up to <strong>5 people</strong></li><li>In your browser, with a backup file</li></ul><a class="boton secundario" href="{APP}">Start for free</a></div>
+        <div class="tarjeta plan"><h2>Professional</h2><p class="precio">€59</p><ul><li>Files and follow-up of up to <strong>50 people</strong></li><li>In your Google Drive, on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['profesional']}">Buy Professional</a></div>
+        <div class="tarjeta plan"><h2>Centre</h2><p class="precio">€149</p><ul><li>Files and follow-up of up to <strong>300 people</strong></li><li>In your Google Drive, on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['centro']}">Buy Centre</a></div>
+      </div>
+      <p>Already on Professional? <a href="{PAGO['ampliar']}">Move to Centre by paying the difference: €90</a>.</p>
+      <h2>Before you pay</h2>
+      <p><strong>Write in the payment the Google account you sign in to Jepyso with.</strong> The licence is tied to that account and its Google Drive: it does not work with another one.</p>
+      <h2>After you pay</h2>
+      <p>Within minutes you get an email with the link that activates your licence and, separately, the invoice. Open the link on the device where you use Jepyso and connect your Google Drive with that same account. If you use it on more devices, open it on each one too.</p>
+      <h2>Terms</h2>
+      <ul>
+        <li>The licence is for life: it does not expire and is not renewed.</li>
+        <li>Jepyso may stop being maintained one day. Its code is free, so anyone who wants can carry it on, and your licence keeps working with the last published version.</li>
+        <li>If you change your Google account, write to us at <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> and we send you the licence for the new account. Your files go with the backup file.</li>
+        <li>Payment is processed by Stripe: Oksigenia never sees your card details.</li>
+        <li>The use of Jepyso is governed by its <a href="/en/terms/">terms of use</a>, and data by its <a href="/en/privacy/">privacy policy</a>.</li>
+      </ul>
+    </section>'''),
+}
 
 
 # --- Home.
@@ -128,7 +186,7 @@ INICIO = {
       <h2>Gratis, y para tu consulta</h2>
       <div class="dos">
         <div class="tarjeta"><h3>Gratis</h3><p>Rutinas por enlace, todas las que quieras, y las fichas y el seguimiento de hasta 5 personas por cuenta de Google, en tu navegador y con copia en un archivo.</p></div>
-        <div class="tarjeta"><h3>Para tu consulta</h3><p>Fichas sin límite, en tu Google Drive y en todos tus aparatos, con copia. Pago único, sin cuotas. Muy pronto.</p></div>
+        <div class="tarjeta"><h3>Para tu consulta</h3><p>Las fichas de hasta 50 personas (Profesional, 59 €) o de hasta 300 (Centro, 149 €), en tu Google Drive y en todos tus aparatos. Pago único, de por vida, sin cuotas. <a href="/precios/">Ver los planes</a>.</p></div>
       </div>
     </section>
     <section class="bloque cierre">
@@ -168,7 +226,7 @@ INICIO = {
       <h2>Free, and for your practice</h2>
       <div class="dos">
         <div class="tarjeta"><h3>Free</h3><p>Routines as links, as many as you like, and files and follow-up for up to 5 people per Google account, in your browser and with a copy in a file.</p></div>
-        <div class="tarjeta"><h3>For your practice</h3><p>Unlimited files, in your Google Drive and on all your devices, with a backup. One payment, no subscription. Coming very soon.</p></div>
+        <div class="tarjeta"><h3>For your practice</h3><p>The files of up to 50 people (Professional, €59) or up to 300 (Centre, €149), in your Google Drive and on all your devices. One payment, for life, no subscription. <a href="/en/pricing/">See the plans</a>.</p></div>
       </div>
     </section>
     <section class="bloque cierre">
@@ -198,7 +256,10 @@ PRIVACIDAD = {
         '<li><strong>Las fichas de la versión gratis</strong> van con la cuenta de Google del profesional, hasta cinco por cuenta. Al entrar con Google, el navegador recibe de Google una prueba de qué cuenta es y se la manda al servidor de Jepyso, que la comprueba con Google y apunta solo una huella de la cuenta (un código del que no se puede sacar la dirección de correo) y el código al azar de cada ficha. No guarda el correo, el nombre ni nada de lo que hay dentro de las fichas: los nombres de tus personas, sus rutinas y sus resúmenes se quedan en tu navegador. Al borrar una ficha, su código se borra también del servidor. Con la versión de pago no hace falta.</li>',
         '<li><strong>Con Google Drive</strong> (versión de pago), las fichas se guardan además en una carpeta «Jepyso» del Drive del propio profesional. Jepyso pide a Google un solo permiso, el de los archivos que crea la propia app (<code>https://www.googleapis.com/auth/drive.file</code>): no puede ver ni tocar el resto del Drive. Para comprobar la licencia de la versión de pago, lee la dirección de la cuenta con la que se conecta el Drive, y la compara en el propio navegador con la de la licencia. La conexión se hace desde el navegador, directamente entre tu aparato y Google, y el permiso dura poco y no se guarda. Puedes quitárselo cuando quieras en la configuración de tu cuenta de Google («Seguridad», «Aplicaciones de terceros»); tus archivos siguen siendo tuyos y puedes borrarlos desde tu Drive.</li>',
         '<li><strong>El recordatorio en el calendario</strong> es un archivo que se hace en tu teléfono y abre tu propio calendario; no pasa por ningún servidor.</li>',
-        '<li><strong>La voz</strong> que guía la serie usa solo las voces del propio teléfono: lo que dice no se manda a ninguna parte.</li>',
+        '<li><strong>La voz</strong> que guía la serie son grabaciones que vienen con la app, con voz de mujer o de hombre, a elegir; si una no está a mano, la dice una voz del propio teléfono. Lo que dice no se manda a ninguna parte.</li>',
+        '<li><strong>La app de Android</strong> es esta misma web, empaquetada: guarda lo mismo, en el mismo sitio, y no pide permisos del teléfono.</li>',
+        '<li><strong>Si compras una licencia</strong>, el pago lo procesa Stripe: Oksigenia no ve los datos de tu tarjeta. Guardamos lo que hace falta para mandarte la licencia y la factura: tu nombre, tu correo y la cuenta de Google de la licencia.</li>',
+        '<li><strong>Para borrar lo que guarda el servidor</strong> de la versión gratis (la huella de tu cuenta y el código de cada ficha), borra tus fichas en la app o escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</li>',
         '</ul>',
         '<h2>Uso de los datos de Google</h2>',
         '<p>El uso que hace Jepyso de la información recibida de las API de Google, y su transferencia a cualquier otra aplicación, cumplen la <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Datos del Usuario de los Servicios de las API de Google</a>, incluidos los requisitos de uso limitado. Jepyso usa esos datos solo para guardar y leer tus fichas en tu Drive, para comprobar tu licencia y para contar las fichas gratis de tu cuenta; no los vende, no los cede, no los usa para publicidad y nadie de Oksigenia los lee.</p>',
@@ -217,7 +278,10 @@ PRIVACIDAD = {
         '<li><strong>The free version’s files</strong> go with the professional’s Google account, up to five per account. On signing in with Google, the browser gets from Google a proof of which account it is and sends it to Jepyso’s server, which checks it with Google and records only a fingerprint of the account (a code from which the email address cannot be worked out) and the random code of each file. It does not keep the email, the name or anything inside the files: your people’s names, their routines and their summaries stay in your browser. When a file is deleted, its code is deleted from the server too. The paid version does not need it.</li>',
         '<li><strong>With Google Drive</strong> (paid version), the files are also kept in a «Jepyso» folder in the professional’s own Drive. Jepyso asks Google for a single permission, for the files the app itself creates (<code>https://www.googleapis.com/auth/drive.file</code>): it cannot see or change the rest of the Drive. To check the paid version’s licence, it reads the address of the account the Drive is connected with and compares it, in the browser itself, with the licence’s. The connection goes from the browser, straight between your device and Google; the permission is short-lived and is not stored. You can remove it at any time in your Google account settings («Security», «Third-party apps»); your files stay yours and you can delete them from your Drive.</li>',
         '<li><strong>The calendar reminder</strong> is a file made on your phone that opens your own calendar; it goes through no server.</li>',
-        '<li><strong>The voice</strong> that guides a set only uses the phone’s own voices: nothing it says is sent anywhere.</li>',
+        '<li><strong>The voice</strong> that guides a set is recordings that come with the app, a woman’s or a man’s voice, as you choose; if one is not at hand, a voice of the phone itself says it. Nothing it says is sent anywhere.</li>',
+        '<li><strong>The Android app</strong> is this same website, packaged: it keeps the same things in the same place and asks for no phone permissions.</li>',
+        '<li><strong>If you buy a licence</strong>, payment is processed by Stripe: Oksigenia never sees your card details. We keep what is needed to send you the licence and the invoice: your name, your email and the Google account of the licence.</li>',
+        '<li><strong>To delete what the server keeps</strong> for the free version (the fingerprint of your account and the code of each file), delete your files in the app or write to us at <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</li>',
         '</ul>',
         '<h2>Use of Google user data</h2>',
         '<p>Jepyso’s use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. Jepyso uses that data only to save and read your files in your Drive, to check your licence and to count your account’s free files; it does not sell it, share it, use it for advertising, and no one at Oksigenia reads it.</p>',
@@ -301,6 +365,8 @@ def main():
         r = RUTAS[lengua]
         i = INICIO[lengua]
         escribir(r['inicio'], pagina(lengua, 'inicio', i['titulo'], i['desc'], i['cuerpo'], 'inicio'))
+        titulo, desc, cuerpo = PRECIOS[lengua]
+        escribir(r['precios'], pagina(lengua, 'precios', f'{titulo} · Jepyso', desc, cuerpo, 'precios'))
         for clave, textos in (('privacidad', PRIVACIDAD), ('condiciones', CONDICIONES), ('aviso', AVISO)):
             titulo, fecha, bloques = textos[lengua]
             escribir(r[clave], pagina(lengua, clave, f'{titulo} · Jepyso', titulo, texto_legal(titulo, fecha, bloques), clave))
