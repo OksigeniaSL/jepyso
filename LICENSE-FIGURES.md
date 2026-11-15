@@ -16,4 +16,9 @@ service, nor distributed apart from this repository.
 The bodies are made from the base assets of MakeHuman, which are under CC0
 (https://static.makehumancommunity.org/about/license.html).
 
+The twelve exercises of the free sample, as they go in the Moodle plugin (built with `tools/construir-moodle.sh`:
+the two bodies, those movements, props, sheets and stills, the plaster headers, the icon and the body map), are also
+licensed under CC BY-SA 4.0 there, so that the plugin can be distributed under the GPL
+(`tools/moodle/LICENSE.md`).
+
 For anything else, write to Oksigenia SL at dev@oksigenia.cc.

@@ -5,7 +5,9 @@
 #  - No worker and no manifest of its own: the plugin serves the app and the course keeps the sessions.
 #  - The models of the free sample only (MUESTRA, below), or all of them with --todo; the two lists of clips
 #    (modelos/ejercicios.json and modelos/b/ejercicios.json) say just those.
-#  - modelos/LICENSE-FIGURES.md: the terms of the figures, which are not GPL.
+#  - modelos/LICENSE.md: the content of the package (sample, headers, icon, body map) under CC BY-SA 4.0, with the
+#    sheets of the twelve movements in modelos/fichas/.
+#  - voz/: the recorded voice, with only the sentences of the exercises this copy brings.
 #  - catalogo.json: every exercise of the library with its name and its unit, and whether this copy brings it. The
 #    plugin's PHP reads it to describe the routine and to warn about exercises the site does not have.
 # Usage: tools/construir-moodle.sh <plugin folder> [--todo]
@@ -22,8 +24,12 @@ trap 'rm -rf "$TMP"' EXIT
 W=$TMP/web
 mv "$W/vendor" "$W/libs"
 rm -f "$W/sw.js" "$W/manifest.json"
-# The figures travel with their own terms.
-cp "$ROOT/LICENSE-FIGURES.md" "$W/modelos/LICENSE-FIGURES.md"
+# The content of the package (the sample, the headers, the icon, the body map) under CC BY-SA 4.0, which the Moodle
+# Marketplace accepts as GPL-compatible (coordinator, 15-11-2026, shared/licencias.md), with the sheets the twelve
+# movements are built from.
+cp "$ROOT/tools/moodle/LICENSE.md" "$ROOT/tools/moodle/CC-BY-SA-4.0.txt" "$W/modelos/"
+mkdir -p "$W/modelos/fichas"
+for id in $MUESTRA; do cp "$ROOT/figuras/fichas/$id.json" "$W/modelos/fichas/"; done
 python3 -I - "$W" "$TODO" $MUESTRA <<'PY'
 import json, os, re, sys
 w, todo, muestra = sys.argv[1], sys.argv[2] == '--todo', set(sys.argv[3:])
@@ -57,7 +63,7 @@ for sub in ('', 'b'):
             os.remove(os.path.join(posters, f))
 PY
 # The catalogue, from the app's own data.
-node --input-type=module - "$W" <<'JS'
+node --input-type=module - "$W" "$ROOT" <<'JS'
 import fs from 'node:fs';
 const w = process.argv[2];
 globalThis.window = {};
@@ -75,6 +81,26 @@ for (const id of d.ORDEN) {
   };
 }
 fs.writeFileSync(`${w}/catalogo.json`, `${JSON.stringify({ v: 1, ejercicios }, null, 1)}\n`);
+// The recorded voice (voz/): the count and the player's own sentences, and the phases and names of the exercises this
+// copy brings. The rest of the library's sentences stay out.
+const root = process.argv[3];
+for (const quien of fs.existsSync(`${w}/voz`) ? fs.readdirSync(`${w}/voz`) : []) {
+  const carpeta = `${w}/voz/${quien}`;
+  if (!fs.existsSync(`${carpeta}/indice.json`)) continue;
+  const indice = JSON.parse(fs.readFileSync(`${carpeta}/indice.json`, 'utf8'));
+  const fasesDe = (carpeta) => fs.readdirSync(carpeta).filter((f) => f.endsWith('.json') && f !== 'ejercicios.json')
+    .flatMap((f) => (JSON.parse(fs.readFileSync(`${carpeta}/${f}`, 'utf8')).fases || []).map((x) => x.texto).filter(Boolean));
+  const propias = new Set([...fasesDe(`${root}/app/modelos`), ...fasesDe(`${root}/app/modelos/b`), ...d.ORDEN.map((id) => d.EJERCICIOS[id].nombre)]);
+  const deEsta = new Set([...fasesDe(`${w}/modelos`), ...fasesDe(`${w}/modelos/b`), ...[...hay].map((id) => d.EJERCICIOS[id].nombre)]);
+  const generales = new Set(['Hecho', 'Descansa', 'Descansa. Ahora, el otro lado', 'Rutina terminada. Buen trabajo.', 'Voz encendida', 'Ida', 'Mantén', 'Vuelta', 'Respira']);
+  for (const [texto, clave] of Object.entries(indice)) {
+    if (propias.has(texto) && !deEsta.has(texto) && !generales.has(texto)) {
+      delete indice[texto];
+      fs.rmSync(`${carpeta}/${clave}.mp3`, { force: true });
+    }
+  }
+  fs.writeFileSync(`${carpeta}/indice.json`, `${JSON.stringify(indice, null, 0)}\n`);
+}
 JS
 if grep -rIl --include=*.js --include=*.html --include=*.css "vendor/" "$W" | grep -v "/libs/"; then
   echo "paths with vendor/ left" >&2
