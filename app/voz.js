@@ -38,6 +38,13 @@ export const quienHabla = () => {
   }
   return q;
 };
+// Without connection, only what this phone keeps: a take never saved is said by the phone's voice, and nothing is
+// asked for that can only fail.
+async function pedir(url) {
+  if (!navigator.onLine && 'caches' in window && !(await caches.match(url).catch(() => null))) return null;
+  const r = await fetch(url);
+  return r.ok ? r : null;
+}
 let indice = null;
 let pidiendoIndice = null;
 let indiceListo = false;
@@ -51,8 +58,8 @@ function cargarIndice() {
     indiceListo = false;
     tomas.clear();
   }
-  pidiendoIndice ||= fetch(`voz/${CARPETAS[q]}/indice.json`)
-    .then((r) => (r.ok ? r.json() : null))
+  pidiendoIndice ||= pedir(`voz/${CARPETAS[q]}/indice.json`)
+    .then((r) => (r ? r.json() : null))
     .then((i) => {
       if (indiceDe === q) indice = i && typeof i === 'object' && !Array.isArray(i) ? i : null;
     })
@@ -102,8 +109,8 @@ function toma(texto) {
   const k = indice?.[texto];
   if (!esClave(k)) return null;
   if (!tomas.has(k)) {
-    tomas.set(k, fetch(`voz/${CARPETAS[indiceDe]}/${k}.mp3`)
-      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error(k))))
+    tomas.set(k, pedir(`voz/${CARPETAS[indiceDe]}/${k}.mp3`)
+      .then((r) => (r ? r.arrayBuffer() : Promise.reject(new Error(k))))
       .then((b) => audio().decodeAudioData(b))
       .catch(() => {
         tomas.delete(k);
@@ -178,6 +185,18 @@ export function callar() {
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   callarTomas();
 }
+
+// The files of the voice chosen for some sentences (and its list), for the worker to keep them with a routine that
+// is saved to be done without connection.
+export async function rutasDeVoz(textos) {
+  await cargarIndice();
+  if (!indice) return [];
+  const carpeta = `voz/${CARPETAS[indiceDe]}`;
+  const claves = new Set(textos.flatMap((t) => partes(t)).map((t) => indice[t]).filter(esClave));
+  return [`${carpeta}/indice.json`, ...[...claves].map((k) => `${carpeta}/${k}.mp3`)];
+}
+// What the player may say in any routine: the count, its own sentences and the default words of the phases.
+export const FRASES_GENERALES = ['Hecho', 'Descansa', 'Descansa. Ahora, el otro lado', 'Rutina terminada. Buen trabajo.', 'Voz encendida', 'Ida', 'Mantén', 'Vuelta', 'Respira'];
 
 const NUMEROS = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce',
   'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte'];

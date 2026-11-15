@@ -5,7 +5,7 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
-import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz, quienHabla, ponerQuien } from './voz.js';
+import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz, quienHabla, ponerQuien, rutasDeVoz, FRASES_GENERALES } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
@@ -3274,8 +3274,17 @@ function mostrarVersionNueva() {
 async function guardarParaSinConexion(c, ejercicios) {
   if (!(await trabajador)) return false;
   const m = await cargarManifiesto(c);
+  // The voice too, in the voice this person chose: the count up to the top of the routine, the player's own sentences
+  // and the words of each phase of these exercises (from their sheets, which are kept as well).
+  const fichas = await Promise.all(ejercicios.map(({ i }) => (m.ejercicios[i] ? fetch(m.ejercicios[i].ficha).then((r) => r.json()).catch(() => null) : null)));
+  const tope = Math.max(3, ...ejercicios.map((e) => e.r));
+  const textosVoz = [...FRASES_GENERALES, ...Array.from({ length: Math.min(tope, 60) + 1 }, (_, n) => [numero(n), numero(n, true)]).flat(),
+    ...fichas.flatMap((f) => (Array.isArray(f?.fases) ? f.fases.map((x) => x.texto).filter(Boolean) : [])),
+    ...ejercicios.map(({ i }) => EJERCICIOS[i]?.nombre).filter(Boolean)];
+  const voz = vozActiva() ? await rutasDeVoz(textosVoz).catch(() => []) : [];
   const rutas = [...new Set([...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo,
-    ...ejercicios.flatMap(({ i, b }) => (m.ejercicios[i] ? [m.ejercicios[i].glb, m.ejercicios[i].ficha, poster(i, c, bandaDe(EJERCICIOS[i], b)?.clave)] : []))])];
+    ...ejercicios.flatMap(({ i, b }) => (m.ejercicios[i] ? [m.ejercicios[i].glb, m.ejercicios[i].ficha, poster(i, c, bandaDe(EJERCICIOS[i], b)?.clave)] : [])),
+    ...voz])];
   const listo = await navigator.serviceWorker.ready;
   return new Promise((resolver) => {
     const canal = new MessageChannel();
