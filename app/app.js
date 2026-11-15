@@ -175,7 +175,7 @@ function primerUsoBanda(b) {
     <h2 id="primer-uso-t">Así funciona</h2>
     <ol class="camino">
       <li><strong>Armas la rutina</strong> y se la mandas por WhatsApp o Telegram.</li>
-      <li><strong>La persona la hace</strong> en su móvil, con la figura, sin instalar nada.</li>
+      <li><strong>La persona la hace</strong> en su teléfono, con la figura, sin instalar nada.</li>
       <li><strong>Te vuelve su resumen</strong>: lo que hizo y la molestia que notó.</li>
     </ol>
     <p class="probar"><a class="boton secundario probar-ejemplo"${url ? ` href="${esc(url)}"` : ''} target="_blank" rel="noopener">Probar con una rutina de ejemplo</a>
