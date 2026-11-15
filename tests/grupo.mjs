@@ -8,7 +8,9 @@ const base = process.argv[2];
 const navegador = await chromium.launch({ executablePath: process.env.CHROMIUM_BIN || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const fallos = [];
 try {
-  const pagina = await navegador.newPage({ viewport: { width: 1280, height: 600 } });
+  // The phone's own voice, slower for a group: without the worker and with the recorded takes out of reach.
+  const pagina = await (await navegador.newContext({ viewport: { width: 1280, height: 600 }, serviceWorkers: 'block' })).newPage();
+  await pagina.route('**/voz/**', (r) => r.fulfill({ contentType: 'application/json', body: '{}' }));
   pagina.setDefaultTimeout(120000);
   await pagina.addInitScript(() => {
     window.dicho = [];

@@ -1,4 +1,4 @@
-// The voice that guides a set (app/voz.js), with a pretend local Spanish voice: the countdown, the words of each phase
+// The voice that guides a set (app/voz.js) when no recorded take is at hand, with a pretend local Spanish voice: the countdown, the words of each phase
 // in the first repetition, the count and «Hecho»; and once turned off, nothing more is said.
 // Usage: node voz.mjs <base url>      (CHROMIUM_BIN as in correr.sh)
 import { chromium } from 'playwright-core';
@@ -7,7 +7,8 @@ const base = process.argv[2];
 const navegador = await chromium.launch({ executablePath: process.env.CHROMIUM_BIN || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const fallos = [];
 try {
-  const pagina = await navegador.newPage({ viewport: { width: 390, height: 844 } });
+  // Without the worker, which would fetch the recorded takes past the block below.
+  const pagina = await (await navegador.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' })).newPage();
   pagina.setDefaultTimeout(60000);
   await pagina.addInitScript(() => {
     window.dicho = [];
@@ -17,6 +18,8 @@ try {
   });
   const errores = [];
   pagina.on('pageerror', (e) => errores.push(e.message));
+  // The phone's own voice: the recorded takes are out of reach here, so it is the one that speaks (the fallback).
+  await pagina.route('**/voz/**', (r) => r.abort());
   await pagina.goto(`${base}/index.html?calidad=baja`);
   const codigo = await pagina.evaluate(async () => (await import('./datos.js')).codificar({ v: 1, d: 30, x: 1, c: 'a', e: [{ i: 'puente', s: 1, r: 2, t: [1, 0, 1] }] }));
   await pagina.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
