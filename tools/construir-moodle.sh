@@ -24,6 +24,8 @@ trap 'rm -rf "$TMP"' EXIT
 W=$TMP/web
 mv "$W/vendor" "$W/libs"
 rm -f "$W/sw.js" "$W/manifest.json"
+# Nor the file that vouches for the Android app, which is app.jepyso.com's.
+rm -f "$W/.well-known/assetlinks.json" && rmdir "$W/.well-known"
 # The content of the package (the sample, the headers, the icon, the body map) under CC BY-SA 4.0, which the Moodle
 # Marketplace accepts as GPL-compatible (coordinator, 15-11-2026, shared/licencias.md), with the sheets the twelve
 # movements are built from.
