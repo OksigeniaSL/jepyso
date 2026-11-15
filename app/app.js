@@ -5,13 +5,14 @@ import {
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
 } from './datos.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
-import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
+import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz, quienHabla, ponerQuien } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
 } from './personas.js';
 import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
-import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive } from './licencia.js';
+import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
+import { ampliarPlan } from './tienda.js';
 import {
   valesEnMarcha, fichaAbierta, fichaSinPlaza, cuentaDeVales, fichasQuedan, avisoVales, alCambiarVales, comprobarVales, pedirVale, pedirVales,
   soltarVale, botonGoogle,
@@ -21,7 +22,7 @@ import { PROGRAMAS } from './programas.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 import {
   enMoodle, armandoParaMoodle, prepararMoodle, moodle, vistaPrevia, volverAlCurso, juntarHistorial, subirHistorial, recordarClave, TEXTO_ESTADO,
-  devolverRutina,
+  devolverRutina, enAppDeMoodle, TEXTO_CERRAR,
 } from './moodle.js';
 
 const app = document.getElementById('app');
@@ -60,6 +61,7 @@ const ICONO = {
   girar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
   telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
+  ayuda: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>',
   // Oksigenia's accessibility sign, the one the panel's own button wears on every Oksigenia website.
   acceso: '<svg viewBox="0 0 122.88 122.88" fill="currentColor"><path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0Zm-.39,74.18L52.1,98.91a4.94,4.94,0,0,1-2.58,2.83A5,5,0,0,1,42.7,95.5l6.24-17.28a26.3,26.3,0,0,0,1.17-4,40.64,40.64,0,0,0,.54-4.18c.24-2.53.41-5.27.54-7.9s.22-5.18.29-7.29c.09-2.63-.62-2.8-2.73-3.3l-.44-.1-18-3.39A5,5,0,0,1,27.08,46a5,5,0,0,1,5.05-7.74l19.34,3.63c.77.07,1.52.16,2.31.25a57.64,57.64,0,0,0,7.18.53A81.13,81.13,0,0,0,69.9,42c.9-.1,1.75-.21,2.6-.29l18.25-3.42A5,5,0,0,1,94.5,39a5,5,0,0,1,1.3,7,5,5,0,0,1-3.21,2.09L75.15,51.37c-.58.13-1.1.22-1.56.29-1.82.31-2.72.47-2.61,3.06.08,1.89.31,4.15.61,6.51.35,2.77.81,5.71,1.29,8.4.31,1.77.6,3.19,1,4.55s.79,2.75,1.39,4.42l6.11,16.9a5,5,0,0,1-6.82,6.24,4.94,4.94,0,0,1-2.58-2.83L63,74.23,62,72.4l-1,1.78Zm.39-53.52a8.83,8.83,0,1,1-6.24,2.59,8.79,8.79,0,0,1,6.24-2.59Zm36.35,4.43a51.42,51.42,0,1,0,15,36.35,51.27,51.27,0,0,0-15-36.35Z"/></svg>',
 };
@@ -281,8 +283,44 @@ let firmaPro = null;
 const FIRMA = '<p class="firma-linea">Jepyso · un producto de <a href="https://oksigenia.com">Oksigenia</a></p>';
 const botonAcceso = `<button type="button" class="firma-acceso" data-acceso aria-haspopup="dialog">${ICONO.acceso}<span>Accesibilidad</span></button>`;
 const firmaPersona = `<div class="firma firma-persona">${botonAcceso}${FIRMA}</div>`;
+// Help and contact for the professional, beside «Accesibilidad»: what is asked most, and where to write. Someone who
+// arrives from an app store finds them in the app itself.
+const botonAyuda = `<button type="button" class="firma-acceso" data-ayuda aria-haspopup="dialog">${ICONO.ayuda}<span>Ayuda</span></button>`;
+function abrirAyuda() {
+  const volverA = document.activeElement;
+  const pregunta = (p, r) => `<details class="ayuda-plegada"><summary>${p}</summary><p>${r}</p></details>`;
+  const dialogo = document.createElement('dialog');
+  dialogo.className = 'hoja hoja-ayuda';
+  dialogo.setAttribute('aria-labelledby', 'ayuda-titulo');
+  dialogo.innerHTML = `<h2 id="ayuda-titulo" tabindex="-1">Ayuda</h2>
+    ${pregunta('¿Cómo le mando una rutina a alguien?', 'Ármala en «Nueva rutina» y pulsa «Crear enlace»: se lo mandas por WhatsApp, Telegram u otra app. Lo abre en su teléfono, sin instalar nada.')}
+    ${pregunta('¿Qué hace la persona?', 'Sigue a la figura, que lleva el ritmo, el lado y las series que pusiste. Al acabar apunta lo que hizo y la molestia que notó, y te manda su resumen con un enlace: ábrelo en este aparato y se guarda en su ficha.')}
+    ${pregunta('¿Dónde se guardan mis fichas?', 'En este aparato, y con un plan de pago también en tu Google Drive, para tenerlas en todos tus aparatos. Desde «Personas» puedes guardar una copia en un archivo cuando quieras.')}
+    ${pregunta('¿Cuántas personas caben?', `Gratis, ${LIMITE_GRATIS} con ficha; con un plan, las que diga tu licencia. Las rutinas se mandan igual a cualquiera, con ficha o sin ella. ${ampliarPlan()}`)}
+    ${pregunta('¿Cómo activo mi licencia?', 'Abre el enlace que te llegó con ella, o pégala en «Personas», en «¿Tienes una licencia de Jepyso?». Después conecta el Drive con la cuenta de la licencia.')}
+    ${pregunta('¿Se puede cambiar la voz?', 'Sí: al abrir su rutina, cada persona elige voz de mujer, voz de hombre o sin voz.')}
+    <section class="ayuda-contacto">
+      <h3>Contacto</h3>
+      <p>¿Algo no va como esperabas o tienes una idea? Escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</p>
+      <p><a href="https://jepyso.com/privacidad/" target="_blank" rel="noopener">Privacidad</a> · <a href="https://jepyso.com/condiciones/" target="_blank" rel="noopener">Condiciones</a> · <a href="https://jepyso.com" target="_blank" rel="noopener">jepyso.com</a></p>
+    </section>
+    <div class="hoja-como-pie"><button type="button" class="boton">Entendido</button></div>`;
+  document.body.appendChild(dialogo);
+  dialogo.addEventListener('close', () => {
+    dialogo.remove();
+    volverA?.focus?.({ preventScroll: true });
+  });
+  dialogo.addEventListener('click', (ev) => {
+    const r = dialogo.getBoundingClientRect();
+    const fuera = ev.target === dialogo && (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom);
+    if (fuera || ev.target.closest('.hoja-como-pie .boton')) dialogo.close();
+  });
+  dialogo.showModal();
+  dialogo.querySelector('h2').focus({ preventScroll: true });
+}
 document.addEventListener('click', (ev) => {
   if (ev.target.closest?.('[data-acceso]')) document.querySelector('oksigenia-access-panel')?.open?.();
+  if (ev.target.closest?.('[data-ayuda]')) abrirAyuda();
 });
 
 function marcoApp(h) {
@@ -300,7 +338,7 @@ function marcoApp(h) {
     document.body.append(pestanas);
     firmaPro = document.createElement('footer');
     firmaPro.className = 'firma firma-pro';
-    firmaPro.innerHTML = botonAcceso + FIRMA;
+    firmaPro.innerHTML = botonAyuda + botonAcceso + FIRMA;
     document.body.append(firmaPro);
   }
   if (firmaPro) firmaPro.hidden = !pro;
@@ -349,14 +387,17 @@ const barraApp = (titulo, { volver = '', accion = '' } = {}) => `<header class="
 const botonNueva = '<a class="boton barra-boton" href="#">' + ICONO.mas + 'Nueva rutina</a>';
 
 // The free version keeps up to five people with a file (Enrique, 11 November 2026): how many there are, in sight, as five
-// squares; full, said before a routine for someone new is made.
+// squares; full, said before a routine for someone new is made. A paid plan says its name and its top (Enrique, 15-11).
 function capacidad(lista) {
   const n = lista.length;
-  if (esDePago()) return `<p class="capacidad"><span><b>${n}</b> ${n === 1 ? 'persona' : 'personas'} con ficha · sin límite</span></p>`;
   const max = limite();
+  if (esDePago()) {
+    const plan = licenciaActiva() ? `plan ${nombrePlan(topeLicencia())}` : 'versión de pago';
+    return `<p class="capacidad${n >= max ? ' llena' : ''}"><span><b>${Math.min(n, max)} de ${max}</b> personas con ficha · ${plan}${n >= max ? `. ${ampliarPlan()}` : ''}</span></p>`;
+  }
   const marcas = Array.from({ length: max }, (_, i) => `<i${i < n ? ' class="usada"' : ''}></i>`).join('');
   return `<p class="capacidad${n >= max ? ' llena' : ''}"><span class="capacidad-marcas" aria-hidden="true">${marcas}</span>
-    <span><b>${Math.min(n, max)} de ${max}</b> personas con ficha${n >= max ? '. Las rutinas para alguien nuevo van igual, sin ficha' : ''} · la versión de pago no tiene límite</span></p>`;
+    <span><b>${Math.min(n, max)} de ${max}</b> personas con ficha${n >= max ? '. Las rutinas para alguien nuevo van igual, sin ficha' : ''}. ${ampliarPlan()}</span></p>`;
 }
 // The line of the link sheet about the file. A free file whose ticket waits for the Google sign-in says so.
 function enFicha(p, esperaCuenta) {
@@ -1392,7 +1433,7 @@ async function crearEnlace(b, empezarOtra = null) {
     ${persona ? `<p class="en-ficha">${enFicha(persona, sinVale && !cuentaDeVales())}</p>` : ''}
     ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
     ${sinSitio === 'elegir' ? `<p class="en-ficha">Tienes más de una ficha con el nombre ${esc(rutina.para)}: elige cuál en «Para» y vuelve a crear el enlace para guardarla en su ficha. La rutina va igual en este enlace.</p>` : ''}
-    ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace. Para guardar a más personas, la versión de pago no tiene límite.</p>` : ''}
+    ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de ${esDePago() ? 'tu plan' : 'la versión gratis'}. La rutina va igual en el enlace. ${ampliarPlan()}</p>` : ''}
     <figure class="burbuja"><figcaption>${nombre ? `Así le llega a ${nombre}` : 'Así llega'}</figcaption><p>${esc(mensaje)} <span class="burbuja-enlace">${esc(location.host)}/…</span></p></figure>
     <div class="hoja-mandar">
       <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Mandar por WhatsApp</a>
@@ -1571,18 +1612,29 @@ async function vistaRutina(codigo) {
     const fila = ({ d, k }) => `<li><span>${esc(fechaCorta(d.f))}${d.h ? ` · ${esc(d.h)}` : ''}${d.sinApp ? ' · sin la app' : ''}</span>
         <button type="button" class="enlace" data-r="corregir" data-k="${k}">Corregir</button></li>`;
     // In a Moodle course it goes to the course by itself: the card says where it is and leads back.
+    const salida = volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${TEXTO_CERRAR}</p>` : '';
     const enviar = enMoodle
-      ? `<p class="moodle-estado" aria-live="polite"></p>${volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}`
+      ? `<p class="moodle-estado" aria-live="polite"></p>${salida}`
       : `<p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
         <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
         <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>`;
     sitio.innerHTML = `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
         <h3 id="mandar-titulo">Lo que llevas hecho</h3>
         ${hist.length ? `<ul class="dias-hechos">${recientes.map(fila).join('')}</ul>
-        ${enviar}` : `<p>Todavía nada.</p>${enMoodle && volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}`}
+        ${enviar}` : `<p>Todavía nada.</p>${enMoodle ? salida : ''}`}
         <button type="button" class="enlace" data-r="sin-app">Apuntar una vez que la hice sin la app</button>
       </section>`;
     if (enMoodle && hist.length) subirHistorial(clave);
+  }
+
+  // Who guides the sets: each person chooses (Enrique, 15-11-2026: «que cada usuario elija»).
+  function tarjetaVoz() {
+    const actual = vozActiva() ? quienHabla() : 'no';
+    const boton = (v, t) => `<button type="button" data-r="voz-quien" data-v="${v}" aria-pressed="${actual === v}">${t}</button>`;
+    return `<section class="tarjeta voz-elegir" aria-labelledby="voz-titulo">
+          <h3 id="voz-titulo">La voz que te guía</h3>
+          <div class="segmentos" role="group" aria-label="La voz que te guía">${boton('mujer', 'Voz de mujer')}${boton('hombre', 'Voz de hombre')}${boton('no', 'Sin voz')}</div>
+        </section>`;
   }
 
   function intro() {
@@ -1624,6 +1676,7 @@ async function vistaRutina(codigo) {
             </article>`;
           })
           .join('')}
+        ${tarjetaVoz()}
         ${enMoodle ? '' : `<section class="tarjeta recordatorio" aria-labelledby="recordar-titulo">
           <h3 id="recordar-titulo">Que no se te olvide</h3>
           <p>Pon un aviso cada día en el calendario de tu teléfono, con el enlace a esta rutina.</p>
@@ -2174,7 +2227,7 @@ async function vistaRutina(codigo) {
     // In a Moodle course the session goes to the course by itself; the way out leads back to it.
     const pie = enMoodle
       ? `<p class="moodle-estado" aria-live="polite"></p>
-        ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}
+        ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${TEXTO_CERRAR}</p>` : ''}
         <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>`
       : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
         <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
@@ -2385,6 +2438,17 @@ async function vistaRutina(codigo) {
     if (a === 'completa') {
       if (document.fullscreenElement) return document.exitFullscreen().catch(() => {});
       return document.documentElement.requestFullscreen().catch(() => {});
+    }
+    // The voice that guides: a woman's, a man's or none; what is chosen is said once, to hear it.
+    if (a === 'voz-quien') {
+      const v = el.dataset.v;
+      if (v === 'no') ponerVoz(false);
+      else {
+        ponerVoz(true);
+        ponerQuien(v);
+      }
+      el.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === el)));
+      return vozActiva() && decir('Voz encendida');
     }
     if (a === 'voz') {
       ponerVoz(!vozActiva());
@@ -2753,6 +2817,7 @@ function seccionDrive() {
     <h2>Tu Google Drive</h2>
     <p class="ayuda">Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.</p>
     ${pendiente ? `<p class="ayuda"><strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta ${esc(licencia().cuenta)}.</p>` : ''}
+    ${licencia().valida ? `<p class="ayuda plan">Plan ${esc(nombrePlan(topeLicencia()))}: hasta ${topeLicencia()} personas con ficha, de por vida. Licencia de ${esc(licencia().cuenta)}.</p>` : ''}
     <div class="botones"><button type="button" class="boton" data-accion="drive">Sincronizar con Google Drive</button></div>
     <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
   </section>`;
@@ -2961,7 +3026,7 @@ function vistaFichaCerrada(p) {
       <section class="general cuenta-fichas pide">
         <h2>${ICONO.candado}${sinPlaza ? 'Esta ficha no cabe en tu cuenta' : 'Entra para abrir esta ficha'}</h2>
         <p class="ayuda">${sinPlaza
-          ? `Tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis. Borra una que ya no uses, aquí o en otro aparato, o pasa a la versión de pago, que no tiene límite.`
+          ? `Tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis. Borra una que ya no uses, aquí o en otro aparato. ${ampliarPlan()}`
           : `En la versión gratis, cada ficha va con tu cuenta de Google: ${LIMITE_GRATIS} por cuenta. Entra con la tuya y la ficha se abre en este aparato, también sin conexión.`}</p>
         ${cuentaDeVales() ? '' : '<div class="hueco-google"></div>'}
         <p class="aviso-vales" aria-live="polite">${esc(avisoVales())}</p>

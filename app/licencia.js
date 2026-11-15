@@ -43,12 +43,19 @@ export async function verificarFirma(clave) {
   }
 }
 
-// What a key says, once its signature is checked: { valida, cuenta, fecha, pedido } or { valida: false, motivo }.
+// The plans (Enrique, 15-11-2026): the licence says how many people with a file it holds in «m». One without it is
+// of the highest plan (as the first ones, given before there were plans).
+export const TOPE_MAXIMO = 300;
+const PLANES = { 50: 'Profesional', 300: 'Centro' };
+export const nombrePlan = (tope) => PLANES[tope] || `de ${tope} fichas`;
+
+// What a key says, once its signature is checked: { valida, cuenta, fecha, pedido, tope } or { valida: false, motivo }.
 export async function leerLicencia(clave) {
   const { datos, motivo } = await verificarFirma(clave);
   if (motivo) return { valida: false, motivo };
   if (datos?.p !== 'jepyso' || datos?.s !== 'consulta' || typeof datos?.c !== 'string' || !datos.c.includes('@')) return { valida: false, motivo: 'formato' };
-  return { valida: true, cuenta: datos.c.trim().toLowerCase(), fecha: String(datos.f || ''), pedido: String(datos.n || '') };
+  const tope = Number.isInteger(datos.m) && datos.m > 0 ? datos.m : TOPE_MAXIMO;
+  return { valida: true, cuenta: datos.c.trim().toLowerCase(), fecha: String(datos.f || ''), pedido: String(datos.n || ''), tope };
 }
 
 // The state for this browser, checked once at start (comprobarLicencia) and kept in memory for the synchronous
@@ -59,12 +66,13 @@ export async function comprobarLicencia() {
   const clave = almacen.leer('licencia', '');
   const l = clave ? await leerLicencia(clave) : { valida: false };
   const comprobada = almacen.leer('licencia-cuenta', '');
-  estado = { clave, valida: l.valida, motivo: l.motivo, cuenta: l.cuenta || '', activa: l.valida && comprobada === l.cuenta };
+  estado = { clave, valida: l.valida, motivo: l.motivo, cuenta: l.cuenta || '', tope: l.tope || 0, activa: l.valida && comprobada === l.cuenta };
   return estado;
 }
 
 export const licencia = () => estado;
 export const licenciaActiva = () => estado.activa;
+export const topeLicencia = () => estado.tope || TOPE_MAXIMO;
 // A key that verifies but whose account has not yet been seen on the Drive connection.
 export const licenciaPendiente = () => estado.valida && !estado.activa;
 

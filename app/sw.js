@@ -28,6 +28,7 @@ const ARCHIVOS = [
   'goniometro.js',
   'recorrido.js',
   'moodle.js',
+  'tienda.js',
   'fuentes/red-hat-display.woff2',
   'fuentes/red-hat-text.woff2',
   'fuentes/red-hat-mono.woff2',

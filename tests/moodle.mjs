@@ -101,6 +101,19 @@ try {
   comprobar(!errores.length, `errores en la página: ${errores.join(' | ')}`);
   await contexto.close();
 
+  // Inside the Moodle app's in-app browser (its user agent says MoodleMobile): the way back is the window's ×.
+  const enApp = await navegador.newContext({ viewport: { width: 390, height: 844 }, userAgent: 'Mozilla/5.0 (Linux; Android 16) Chrome/148.0 Mobile MoodleMobile 5.2.1 (52100)' });
+  await curso(enApp, { sesiones: [antes] });
+  const app = await enApp.newPage();
+  app.setDefaultTimeout(30000);
+  app.on('pageerror', (e) => errores.push(e.message));
+  await app.goto(`${PLUGIN}/reproductor/index.html?cm=7&calidad=baja#r=${codigo}`);
+  await app.waitForSelector('.mandar-hecho');
+  comprobar(!(await app.$('.mandar-hecho a.boton')), 'dentro de la app de Moodle sigue ofreciendo «Volver al curso»');
+  const cerrar = await app.textContent('.moodle-cerrar').catch(() => '');
+  comprobar(cerrar.includes('cierra esta ventana'), `dentro de la app de Moodle no dice cómo volver al curso (${cerrar})`);
+  await enApp.close();
+
   // The teacher tries it: it says so, and nothing reaches the course.
   const profe = await navegador.newContext({ viewport: { width: 1366, height: 900 } });
   const cp = await curso(profe, { puede: false });

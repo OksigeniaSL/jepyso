@@ -828,6 +828,15 @@ a.boton { text-decoration: none; }
 .moodle-estado[data-estado="pendiente"] { color: var(--tinta); font-weight: 600; }
 .moodle-aviso { margin: 8px 0 0; padding-left: 10px; border-left: 3px solid var(--tinta); color: var(--tinta); font-weight: 600; }
 .mandar-hecho > a.boton { justify-self: start; }
+.moodle-cerrar { margin: 0; color: var(--tinta-suave); font-size: 15px; }
+/* The voice that guides: a woman's, a man's or none (voz.js). */
+.voz-elegir .segmentos { display: flex; width: 100%; }
+.voz-elegir .segmentos button { flex: 1 1 0; }
+/* Help and contact (app.js, abrirAyuda). */
+.hoja-ayuda .ayuda-plegada { margin: 0 0 6px; }
+.ayuda-contacto { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--linea); }
+.ayuda-contacto h3 { margin: 0 0 6px; font-size: 17px; }
+.ayuda-contacto p { margin: 0 0 6px; }
 .sin-noticias p { margin: 0; }
 .sin-noticias .botones .boton { flex: 0 1 auto; }
 .pestana-cuenta {

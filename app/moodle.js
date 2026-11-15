@@ -53,7 +53,11 @@ export function prepararMoodle() {
 export const moodle = () => config;
 // Who tries the routine without saving: the teacher, or anyone without the capability to submit.
 export const vistaPrevia = () => enMoodle && config && !config.puede;
-export const volverAlCurso = () => config?.volver || '';
+// Inside the Moodle app (official or Aty) the routine opens in its in-app browser, which says so in its user agent:
+// there the way back is the window's own ×, and a link to the course would open the web page inside that window.
+export const enAppDeMoodle = enMoodle && /MoodleMobile/.test(navigator.userAgent);
+export const volverAlCurso = () => (enAppDeMoodle ? '' : config?.volver || '');
+export const TEXTO_CERRAR = 'Para volver al curso, cierra esta ventana con la × de arriba.';
 
 const claveDia = (d) => `${d.f} ${d.h || ''}`;
 const forma = (d) => JSON.stringify(limpiarDia(d, true));

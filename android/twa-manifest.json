@@ -12,7 +12,7 @@
   "navigationDividerColorDark": "#121517",
   "backgroundColor": "#E4E6E3",
   "enableNotifications": false,
-  "startUrl": "/",
+  "startUrl": "/?app=android",
   "iconUrl": "https://app.jepyso.com/iconos/icono-512.png",
   "maskableIconUrl": "https://app.jepyso.com/iconos/maskable-512.png",
   "splashScreenFadeOutDuration": 300,

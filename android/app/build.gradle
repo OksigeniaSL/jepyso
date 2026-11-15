@@ -23,7 +23,7 @@ plugins {
 def twaManifest = [
     applicationId: 'com.oksigenia.jepyso',
     hostName: 'app.jepyso.com', // The domain being opened in the TWA.
-    launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
+    launchUrl: '/?app=android', // The start path for the TWA. Must be relative to the domain. ?app=android: the web knows it is the store's app (app/tienda.js).
     name: 'Jepyso', // The application name.
     launcherName: 'Jepyso', // The name shown on the Android Launcher.
     themeColor: '#E4E6E3', // The color used for the status bar.
