@@ -19,6 +19,10 @@ import {
 import { MAPA, PUNTOS } from './mapa.js';
 import { PROGRAMAS } from './programas.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
+import {
+  enMoodle, armandoParaMoodle, prepararMoodle, moodle, vistaPrevia, volverAlCurso, juntarHistorial, subirHistorial, recordarClave, TEXTO_ESTADO,
+  devolverRutina,
+} from './moodle.js';
 
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
@@ -148,7 +152,7 @@ const leerPlantillas = () => limpiarPlantillas(almacen.leer('plantillas', []));
 
 // The professional's first use: no link made yet, nobody in Personas and no template. Until then the builder opens with
 // the way (build it and send it, the person does it, the summary comes back) and a routine to try.
-const primerUso = () => !almacen.leer('estrenada', false) && !leerPersonas().length && !leerPlantillas().length;
+const primerUso = () => !armandoParaMoodle && !almacen.leer('estrenada', false) && !leerPersonas().length && !leerPlantillas().length;
 
 // The routine to try, as the person will see it: three of the first exercises, one short set each, in the figure the
 // professional has chosen. Made once per figure; the link is ready by the time the button is reached.
@@ -264,7 +268,10 @@ async function compartir(texto, url) {
 // The professional's side is an app for the phone and the tablet (Enrique, 11 November 2026): a tab bar at the foot of
 // the phone, a rail at the side of a tablet, a bar on top with the title and, inside a file, the way back. The person's
 // routine (#r=) has none of it, and no manifest: installed from there, its icon would open the builder, not the routine.
-const PESTANAS = [['#', 'Nueva rutina', 'mas'], ['#personas', 'Personas', 'personas'], ['#plantillas', 'Plantillas', 'plantillas']];
+// Building for a Moodle activity there are no people to follow: the course does that.
+const PESTANAS = [['#', 'Nueva rutina', 'mas'], ['#personas', 'Personas', 'personas'], ['#plantillas', 'Plantillas', 'plantillas']].filter(
+  ([href]) => !(armandoParaMoodle && href === '#personas'),
+);
 let pestanas = null;
 let firmaPro = null;
 
@@ -304,7 +311,8 @@ function marcoApp(h) {
     if (pro) avisoPestana();
   }
   let m = document.querySelector('link[rel="manifest"]');
-  if (pro && !m) {
+  // Inside a Moodle course the plugin serves the app and nothing installs it.
+  if (pro && !m && !armandoParaMoodle) {
     m = document.createElement('link');
     m.rel = 'manifest';
     m.href = 'manifest.json';
@@ -746,13 +754,17 @@ function vistaArmar() {
         <div class="armar-cuerpo">
           ${primerUsoBanda(b)}
           <section class="etapa" id="etapa-para" aria-labelledby="etapa-para-t">
-            <p class="etapa-titulo" id="etapa-para-t"><b>1</b>Para quién</p>
+            ${armandoParaMoodle ? `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>Quién la manda</p>
+            <div class="campos">
+              <div class="campo"><label for="de">Tu nombre</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
+            </div>
+            <p class="ayuda">Es para toda la clase: cada uno la verá con su nombre, como «Tu rutina de» y el tuyo.</p>` : `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>Para quién</p>
             <div class="campos">
               <div class="campo"><label for="para">Nombre de la persona</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
               <div class="campo"><label for="de">Tu nombre</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
             </div>
             <div class="hueco-recientes">${personasRecientes(b)}</div>
-            <div class="hueco-lleno">${avisoLleno(b)}</div>
+            <div class="hueco-lleno">${avisoLleno(b)}</div>`}
           </section>
           <section class="etapa" id="etapa-ejercicios" aria-labelledby="etapa-ejercicios-t">
             <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>Ejercicios</p>
@@ -771,13 +783,13 @@ function vistaArmar() {
                 <div class="ajuste"><span>Figura</span>${eleccionFigura(b.cuerpo)}</div>
                 <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
               </div>
-              <p class="ayuda">Si la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
+              <p class="ayuda">${armandoParaMoodle ? 'Si alguien pasa de esa molestia, el día te sale marcado en su seguimiento.' : 'Si la persona pasa de esa molestia, el día te sale marcado en su resumen.'}</p>
             </section>
           </section>
         </div>
         <div class="barra-crear" id="etapa-enlace">
           <span class="resumen-corto">${resumenCorto()}</span>
-          <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>Crear enlace</button>
+          <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>${armandoParaMoodle ? 'Usar en la actividad' : 'Crear enlace'}</button>
           <button type="button" class="boton anadir-en-barra" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}Añadir ejercicio</button>
         </div>
       </div>
@@ -1324,6 +1336,9 @@ async function crearEnlace(b, empezarOtra = null) {
       return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, b: bandaDe(EJERCICIOS[id], e.banda)?.clave, n: e.nota.trim() || undefined };
     }),
   };
+  // For a Moodle activity: the routine goes back to the activity form, for the whole class and with no file. Opened by
+  // hand, without the form behind, it goes on as a link to copy.
+  if (armandoParaMoodle && devolverRutina(await codificar({ ...rutina, para: '' }))) return;
   // With a name, the routine goes to that person's file: the one chosen in the builder, the only one with that name,
   // or a new one. Its id travels in the link (p) and comes back with each summary.
   const lista = leerPersonas();
@@ -1497,6 +1512,15 @@ async function vistaRutina(codigo) {
     return () => {};
   }
   const clave = 'hist:' + hashCorto(codigo);
+  // In a Moodle course the history is the course's, joined to what this device kept, and the person is the one logged in.
+  if (enMoodle) {
+    await prepararMoodle();
+    juntarHistorial(clave);
+    recordarClave(clave);
+    if (!r.para && moodle()?.nombre) r.para = moodle().nombre;
+  }
+  // Where what is done goes: to the course, or in a summary the person sends.
+  const destinoMarca = (q) => (enMoodle ? `saldrá marcado en lo que ve ${q} en el curso` : `saldrá marcado en el resumen que le mandes a ${q}`);
   const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d, EJERCICIOS[e.i]), 0);
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
   const quien = r.de ? esc(r.de) : 'quien te dio la rutina';
@@ -1530,9 +1554,10 @@ async function vistaRutina(codigo) {
     if (i < 0) return;
     hist[i].a = valor;
     almacen.guardar(clave, hist);
+    subirHistorial(clave);
     const tarjeta = app.querySelector('.manana');
     tarjeta.innerHTML = `<p class="apuntado">Apuntado: ${valor} de 10 al levantarte.${
-      pasaDelTope(valor, tope) ? ` Es más de ${tope}: saldrá marcado en el resumen que le mandes a ${quien}.` : ''
+      pasaDelTope(valor, tope) ? ` Es más de ${tope}: ${destinoMarca(quien)}.` : ''
     }</p>`;
     pintarPie(hist);
   }
@@ -1545,14 +1570,19 @@ async function vistaRutina(codigo) {
     const recientes = hist.map((d, k) => ({ d, k })).slice(-7).reverse();
     const fila = ({ d, k }) => `<li><span>${esc(fechaCorta(d.f))}${d.h ? ` · ${esc(d.h)}` : ''}${d.sinApp ? ' · sin la app' : ''}</span>
         <button type="button" class="enlace" data-r="corregir" data-k="${k}">Corregir</button></li>`;
+    // In a Moodle course it goes to the course by itself: the card says where it is and leads back.
+    const enviar = enMoodle
+      ? `<p class="moodle-estado" aria-live="polite"></p>${volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}`
+      : `<p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
+        <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
+        <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>`;
     sitio.innerHTML = `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
         <h3 id="mandar-titulo">Lo que llevas hecho</h3>
         ${hist.length ? `<ul class="dias-hechos">${recientes.map(fila).join('')}</ul>
-        <p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
-        <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
-        <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>` : '<p>Todavía nada.</p>'}
+        ${enviar}` : `<p>Todavía nada.</p>${enMoodle && volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}`}
         <button type="button" class="enlace" data-r="sin-app">Apuntar una vez que la hice sin la app</button>
       </section>`;
+    if (enMoodle && hist.length) subirHistorial(clave);
   }
 
   function intro() {
@@ -1566,6 +1596,7 @@ async function vistaRutina(codigo) {
         ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
         <h1>${r.para ? `Hola, ${esc(r.para)}` : 'Tu rutina'}</h1>
         ${r.w ? `<p class="semana-rutina">${r.w === 7 ? 'Todos los días' : `${r.w} ${r.w === 1 ? 'día' : 'días'} a la semana${r.w <= 3 ? ', mejor no seguidos' : ''}`}</p>` : ''}
+        ${vistaPrevia() ? `<p class="moodle-aviso">${TEXTO_ESTADO['vista-previa']}</p>` : ''}
         ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>Hoy: ${Math.min(vecesHoy, r.x)} de ${r.x} veces</p>` : ''}
       </header>
       <section class="lista">
@@ -1593,7 +1624,7 @@ async function vistaRutina(codigo) {
             </article>`;
           })
           .join('')}
-        <section class="tarjeta recordatorio" aria-labelledby="recordar-titulo">
+        ${enMoodle ? '' : `<section class="tarjeta recordatorio" aria-labelledby="recordar-titulo">
           <h3 id="recordar-titulo">Que no se te olvide</h3>
           <p>Pon un aviso cada día en el calendario de tu teléfono, con el enlace a esta rutina.</p>
           <div class="recordatorio-fila">
@@ -1601,7 +1632,7 @@ async function vistaRutina(codigo) {
             <button type="button" class="boton secundario" data-r="recordatorio">Añadir al calendario</button>
           </div>
           <p class="recordatorio-hecho" aria-live="polite"></p>
-        </section>
+        </section>`}
         <p class="sin-conexion" aria-live="polite"></p>
         ${firmaPersona}
       </section>
@@ -2139,18 +2170,26 @@ async function vistaRutina(codigo) {
     const hist = almacen.leer(clave, []);
     hist.push(dia);
     almacen.guardar(clave, hist.slice(-200));
+    const trabajo = `${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo.`;
+    // In a Moodle course the session goes to the course by itself; the way out leads back to it.
+    const pie = enMoodle
+      ? `<p class="moodle-estado" aria-live="polite"></p>
+        ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : ''}
+        <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>`
+      : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
+        <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
+        <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>
+        ${tarjetaAMano()}`;
     app.innerHTML = `<div class="rutina">
       <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1>${
         parcial ? `<p>Te faltó: ${[...new Set(cola.filter((c) => !dia.e.some((x) => x.i === c.e.i)).map((c) => EJERCICIOS[c.e.i].nombre))].map(esc).join(', ')}.</p>` : ''
-      }<p>${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo. ${r.de ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
+      }<p>${trabajo} ${r.de && !enMoodle ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
-        <button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
-        <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
-        <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>
-        ${tarjetaAMano()}
+        ${pie}
       </footer>
     </div>`;
+    subirHistorial(clave);
   }
 
   // «Tenla a mano» (Fable B6): the routine lives in a message that tomorrow will be buried. On a phone, and until the
@@ -2371,7 +2410,7 @@ async function vistaRutina(codigo) {
       app.querySelector('.j-mando').innerHTML = grupo
         ? `<div class="centro"><p>¿Salir de la rutina?</p><p>El grupo va por el ejercicio ${ejercicios.indexOf(actual().e) + 1} de ${ejercicios.length}.</p></div>
         <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Salir</button></div>`
-        : `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>Lo que has hecho se guarda y puedes mandarlo.</p></div>
+        : `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>${enMoodle ? 'Lo que has hecho se guarda en el curso.' : 'Lo que has hecho se guarda y puedes mandarlo.'}</p></div>
         <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Dejarla</button></div>`;
       return;
     }
@@ -2442,7 +2481,7 @@ async function vistaRutina(codigo) {
         seguir.textContent = seguir.dataset.seguir;
       }
       const aviso = app.querySelector('.aviso-molestia');
-      if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: saldrá marcado en el resumen que le mandes a ${r.de || 'quien te dio la rutina'}. La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.` : '';
+      if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: ${destinoMarca(r.de || 'quien te dio la rutina')}. La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.` : '';
       return;
     }
     if (a === 'manana') {
@@ -3116,7 +3155,8 @@ const MOTOR = [
 ];
 
 function registrarTrabajador() {
-  if (!('serviceWorker' in navigator)) return null;
+  // Inside a Moodle course the plugin serves the app: no worker of its own there.
+  if (!('serviceWorker' in navigator) || enMoodle || armandoParaMoodle) return null;
   // Offline, the update check of an existing worker fails; the one already installed keeps working.
   return navigator.serviceWorker.register('sw.js').catch(async (err) => {
     const ya = await navigator.serviceWorker.getRegistration().catch(() => null);
@@ -3297,4 +3337,18 @@ alCambiarVales(() => {
 });
 // The licence and the free files' tickets are checked once, before the first view: what is open must be known when it
 // paints.
-comprobarLicencia().then(comprobarVales).finally(ir);
+// Building for a Moodle activity, the library and the programmes offer only what the plugin brings (its free sample,
+// or the whole library): the exercises with their clip in both figures.
+async function soloLoQueHay() {
+  if (!armandoParaMoodle) return;
+  try {
+    const [a, b] = await Promise.all([cargarManifiesto('a'), cargarManifiesto('b')]);
+    const hay = (id) => !!(a.ejercicios[id] && b.ejercicios[id]);
+    for (let k = ORDEN.length - 1; k >= 0; k--) if (!hay(ORDEN[k])) ORDEN.splice(k, 1);
+    for (let k = PROGRAMAS.length - 1; k >= 0; k--) if (!PROGRAMAS[k].orden.every(hay)) PROGRAMAS.splice(k, 1);
+  } catch {
+    // Without the lists the whole library stays: the activity form says which exercises the site does not have.
+  }
+}
+// In a Moodle course neither applies: the course is the licence and keeps the sessions.
+(enMoodle || armandoParaMoodle ? soloLoQueHay() : comprobarLicencia().then(comprobarVales)).finally(ir);

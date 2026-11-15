@@ -823,6 +823,11 @@ a.boton { text-decoration: none; }
 /* A routine sent with nothing back yet, in the first two weeks: a quiet card at the top of the file, with the message
    ready. The tab of Personas carries how many there are. */
 .sin-noticias { border-left: 3px solid var(--tinta); }
+/* Inside a Moodle course (moodle.js): whether what was done reached the course, and the teacher's preview. */
+.moodle-estado { margin: 0; min-height: 1.4em; color: var(--tinta-suave); font-size: 15px; }
+.moodle-estado[data-estado="pendiente"] { color: var(--tinta); font-weight: 600; }
+.moodle-aviso { margin: 8px 0 0; padding-left: 10px; border-left: 3px solid var(--tinta); color: var(--tinta); font-weight: 600; }
+.mandar-hecho > a.boton { justify-self: start; }
 .sin-noticias p { margin: 0; }
 .sin-noticias .botones .boton { flex: 0 1 auto; }
 .pestana-cuenta {
