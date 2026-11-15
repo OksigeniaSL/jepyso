@@ -17,6 +17,9 @@
   --tinta: #1d2225;
   --tinta-suave: #596165;
   --linea: #bcc2c2;
+  /* The edge of what is touched (fields, steppers, segments): 3:1 or more on the page and on both surfaces, as WCAG asks
+     of a control. The fine graphite of cards and rules stays in --linea. */
+  --linea-control: #737c7e;
   --acento: #1d2225;
   --acento-tinta: #f2f3f1;
   --acento-suave: #d3d7d6;
@@ -38,6 +41,7 @@
     --tinta: #e3e6e4;
     --tinta-suave: #a2aaae;
     --linea: #353b3f;
+    --linea-control: #6b7377;
     --acento: #e3e6e4;
     --acento-tinta: #121517;
     --acento-suave: #2a3034;
@@ -57,6 +61,7 @@
   --tinta: #e3e6e4;
   --tinta-suave: #a2aaae;
   --linea: #353b3f;
+  --linea-control: #6b7377;
   --acento: #e3e6e4;
   --acento-tinta: #121517;
   --acento-suave: #2a3034;
@@ -106,7 +111,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .chip.alta { border-color: var(--tinta); color: var(--tinta); font-weight: 700; }
 
 .paso {
-  display: inline-flex; align-items: center; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  display: inline-flex; align-items: center; border: 1px solid var(--linea-control); border-radius: var(--radio-sm);
   background: var(--superficie); height: 40px;
 }
 .paso button {
@@ -115,7 +120,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .paso output { min-width: 34px; text-align: center; font-weight: 650; }
 
 .segmentos {
-  display: inline-flex; padding: 3px; border-radius: var(--radio-sm); background: transparent; border: 1px solid var(--linea); gap: 2px;
+  display: inline-flex; padding: 3px; border-radius: var(--radio-sm); background: transparent; border: 1px solid var(--linea-control); gap: 2px;
 }
 .segmentos button {
   border: 0; background: transparent; padding: 8px 14px; border-radius: 1px; color: var(--tinta-suave); font-size: 14px;
@@ -137,7 +142,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 }
 .bandas .banda[aria-pressed="true"] { box-shadow: inset 0 -6px 0 rgb(0 0 0 / 0.14), 0 0 0 2px var(--fondo), 0 0 0 4px var(--tinta); }
 .bandas .banda-sin {
-  min-height: 36px; padding: 6px 12px; border: 1px solid var(--linea); border-radius: var(--radio-sm); background: transparent;
+  min-height: 36px; padding: 6px 12px; border: 1px solid var(--linea-control); border-radius: var(--radio-sm); background: transparent;
   color: var(--tinta-suave); font-size: 14px;
 }
 .bandas .banda-sin[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); font-weight: 600; }
@@ -165,7 +170,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .campo { display: grid; gap: 6px; }
 .campo label { font-size: 13px; color: var(--tinta-suave); }
 .campo input, .campo textarea, .buscar, .plantilla-nueva input, .campo-musculo select {
-  width: 100%; border: 1px solid var(--linea); background: var(--superficie); border-radius: var(--radio-sm);
+  width: 100%; border: 1px solid var(--linea-control); background: var(--superficie); border-radius: var(--radio-sm);
   padding: 12px 14px; min-height: 48px;
 }
 .campo textarea { resize: vertical; min-height: 64px; }
@@ -183,7 +188,7 @@ h1, h2, h3 { font-family: var(--letra-titulo); }
 .ejercicio-cabeza h3 { margin: 0; font-size: 17px; }
 .ejercicio-cabeza .linea-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .marca {
-  width: 28px; height: 28px; border-radius: 0; border: 1px solid var(--linea); display: grid; place-items: center; flex: none;
+  width: 28px; height: 28px; border-radius: 0; border: 1px solid var(--linea-control); display: grid; place-items: center; flex: none;
 }
 .ejercicio.incluido .marca { background: transparent; border-color: var(--tinta); color: var(--tinta); }
 .marca { font-size: 14px; font-weight: 600; font-family: var(--letra-cifras); }
@@ -366,7 +371,7 @@ a.boton { text-decoration: none; }
 .jugador-arriba h2 { margin: 0; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .jugador-arriba .sub { color: var(--tinta-suave); font-size: 14px; }
 .redondo {
-  width: 48px; height: 48px; border-radius: 0; border: 1px solid var(--linea); background: var(--fondo); color: var(--tinta);
+  width: 48px; height: 48px; border-radius: 0; border: 1px solid var(--linea-control); background: var(--fondo); color: var(--tinta);
   display: grid; place-items: center; flex: none;
 }
 .redondo svg { width: 22px; height: 22px; }
@@ -433,7 +438,7 @@ a.boton { text-decoration: none; }
 /* On a phone, 0 to 10 in two rows: eleven in one line left buttons 28 px wide for a finger. */
 @media (max-width: 560px) { .escala { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; } }
 .escala button {
-  height: 48px; border-radius: 0; border: 1px solid var(--linea); background: var(--superficie); font-weight: 600; padding: 0;
+  height: 48px; border-radius: 0; border: 1px solid var(--linea-control); background: var(--superficie); font-weight: 600; padding: 0;
 }
 .escala button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
 .escala-pie { display: flex; justify-content: space-between; font-size: 14px; color: var(--tinta-suave); }
@@ -600,7 +605,7 @@ a.boton { text-decoration: none; }
 .plantilla-nueva input { flex: 1 1 240px; width: auto; }
 .lista-plantillas { display: flex; flex-wrap: wrap; gap: 8px; }
 .plantilla {
-  display: inline-flex; align-items: stretch; border: 1px solid var(--linea); border-radius: var(--radio-sm); background: var(--superficie);
+  display: inline-flex; align-items: stretch; border: 1px solid var(--linea-control); border-radius: var(--radio-sm); background: var(--superficie);
   overflow: hidden; max-width: 100%;
 }
 .plantilla .usar {
@@ -810,10 +815,19 @@ a.boton { text-decoration: none; }
 }
 .persona-fila .nombre { font-family: var(--letra-titulo); font-size: 18px; font-weight: 500; }
 .persona-fila .meta { grid-column: 1; color: var(--tinta-suave); font-size: 14px; }
-.persona-fila .chip { grid-column: 2; grid-row: 1 / span 2; }
-/* On a phone the mark goes under the name, so the line of what it has keeps its width. */
+.persona-fila .marcas { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+/* On a phone the marks go under the name, so the line of what it has keeps its width. */
 @media (max-width: 560px) {
-  .persona-fila .chip { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 4px; }
+  .persona-fila .marcas { grid-column: 1; grid-row: auto; flex-direction: row; flex-wrap: wrap; align-items: center; justify-self: start; margin-top: 4px; }
+}
+/* A routine sent with nothing back yet, in the first two weeks: a quiet card at the top of the file, with the message
+   ready. The tab of Personas carries how many there are. */
+.sin-noticias { border-left: 3px solid var(--tinta); }
+.sin-noticias p { margin: 0; }
+.sin-noticias .botones .boton { flex: 0 1 auto; }
+.pestana-cuenta {
+  position: absolute; top: 4px; left: calc(50% + 6px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
+  background: var(--tinta); color: var(--fondo); font: 700 11px/18px var(--letra-cifras); text-align: center;
 }
 .lista-personas .vacio, .lo-hecho .vacio { margin: 0; padding: 18px 16px; border: 1px dashed var(--linea); border-radius: var(--radio); color: var(--tinta-suave); }
 .copia .botones .boton { flex: 0 1 auto; }
@@ -822,7 +836,7 @@ a.boton { text-decoration: none; }
 
 .persona .armar-cabecera .botones { margin-top: 14px; }
 .persona textarea {
-  width: 100%; border: 1px solid var(--linea); background: var(--superficie); border-radius: var(--radio-sm); padding: 12px 14px;
+  width: 100%; border: 1px solid var(--linea-control); background: var(--superficie); border-radius: var(--radio-sm); padding: 12px 14px;
   min-height: 72px; resize: vertical;
 }
 .persona textarea:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: transparent; }
@@ -1143,14 +1157,14 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .pregunta-suave span { font-weight: 400; color: var(--tinta-suave); font-size: 15px; margin-left: 6px; }
 .chips-elegir { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip-elegir {
-  min-height: 48px; padding: 0 16px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  min-height: 48px; padding: 0 16px; border: 1px solid var(--linea-control); border-radius: var(--radio-sm);
   background: var(--superficie); color: var(--tinta); font-weight: 600; font-size: 16px;
 }
 .chip-elegir[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); }
 .nota-persona { display: grid; gap: 6px; }
 .nota-persona span { font-size: 15px; color: var(--tinta-suave); }
 .nota-persona textarea {
-  font: inherit; font-size: 17px; padding: 10px 12px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  font: inherit; font-size: 17px; padding: 10px 12px; border: 1px solid var(--linea-control); border-radius: var(--radio-sm);
   background: var(--superficie); color: var(--tinta); resize: vertical;
 }
 .nota-dia { margin: 0; grid-column: 1 / -1; font-size: 15px; color: var(--tinta); }
@@ -1164,7 +1178,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .recordatorio .hora { display: grid; gap: 4px; }
 .recordatorio .hora span { font-size: 15px; color: var(--tinta-suave); }
 .recordatorio input[type="time"] {
-  font: inherit; font-size: 18px; min-height: 48px; padding: 0 10px; border: 1px solid var(--linea); border-radius: var(--radio-sm);
+  font: inherit; font-size: 18px; min-height: 48px; padding: 0 10px; border: 1px solid var(--linea-control); border-radius: var(--radio-sm);
   background: var(--superficie); color: var(--tinta);
 }
 .recordatorio-hecho { margin: 0; color: var(--tinta-suave); }
@@ -1292,7 +1306,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .licencia-fila { display: flex; flex-wrap: wrap; gap: 8px; }
 .licencia-fila input {
   flex: 1 1 220px; min-height: 48px; padding: 0 12px; font: inherit; font-family: var(--letra-cifras); font-size: 14px;
-  border: 1px solid var(--linea); border-radius: var(--radio-sm); background: var(--superficie); color: var(--tinta);
+  border: 1px solid var(--linea-control); border-radius: var(--radio-sm); background: var(--superficie); color: var(--tinta);
 }
 .aviso-licencia { margin: 0; color: var(--tinta); }
 .aviso-licencia:empty { display: none; }

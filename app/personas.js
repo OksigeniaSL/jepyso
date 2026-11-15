@@ -92,6 +92,19 @@ export function apuntarResumen(p, resumen, recibido = true) {
   return nuevos;
 }
 
+// The first two weeks of a routine are when most people give up (docs/revisiones/2026-11-14.md in hq, idea 6). A
+// routine sent 3 to 14 days ago with nothing back since, no summary and no session after it: the professional sees it
+// in Personas and in the file, with a message ready. No server is needed to warn anyone.
+export const DIAS_SIN_NOTICIAS = 3;
+export function sinNoticias(p, hoy = diaLocal()) {
+  const r = p.rutinas.filter((x) => x.f).reduce((a, x) => (!a || x.f >= a.f ? x : a), null);
+  if (!r) return null;
+  const dias = Math.round((new Date(`${hoy}T12:00:00`) - new Date(`${r.f}T12:00:00`)) / 86400000);
+  if (!(dias >= DIAS_SIN_NOTICIAS && dias <= 14)) return null;
+  if ((p.ultimoResumen || '') >= r.f || p.dias.some((d) => d.f >= r.f)) return null;
+  return { f: r.f, dias, codigo: r.codigo };
+}
+
 // Monday of the week of a day, as YYYY-MM-DD in local time.
 function lunes(f) {
   const d = new Date(f + 'T12:00:00');

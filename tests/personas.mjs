@@ -32,6 +32,19 @@ ok(s.length === 2 && s[0].desde === '2026-11-02' && s[1].desde === '2026-11-09',
 ok(s[0].durante === 6 && s[0].manana === 2 && s[0].marcados === 1, 'la primera semana: máxima 6 durante, 2 al levantarse');
 ok(s[1].manana === 6 && s[1].sube === true, 'la segunda sube: se marca');
 
+// The first two weeks: a routine sent with nothing back.
+const ana = P.apuntarRutina([], { nombre: 'Ana' }, { f: '2026-11-10', e: [{ i: 'puente' }] }, 'codA');
+ok(P.sinNoticias(ana, '2026-11-12') === null, 'a los dos días todavía no avisa');
+const sin = P.sinNoticias(ana, '2026-11-14');
+ok(sin && sin.dias === 4 && sin.codigo === 'codA', 'a los cuatro días sin nada, avisa con su rutina');
+ok(P.sinNoticias(ana, '2026-11-25') === null, 'pasadas las dos semanas, ya no');
+P.apuntarRutina([ana], { id: ana.id, nombre: 'Ana' }, { f: '2026-11-13', e: [{ i: 'silla' }] }, 'codB');
+ok(P.sinNoticias(ana, '2026-11-14') === null, 'una rutina nueva vuelve a contar desde su día');
+ok(P.sinNoticias(ana, '2026-11-17')?.codigo === 'codB', 'y avisa con la última');
+P.apuntarResumen(ana, { dias: [dia('2026-11-15', '10:00', 2)] });
+ok(P.sinNoticias(ana, '2026-11-17') === null, 'con un resumen recibido, no avisa');
+ok(P.sinNoticias(P.crearPersona([], 'Sin rutina'), '2026-11-17') === null, 'sin rutinas, no avisa');
+
 const otraLista = [];
 const r = P.cargarCopia(otraLista, JSON.parse(JSON.stringify(P.copia(lista))));
 ok(r.total === 3 && r.nuevas === 3 && otraLista[0].dias.length === 3, 'una copia se carga entera en otro aparato');

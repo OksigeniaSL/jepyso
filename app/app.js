@@ -8,7 +8,7 @@ import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } fr
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
-  esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS,
+  esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
 } from './personas.js';
 import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
 import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive } from './licencia.js';
@@ -45,6 +45,7 @@ const ICONO = {
   salirCompleta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
   sinVoz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
   puntos: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+  compartir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>',
   compartirIos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6v11h12V10h-2"/></svg>',
   volver: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
   cuerpo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M5 9l7 1.5L19 9M12 10.5V15m0 0l-3 6m3-6l3 6"/></svg>',
@@ -177,6 +178,15 @@ async function cargarFigura() {
   return moduloFigura;
 }
 
+// For a screen reader the figure is a picture with a name: what it is doing and, if it has sides, which one.
+function nombrarFigura(f, id, lado) {
+  const lienzo = f?.renderer?.domElement;
+  const def = EJERCICIOS[id];
+  if (!lienzo || !def) return;
+  lienzo.setAttribute('role', 'img');
+  lienzo.setAttribute('aria-label', `Figura haciendo ${def.nombre}${def.unLado ? `, lado ${lado === 'izq' ? 'izquierdo' : 'derecho'}` : ''}`);
+}
+
 async function figuraEn(contenedor, c = 'a') {
   const [{ Figura }, manifiesto] = await Promise.all([cargarFigura(), cargarManifiesto(c)]);
   if (!figura) figura = new Figura(contenedor, manifiesto, { calidad });
@@ -190,6 +200,18 @@ const enlaceMensaje = (canal, texto, url) =>
   canal === 'tg'
     ? `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`
     : `https://wa.me/?text=${encodeURIComponent(`${texto} ${url}`)}`;
+
+// The phone's own share sheet, where there is one: SMS, e-mail, Signal or whatever the professional uses besides
+// WhatsApp and Telegram. Where there is none (most computers), the button is not shown.
+const hayCompartir = () => typeof navigator.share === 'function';
+const botonCompartir = (h) => (hayCompartir() ? `<button type="button" class="boton secundario" data-${h}="compartir">${ICONO.compartir}Mandar con otra app</button>` : '');
+async function compartir(texto, url) {
+  try {
+    await navigator.share({ text: texto, url });
+  } catch {
+    // Closed without choosing an app, or the browser said no: nothing to do.
+  }
+}
 
 // ---------- The professional's app ----------
 // The professional's side is an app for the phone and the tablet (Enrique, 11 November 2026): a tab bar at the foot of
@@ -232,6 +254,7 @@ function marcoApp(h) {
     pestanas.hidden = !pro;
     const actual = h.startsWith('#persona') ? '#personas' : h === '#plantillas' ? '#plantillas' : h.startsWith('#s=') ? '' : '#';
     pestanas.querySelectorAll('a').forEach((a) => (a.dataset.pestana === actual ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
+    if (pro) avisoPestana();
   }
   let m = document.querySelector('link[rel="manifest"]');
   if (pro && !m) {
@@ -240,6 +263,28 @@ function marcoApp(h) {
     m.href = 'manifest.json';
     document.head.append(m);
   } else if (!pro && m) m.remove();
+}
+
+// The tab of Personas carries how many people have sent nothing since their routine (sinNoticias): the professional
+// sees it from any screen, without opening the list.
+function avisoPestana() {
+  const a = pestanas?.querySelector('[data-pestana="#personas"]');
+  if (!a) return;
+  const n = leerPersonas().filter((p) => fichaAbierta(p) && sinNoticias(p)).length;
+  let marca = a.querySelector('.pestana-cuenta');
+  if (!n) {
+    marca?.remove();
+    a.removeAttribute('aria-label');
+    return;
+  }
+  if (!marca) {
+    marca = document.createElement('span');
+    marca.className = 'pestana-cuenta';
+    marca.setAttribute('aria-hidden', 'true');
+    a.append(marca);
+  }
+  marca.textContent = n;
+  a.setAttribute('aria-label', `Personas: ${n} sin noticias desde su rutina`);
 }
 
 const barraApp = (titulo, { volver = '', accion = '' } = {}) => `<header class="barra-app">
@@ -330,8 +375,8 @@ function paso(accion, valor, etiqueta, min, max) {
   </div>`;
 }
 
-function segmentos(accion, opciones, actual) {
-  return `<div class="segmentos" role="group">${opciones
+function segmentos(accion, opciones, actual, etiqueta) {
+  return `<div class="segmentos" role="group" aria-label="${esc(etiqueta)}">${opciones
     .map(([v, t]) => `<button type="button" data-accion="${accion}" data-valor="${v}" aria-pressed="${String(v) === String(actual)}">${t}</button>`)
     .join('')}</div>`;
 }
@@ -399,7 +444,7 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
       <div class="fila">
         <div class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</div>
         <div class="ajuste"><span>${mayuscula(unidad(def).varios)}</span>${paso('reps', e.reps, mayuscula(unidad(def).varios), 1, topeReps(def))}</div>
-        ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado)}</div>` : ''}
+        ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado, 'Lado')}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
       ${def.unidad && !porPasos(def) ? '' : porPasos(def) ? `<div class="ajuste">
@@ -670,10 +715,10 @@ function vistaArmar() {
             <section class="general">
               <h2>Para toda la rutina</h2>
               <div class="fila">
-                <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso)}</div>
-                <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces)}</div>
-                <div class="ajuste"><span>Días a la semana</span>${segmentos('semana', [[0, 'Libre'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana)}</div>
-                <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo)}</div>
+                <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso, 'Descanso entre series')}</div>
+                <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces, 'Veces al día')}</div>
+                <div class="ajuste"><span>Días a la semana</span>${segmentos('semana', [[0, 'Libre'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana, 'Días a la semana')}</div>
+                <div class="ajuste"><span>Figura</span>${segmentos('cuerpo', FIGURAS, b.cuerpo, 'Figura')}</div>
                 <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
               </div>
               <p class="ayuda">Si la persona pasa de esa molestia, el día te sale marcado en su resumen.</p>
@@ -712,6 +757,7 @@ function vistaArmar() {
       f.oyentes = { fase: [alFase], dibujado: [() => pintarRecorrido(f, gonio && gonio.id === f.id ? gonio.k : null)] };
       // Another exercise tapped meanwhile: that call shows it, this one stops here.
       if ((await f.poner(id, { tempo: e.tempo, lado: e.lado === 'izq' ? 'izq' : 'der', banda: bandaDe(EJERCICIOS[id], e.banda)?.color })) === false) return;
+      nombrarFigura(f, id, e.lado);
       gonio = await medida(f);
       pintarGonio();
       f.empezar({ modo: 'demo' });
@@ -1243,6 +1289,7 @@ async function crearEnlace(b, empezarOtra = null) {
     <div class="hoja-mandar">
       <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Mandar por WhatsApp</a>
       <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}Mandar por Telegram</a>
+      ${botonCompartir('h')}
       <button type="button" class="boton secundario" data-h="copiar">Copiar enlace</button>
     </div>
     <a class="boton fantasma hoja-ver" href="${esc(url)}" target="_blank" rel="noopener">${nombre ? `Ver la rutina como ${nombre}` : 'Ver la rutina como la persona'}</a>
@@ -1295,6 +1342,7 @@ async function crearEnlace(b, empezarOtra = null) {
       destino = ficha.getAttribute('href');
       return dialogo.close();
     }
+    if (ev.target.closest('[data-h="compartir"]')) return compartir(mensaje, url);
     if (ev.target.closest('[data-h="copiar"]')) {
       try {
         await navigator.clipboard.writeText(url);
@@ -1307,6 +1355,9 @@ async function crearEnlace(b, empezarOtra = null) {
 }
 
 // ---------- Routine (the person) ----------
+// A link that cannot be opened: whose app this is, the likely cause in plain words and what to do about it.
+const avisoRoto = (titulo, texto) => `<div class="saludo aviso-roto"><p class="marca-jepyso">jepyso<span aria-hidden="true">°</span></p><h1>${titulo}</h1><p>${texto}</p></div>`;
+
 function hashCorto(texto) {
   let h = 0x811c9dc5;
   for (let i = 0; i < texto.length; i++) h = Math.imul(h ^ texto.charCodeAt(i), 0x01000193);
@@ -1343,13 +1394,13 @@ async function vistaRutina(codigo) {
     // Read below as a link that cannot be opened.
   }
   if (!r) {
-    app.innerHTML = `<div class="saludo"><h1>Este enlace no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>${firmaPersona}`;
+    app.innerHTML = avisoRoto('Este enlace no se puede abrir', 'Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a quien te lo mandó que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.') + firmaPersona;
     return () => {};
   }
   hayVoz(); // the list of voices fills while the person reads the routine
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
   if (!ejercicios.length) {
-    app.innerHTML = `<div class="saludo"><h1>Este enlace no trae ejercicios que se puedan abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>${firmaPersona}`;
+    app.innerHTML = avisoRoto('Este enlace no trae ejercicios que se puedan abrir', 'Puede que tu teléfono tenga guardada una versión anterior de Jepyso. Vuelve a abrir el enlace con conexión a internet; si sigue igual, pídele a quien te lo mandó que te lo reenvíe.') + firmaPersona;
     return () => {};
   }
   const clave = 'hist:' + hashCorto(codigo);
@@ -1647,6 +1698,7 @@ async function vistaRutina(codigo) {
       });
       app.querySelector('.recolocar')?.classList.add('oculto');
       await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
+      nombrarFigura(f, e.i, lado);
     } catch {
       // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
       if (sesion.item !== item) return;
@@ -1707,8 +1759,10 @@ async function vistaRutina(codigo) {
     clearTimeout(sesion.temporizador);
     const { e } = actual();
     const mando = app.querySelector('.j-mando');
-    mando.innerHTML = `<div class="cuenta">
-        <div class="grande num"><span class="j-rep">1</span> <small>de ${e.r}${EJERCICIOS[e.i].unidad ? ` ${e.r === 1 ? unidad(EJERCICIOS[e.i]).uno : unidad(EJERCICIOS[e.i]).varios}` : ''}</small></div>
+    const deTotal = `de ${e.r}${EJERCICIOS[e.i].unidad ? ` ${e.r === 1 ? unidad(EJERCICIOS[e.i]).uno : unidad(EJERCICIOS[e.i]).varios}` : ''}`;
+    // The count for a screen reader, said once per repetition: the phases change too often to be read aloud.
+    mando.innerHTML = `<p class="sr j-anuncio" aria-live="polite"></p><div class="cuenta">
+        <div class="grande num"><span class="j-rep">1</span> <small>${deTotal}</small></div>
         <div class="fase j-fase">${esc(figura?.textos?.subir || 'Ida')}</div>
       </div>
       ${svgTempo(e.t, { punto: true })}
@@ -1720,6 +1774,7 @@ async function vistaRutina(codigo) {
     const svg = mando.querySelector('.tempo');
     const elFase = mando.querySelector('.j-fase');
     const elRep = mando.querySelector('.j-rep');
+    const elAnuncio = mando.querySelector('.j-anuncio');
     const nombres = { subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos };
     // The phrases of an exercise have different lengths: the box takes the height of the longest once, so the sheet
     // (and the figure above it) does not jump from phase to phase.
@@ -1755,6 +1810,7 @@ async function vistaRutina(codigo) {
       if (n > 0) {
         primeraRep = false;
         decir(numero(n, masculino));
+        elAnuncio.textContent = `${n} ${deTotal}`;
       }
     });
     f.on('fin', () => {
@@ -2448,7 +2504,7 @@ async function vistaResumen(codigo) {
     // Read below as a summary that cannot be opened.
   }
   if (!s) {
-    app.innerHTML = `<div class="saludo"><h1>Este resumen no se puede abrir</h1><p>Pide que te lo vuelvan a mandar.</p></div>`;
+    app.innerHTML = avisoRoto('Este resumen no se puede abrir', 'Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a la persona que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.');
     return () => {};
   }
   const dias = [...s.dias].reverse();
@@ -2539,12 +2595,13 @@ function filaPersona(p) {
   </a></li>`;
   }
   const marcado = ultimoMarcado(p);
+  const callado = sinNoticias(p);
   const rutinas = p.rutinas.length ? `${p.rutinas.length} ${p.rutinas.length === 1 ? 'rutina' : 'rutinas'}` : 'sin rutinas';
   const resumen = p.ultimoResumen ? `último resumen el ${fechaLarga(p.ultimoResumen)}` : 'sin resúmenes todavía';
   return `<li><a class="persona-fila" href="#persona=${esc(p.id)}">
     <span class="nombre">${esc(p.nombre)}</span>
     <span class="meta">${rutinas} · ${resumen}</span>
-    ${marcado ? `<span class="chip alta">Pasó de ${marcado.tope} ${listaDias([marcado.f])}</span>` : ''}
+    ${marcado || callado ? `<span class="marcas">${marcado ? `<span class="chip alta">Pasó de ${marcado.tope} ${listaDias([marcado.f])}</span>` : ''}${callado ? `<span class="chip">${callado.dias} días sin noticias</span>` : ''}</span>` : ''}
   </a></li>`;
 }
 
@@ -2815,6 +2872,9 @@ function vistaPersona(id) {
   if (!fichaAbierta(p)) return vistaFichaCerrada(p);
   const tope = Number.isInteger(p.m) ? p.m : TOPE_MOLESTIA;
   const dias = [...p.dias].reverse();
+  const callado = sinNoticias(p);
+  const urlCallado = callado ? `${location.origin}${location.pathname}#r=${callado.codigo}` : '';
+  const textoCallado = `Hola, ${p.nombre}. ¿Qué tal vas con la rutina? Si algún ejercicio te cuesta o te molesta, dímelo y lo ajustamos. Aquí la tienes otra vez:`;
   app.innerHTML = `<div class="personas persona">
     ${barraApp(esc(p.nombre), { volver: '#personas' })}
     <div class="ficha-cabeza">
@@ -2823,6 +2883,15 @@ function vistaPersona(id) {
     </div>
     <div class="armar-cuerpo">
       <div class="persona-ficha">
+      ${callado ? `<section class="general sin-noticias" aria-labelledby="sin-noticias">
+        <h2 id="sin-noticias">${callado.dias} días sin noticias</h2>
+        <p>Le mandaste la rutina el ${fechaLarga(callado.f)} y todavía no te ha llegado nada. Las dos primeras semanas son las que más cuestan: es buen momento para preguntarle qué tal va.</p>
+        <div class="botones">
+          <a class="boton" href="${esc(enlaceMensaje('wa', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.whatsapp}Escribirle por WhatsApp</a>
+          <a class="boton secundario" href="${esc(enlaceMensaje('tg', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.telegram}Por Telegram</a>
+          ${botonCompartir('accion')}
+        </div>
+      </section>` : ''}
       <section class="general notas">
         <h2><label for="notas">Notas</label></h2>
         <textarea id="notas" data-accion="notas" rows="3" placeholder="Lo que quieras recordar de esta persona">${esc(p.notas)}</textarea>
@@ -2893,6 +2962,7 @@ function vistaPersona(id) {
       const b = app.querySelector('[data-accion="borrar-persona"]');
       if (b) b.textContent = 'Borrar su ficha';
     }
+    if (a === 'compartir') return compartir(textoCallado, urlCallado);
     if (a === 'rutina-para') {
       const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
       Object.assign(b, { para: p.nombre, persona: p.id, tope });
