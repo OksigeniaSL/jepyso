@@ -153,6 +153,19 @@ if (enMoodle) {
 }
 export const recordarClave = (clave) => enMoodle && almacen.guardar(`moodle:${cm}:clave`, clave);
 
+// The routine already in the activity form, to build on it. The builder opens from that form, on the same site, so it
+// can read the field: a code, or a whole link that carries one (…#r=code); anything else gives nothing.
+export function rutinaDelFormulario() {
+  if (!armandoParaMoodle) return '';
+  try {
+    const v = (window.opener?.document.getElementById('id_routine')?.value || '').trim();
+    const codigo = v.includes('#r=') ? v.slice(v.indexOf('#r=') + 3) : v;
+    return /^[A-Za-z0-9._-]{1,20000}$/.test(codigo) ? codigo : '';
+  } catch {
+    return '';
+  }
+}
+
 // The teacher's builder, opened from the activity form: the routine goes back to the form, which fills its field.
 export function devolverRutina(codigo) {
   if (!armandoParaMoodle || !window.opener) return false;

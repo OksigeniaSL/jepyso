@@ -151,6 +151,28 @@ try {
     return d.decodificar(cod);
   }, recibida?.codigo || 'j.e30');
   comprobar(rutina.e?.length === 13 && rutina.para === '' && rutina.w === 3, `la rutina devuelta no es la de Otago A para toda la clase (${rutina.e?.length}, «${rutina.para}», ${rutina.w})`);
+
+  // Again, on an activity that already has a routine (here a whole link of one): the builder opens with it, not with
+  // what this browser built last.
+  const otra = await vista.evaluate(async (cod) => {
+    const d = await import('/mod/oksigeniajepyso/reproductor/datos.js');
+    const r = await d.decodificar(cod);
+    return d.codificar({ ...r, e: r.e.slice(0, 2), de: 'Carmen' });
+  }, recibida?.codigo || 'j.e30');
+  await vista.evaluate((cod) => {
+    const campo = document.createElement('textarea');
+    campo.id = 'id_routine';
+    campo.value = `https://example.org/app/#r=${cod}`;
+    document.body.append(campo);
+    window.open('/mod/oksigeniajepyso/reproductor/index.html?armar=1&calidad=baja', 'jepyso-armar-2');
+  }, otra);
+  const armar2 = await vista.waitForEvent('popup');
+  armar2.on('pageerror', (e) => errores.push(e.message));
+  await armar2.waitForFunction(() => document.querySelectorAll('.ejercicio[data-id]').length > 0);
+  const enElConstructor = await armar2.$$eval('.ejercicio[data-id]', (l) => l.map((e) => e.dataset.id));
+  const firmada = await armar2.inputValue('#de').catch(() => '');
+  comprobar(enElConstructor.length === 2 && enElConstructor.join() === rutina.e.slice(0, 2).map((e) => e.i).join() && firmada === 'Carmen',
+    `el constructor no abre con la rutina que ya tiene la actividad (${enElConstructor.join()}, «${firmada}»)`);
   comprobar(!errores.length, `errores: ${errores.join(' | ')}`);
 } finally {
   await navegador.close();
@@ -159,4 +181,4 @@ if (fallos.length) {
   console.error(`moodle, ${fallos.length} fallos:\n  ${fallos.join('\n  ')}`);
   process.exit(1);
 }
-console.log('moodle: en el curso, cada sesión va sola al curso (y espera sin conexión), el profesor la prueba sin guardar y arma la rutina para el formulario');
+console.log('moodle: en el curso, cada sesión va sola al curso (y espera sin conexión), el profesor la prueba sin guardar y arma la rutina para el formulario, partiendo de la que ya tiene');

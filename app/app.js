@@ -23,7 +23,7 @@ import { MAPA, PUNTOS } from './mapa.js';
 import { PROGRAMAS } from './programas.js';
 import { medida, dibujar, actualizar } from './goniometro.js';
 import {
-  enMoodle, armandoParaMoodle, prepararMoodle, moodle, vistaPrevia, volverAlCurso, juntarHistorial, subirHistorial, recordarClave, TEXTO_ESTADO,
+  enMoodle, armandoParaMoodle, rutinaDelFormulario, prepararMoodle, moodle, vistaPrevia, volverAlCurso, juntarHistorial, subirHistorial, recordarClave, TEXTO_ESTADO,
   devolverRutina, enAppDeMoodle, TEXTO_CERRAR,
 } from './moodle.js';
 
@@ -809,6 +809,32 @@ function personasRecientes(b) {
     ${seis.map((p) => `<button type="button" class="filtro" data-accion="persona" data-id="${esc(p.id)}" aria-pressed="${b.persona === p.id}">${esc(nombreDe(p))}</button>`).join('')}
     ${lista.length > 6 ? `<a href="#personas">${t('Todas')}</a>` : ''}
   </div>`;
+}
+
+// A routine back in the builder, to change it: its exercises with their settings, and the routine's own settings.
+function rutinaAlBorrador(r, extra = {}) {
+  const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
+  Object.assign(b, { descanso: r.d, veces: r.x, semana: r.w || 0, tope: Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA, cuerpo: r.c || 'a', ...extra });
+  b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
+  for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, banda: e.b || '', nota: e.n || '' };
+  b.activo = b.orden[0] || b.activo;
+  almacen.guardar('borrador', b);
+}
+
+// In the Moodle activity form, «Armar la rutina» on an activity that has one opens the builder with it, once per window.
+let formularioLeido = false;
+async function rutinaDelFormularioAlBorrador() {
+  if (formularioLeido) return;
+  formularioLeido = true;
+  const codigo = rutinaDelFormulario();
+  if (!codigo) return;
+  let r = null;
+  try {
+    r = limpiarRutina(await decodificar(codigo));
+  } catch {
+    // A code that cannot be read: the form says so itself when it is saved.
+  }
+  if (r?.e?.length) rutinaAlBorrador(r, { para: '', ...(r.de ? { de: r.de } : {}) });
 }
 
 function vistaArmar() {
@@ -3273,12 +3299,7 @@ function vistaPersona(id) {
       // The routine as it was sent, back in the builder for this person, to change it and send it again.
       const r = limpiarRutina(await decodificar(el.dataset.codigo));
       if (!r) return;
-      const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
-      Object.assign(b, { para: p.nombre, persona: p.id, descanso: r.d, veces: r.x, semana: r.w || 0, tope: Number.isInteger(r.m) ? r.m : tope, cuerpo: r.c || 'a' });
-      b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
-      for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, banda: e.b || '', nota: e.n || '' };
-      b.activo = b.orden[0] || b.activo;
-      almacen.guardar('borrador', b);
+      rutinaAlBorrador(r, { para: p.nombre, persona: p.id, tope: Number.isInteger(r.m) ? r.m : tope });
       location.hash = '';
     } else if (a === 'copiar-rutina') {
       const url = `${location.origin}${location.pathname}#r=${el.dataset.codigo}`;
@@ -3497,7 +3518,10 @@ async function ir() {
     }
     limpiar = vistaPersona(id);
   }
-  else limpiar = vistaArmar();
+  else {
+    if (armandoParaMoodle) await rutinaDelFormularioAlBorrador();
+    limpiar = vistaArmar();
+  }
 }
 // The paid version without a licence, for the tests: ?pago=1 switches it on in this browser, ?pago=0 off, only on
 // this laptop (personas.js). Anywhere else a switch left from before is cleared.
