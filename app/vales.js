@@ -11,6 +11,7 @@ import { verificarFirma } from './licencia.js';
 import { CLIENTE, cargarGoogle } from './drive.js';
 import { leerPersonas, guardarPersonas, esDePago, esEntornoDePruebas } from './personas.js';
 import { esId } from './entrada.js';
+import { idioma, t } from './idioma.js';
 
 const API = '/api/fichas';
 
@@ -75,6 +76,7 @@ async function llamar(ruta, ficha) {
   return { estado: r.status, datos };
 }
 
+// Said through t(), like every notice below: aviso holds the text in the language in use.
 const NO_HAY_SERVICIO = 'Ahora no se puede hablar con Jepyso para abrir las fichas. Mira si hay conexión y vuelve a probar en un rato.';
 
 // The ticket for one file, from the server. True when the file has it now.
@@ -85,7 +87,7 @@ export async function pedirVale(id) {
   try {
     r = await llamar('', id);
   } catch {
-    aviso = NO_HAY_SERVICIO;
+    aviso = t(NO_HAY_SERVICIO);
     return false;
   }
   if (r.estado === 200 && (await valeDe(r.datos?.vale, id))) {
@@ -110,9 +112,9 @@ export async function pedirVale(id) {
     aviso = '';
   } else if (r.estado === 401) {
     cuenta = null;
-    aviso = 'Google no ha dado por buena la entrada. Vuelve a entrar con tu cuenta.';
-  } else if (r.estado === 429) aviso = 'Demasiadas peticiones seguidas. Espera un minuto y vuelve a probar.';
-  else aviso = NO_HAY_SERVICIO;
+    aviso = t('Google no ha dado por buena la entrada. Vuelve a entrar con tu cuenta.');
+  } else if (r.estado === 429) aviso = t('Demasiadas peticiones seguidas. Espera un minuto y vuelve a probar.');
+  else aviso = t(NO_HAY_SERVICIO);
   return false;
 }
 
@@ -214,7 +216,7 @@ export async function botonGoogle(hueco) {
       text: 'signin_with',
       shape: 'rectangular',
       logo_alignment: 'left',
-      locale: 'es',
+      locale: idioma(),
     });
     if (!preguntado) {
       preguntado = true;

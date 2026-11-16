@@ -3,6 +3,7 @@
 // the figure's own skeleton and drawn right after each picture, with the same pose (a frame late, the points would
 // trail the body). An SVG over the canvas: its colours are the page's, in light and dark.
 import * as THREE from 'three';
+import { t } from './idioma.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const JUNTAS = ['head', 'neck_01', 'spine_03', 'pelvis', 'upperarm_l', 'upperarm_r', 'lowerarm_l', 'lowerarm_r', 'hand_l',
@@ -116,6 +117,6 @@ export function pintarRecorrido(figura, clave = null) {
     nombre.setAttribute('x', p[vivo][0] + (derecha ? 10 : -10));
     nombre.setAttribute('y', p[vivo][1] - 9);
     nombre.setAttribute('text-anchor', derecha ? 'start' : 'end');
-    nombre.textContent = NOMBRE[vivo] || vivo;
+    nombre.textContent = NOMBRE[vivo] ? t(NOMBRE[vivo]) : vivo;
   }
 }

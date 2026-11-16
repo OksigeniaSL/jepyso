@@ -5,6 +5,7 @@
 // with the Drive connected to that same account: a key passed to a colleague is no use to them. It arrives in a link
 // (#licencia=…, a fragment: no server sees it) or pasted. Nothing about it is sent anywhere.
 import { almacen } from './datos.js';
+import { t } from './idioma.js';
 
 const CLAVE_PUBLICA = 'WyU9AFvH45c_mKFK4-E4Qj2BZ4mRChFm6BNOVS5n8Z0';
 const deBase64url = (t) => Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
@@ -47,7 +48,8 @@ export async function verificarFirma(clave) {
 // of the highest plan (as the first ones, given before there were plans).
 export const TOPE_MAXIMO = 300;
 const PLANES = { 50: 'Profesional', 300: 'Centro' };
-export const nombrePlan = (tope) => PLANES[tope] || `de ${tope} fichas`;
+// Its name on screen: «Profesional», «Centro», or one made for another number of files.
+export const nombrePlan = (tope) => (PLANES[tope] ? t(PLANES[tope]) : t('de {n} fichas', { n: tope }));
 
 // What a key says, once its signature is checked: { valida, cuenta, fecha, pedido, tope } or { valida: false, motivo }.
 export async function leerLicencia(clave) {

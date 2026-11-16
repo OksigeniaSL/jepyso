@@ -6,6 +6,7 @@
 // it, without saving. Anywhere else (app.jepyso.com, the tests) nothing here does anything.
 import { almacen } from './datos.js';
 import { limpiarDia } from './entrada.js';
+import { t } from './idioma.js';
 
 const parametros = new URLSearchParams(location.search);
 const enPlugin = location.pathname.includes('/mod/oksigeniajepyso/');
@@ -57,6 +58,7 @@ export const vistaPrevia = () => enMoodle && config && !config.puede;
 // there the way back is the window's own ×, and a link to the course would open the web page inside that window.
 export const enAppDeMoodle = enMoodle && /MoodleMobile/.test(navigator.userAgent);
 export const volverAlCurso = () => (enAppDeMoodle ? '' : config?.volver || '');
+// The texts of this file are the keys of their translation: the screens show them through t().
 export const TEXTO_CERRAR = 'Para volver al curso, cierra esta ventana con la × de arriba.';
 
 const claveDia = (d) => `${d.f} ${d.h || ''}`;
@@ -136,7 +138,7 @@ export const TEXTO_ESTADO = {
 
 function mostrarEstado(estado) {
   document.querySelectorAll('.moodle-estado').forEach((p) => {
-    p.textContent = TEXTO_ESTADO[estado] || '';
+    p.textContent = TEXTO_ESTADO[estado] ? t(TEXTO_ESTADO[estado]) : '';
     p.dataset.estado = estado;
   });
   return estado;

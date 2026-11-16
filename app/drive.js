@@ -3,6 +3,7 @@
 // out of its reach. No server: Google's token model, in the browser. The token lives a short while, only in memory, and
 // a new one needs a tap, because Google opens its window only from a gesture.
 import { fusionar, empaquetar, esDatos } from './sincronia.js';
+import { t } from './idioma.js';
 
 // Oksigenia's OAuth client (project jepyso-514617, in Oksigenia's Google account). Public by design: it names the app.
 export const CLIENTE = '728186575121-mqkqj3qhmkjrmfiqr31e2dv4gsfr9ttj.apps.googleusercontent.com';
@@ -25,7 +26,7 @@ export function cargarGoogle() {
     s.onload = () => ok(window.google);
     s.onerror = () => {
       guion = null;
-      mal(new Error('No se ha podido abrir la conexión con Google. Mira si hay red.'));
+      mal(new Error(t('No se ha podido abrir la conexión con Google. Mira si hay red.')));
     };
     document.head.append(s);
   });
@@ -46,12 +47,12 @@ export async function conectar() {
       client_id: CLIENTE,
       scope: AMBITO,
       callback: (r) => {
-        if (r.error || !r.access_token) return mal(new Error('Google no ha dado permiso para tu Drive.'));
-        if (!google.accounts.oauth2.hasGrantedAllScopes(r, AMBITO)) return mal(new Error('Hace falta el permiso para los archivos de Jepyso en tu Drive.'));
+        if (r.error || !r.access_token) return mal(new Error(t('Google no ha dado permiso para tu Drive.')));
+        if (!google.accounts.oauth2.hasGrantedAllScopes(r, AMBITO)) return mal(new Error(t('Hace falta el permiso para los archivos de Jepyso en tu Drive.')));
         token = { valor: r.access_token, caduca: Date.now() + (Number(r.expires_in) || 3600) * 1000 };
         ok();
       },
-      error_callback: (e) => mal(new Error(e?.type === 'popup_closed' ? 'Se ha cerrado la ventana de Google.' : 'No se ha podido abrir la ventana de Google.')),
+      error_callback: (e) => mal(new Error(e?.type === 'popup_closed' ? t('Se ha cerrado la ventana de Google.') : t('No se ha podido abrir la ventana de Google.'))),
     });
     cliente.requestAccessToken({ prompt: '' });
   });
@@ -64,13 +65,13 @@ export async function cuentaDrive() {
 }
 
 async function pedir(url, opciones = {}) {
-  if (!conectado()) throw new Error('La conexión con tu Drive ha caducado: vuelve a sincronizar.');
+  if (!conectado()) throw new Error(t('La conexión con tu Drive ha caducado: vuelve a sincronizar.'));
   const r = await fetch(url, { ...opciones, headers: { Authorization: `Bearer ${token.valor}`, ...(opciones.headers || {}) } });
   if (r.status === 401) {
     token = null;
-    throw new Error('La conexión con tu Drive ha caducado: vuelve a sincronizar.');
+    throw new Error(t('La conexión con tu Drive ha caducado: vuelve a sincronizar.'));
   }
-  if (!r.ok) throw new Error(`Tu Drive no ha respondido bien (${r.status}).`);
+  if (!r.ok) throw new Error(t('Tu Drive no ha respondido bien ({estado}).', { estado: r.status }));
   return r;
 }
 
@@ -120,7 +121,7 @@ export async function sincronizar(local, guardarLocal) {
   let remoto = {};
   if (ya) {
     const d = await (await pedir(`${API}/files/${ya.id}?alt=media`)).json();
-    if (!esDatos(d)) throw new Error('El archivo jepyso.json de tu Drive no es de Jepyso: no se ha tocado nada.');
+    if (!esDatos(d)) throw new Error(t('El archivo jepyso.json de tu Drive no es de Jepyso: no se ha tocado nada.'));
     remoto = d;
   }
   const junto = fusionar(local, remoto);

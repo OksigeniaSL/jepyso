@@ -1,5 +1,8 @@
 // Exercise catalogue, the routine link format and the local store.
 // Texts are written for any Spanish speaker (tú, no regional words), from open home-exercise guides (AAOS, NHS).
+// They stay in Spanish here, as data: the screens show each one through t() (idioma.js), so a routine reads the same
+// on a phone in any language.
+import { idioma, t, tn } from './idioma.js';
 
 // Every exercise: the starting position, the steps, where it is felt (only when an open guide says so), the most
 // common mistake, an easier way when the guide gives one, and the open guides it comes from (docs/guias-tanda-1.md
@@ -1853,14 +1856,17 @@ export const MUSCULOS = {
 
 const sinTildes = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-// The library filtered by area, muscle (main or secondary) and words of the name, keeping the catalogue order.
+// The library filtered by area, muscle (main or secondary) and words of the name, keeping the catalogue order. In
+// English the words are looked for in the English name, other names, position and material too.
 export function buscarEjercicios({ zona = '', musculo = '', texto = '' } = {}) {
   const palabras = sinTildes(texto).split(/\s+/).filter(Boolean);
   return ORDEN.filter((id) => {
     const e = EJERCICIOS[id];
     if (zona && !e.zonas.includes(zona)) return false;
     if (musculo && ![...e.musculos.principales, ...e.musculos.secundarios].includes(musculo)) return false;
-    const nombre = sinTildes(`${e.nombre} ${(e.otrosNombres || []).join(' ')} ${e.posicion} ${e.material}`);
+    if (!palabras.length) return true;
+    const textos = [e.nombre, ...(e.otrosNombres || []), e.posicion, e.material];
+    const nombre = sinTildes(`${textos.join(' ')} ${idioma() === 'es' ? '' : textos.map((x) => t(x)).join(' ')}`);
     return palabras.every((p) => nombre.includes(p));
   });
 }
@@ -1892,6 +1898,42 @@ const UNIDADES = {
   minutos: { uno: 'minuto', varios: 'minutos', todas: 'todos los minutos' },
 };
 export const unidad = (def) => UNIDADES[def?.unidad] || UNIDADES.repeticiones;
+
+// The same words for the screens, as whole sentences: Spanish agrees them in gender and number («todas las
+// repeticiones», «todos los pasos», «¿Cuántos…?»), and each language says them in its own order (idioma.js).
+const FRASES_UNIDAD = {
+  repeticiones: {
+    titulo: 'Repeticiones', palabra: 'repeticiones', cuenta: ['{n} repetición', '{n} repeticiones'], de: ['de {n}', 'de {n}'],
+    pregunta: '¿Hiciste todas las repeticiones?', si: 'Sí, todas', cuantas: '¿Cuántas hiciste en cada serie?',
+    todas: 'Todas las repeticiones', menos: 'Hiciste menos repeticiones', porSerie: 'Repeticiones por serie: {lista} de {r}',
+  },
+  pasos: {
+    titulo: 'Pasos', palabra: 'pasos', cuenta: ['{n} paso', '{n} pasos'], de: ['de {n} paso', 'de {n} pasos'],
+    pregunta: '¿Hiciste todos los pasos?', si: 'Sí, todos', cuantas: '¿Cuántos hiciste en cada serie?',
+    todas: 'Todos los pasos', menos: 'Hiciste menos pasos', porSerie: 'Pasos por serie: {lista} de {r}',
+  },
+  vueltas: {
+    titulo: 'Vueltas', palabra: 'vueltas', cuenta: ['{n} vuelta', '{n} vueltas'], de: ['de {n} vuelta', 'de {n} vueltas'],
+    pregunta: '¿Hiciste todas las vueltas?', si: 'Sí, todas', cuantas: '¿Cuántas hiciste en cada serie?',
+    todas: 'Todas las vueltas', menos: 'Hiciste menos vueltas', porSerie: 'Vueltas por serie: {lista} de {r}',
+  },
+  minutos: {
+    titulo: 'Minutos', palabra: 'minutos', cuenta: ['{n} minuto', '{n} minutos'], de: ['de {n} minuto', 'de {n} minutos'],
+    pregunta: '¿Hiciste todos los minutos?', si: 'Sí, todos', cuantas: '¿Cuántos hiciste en cada serie?',
+    todas: 'Todos los minutos', menos: 'Hiciste menos minutos', porSerie: 'Minutos por serie: {lista} de {r}',
+  },
+};
+const frasesDe = (def) => FRASES_UNIDAD[def?.unidad] || FRASES_UNIDAD.repeticiones;
+// «Repeticiones», «Pasos»: the name of the setting.
+export const tituloUnidad = (def) => t(frasesDe(def).titulo);
+// «pasos», «minutos»: the word alone, where the tempo line would go.
+export const palabraUnidad = (def) => t(frasesDe(def).palabra);
+// «10 repeticiones», «1 paso».
+export const cuentaUnidad = (def, n) => tn(n, ...frasesDe(def).cuenta);
+// «de 10» under the count of a set; with steps, laps and minutes it names them («de 40 pasos»).
+export const deTotalUnidad = (def, n) => tn(n, ...frasesDe(def).de);
+// The questions and answers of the rating, and the line of a day: pregunta, si, cuantas, todas, menos, porSerie.
+export const fraseUnidad = (def, clave, v) => t(frasesDe(def)[clave], v);
 export const porPasos = (def) => def?.unidad === 'pasos';
 export const porMinutos = (def) => def?.unidad === 'minutos';
 // The most a set can have: minutes of walking go up to an hour; anything else, 30.
@@ -1975,7 +2017,7 @@ export function duracionEjercicio(e, descanso, def = null) {
 
 export function minutos(segundos) {
   const m = Math.max(1, Math.round(segundos / 60));
-  return m === 1 ? 'un minuto' : `unos ${m} minutos`;
+  return tn(m, 'un minuto', 'unos {n} minutos');
 }
 
 // Small persistent store; private windows or blocked storage must not break the app. Saving returns whether it
@@ -2002,4 +2044,5 @@ export const almacen = {
   },
 };
 
+// Kept in Spanish, as the key of its translation: the screens show it through t(SIN_SITIO).
 export const SIN_SITIO = 'No se ha podido guardar: este aparato no tiene más sitio para Jepyso. Guarda una copia en un archivo (en Personas) y borra lo que ya no uses.';

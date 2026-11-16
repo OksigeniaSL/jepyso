@@ -1324,6 +1324,8 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 /* The person: the last thing in the list, after the reminder, with the room of a card around it. */
 .firma-persona { flex-direction: row-reverse; margin-top: 12px; padding: 10px 4px 0; }
 .saludo + .firma-persona { margin: 24px 20px 0; }
+/* «Accesibilidad» and the language switch, side by side on the person's signature. */
+.firma-botones { display: flex; flex-wrap: wrap; align-items: center; gap: 0 20px; }
 @media (max-width: 599px) { .firma-persona { flex-direction: column; align-items: flex-start; gap: 0; } }
 /* The professional, on a phone: the end of the page, clear of the tabs (and of «Crear enlace» in the builder). The
    room is the signature's own padding: the page's height is the screen's, so a margin under the last thing would

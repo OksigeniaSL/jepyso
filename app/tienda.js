@@ -3,6 +3,8 @@
 // «Amplía tu plan en nuestra web», and the licence that was bought is activated by its link or pasted. The app says it
 // is the one of the store by its start address (?app=android, android/twa-manifest.json) or, when a routine link opens
 // it, by the referrer Android gives (android-app://com.oksigenia.jepyso); it is kept for the rest of the visit.
+import { idioma, t } from './idioma.js';
+
 const PAQUETE = 'android-app://com.oksigenia.jepyso';
 function deLaTienda() {
   let marcada = false;
@@ -23,9 +25,10 @@ function deLaTienda() {
 }
 export const enAppDeLaTienda = typeof location !== 'undefined' && deLaTienda();
 
-// The page with the plans, on jepyso.com: only the web links to it.
-const PAGINA_PLANES = 'https://jepyso.com/precios/';
+// The page with the plans, on jepyso.com, in the language in use: only the web links to it.
+const PAGINAS_PLANES = { es: 'https://jepyso.com/precios/', en: 'https://jepyso.com/en/pricing/' };
 export function ampliarPlan() {
-  if (enAppDeLaTienda || !PAGINA_PLANES) return 'Amplía tu plan en nuestra web.';
-  return `<a href="${PAGINA_PLANES}" target="_blank" rel="noopener">Amplía tu plan</a> en nuestra web.`;
+  const pagina = PAGINAS_PLANES[idioma()] || PAGINAS_PLANES.es;
+  if (enAppDeLaTienda || !pagina) return t('Amplía tu plan en nuestra web.');
+  return t('<a href="{pagina}" target="_blank" rel="noopener">Amplía tu plan</a> en nuestra web.', { pagina });
 }

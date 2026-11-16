@@ -3,7 +3,9 @@
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
   codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
+  tituloUnidad, palabraUnidad, cuentaUnidad, deTotalUnidad, fraseUnidad,
 } from './datos.js';
+import { t, tn, idioma, otroIdioma, ponerIdioma, IDIOMAS, locale, cargarIdioma } from './idioma.js';
 import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz, quienHabla, ponerQuien, rutasDeVoz, FRASES_GENERALES } from './voz.js';
 import {
@@ -24,6 +26,12 @@ import {
   enMoodle, armandoParaMoodle, prepararMoodle, moodle, vistaPrevia, volverAlCurso, juntarHistorial, subirHistorial, recordarClave, TEXTO_ESTADO,
   devolverRutina, enAppDeMoodle, TEXTO_CERRAR,
 } from './moodle.js';
+
+// The language first (idioma.js): every text below is written in it, from the first screen on. The page's title and
+// Oksigenia's accessibility panel (which redraws itself when its locale changes) follow it.
+await cargarIdioma();
+document.title = t('Rutina');
+document.querySelector('oksigenia-access-panel')?.setAttribute('locale', idioma());
 
 const app = document.getElementById('app');
 const parametros = new URLSearchParams(location.search);
@@ -62,6 +70,7 @@ const ICONO = {
   telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 4.3 2.9 11.4c-1.3.5-1.3 1.2-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.5zM8.6 14l9.2-5.8c.5-.3.9-.1.5.2l-7.5 6.8-.3 3.3L8.6 14z"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
   ayuda: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>',
+  idioma: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.5 12h17M12 3c2.4 2.6 3.5 5.6 3.5 9s-1.1 6.4-3.5 9c-2.4-2.6-3.5-5.6-3.5-9S9.6 5.6 12 3z"/></svg>',
   // Oksigenia's accessibility sign, the one the panel's own button wears on every Oksigenia website.
   acceso: '<svg viewBox="0 0 122.88 122.88" fill="currentColor"><path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0Zm-.39,74.18L52.1,98.91a4.94,4.94,0,0,1-2.58,2.83A5,5,0,0,1,42.7,95.5l6.24-17.28a26.3,26.3,0,0,0,1.17-4,40.64,40.64,0,0,0,.54-4.18c.24-2.53.41-5.27.54-7.9s.22-5.18.29-7.29c.09-2.63-.62-2.8-2.73-3.3l-.44-.1-18-3.39A5,5,0,0,1,27.08,46a5,5,0,0,1,5.05-7.74l19.34,3.63c.77.07,1.52.16,2.31.25a57.64,57.64,0,0,0,7.18.53A81.13,81.13,0,0,0,69.9,42c.9-.1,1.75-.21,2.6-.29l18.25-3.42A5,5,0,0,1,94.5,39a5,5,0,0,1,1.3,7,5,5,0,0,1-3.21,2.09L75.15,51.37c-.58.13-1.1.22-1.56.29-1.82.31-2.72.47-2.61,3.06.08,1.89.31,4.15.61,6.51.35,2.77.81,5.71,1.29,8.4.31,1.77.6,3.19,1,4.55s.79,2.75,1.39,4.42l6.11,16.9a5,5,0,0,1-6.82,6.24,4.94,4.94,0,0,1-2.58-2.83L63,74.23,62,72.4l-1,1.78Zm.39-53.52a8.83,8.83,0,1,1-6.24,2.59,8.79,8.79,0,0,1,6.24-2.59Zm36.35,4.43a51.42,51.42,0,1,0,15,36.35,51.27,51.27,0,0,0-15-36.35Z"/></svg>',
 };
@@ -74,13 +83,24 @@ const DE_PIE = 'extension_espalda_pie';
 // The choice of body with the still of each one standing (tools/posters/figuras.mjs): the names alone did not say how
 // they differ.
 function eleccionFigura(actual) {
-  return `<div class="segmentos figuras" role="group" aria-label="Figura">${FIGURAS.map(
-    ([v, t]) => `<button type="button" data-accion="cuerpo" data-valor="${v}" aria-pressed="${v === actual}"><img src="imagenes/figura-${v}.webp" alt="" width="36" height="48">${t}</button>`,
+  return `<div class="segmentos figuras" role="group" aria-label="${t('Figura')}">${FIGURAS.map(
+    ([v, nombre]) => `<button type="button" data-accion="cuerpo" data-valor="${v}" aria-pressed="${v === actual}"><img src="imagenes/figura-${v}.webp" alt="" width="36" height="48">${t(nombre)}</button>`,
   ).join('')}</div>`;
 }
 
-const mayuscula = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+const mayuscula = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+// «a, b y c» in the language in use.
+function enLista(cosas) {
+  try {
+    return new Intl.ListFormat(locale(), { type: 'conjunction' }).format(cosas);
+  } catch {
+    return cosas.length > 1 ? t('{a} y {b}', { a: cosas.slice(0, -1).join(', '), b: cosas.at(-1) }) : cosas[0] || '';
+  }
+}
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+// A file made from a summary that brought no name is kept as «Sin nombre» (entrada.js): data, shown in the language
+// in use. Any other name is the person's own.
+const nombreDe = (p) => (p.nombre === 'Sin nombre' ? t('Sin nombre') : p.nombre);
 
 // ---------- Tempo line ----------
 // Up, hold, down, then one second at rest: the same cycle the figure plays.
@@ -157,7 +177,8 @@ const leerPlantillas = () => limpiarPlantillas(almacen.leer('plantillas', []));
 const primerUso = () => !armandoParaMoodle && !almacen.leer('estrenada', false) && !leerPersonas().length && !leerPlantillas().length;
 
 // The routine to try, as the person will see it: three of the first exercises, one short set each, in the figure the
-// professional has chosen. Made once per figure; the link is ready by the time the button is reached.
+// professional has chosen. Made once per figure; the link is ready by the time the button is reached. Its note stays in
+// Spanish inside the link, as everything in a link does; the person's screen shows it through t(), like any text.
 const NOTA_EJEMPLO = 'Esta es una rutina de ejemplo: una serie corta de cada ejercicio, para verla entera en un par de minutos.';
 const ejemplos = {};
 const ejemplosListos = {};
@@ -178,24 +199,26 @@ function primerUsoBanda(b) {
   if (!primerUso()) return '';
   const url = ejemplosListos[b.cuerpo];
   return `<section class="primer-uso" aria-labelledby="primer-uso-t">
-    <h2 id="primer-uso-t">Así funciona</h2>
+    <h2 id="primer-uso-t">${t('Así funciona')}</h2>
     <ol class="camino">
-      <li><strong>Armas la rutina</strong> y se la mandas por WhatsApp o Telegram.</li>
-      <li><strong>La persona la hace</strong> en su teléfono, con la figura, sin instalar nada.</li>
-      <li><strong>Te vuelve su resumen</strong>: lo que hizo y la molestia que notó.</li>
+      <li>${t('<strong>Armas la rutina</strong> y se la mandas por WhatsApp o Telegram.')}</li>
+      <li>${t('<strong>La persona la hace</strong> en su teléfono, con la figura, sin instalar nada.')}</li>
+      <li>${t('<strong>Te vuelve su resumen</strong>: lo que hizo y la molestia que notó.')}</li>
     </ol>
-    <p class="probar"><a class="boton secundario probar-ejemplo"${url ? ` href="${esc(url)}"` : ''} target="_blank" rel="noopener">Probar con una rutina de ejemplo</a>
-      <span>Se abre aparte, tal como la verá la persona.</span></p>
+    <p class="probar"><a class="boton secundario probar-ejemplo"${url ? ` href="${esc(url)}"` : ''} target="_blank" rel="noopener">${t('Probar con una rutina de ejemplo')}</a>
+      <span>${t('Se abre aparte, tal como la verá la persona.')}</span></p>
   </section>`;
 }
 
 // Neutral words for the three parts: the first is not always «up» (a squat goes down first). In the player, the exercise
 // names its own phases (figura.textos).
-const textoTempo = ([s, m, b]) => (m ? `Ida en ${s} s, mantén ${m} s, vuelta en ${b} s` : `Ida en ${s} s, vuelta en ${b} s`);
+const textoTempo = ([s, m, b]) => (m ? t('Ida en {s} s, mantén {m} s, vuelta en {b} s', { s, m, b }) : t('Ida en {s} s, vuelta en {b} s', { s, b }));
 // The same, with the exercise's own words when its sheet has them («Sube la cadera en 2 s, aguanta arriba 1 s…»).
-const pautaTempo = (t, tempo) => (t?.subir && t?.bajar
-  ? `${t.subir} en ${tempo[0]} s${tempo[1] ? `, ${(t.mantener || 'mantén').toLowerCase()} ${tempo[1]} s` : ''}, ${t.bajar.toLowerCase()} en ${tempo[2]} s`
-  : textoTempo(tempo));
+function pautaTempo(f, tempo) {
+  if (!f?.subir || !f?.bajar) return textoTempo(tempo);
+  const v = { subir: t(f.subir), mantener: t(f.mantener || 'Mantén').toLowerCase(), bajar: t(f.bajar).toLowerCase(), s: tempo[0], m: tempo[1], b: tempo[2] };
+  return tempo[1] ? t('{subir} en {s} s, {mantener} {m} s, {bajar} en {b} s', v) : t('{subir} en {s} s, {bajar} en {b} s', v);
+}
 const textosDeFicha = (ficha) => Object.fromEntries((Array.isArray(ficha?.fases) ? ficha.fases : []).filter((p) => p.texto).map((p) => [p.fase || p.nombre, p.texto]));
 
 // ---------- Figure ----------
@@ -237,7 +260,9 @@ function nombrarFigura(f, id, lado) {
   const def = EJERCICIOS[id];
   if (!lienzo || !def) return;
   lienzo.setAttribute('role', 'img');
-  lienzo.setAttribute('aria-label', `Figura haciendo ${def.nombre}${def.unLado ? `, lado ${lado === 'izq' ? 'izquierdo' : 'derecho'}` : ''}`);
+  const ejercicio = t(def.nombre);
+  if (!def.unLado) lienzo.setAttribute('aria-label', t('Figura haciendo {ejercicio}', { ejercicio }));
+  else lienzo.setAttribute('aria-label', lado === 'izq' ? t('Figura haciendo {ejercicio}, lado izquierdo', { ejercicio }) : t('Figura haciendo {ejercicio}, lado derecho', { ejercicio }));
 }
 
 async function figuraEn(contenedor, c = 'a') {
@@ -257,7 +282,7 @@ const enlaceMensaje = (canal, texto, url) =>
 // The phone's own share sheet, where there is one: SMS, e-mail, Signal or whatever the professional uses besides
 // WhatsApp and Telegram. Where there is none (most computers), the button is not shown.
 const hayCompartir = () => typeof navigator.share === 'function';
-const botonCompartir = (h) => (hayCompartir() ? `<button type="button" class="boton secundario" data-${h}="compartir">${ICONO.compartir}Mandar con otra app</button>` : '');
+const botonCompartir = (h) => (hayCompartir() ? `<button type="button" class="boton secundario" data-${h}="compartir">${ICONO.compartir}${t('Mandar con otra app')}</button>` : '');
 async function compartir(texto, url) {
   try {
     await navigator.share({ text: texto, url });
@@ -280,31 +305,38 @@ let firmaPro = null;
 // Oksigenia signs every website it makes (shared/sitios-publicos.md): the line with its link, and beside it the button
 // that opens the accessibility panel (index.html). The professional has it at the foot of the rail, or at the end of
 // the page on a phone; the person, quiet at the end of the list, under the routine and away from «Empezar».
-const FIRMA = '<p class="firma-linea">Jepyso · un producto de <a href="https://oksigenia.com">Oksigenia</a></p>';
-const botonAcceso = `<button type="button" class="firma-acceso" data-acceso aria-haspopup="dialog">${ICONO.acceso}<span>Accesibilidad</span></button>`;
-const firmaPersona = `<div class="firma firma-persona">${botonAcceso}${FIRMA}</div>`;
+const FIRMA = `<p class="firma-linea">${t('Jepyso · un producto de <a href="https://oksigenia.com">Oksigenia</a>')}</p>`;
+const botonAcceso = `<button type="button" class="firma-acceso" data-acceso aria-haspopup="dialog">${ICONO.acceso}<span>${t('Accesibilidad')}</span></button>`;
+// The language switch, beside «Accesibilidad» (and «Ayuda»): the other language, in its own name. The page starts again
+// in it, and the choice stays on this device (idioma.js). Routines, summaries and files read the same in both.
+const botonIdioma = `<button type="button" class="firma-acceso firma-idioma" data-idioma lang="${otroIdioma()}">${ICONO.idioma}<span>${IDIOMAS[otroIdioma()]}</span></button>`;
+const firmaPersona = `<div class="firma firma-persona"><span class="firma-botones">${botonAcceso}${botonIdioma}</span>${FIRMA}</div>`;
+// jepyso.com in the language in use.
+const WEB = idioma() === 'en'
+  ? { inicio: 'https://jepyso.com/en/', privacidad: 'https://jepyso.com/en/privacy/', condiciones: 'https://jepyso.com/en/terms/' }
+  : { inicio: 'https://jepyso.com', privacidad: 'https://jepyso.com/privacidad/', condiciones: 'https://jepyso.com/condiciones/' };
 // Help and contact for the professional, beside «Accesibilidad»: what is asked most, and where to write. Someone who
 // arrives from an app store finds them in the app itself.
-const botonAyuda = `<button type="button" class="firma-acceso" data-ayuda aria-haspopup="dialog">${ICONO.ayuda}<span>Ayuda</span></button>`;
+const botonAyuda = `<button type="button" class="firma-acceso" data-ayuda aria-haspopup="dialog">${ICONO.ayuda}<span>${t('Ayuda')}</span></button>`;
 function abrirAyuda() {
   const volverA = document.activeElement;
   const pregunta = (p, r) => `<details class="ayuda-plegada"><summary>${p}</summary><p>${r}</p></details>`;
   const dialogo = document.createElement('dialog');
   dialogo.className = 'hoja hoja-ayuda';
   dialogo.setAttribute('aria-labelledby', 'ayuda-titulo');
-  dialogo.innerHTML = `<h2 id="ayuda-titulo" tabindex="-1">Ayuda</h2>
-    ${pregunta('¿Cómo le mando una rutina a alguien?', 'Ármala en «Nueva rutina» y pulsa «Crear enlace»: se lo mandas por WhatsApp, Telegram u otra app. Lo abre en su teléfono, sin instalar nada.')}
-    ${pregunta('¿Qué hace la persona?', 'Sigue a la figura, que lleva el ritmo, el lado y las series que pusiste. Al acabar apunta lo que hizo y la molestia que notó, y te manda su resumen con un enlace: ábrelo en este aparato y se guarda en su ficha.')}
-    ${pregunta('¿Dónde se guardan mis fichas?', 'En este aparato, y con un plan de pago también en tu Google Drive, para tenerlas en todos tus aparatos. Desde «Personas» puedes guardar una copia en un archivo cuando quieras.')}
-    ${pregunta('¿Cuántas personas caben?', `Gratis, ${LIMITE_GRATIS} con ficha; con un plan, las que diga tu licencia. Las rutinas se mandan igual a cualquiera, con ficha o sin ella. ${ampliarPlan()}`)}
-    ${pregunta('¿Cómo activo mi licencia?', 'Abre el enlace que te llegó con ella, o pégala en «Personas», en «¿Tienes una licencia de Jepyso?». Después conecta el Drive con la cuenta de la licencia.')}
-    ${pregunta('¿Se puede cambiar la voz?', 'Sí: al abrir su rutina, cada persona elige voz de mujer, voz de hombre o sin voz.')}
+  dialogo.innerHTML = `<h2 id="ayuda-titulo" tabindex="-1">${t('Ayuda')}</h2>
+    ${pregunta(t('¿Cómo le mando una rutina a alguien?'), t('Ármala en «Nueva rutina» y pulsa «Crear enlace»: se lo mandas por WhatsApp, Telegram u otra app. Lo abre en su teléfono, sin instalar nada.'))}
+    ${pregunta(t('¿Qué hace la persona?'), t('Sigue a la figura, que lleva el ritmo, el lado y las series que pusiste. Al acabar apunta lo que hizo y la molestia que notó, y te manda su resumen con un enlace: ábrelo en este aparato y se guarda en su ficha.'))}
+    ${pregunta(t('¿Dónde se guardan mis fichas?'), t('En este aparato, y con un plan de pago también en tu Google Drive, para tenerlas en todos tus aparatos. Desde «Personas» puedes guardar una copia en un archivo cuando quieras.'))}
+    ${pregunta(t('¿Cuántas personas caben?'), `${t('Gratis, {n} con ficha; con un plan, las que diga tu licencia. Las rutinas se mandan igual a cualquiera, con ficha o sin ella.', { n: LIMITE_GRATIS })} ${ampliarPlan()}`)}
+    ${pregunta(t('¿Cómo activo mi licencia?'), t('Abre el enlace que te llegó con ella, o pégala en «Personas», en «¿Tienes una licencia de Jepyso?». Después conecta el Drive con la cuenta de la licencia.'))}
+    ${pregunta(t('¿Se puede cambiar la voz?'), t('Sí: al abrir su rutina, cada persona elige voz de mujer, voz de hombre o sin voz.'))}
     <section class="ayuda-contacto">
-      <h3>Contacto</h3>
-      <p>¿Algo no va como esperabas o tienes una idea? Escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</p>
-      <p><a href="https://jepyso.com/privacidad/" target="_blank" rel="noopener">Privacidad</a> · <a href="https://jepyso.com/condiciones/" target="_blank" rel="noopener">Condiciones</a> · <a href="https://jepyso.com" target="_blank" rel="noopener">jepyso.com</a></p>
+      <h3>${t('Contacto')}</h3>
+      <p>${t('¿Algo no va como esperabas o tienes una idea? Escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.')}</p>
+      <p><a href="${WEB.privacidad}" target="_blank" rel="noopener">${t('Privacidad')}</a> · <a href="${WEB.condiciones}" target="_blank" rel="noopener">${t('Condiciones')}</a> · <a href="${WEB.inicio}" target="_blank" rel="noopener">jepyso.com</a></p>
     </section>
-    <div class="hoja-como-pie"><button type="button" class="boton">Entendido</button></div>`;
+    <div class="hoja-como-pie"><button type="button" class="boton">${t('Entendido')}</button></div>`;
   document.body.appendChild(dialogo);
   dialogo.addEventListener('close', () => {
     dialogo.remove();
@@ -321,6 +353,7 @@ function abrirAyuda() {
 document.addEventListener('click', (ev) => {
   if (ev.target.closest?.('[data-acceso]')) document.querySelector('oksigenia-access-panel')?.open?.();
   if (ev.target.closest?.('[data-ayuda]')) abrirAyuda();
+  if (ev.target.closest?.('[data-idioma]')) ponerIdioma(otroIdioma());
 });
 
 function marcoApp(h) {
@@ -333,12 +366,12 @@ function marcoApp(h) {
     pestanas.className = 'pestanas';
     pestanas.setAttribute('aria-label', 'Jepyso');
     pestanas.innerHTML = `<p class="marca-jepyso pestanas-marca">jepyso<span aria-hidden="true">°</span></p>${PESTANAS.map(
-      ([href, texto, icono]) => `<a href="${href}" data-pestana="${href}">${ICONO[icono]}<span>${texto}</span></a>`,
+      ([href, texto, icono]) => `<a href="${href}" data-pestana="${href}">${ICONO[icono]}<span>${t(texto)}</span></a>`,
     ).join('')}`;
     document.body.append(pestanas);
     firmaPro = document.createElement('footer');
     firmaPro.className = 'firma firma-pro';
-    firmaPro.innerHTML = botonAyuda + botonAcceso + FIRMA;
+    firmaPro.innerHTML = botonAyuda + botonAcceso + botonIdioma + FIRMA;
     document.body.append(firmaPro);
   }
   if (firmaPro) firmaPro.hidden = !pro;
@@ -377,14 +410,14 @@ function avisoPestana() {
     a.append(marca);
   }
   marca.textContent = n;
-  a.setAttribute('aria-label', `Personas: ${n} sin noticias desde su rutina`);
+  a.setAttribute('aria-label', tn(n, 'Personas: {n} sin noticias desde su rutina', 'Personas: {n} sin noticias desde su rutina'));
 }
 
 const barraApp = (titulo, { volver = '', accion = '' } = {}) => `<header class="barra-app">
-  ${volver ? `<a class="barra-volver" href="${volver}" aria-label="Volver">${ICONO.volver}</a>` : ''}
+  ${volver ? `<a class="barra-volver" href="${volver}" aria-label="${t('Volver')}">${ICONO.volver}</a>` : ''}
   <h1>${titulo}</h1>${accion}
 </header>`;
-const botonNueva = '<a class="boton barra-boton" href="#">' + ICONO.mas + 'Nueva rutina</a>';
+const botonNueva = `<a class="boton barra-boton" href="#">${ICONO.mas}${t('Nueva rutina')}</a>`;
 
 // The free version keeps up to five people with a file (Enrique, 11 November 2026): how many there are, in sight, as five
 // squares; full, said before a routine for someone new is made. A paid plan says its name and its top (Enrique, 15-11).
@@ -392,36 +425,37 @@ function capacidad(lista) {
   const n = lista.length;
   const max = limite();
   if (esDePago()) {
-    const plan = licenciaActiva() ? `plan ${nombrePlan(topeLicencia())}` : 'versión de pago';
-    return `<p class="capacidad${n >= max ? ' llena' : ''}"><span><b>${Math.min(n, max)} de ${max}</b> personas con ficha · ${plan}${n >= max ? `. ${ampliarPlan()}` : ''}</span></p>`;
+    const plan = licenciaActiva() ? t('plan {nombre}', { nombre: nombrePlan(topeLicencia()) }) : t('versión de pago');
+    return `<p class="capacidad${n >= max ? ' llena' : ''}"><span>${t('<b>{n} de {max}</b> personas con ficha · {plan}', { n: Math.min(n, max), max, plan })}${n >= max ? `. ${ampliarPlan()}` : ''}</span></p>`;
   }
   const marcas = Array.from({ length: max }, (_, i) => `<i${i < n ? ' class="usada"' : ''}></i>`).join('');
+  const cuantas = { n: Math.min(n, max), max };
   return `<p class="capacidad${n >= max ? ' llena' : ''}"><span class="capacidad-marcas" aria-hidden="true">${marcas}</span>
-    <span><b>${Math.min(n, max)} de ${max}</b> personas con ficha${n >= max ? '. Las rutinas para alguien nuevo van igual, sin ficha' : ''}. ${ampliarPlan()}</span></p>`;
+    <span>${n >= max ? t('<b>{n} de {max}</b> personas con ficha. Las rutinas para alguien nuevo van igual, sin ficha.', cuantas) : t('<b>{n} de {max}</b> personas con ficha.', cuantas)} ${ampliarPlan()}</span></p>`;
 }
 // The line of the link sheet about the file. A free file whose ticket waits for the Google sign-in says so.
 function enFicha(p, esperaCuenta) {
-  if (esperaCuenta) return `Guardada en la ficha de ${esc(p.nombre)}. Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.`;
-  return `Guardada en la ficha de ${esc(p.nombre)}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
+  if (esperaCuenta) return t('Guardada en la ficha de {nombre}. Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.', { nombre: esc(nombreDe(p)) });
+  return `${t('Guardada en la ficha de {nombre}.', { nombre: esc(nombreDe(p)) })} <a href="#persona=${esc(p.id)}">${t('Ver su ficha')}</a>`;
 }
 function avisoLleno(b) {
   const lista = leerPersonas();
   const nombre = b.para.trim();
   if (!nombre || caben(lista) || buscarPorNombre(lista, nombre).length) return '';
-  return `<p class="aviso-lleno">Tus ${limite()} fichas están llenas: esta rutina va en el enlace, pero no se guarda en Personas.</p>`;
+  return `<p class="aviso-lleno">${t('Tus {n} fichas están llenas: esta rutina va en el enlace, pero no se guarda en Personas.', { n: limite() })}</p>`;
 }
 
 // The steps of the builder, on top: for whom, the exercises, the settings and the link. One tap goes to each.
 function etapasApp(b) {
   const pasos = [
-    ['para', 'Para quién', b.para.trim() ? b.para.trim() : ''],
-    ['ejercicios', 'Ejercicios', b.orden.length ? String(b.orden.length) : ''],
-    ['ajustes', 'Ajustes', ''],
-    ['enlace', 'Enlace', ''],
+    ['para', t('Para quién'), b.para.trim() ? b.para.trim() : ''],
+    ['ejercicios', t('Ejercicios'), b.orden.length ? String(b.orden.length) : ''],
+    ['ajustes', t('Ajustes'), ''],
+    ['enlace', t('Enlace'), ''],
   ];
   return pasos
-    .map(([k, t, hecho], i) => `<button type="button" class="etapa-ir${hecho ? ' hecha' : ''}" data-accion="ir-etapa" data-etapa="${k}"${k === 'enlace' && !b.orden.length ? ' disabled' : ''}>
-      <b>${hecho ? ICONO.check : i + 1}</b><span>${t}</span></button>`)
+    .map(([k, rotulo, hecho], i) => `<button type="button" class="etapa-ir${hecho ? ' hecha' : ''}" data-accion="ir-etapa" data-etapa="${k}"${k === 'enlace' && !b.orden.length ? ' disabled' : ''}>
+      <b>${hecho ? ICONO.check : i + 1}</b><span>${rotulo}</span></button>`)
     .join('');
 }
 
@@ -467,30 +501,30 @@ function ponerAlDia(b) {
 
 function paso(accion, valor, etiqueta, min, max) {
   return `<div class="paso" role="group" aria-label="${esc(etiqueta)}">
-    <button type="button" data-accion="${accion}" data-delta="-1" aria-label="Menos" ${valor <= min ? 'disabled' : ''}>−</button>
+    <button type="button" data-accion="${accion}" data-delta="-1" aria-label="${t('Menos')}" ${valor <= min ? 'disabled' : ''}>−</button>
     <output class="num">${esc(valor)}</output>
-    <button type="button" data-accion="${accion}" data-delta="1" aria-label="Más" ${valor >= max ? 'disabled' : ''}>+</button>
+    <button type="button" data-accion="${accion}" data-delta="1" aria-label="${t('Más')}" ${valor >= max ? 'disabled' : ''}>+</button>
   </div>`;
 }
 
 function segmentos(accion, opciones, actual, etiqueta) {
   return `<div class="segmentos" role="group" aria-label="${esc(etiqueta)}">${opciones
-    .map(([v, t]) => `<button type="button" data-accion="${accion}" data-valor="${v}" aria-pressed="${String(v) === String(actual)}">${t}</button>`)
+    .map(([v, rotulo]) => `<button type="button" data-accion="${accion}" data-valor="${v}" aria-pressed="${String(v) === String(actual)}">${rotulo}</button>`)
     .join('')}</div>`;
 }
 
 // How an exercise is done, for the person (the how-to sheet) and for the professional (the card).
 function explicacion(def) {
   return `<div class="explicacion">
-    <p class="partida"><strong>Para empezar.</strong> ${esc(def.partida)}</p>
-    <ol class="como">${def.pasos.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>
-    ${def.notar ? `<p><strong>Dónde se nota.</strong> ${esc(def.notar)}</p>` : ''}
-    <p><strong>Ojo.</strong> ${esc(def.error)}</p>
-    ${def.para ? `<p><strong>Para qué.</strong> ${esc(def.para)}</p>` : ''}
-    ${def.ayuda ? `<p><strong>Más fácil.</strong> ${esc(def.ayuda)}</p>` : ''}
-    ${def.masDificil ? `<p><strong>Para más.</strong> ${esc(def.masDificil)}</p>` : ''}
-    ${def.cuidado ? `<p class="cuidado"><strong>Cuidado.</strong> ${esc(def.cuidado)}</p>` : ''}
-    <p class="parar">${PARAR}</p>
+    <p class="partida"><strong>${t('Para empezar.')}</strong> ${esc(t(def.partida))}</p>
+    <ol class="como">${def.pasos.map((p) => `<li>${esc(t(p))}</li>`).join('')}</ol>
+    ${def.notar ? `<p><strong>${t('Dónde se nota.')}</strong> ${esc(t(def.notar))}</p>` : ''}
+    <p><strong>${t('Ojo.')}</strong> ${esc(t(def.error))}</p>
+    ${def.para ? `<p><strong>${t('Para qué.')}</strong> ${esc(t(def.para))}</p>` : ''}
+    ${def.ayuda ? `<p><strong>${t('Más fácil.')}</strong> ${esc(t(def.ayuda))}</p>` : ''}
+    ${def.masDificil ? `<p><strong>${t('Para más.')}</strong> ${esc(t(def.masDificil))}</p>` : ''}
+    ${def.cuidado ? `<p class="cuidado"><strong>${t('Cuidado.')}</strong> ${esc(t(def.cuidado))}</p>` : ''}
+    <p class="parar">${t(PARAR)}</p>
   </div>`;
 }
 
@@ -503,23 +537,23 @@ const muestraBanda = (banda) => `<i class="muestra-banda banda-${banda.clave}" a
 
 // The professional picks the colour of the band they gave the person: one strip per colour, and «Sin indicar».
 function eleccionBanda(e) {
-  return `<div class="ajuste"><span>Color de la banda</span><div class="bandas" role="group" aria-label="Color de la banda">${Object.entries(BANDAS)
-    .map(([k, v]) => `<button type="button" class="banda banda-${k}" data-accion="banda" data-valor="${k}" aria-pressed="${e.banda === k}" aria-label="${esc(v.nombre)}" title="${esc(v.nombre)}"></button>`)
-    .join('')}<button type="button" class="banda-sin" data-accion="banda" data-valor="" aria-pressed="${!e.banda}">Sin indicar</button></div></div>`;
+  return `<div class="ajuste"><span>${t('Color de la banda')}</span><div class="bandas" role="group" aria-label="${t('Color de la banda')}">${Object.entries(BANDAS)
+    .map(([k, v]) => `<button type="button" class="banda banda-${k}" data-accion="banda" data-valor="${k}" aria-pressed="${e.banda === k}" aria-label="${esc(t(v.nombre))}" title="${esc(t(v.nombre))}"></button>`)
+    .join('')}<button type="button" class="banda-sin" data-accion="banda" data-valor="" aria-pressed="${!e.banda}">${t('Sin indicar')}</button></div></div>`;
 }
 
 const chipsEjercicio = (def) =>
-  `<span class="chip">${esc(def.posicion)}</span><span class="chip">${esc(def.material)}</span>${def.musculos.principales
-    .map((mu) => `<span class="chip vivo">${esc(MUSCULOS[mu] || mu)}</span>`)
+  `<span class="chip">${esc(t(def.posicion))}</span><span class="chip">${esc(t(def.material))}</span>${def.musculos.principales
+    .map((mu) => `<span class="chip vivo">${esc(t(MUSCULOS[mu] || mu))}</span>`)
     .join('')}`;
 
 // What a folded card says: sets and repetitions, the tempo line, the side and the band.
 function dosis(def, e) {
   const banda = bandaDe(def, e.banda);
-  const tempo = def.unidad ? `<span>${unidad(def).varios}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
+  const tempo = def.unidad ? `<span>${palabraUnidad(def)}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
   return `<span class="num">${e.series} × ${e.reps}</span>${tempo}${
-    def.unLado && LADOS[e.lado] ? `<span>${esc(LADOS[e.lado])}</span>` : ''
-  }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : ''}`;
+    def.unLado && LADOS[e.lado] ? `<span>${esc(t(LADOS[e.lado]))}</span>` : ''
+  }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(t(banda.nombre))}</span>` : ''}`;
 }
 
 // An exercise of the routine, with its number in the routine and everything the professional sets for it. Only the
@@ -531,7 +565,7 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
     <button type="button" class="ejercicio-cabeza" data-accion="elegir" aria-expanded="${activo}">
       <span class="marca num" aria-hidden="true">${pos + 1}</span>
       <span class="titulo">
-        <h3>${esc(def.nombre)}</h3>
+        <h3>${esc(t(def.nombre))}</h3>
         <span class="linea-chips">${chipsEjercicio(def)}</span>
         <span class="dosis">${dosis(def, e)}</span>
       </span>
@@ -540,34 +574,34 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
     <div class="ejercicio-ajustes">
       <div class="mini-figura"></div>
       <div class="fila">
-        <div class="ajuste"><span>Series</span>${paso('series', e.series, 'Series', 1, 6)}</div>
-        <div class="ajuste"><span>${mayuscula(unidad(def).varios)}</span>${paso('reps', e.reps, mayuscula(unidad(def).varios), 1, topeReps(def))}</div>
-        ${def.unLado ? `<div class="ajuste"><span>Lado</span>${segmentos('lado', [['der', 'Derecho'], ['izq', 'Izquierdo'], ['ambos', 'Los dos']], e.lado, 'Lado')}</div>` : ''}
+        <div class="ajuste"><span>${t('Series')}</span>${paso('series', e.series, t('Series'), 1, 6)}</div>
+        <div class="ajuste"><span>${tituloUnidad(def)}</span>${paso('reps', e.reps, tituloUnidad(def), 1, topeReps(def))}</div>
+        ${def.unLado ? `<div class="ajuste"><span>${t('Lado')}</span>${segmentos('lado', [['der', t('Derecho')], ['izq', t('Izquierdo')], ['ambos', t('Los dos')]], e.lado, t('Lado'))}</div>` : ''}
       </div>
       ${conBanda(def) ? eleccionBanda(e) : ''}
       ${def.unidad && !porPasos(def) ? '' : porPasos(def) ? `<div class="ajuste">
-        <span>Ritmo del paso</span>
-        <div class="ritmo"><div class="ritmo-mini"><span>Cada paso</span>${paso('tp', s, 'Segundos por paso', 1, 4)}</div></div>
+        <span>${t('Ritmo del paso')}</span>
+        <div class="ritmo"><div class="ritmo-mini"><span>${t('Cada paso')}</span>${paso('tp', s, t('Segundos por paso'), 1, 4)}</div></div>
       </div>` : `<div class="ajuste">
-        <span>Ritmo de cada repetición</span>
+        <span>${t('Ritmo de cada repetición')}</span>
         <div class="ritmo">
-          <div class="ritmo-mini"><span>Ida</span>${paso('t0', s, 'Segundos de ida', 1, 6)}</div>
-          <div class="ritmo-mini"><span>Mantén</span>${paso('t1', m, 'Segundos manteniendo', 0, 30)}</div>
-          <div class="ritmo-mini"><span>Vuelta</span>${paso('t2', b, 'Segundos de vuelta', 1, 6)}</div>
+          <div class="ritmo-mini"><span>${t('Ida')}</span>${paso('t0', s, t('Segundos de ida'), 1, 6)}</div>
+          <div class="ritmo-mini"><span>${t('Mantén')}</span>${paso('t1', m, t('Segundos manteniendo'), 0, 30)}</div>
+          <div class="ritmo-mini"><span>${t('Vuelta')}</span>${paso('t2', b, t('Segundos de vuelta'), 1, 6)}</div>
           ${svgTempo(e.tempo, { ancho: 200, alto: 44 })}
         </div>
       </div>`}
       <details class="detalle">
-        <summary>Cómo se explica a la persona</summary>
+        <summary>${t('Cómo se explica a la persona')}</summary>
         ${explicacion(def)}
-        <p class="fuente">Fuente: ${def.fuentes.map(esc).join('; ')}.</p>
+        <p class="fuente">${t('Fuente: {fuentes}.', { fuentes: def.fuentes.map((f) => esc(t(f))).join('; ') })}</p>
       </details>
-      <div class="campo"><label for="nota-${id}">Nota para la persona</label>
-        <textarea id="nota-${id}" data-accion="nota" rows="2" placeholder="Por ejemplo: sin dolor; si molesta, baja menos">${esc(e.nota)}</textarea></div>
+      <div class="campo"><label for="nota-${id}">${t('Nota para la persona')}</label>
+        <textarea id="nota-${id}" data-accion="nota" rows="2" placeholder="${t('Por ejemplo: sin dolor; si molesta, baja menos')}">${esc(e.nota)}</textarea></div>
       <div class="ordenar">
-        <button type="button" class="boton secundario" data-accion="subir" ${pos === 0 ? 'disabled' : ''}>Subir</button>
-        <button type="button" class="boton secundario" data-accion="bajar" ${pos === total - 1 ? 'disabled' : ''}>Bajar</button>
-        <button type="button" class="boton fantasma" data-accion="quitar">Quitar de la rutina</button>
+        <button type="button" class="boton secundario" data-accion="subir" ${pos === 0 ? 'disabled' : ''}>${t('Subir')}</button>
+        <button type="button" class="boton secundario" data-accion="bajar" ${pos === total - 1 ? 'disabled' : ''}>${t('Bajar')}</button>
+        <button type="button" class="boton fantasma" data-accion="quitar">${t('Quitar de la rutina')}</button>
       </div>
     </div>
   </article>`;
@@ -575,13 +609,13 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
 
 function seccionRutina(b, vaciada = null) {
   return `<section class="rutina-armada" aria-labelledby="rutina-titulo">
-    <h2 id="rutina-titulo">La rutina</h2>
-    ${b.orden.length ? '<button type="button" class="boton fantasma vaciar" data-accion="vaciar">Vaciar</button>' : ''}
-    ${vaciada ? `<p class="vaciada" role="status">Rutina vaciada. <button type="button" class="enlace" data-accion="deshacer-vaciar">Deshacer</button></p>` : ''}
+    <h2 id="rutina-titulo">${t('La rutina')}</h2>
+    ${b.orden.length ? `<button type="button" class="boton fantasma vaciar" data-accion="vaciar">${t('Vaciar')}</button>` : ''}
+    ${vaciada ? `<p class="vaciada" role="status">${t('Rutina vaciada.')} <button type="button" class="enlace" data-accion="deshacer-vaciar">${t('Deshacer')}</button></p>` : ''}
     ${
       b.orden.length
         ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
-        : '<div class="rutina-vacia"><p>Todavía no tiene ejercicios.</p></div>'
+        : `<div class="rutina-vacia"><p>${t('Todavía no tiene ejercicios.')}</p></div>`
     }
   </section>`;
 }
@@ -591,22 +625,23 @@ function seccionRutina(b, vaciada = null) {
 function filaBiblioteca(id, b) {
   const def = EJERCICIOS[id];
   const dentro = b.orden.includes(id);
-  const musculos = def.musculos.principales.map((mu) => `<span class="vivo">${esc(MUSCULOS[mu] || mu)}</span>`).join(', ');
+  const musculos = def.musculos.principales.map((mu) => `<span class="vivo">${esc(t(MUSCULOS[mu] || mu))}</span>`).join(', ');
   return `<li class="biblio-fila ${id === b.activo && !dentro && b.mirado ? 'activo' : ''}" data-id="${id}">
     <button type="button" class="biblio-ver" data-accion="ver">
       <span class="biblio-poster"><img src="${poster(id, b.cuerpo)}" alt="" width="96" height="72" loading="lazy" decoding="async"></span>
-      <span class="titulo"><h3>${esc(def.nombre)}</h3><span class="biblio-meta">${esc(def.posicion)} · ${esc(def.material)}${musculos ? ` · ${musculos}` : ''}</span></span>
+      <span class="titulo"><h3>${esc(t(def.nombre))}</h3><span class="biblio-meta">${esc(t(def.posicion))} · ${esc(t(def.material))}${musculos ? ` · ${musculos}` : ''}</span></span>
     </button>
     ${
       dentro
-        ? `<span class="biblio-dentro">${ICONO.check}<span class="rotulo">En la rutina</span></span>`
-        : `<button type="button" class="boton secundario biblio-anadir" data-accion="anadir" aria-label="Añadir ${esc(def.nombre)}">${ICONO.mas}<span class="rotulo">Añadir</span></button>`
+        ? `<span class="biblio-dentro">${ICONO.check}<span class="rotulo">${t('En la rutina')}</span></span>`
+        : `<button type="button" class="boton secundario biblio-anadir" data-accion="anadir" aria-label="${t('Añadir {ejercicio}', { ejercicio: esc(t(def.nombre)) })}">${ICONO.mas}<span class="rotulo">${t('Añadir')}</span></button>`
     }
     <div class="mini-figura"></div>
   </li>`;
 }
 
-// Starting positions in the order a person can get into them: standing and sitting first, the floor after.
+// Starting positions in the order a person can get into them: standing and sitting first, the floor after. They are
+// the catalogue's own words (Spanish, as data); each heading shows through t().
 const POSICIONES = ['De pie', 'Sentado', 'Sentado a la mesa', 'Sentado en el suelo', 'Boca arriba', 'Boca abajo', 'De lado', 'A cuatro patas'];
 const grupoPosicion = (def) => def.posicion.split(',')[0].trim();
 const rangoPosicion = (g) => (POSICIONES.includes(g) ? POSICIONES.indexOf(g) : POSICIONES.length);
@@ -615,7 +650,7 @@ const rangoPosicion = (g) => (POSICIONES.includes(g) ? POSICIONES.indexOf(g) : P
 // A short one stays flat: a heading over every single exercise is noise.
 function listaBiblioteca(b) {
   const ids = buscarEjercicios(b.filtro);
-  if (!ids.length) return '<li class="biblio-vacia">Ningún ejercicio con esos filtros.</li>';
+  if (!ids.length) return `<li class="biblio-vacia">${t('Ningún ejercicio con esos filtros.')}</li>`;
   if (ids.length <= 6) return ids.map((id) => filaBiblioteca(id, b)).join('');
   const grupos = new Map();
   for (const id of ids) {
@@ -624,14 +659,14 @@ function listaBiblioteca(b) {
   }
   return [...grupos.keys()]
     .sort((x, y) => rangoPosicion(x) - rangoPosicion(y))
-    .map((g) => `<li class="biblio-grupo"><span>${esc(g)}</span><span class="num">${grupos.get(g).length}</span></li>${grupos.get(g).map((id) => filaBiblioteca(id, b)).join('')}`)
+    .map((g) => `<li class="biblio-grupo"><span>${esc(t(g))}</span><span class="num">${grupos.get(g).length}</span></li>${grupos.get(g).map((id) => filaBiblioteca(id, b)).join('')}`)
     .join('');
 }
 
 function cuentaBiblioteca(b) {
   const n = buscarEjercicios(b.filtro).length;
-  if (n === ORDEN.length) return `${n} ${n === 1 ? 'ejercicio' : 'ejercicios'}`;
-  return `${n} de ${ORDEN.length}`;
+  if (n === ORDEN.length) return tn(n, '{n} ejercicio', '{n} ejercicios');
+  return t('{n} de {total}', { n, total: ORDEN.length });
 }
 
 // Only the areas and muscles some exercise has: a filter that can only give an empty list is noise.
@@ -660,7 +695,7 @@ function mapaCuerpo(b) {
       .map(([mu, d]) => {
         const con = musculos.includes(mu);
         const clase = `mapa-musculo${con ? ' con' : ''}${b.filtro.musculo === mu ? ' encendido' : ''}`;
-        return `<path class="${clase}" d="${d}"${con ? ` data-accion="musculo-mapa" data-valor="${mu}"` : ''}><title>${esc(MUSCULOS[mu])}</title></path>`;
+        return `<path class="${clase}" d="${d}"${con ? ` data-accion="musculo-mapa" data-valor="${mu}"` : ''}><title>${esc(t(MUSCULOS[mu]))}</title></path>`;
       })
       .join('');
     const aqui = (z) => (PUNTOS[z] || []).filter((p) => p[0] === v);
@@ -674,7 +709,7 @@ function mapaCuerpo(b) {
           // Where the point goes, as data: a style attribute would be blocked by a strict host (style-src 'self');
           // colocarPuntos() sets it from script after the map is drawn.
           const sitio = `data-x="${((x / ancho) * 100).toFixed(2)}" data-y="${((y / alto) * 100).toFixed(2)}"`;
-          const nombre = esc(ZONAS[z]);
+          const nombre = esc(t(ZONAS[z]));
           return `<button type="button" class="mapa-punto" data-accion="zona" data-valor="${z}" data-nombre="${nombre}" aria-pressed="${b.filtro.zona === z}" ${sitio} ${
             i ? 'aria-hidden="true" tabindex="-1"' : `aria-label="${nombre}"`
           }></button>`;
@@ -695,12 +730,12 @@ function mapaCuerpo(b) {
     </figure>`;
   };
   const elegidos = [
-    b.filtro.zona && ZONAS[b.filtro.zona] && `<button type="button" class="mapa-quitar" data-accion="zona" data-valor="" aria-label="Quitar ${esc(ZONAS[b.filtro.zona])}">${esc(ZONAS[b.filtro.zona])}${ICONO.cerrar}</button>`,
-    b.filtro.musculo && MUSCULOS[b.filtro.musculo] && `<button type="button" class="mapa-quitar musculo" data-accion="musculo-mapa" data-valor="" aria-label="Quitar ${esc(MUSCULOS[b.filtro.musculo])}">${esc(MUSCULOS[b.filtro.musculo])}${ICONO.cerrar}</button>`,
+    b.filtro.zona && ZONAS[b.filtro.zona] && `<button type="button" class="mapa-quitar" data-accion="zona" data-valor="" aria-label="${t('Quitar {nombre}', { nombre: esc(t(ZONAS[b.filtro.zona])) })}">${esc(t(ZONAS[b.filtro.zona]))}${ICONO.cerrar}</button>`,
+    b.filtro.musculo && MUSCULOS[b.filtro.musculo] && `<button type="button" class="mapa-quitar musculo" data-accion="musculo-mapa" data-valor="" aria-label="${t('Quitar {nombre}', { nombre: esc(t(MUSCULOS[b.filtro.musculo])) })}">${esc(t(MUSCULOS[b.filtro.musculo]))}${ICONO.cerrar}</button>`,
   ].filter(Boolean);
-  return `<div class="mapa" role="group" aria-label="Zona del cuerpo">
-    <div class="mapa-vistas">${vista('delante', 'Delante')}${vista('detras', 'Detrás')}</div>
-    <p class="mapa-pie">${elegidos.length ? elegidos.join('') : 'Elige una zona o un músculo en la figura.'}</p>
+  return `<div class="mapa" role="group" aria-label="${t('Zona del cuerpo')}">
+    <div class="mapa-vistas">${vista('delante', t('Delante'))}${vista('detras', t('Detrás'))}</div>
+    <p class="mapa-pie">${elegidos.length ? elegidos.join('') : t('Elige una zona o un músculo en la figura.')}</p>
   </div>`;
 }
 
@@ -709,19 +744,19 @@ function seccionBiblioteca(b) {
   return `<section class="biblioteca" aria-labelledby="biblio-titulo">
     <div class="biblio-arriba">
       <div class="biblio-cabeza">
-        <button type="button" class="biblio-cerrar" data-accion="cerrar-biblioteca" aria-label="Volver a la rutina">${ICONO.volver}</button>
-        <h2 id="biblio-titulo" tabindex="-1">Añadir ejercicios</h2>
+        <button type="button" class="biblio-cerrar" data-accion="cerrar-biblioteca" aria-label="${t('Volver a la rutina')}">${ICONO.volver}</button>
+        <h2 id="biblio-titulo" tabindex="-1">${t('Añadir ejercicios')}</h2>
         <span class="biblio-cuenta num" aria-live="polite">${cuentaBiblioteca(b)}</span>
       </div>
       <div class="biblio-filtros">
-        <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar ejercicios por nombre" value="${esc(b.filtro.texto)}">
-      <label class="campo-musculo"><span>Músculo</span>
+        <input type="search" class="buscar" data-accion="buscar" autocomplete="off" placeholder="${t('Buscar por nombre')}" aria-label="${t('Buscar ejercicios por nombre')}" value="${esc(b.filtro.texto)}">
+      <label class="campo-musculo"><span>${t('Músculo')}</span>
         <select data-accion="musculo">
-          <option value="">Todos los músculos</option>
-          ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(MUSCULOS[mu])}</option>`).join('')}
+          <option value="">${t('Todos los músculos')}</option>
+          ${musculos.map((mu) => `<option value="${mu}" ${b.filtro.musculo === mu ? 'selected' : ''}>${esc(t(MUSCULOS[mu]))}</option>`).join('')}
         </select>
       </label>
-        <button type="button" class="boton secundario biblio-ver-mapa" data-accion="ver-mapa" aria-expanded="false" aria-controls="hueco-mapa">${ICONO.cuerpo}<span>En la figura</span></button>
+        <button type="button" class="boton secundario biblio-ver-mapa" data-accion="ver-mapa" aria-expanded="false" aria-controls="hueco-mapa">${ICONO.cuerpo}<span>${t('En la figura')}</span></button>
       </div>
     </div>
     <div class="biblio-cuerpo">
@@ -737,13 +772,13 @@ function seccionPlantillas(b) {
   const lista = leerPlantillas();
   return `<section class="plantillas" aria-labelledby="plantillas-titulo">
     <div class="plantillas-cabeza">
-      <h2 id="plantillas-titulo">Plantillas</h2>
-      <button type="button" class="boton fantasma" data-accion="nueva-plantilla" ${b.orden.length ? '' : 'hidden'}>Guardar la rutina como plantilla</button>
+      <h2 id="plantillas-titulo">${t('Plantillas')}</h2>
+      <button type="button" class="boton fantasma" data-accion="nueva-plantilla" ${b.orden.length ? '' : 'hidden'}>${t('Guardar la rutina como plantilla')}</button>
     </div>
     <form class="plantilla-nueva" hidden>
-      <input data-accion="nombre-plantilla" maxlength="60" autocomplete="off" placeholder="Por ejemplo: rodilla, primera semana" aria-label="Nombre de la plantilla">
-      <button type="submit" class="boton">Guardar</button>
-      <button type="button" class="boton fantasma" data-accion="cancelar-plantilla">Cancelar</button>
+      <input data-accion="nombre-plantilla" maxlength="60" autocomplete="off" placeholder="${t('Por ejemplo: rodilla, primera semana')}" aria-label="${t('Nombre de la plantilla')}">
+      <button type="submit" class="boton">${t('Guardar')}</button>
+      <button type="button" class="boton fantasma" data-accion="cancelar-plantilla">${t('Cancelar')}</button>
     </form>
     ${
       lista.length
@@ -751,11 +786,11 @@ function seccionPlantillas(b) {
             .map(
               (p, i) => `<span class="plantilla">
                 <button type="button" class="usar" data-accion="usar-plantilla" data-i="${i}">${esc(p.nombre)}<span class="cuantos num">${p.orden.length}</span></button>
-                <button type="button" class="borrar" data-accion="borrar-plantilla" data-i="${i}" aria-label="Borrar la plantilla ${esc(p.nombre)}">${ICONO.cerrar}</button>
+                <button type="button" class="borrar" data-accion="borrar-plantilla" data-i="${i}" aria-label="${t('Borrar la plantilla {nombre}', { nombre: esc(p.nombre) })}">${ICONO.cerrar}</button>
               </span>`,
             )
             .join('')}</div>`
-        : '<p class="ayuda">Aún no hay plantillas: guarda esta rutina como una cuando tenga ejercicios.</p>'
+        : `<p class="ayuda">${t('Aún no hay plantillas: guarda esta rutina como una cuando tenga ejercicios.')}</p>`
     }
   </section>`;
 }
@@ -767,10 +802,10 @@ function personasRecientes(b) {
   if (!lista.length) return '';
   const reciente = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
   const seis = [...lista].sort((x, y) => reciente(y).localeCompare(reciente(x))).slice(0, 6);
-  return `<div class="recientes" role="group" aria-label="Para una de tus personas">
-    <span>Para una de tus personas</span>
-    ${seis.map((p) => `<button type="button" class="filtro" data-accion="persona" data-id="${esc(p.id)}" aria-pressed="${b.persona === p.id}">${esc(p.nombre)}</button>`).join('')}
-    ${lista.length > 6 ? `<a href="#personas">Todas</a>` : ''}
+  return `<div class="recientes" role="group" aria-label="${t('Para una de tus personas')}">
+    <span>${t('Para una de tus personas')}</span>
+    ${seis.map((p) => `<button type="button" class="filtro" data-accion="persona" data-id="${esc(p.id)}" aria-pressed="${b.persona === p.id}">${esc(nombreDe(p))}</button>`).join('')}
+    ${lista.length > 6 ? `<a href="#personas">${t('Todas')}</a>` : ''}
   </div>`;
 }
 
@@ -781,61 +816,61 @@ function vistaArmar() {
   const ajustes = (id) => (b.ejercicios[id] ||= ajustesIniciales(id));
 
   const resumenCorto = () => {
-    if (!b.orden.length) return 'Elige al menos un ejercicio';
-    const seg = b.orden.reduce((t, id) => t + duracionEjercicio(b.ejercicios[id], b.descanso, EJERCICIOS[id]), 0);
-    return `${b.orden.length} ${b.orden.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(seg)}`;
+    if (!b.orden.length) return t('Elige al menos un ejercicio');
+    const seg = b.orden.reduce((suma, id) => suma + duracionEjercicio(b.ejercicios[id], b.descanso, EJERCICIOS[id]), 0);
+    return `${tn(b.orden.length, '{n} ejercicio', '{n} ejercicios')} · ${minutos(seg)}`;
   };
 
   function pintar() {
     app.innerHTML = `<div class="armar${b.orden.length ? '' : ' sin-ejercicios'}">
       <div class="armar-biblio">${seccionBiblioteca(b)}</div>
       <div class="armar-izq">
-        ${barraApp('Nueva rutina')}
-        <nav class="etapas-app" aria-label="Pasos">${etapasApp(b)}</nav>
+        ${barraApp(t('Nueva rutina'))}
+        <nav class="etapas-app" aria-label="${t('Pasos')}">${etapasApp(b)}</nav>
         <div class="armar-cuerpo">
           ${primerUsoBanda(b)}
           <section class="etapa" id="etapa-para" aria-labelledby="etapa-para-t">
-            ${armandoParaMoodle ? `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>Quién la manda</p>
+            ${armandoParaMoodle ? `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>${t('Quién la manda')}</p>
             <div class="campos">
-              <div class="campo"><label for="de">Tu nombre</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
+              <div class="campo"><label for="de">${t('Tu nombre')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
             </div>
-            <p class="ayuda">Es para toda la clase: cada uno la verá con su nombre, como «Tu rutina de» y el tuyo.</p>` : `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>Para quién</p>
+            <p class="ayuda">${t('Es para toda la clase: cada uno la verá con su nombre, como «Tu rutina de» y el tuyo.')}</p>` : `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>${t('Para quién')}</p>
             <div class="campos">
-              <div class="campo"><label for="para">Nombre de la persona</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
-              <div class="campo"><label for="de">Tu nombre</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
+              <div class="campo"><label for="para">${t('Nombre de la persona')}</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
+              <div class="campo"><label for="de">${t('Tu nombre')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
             </div>
             <div class="hueco-recientes">${personasRecientes(b)}</div>
             <div class="hueco-lleno">${avisoLleno(b)}</div>`}
           </section>
           <section class="etapa" id="etapa-ejercicios" aria-labelledby="etapa-ejercicios-t">
-            <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>Ejercicios</p>
+            <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>${t('Ejercicios')}</p>
             <div class="hueco-plantillas">${seccionPlantillas(b)}</div>
             <div class="hueco-rutina">${seccionRutina(b)}</div>
-            <button type="button" class="anadir-ejercicio" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}<span>Añadir ejercicio</span></button>
+            <button type="button" class="anadir-ejercicio" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}<span>${t('Añadir ejercicio')}</span></button>
           </section>
           <section class="etapa" id="etapa-ajustes" aria-labelledby="etapa-ajustes-t">
-            <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>Ajustes</p>
+            <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>${t('Ajustes')}</p>
             <section class="general">
-              <h2>Para toda la rutina</h2>
+              <h2>${t('Para toda la rutina')}</h2>
               <div class="fila">
-                <div class="ajuste"><span>Descanso entre series</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, '1 min 30']], b.descanso, 'Descanso entre series')}</div>
-                <div class="ajuste"><span>Veces al día</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces, 'Veces al día')}</div>
-                <div class="ajuste"><span>Días a la semana</span>${segmentos('semana', [[0, 'Libre'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana, 'Días a la semana')}</div>
-                <div class="ajuste"><span>Figura</span>${eleccionFigura(b.cuerpo)}</div>
-                <div class="ajuste"><span>Molestia aceptable, de 0 a 10</span>${paso('tope', b.tope, 'Molestia aceptable', 0, 9)}</div>
+                <div class="ajuste"><span>${t('Descanso entre series')}</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, t('1 min 30')]], b.descanso, t('Descanso entre series'))}</div>
+                <div class="ajuste"><span>${t('Veces al día')}</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces, t('Veces al día'))}</div>
+                <div class="ajuste"><span>${t('Días a la semana')}</span>${segmentos('semana', [[0, t('Libre')], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana, t('Días a la semana'))}</div>
+                <div class="ajuste"><span>${t('Figura')}</span>${eleccionFigura(b.cuerpo)}</div>
+                <div class="ajuste"><span>${t('Molestia aceptable, de 0 a 10')}</span>${paso('tope', b.tope, t('Molestia aceptable'), 0, 9)}</div>
               </div>
-              <p class="ayuda">${armandoParaMoodle ? 'Si alguien pasa de esa molestia, el día te sale marcado en su seguimiento.' : 'Si la persona pasa de esa molestia, el día te sale marcado en su resumen.'}</p>
+              <p class="ayuda">${armandoParaMoodle ? t('Si alguien pasa de esa molestia, el día te sale marcado en su seguimiento.') : t('Si la persona pasa de esa molestia, el día te sale marcado en su resumen.')}</p>
             </section>
           </section>
         </div>
         <div class="barra-crear" id="etapa-enlace">
           <span class="resumen-corto">${resumenCorto()}</span>
-          <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>${armandoParaMoodle ? 'Usar en la actividad' : 'Crear enlace'}</button>
-          <button type="button" class="boton anadir-en-barra" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}Añadir ejercicio</button>
+          <button type="button" class="boton" data-accion="crear" ${b.orden.length ? '' : 'disabled'}>${armandoParaMoodle ? t('Usar en la actividad') : t('Crear enlace')}</button>
+          <button type="button" class="boton anadir-en-barra" data-accion="abrir-biblioteca" aria-haspopup="dialog">${ICONO.mas}${t('Añadir ejercicio')}</button>
         </div>
       </div>
       <aside class="vista">
-        <h2>Así lo verá</h2>
+        <h2>${t('Así lo verá')}</h2>
         <div class="vista-figura"></div>
         <div class="vista-pie"></div>
       </aside>
@@ -870,7 +905,7 @@ function vistaArmar() {
       pintarGonio();
       f.empezar({ modo: 'demo' });
     } catch (err) {
-      sitio.innerHTML = `<p class="chip">La figura de este ejercicio aún no está</p>`;
+      sitio.innerHTML = `<p class="chip">${t('La figura de este ejercicio aún no está')}</p>`;
       console.warn(err);
     }
   }
@@ -881,7 +916,7 @@ function vistaArmar() {
     const vista = app.querySelector('.vista');
     if (!vista) return;
     vista.classList.add('vacia');
-    vista.querySelector('.vista-pie').innerHTML = '<div class="tarjeta"><p>Cuando elijas un ejercicio, aquí lo verás moverse como lo verá la persona, al ritmo que le pongas.</p></div>';
+    vista.querySelector('.vista-pie').innerHTML = `<div class="tarjeta"><p>${t('Cuando elijas un ejercicio, aquí lo verás moverse como lo verá la persona, al ritmo que le pongas.')}</p></div>`;
     const sitio = vista.querySelector('.vista-figura');
     for (const c of [...sitio.children]) if (c.tagName !== 'CANVAS') c.remove();
     if (!window.matchMedia('(min-width: 980px)').matches) return;
@@ -892,7 +927,7 @@ function vistaArmar() {
       f.parar();
       f.posar(f.fases.subir[0]);
       f.musculos?.fuerza(0);
-      f.renderer.domElement.setAttribute('aria-label', 'La figura, de pie, a la espera de un ejercicio');
+      f.renderer.domElement.setAttribute('aria-label', t('La figura, de pie, a la espera de un ejercicio'));
     } catch (err) {
       console.warn(err);
     }
@@ -901,7 +936,7 @@ function vistaArmar() {
   function pintarPieVista() {
     const pie = app.querySelector('.vista-pie');
     const e = ajustes(b.activo);
-    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(EJERCICIOS[b.activo].nombre)}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span><div class="gonio" hidden></div></div>`;
+    if (pie) pie.innerHTML = `<div class="tarjeta"><h3>${esc(t(EJERCICIOS[b.activo].nombre))}</h3>${svgTempo(e.tempo, { etiquetas: true, punto: true })}<span class="chip">${textoTempo(e.tempo)}</span><div class="gonio" hidden></div></div>`;
     pintarGonio();
   }
 
@@ -1204,7 +1239,7 @@ function vistaArmar() {
       ponerEjemplo();
     } else if (a === 'tope') {
       b.tope = Math.min(9, Math.max(0, b.tope + delta));
-      el.closest('.paso').outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
+      el.closest('.paso').outerHTML = paso('tope', b.tope, t('Molestia aceptable'), 0, 9);
     } else if (a === 'descanso' || a === 'veces' || a === 'semana') {
       b[a] = Number(el.dataset.valor);
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
@@ -1231,10 +1266,10 @@ function vistaArmar() {
         if (deshacerBorrar) deshacerBorrar();
         el.dataset.confirmar = '1';
         el.classList.add('confirmar');
-        el.textContent = '¿Borrar?';
-        const t = setTimeout(() => deshacerBorrar?.(), 4000);
+        el.textContent = t('¿Borrar?');
+        const espera = setTimeout(() => deshacerBorrar?.(), 4000);
         deshacerBorrar = () => {
-          clearTimeout(t);
+          clearTimeout(espera);
           deshacerBorrar = null;
           if (el.isConnected) {
             delete el.dataset.confirmar;
@@ -1252,7 +1287,7 @@ function vistaArmar() {
         app.querySelector('#para').value = p.nombre;
         app.querySelector('.hueco-recientes').innerHTML = personasRecientes(b);
         const tope = app.querySelector('.general [data-accion="tope"]')?.closest('.paso');
-        if (tope) tope.outerHTML = paso('tope', b.tope, 'Molestia aceptable', 0, 9);
+        if (tope) tope.outerHTML = paso('tope', b.tope, t('Molestia aceptable'), 0, 9);
       }
     } else if (a === 'crear') {
       crearEnlace(b, empezarOtra);
@@ -1408,8 +1443,10 @@ async function crearEnlace(b, empezarOtra = null) {
   // the sheet opens; without it, the file waits locked until the professional signs in at Personas.
   const sinVale = persona && !fichaAbierta(persona);
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
-  const saludo = rutina.para ? `Hola, ${rutina.para}. ` : '';
-  const mensaje = `${saludo}Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:`;
+  // The message is the professional's, in their language; the link inside it reads the same in any.
+  const mensaje = rutina.para
+    ? t('Hola, {nombre}. Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:', { nombre: rutina.para })
+    : t('Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:');
 
   let qr = '';
   try {
@@ -1418,7 +1455,7 @@ async function crearEnlace(b, empezarOtra = null) {
     q.make();
     qr = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
   } catch {
-    qr = '<p>El enlace es demasiado largo para un código QR.</p>';
+    qr = `<p>${t('El enlace es demasiado largo para un código QR.')}</p>`;
   }
 
   // The sheet of the link: first what sends it (WhatsApp, Telegram, copy), under the message as it will arrive; the
@@ -1428,26 +1465,29 @@ async function crearEnlace(b, empezarOtra = null) {
   const dialogo = document.createElement('dialog');
   dialogo.className = 'hoja hoja-enlace';
   dialogo.setAttribute('aria-labelledby', 'hoja-titulo');
-  dialogo.innerHTML = `<div class="hoja-cabeza"><h2 id="hoja-titulo" tabindex="-1">La rutina, lista</h2>
-      <button type="button" class="redondo" data-h="cerrar" aria-label="Cerrar">${ICONO.cerrar}</button></div>
+  const lleno = { n: limite() };
+  dialogo.innerHTML = `<div class="hoja-cabeza"><h2 id="hoja-titulo" tabindex="-1">${t('La rutina, lista')}</h2>
+      <button type="button" class="redondo" data-h="cerrar" aria-label="${t('Cerrar')}">${ICONO.cerrar}</button></div>
     ${persona ? `<p class="en-ficha">${enFicha(persona, sinVale && !cuentaDeVales())}</p>` : ''}
-    ${sinSitio === 'lleno' ? `<p class="en-ficha">${SIN_SITIO} La rutina va igual en el enlace.</p>` : ''}
-    ${sinSitio === 'elegir' ? `<p class="en-ficha">Tienes más de una ficha con el nombre ${esc(rutina.para)}: elige cuál en «Para» y vuelve a crear el enlace para guardarla en su ficha. La rutina va igual en este enlace.</p>` : ''}
-    ${sinSitio === true ? `<p class="en-ficha">No se guarda en una ficha: ya tienes ${limite()} personas con ficha, el máximo de ${esDePago() ? 'tu plan' : 'la versión gratis'}. La rutina va igual en el enlace. ${ampliarPlan()}</p>` : ''}
-    <figure class="burbuja"><figcaption>${nombre ? `Así le llega a ${nombre}` : 'Así llega'}</figcaption><p>${esc(mensaje)} <span class="burbuja-enlace">${esc(location.host)}/…</span></p></figure>
+    ${sinSitio === 'lleno' ? `<p class="en-ficha">${t(SIN_SITIO)} ${t('La rutina va igual en el enlace.')}</p>` : ''}
+    ${sinSitio === 'elegir' ? `<p class="en-ficha">${t('Tienes más de una ficha con el nombre {nombre}: elige cuál en «Para» y vuelve a crear el enlace para guardarla en su ficha. La rutina va igual en este enlace.', { nombre: esc(rutina.para) })}</p>` : ''}
+    ${sinSitio === true ? `<p class="en-ficha">${esDePago()
+      ? t('No se guarda en una ficha: ya tienes {n} personas con ficha, el máximo de tu plan. La rutina va igual en el enlace.', lleno)
+      : t('No se guarda en una ficha: ya tienes {n} personas con ficha, el máximo de la versión gratis. La rutina va igual en el enlace.', lleno)} ${ampliarPlan()}</p>` : ''}
+    <figure class="burbuja"><figcaption>${nombre ? t('Así le llega a {nombre}', { nombre }) : t('Así llega')}</figcaption><p>${esc(mensaje)} <span class="burbuja-enlace">${esc(location.host)}/…</span></p></figure>
     <div class="hoja-mandar">
-      <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}Mandar por WhatsApp</a>
-      <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}Mandar por Telegram</a>
+      <a class="boton" href="${esc(enlaceMensaje('wa', mensaje, url))}" target="_blank" rel="noopener">${ICONO.whatsapp}${t('Mandar por WhatsApp')}</a>
+      <a class="boton" href="${esc(enlaceMensaje('tg', mensaje, url))}" target="_blank" rel="noopener">${ICONO.telegram}${t('Mandar por Telegram')}</a>
       ${botonCompartir('h')}
-      <button type="button" class="boton secundario" data-h="copiar">Copiar enlace</button>
+      <button type="button" class="boton secundario" data-h="copiar">${t('Copiar enlace')}</button>
     </div>
-    <a class="boton fantasma hoja-ver" href="${esc(url)}" target="_blank" rel="noopener">${nombre ? `Ver la rutina como ${nombre}` : 'Ver la rutina como la persona'}</a>
-    <details class="hoja-mas"${window.matchMedia('(min-width: 700px)').matches ? ' open' : ''}><summary>El código QR y el enlace</summary>
+    <a class="boton fantasma hoja-ver" href="${esc(url)}" target="_blank" rel="noopener">${nombre ? t('Ver la rutina como {nombre}', { nombre }) : t('Ver la rutina como la persona')}</a>
+    <details class="hoja-mas"${window.matchMedia('(min-width: 700px)').matches ? ' open' : ''}><summary>${t('El código QR y el enlace')}</summary>
       <div class="qr">${qr}</div>
       <div class="enlace-texto">${esc(url)}</div>
     </details>
-    <p class="hoja-pie">Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.</p>
-    ${empezarOtra ? `<button type="button" class="boton secundario hoja-otra" data-h="otra">Hecho: empezar otra rutina</button>` : ''}`;
+    <p class="hoja-pie">${t('Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.')}</p>
+    ${empezarOtra ? `<button type="button" class="boton secundario hoja-otra" data-h="otra">${t('Hecho: empezar otra rutina')}</button>` : ''}`;
   document.body.appendChild(dialogo);
   const volverA = document.activeElement;
   let destino = null;
@@ -1468,7 +1508,7 @@ async function crearEnlace(b, empezarOtra = null) {
       const linea = dialogo.querySelector('.en-ficha');
       if (!linea) return;
       if (bien) linea.innerHTML = enFicha(persona, false);
-      else if (fichaSinPlaza(persona.id)) linea.textContent = `Guardada en la ficha de ${persona.nombre}, pero tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis: esta no se abrirá hasta que borres otra. La rutina va igual en el enlace.`;
+      else if (fichaSinPlaza(persona.id)) linea.textContent = t('Guardada en la ficha de {nombre}, pero tu cuenta de Google ya tiene sus {n} fichas gratis: esta no se abrirá hasta que borres otra. La rutina va igual en el enlace.', { nombre: nombreDe(persona), n: LIMITE_GRATIS });
     });
   }
   history.pushState({ jepysoHoja: 'enlace' }, '');
@@ -1495,9 +1535,9 @@ async function crearEnlace(b, empezarOtra = null) {
     if (ev.target.closest('[data-h="copiar"]')) {
       try {
         await navigator.clipboard.writeText(url);
-        ev.target.closest('button').textContent = 'Copiado';
+        ev.target.closest('button').textContent = t('Copiado');
       } catch {
-        ev.target.closest('button').textContent = 'No se pudo copiar';
+        ev.target.closest('button').textContent = t('No se pudo copiar');
       }
     }
   });
@@ -1543,13 +1583,13 @@ async function vistaRutina(codigo) {
     // Read below as a link that cannot be opened.
   }
   if (!r) {
-    app.innerHTML = avisoRoto('Este enlace no se puede abrir', 'Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a quien te lo mandó que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.') + firmaPersona;
+    app.innerHTML = avisoRoto(t('Este enlace no se puede abrir'), t('Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a quien te lo mandó que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.')) + firmaPersona;
     return () => {};
   }
   hayVoz(); // the list of voices fills while the person reads the routine
   const ejercicios = r.e.filter((e) => EJERCICIOS[e.i]);
   if (!ejercicios.length) {
-    app.innerHTML = avisoRoto('Este enlace no trae ejercicios que se puedan abrir', 'Puede que tu teléfono tenga guardada una versión anterior de Jepyso. Vuelve a abrir el enlace con conexión a internet; si sigue igual, pídele a quien te lo mandó que te lo reenvíe.') + firmaPersona;
+    app.innerHTML = avisoRoto(t('Este enlace no trae ejercicios que se puedan abrir'), t('Puede que tu teléfono tenga guardada una versión anterior de Jepyso. Vuelve a abrir el enlace con conexión a internet; si sigue igual, pídele a quien te lo mandó que te lo reenvíe.')) + firmaPersona;
     return () => {};
   }
   const clave = 'hist:' + hashCorto(codigo);
@@ -1561,10 +1601,10 @@ async function vistaRutina(codigo) {
     if (!r.para && moodle()?.nombre) r.para = moodle().nombre;
   }
   // Where what is done goes: to the course, or in a summary the person sends.
-  const destinoMarca = (q) => (enMoodle ? `saldrá marcado en lo que ve ${q} en el curso` : `saldrá marcado en el resumen que le mandes a ${q}`);
+  const destinoMarca = (q) => (enMoodle ? t('saldrá marcado en lo que ve {quien} en el curso', { quien: q }) : t('saldrá marcado en el resumen que le mandes a {quien}', { quien: q }));
   const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d, EJERCICIOS[e.i]), 0);
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
-  const quien = r.de ? esc(r.de) : 'quien te dio la rutina';
+  const quien = r.de ? esc(r.de) : t('quien te dio la rutina');
   let mananaOmitida = false;
 
   // The day after a session, the person says how the area felt on getting up: under the pain-monitoring model the
@@ -1582,10 +1622,10 @@ async function vistaRutina(codigo) {
 
   function preguntaManana() {
     return `<section class="tarjeta manana" aria-labelledby="manana-titulo">
-      <h3 id="manana-titulo">¿Qué tal al levantarte?</h3>
-      <p>Ayer hiciste la rutina. Esta mañana, al levantarte, ¿cuánta molestia notabas? (0 es nada; 10, mucha)</p>
+      <h3 id="manana-titulo">${t('¿Qué tal al levantarte?')}</h3>
+      <p>${t('Ayer hiciste la rutina. Esta mañana, al levantarte, ¿cuánta molestia notabas? (0 es nada; 10, mucha)')}</p>
       <div class="escala">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="manana" data-v="${n}" aria-pressed="false" class="num">${n}</button>`).join('')}</div>
-      <button type="button" class="boton fantasma" data-r="manana-no">Ahora no</button>
+      <button type="button" class="boton fantasma" data-r="manana-no">${t('Ahora no')}</button>
     </section>`;
   }
 
@@ -1597,8 +1637,8 @@ async function vistaRutina(codigo) {
     almacen.guardar(clave, hist);
     subirHistorial(clave);
     const tarjeta = app.querySelector('.manana');
-    tarjeta.innerHTML = `<p class="apuntado">Apuntado: ${valor} de 10 al levantarte.${
-      pasaDelTope(valor, tope) ? ` Es más de ${tope}: ${destinoMarca(quien)}.` : ''
+    tarjeta.innerHTML = `<p class="apuntado">${t('Apuntado: {v} de 10 al levantarte.', { v: valor })}${
+      pasaDelTope(valor, tope) ? ` ${t('Es más de {tope}: {destino}.', { tope, destino: destinoMarca(quien) })}` : ''
     }</p>`;
     pintarPie(hist);
   }
@@ -1609,20 +1649,20 @@ async function vistaRutina(codigo) {
     if (!sitio) return;
     // The last days, each with «Corregir»; and a session done without the app can be noted too.
     const recientes = hist.map((d, k) => ({ d, k })).slice(-7).reverse();
-    const fila = ({ d, k }) => `<li><span>${esc(fechaCorta(d.f))}${d.h ? ` · ${esc(d.h)}` : ''}${d.sinApp ? ' · sin la app' : ''}</span>
-        <button type="button" class="enlace" data-r="corregir" data-k="${k}">Corregir</button></li>`;
+    const fila = ({ d, k }) => `<li><span>${esc(fechaCorta(d.f))}${d.h ? ` · ${esc(d.h)}` : ''}${d.sinApp ? ` · ${t('sin la app')}` : ''}</span>
+        <button type="button" class="enlace" data-r="corregir" data-k="${k}">${t('Corregir')}</button></li>`;
     // In a Moodle course it goes to the course by itself: the card says where it is and leads back.
-    const salida = volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${TEXTO_CERRAR}</p>` : '';
+    const salida = volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}${t('Volver al curso')}</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${t(TEXTO_CERRAR)}</p>` : '';
     const enviar = enMoodle
       ? `<p class="moodle-estado" aria-live="polite"></p>${salida}`
-      : `<p>Mándaselo a ${quien}: así ve cómo te va y te ajusta la rutina.</p>
+      : `<p>${t('Mándaselo a {quien}: así ve cómo te va y te ajusta la rutina.', { quien })}</p>
         <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
         <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>`;
     sitio.innerHTML = `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
-        <h3 id="mandar-titulo">Lo que llevas hecho</h3>
+        <h3 id="mandar-titulo">${t('Lo que llevas hecho')}</h3>
         ${hist.length ? `<ul class="dias-hechos">${recientes.map(fila).join('')}</ul>
-        ${enviar}` : `<p>Todavía nada.</p>${enMoodle ? salida : ''}`}
-        <button type="button" class="enlace" data-r="sin-app">Apuntar una vez que la hice sin la app</button>
+        ${enviar}` : `<p>${t('Todavía nada.')}</p>${enMoodle ? salida : ''}`}
+        <button type="button" class="enlace" data-r="sin-app">${t('Apuntar una vez que la hice sin la app')}</button>
       </section>`;
     if (enMoodle && hist.length) subirHistorial(clave);
   }
@@ -1630,10 +1670,10 @@ async function vistaRutina(codigo) {
   // Who guides the sets: each person chooses (Enrique, 15-11-2026: «que cada usuario elija»).
   function tarjetaVoz() {
     const actual = vozActiva() ? quienHabla() : 'no';
-    const boton = (v, t) => `<button type="button" data-r="voz-quien" data-v="${v}" aria-pressed="${actual === v}">${t}</button>`;
+    const boton = (v, rotulo) => `<button type="button" data-r="voz-quien" data-v="${v}" aria-pressed="${actual === v}">${rotulo}</button>`;
     return `<section class="tarjeta voz-elegir" aria-labelledby="voz-titulo">
-          <h3 id="voz-titulo">La voz que te guía</h3>
-          <div class="segmentos" role="group" aria-label="La voz que te guía">${boton('mujer', 'Voz de mujer')}${boton('hombre', 'Voz de hombre')}${boton('no', 'Sin voz')}</div>
+          <h3 id="voz-titulo">${t('La voz que te guía')}</h3>
+          <div class="segmentos" role="group" aria-label="${t('La voz que te guía')}">${boton('mujer', t('Voz de mujer'))}${boton('hombre', t('Voz de hombre'))}${boton('no', t('Sin voz'))}</div>
         </section>`;
   }
 
@@ -1645,11 +1685,11 @@ async function vistaRutina(codigo) {
     app.innerHTML = `<div class="rutina rutina-intro">
       <header class="saludo">
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
-        ${r.de ? `<div class="de">Tu rutina de ${esc(r.de)}</div>` : ''}
-        <h1>${r.para ? `Hola, ${esc(r.para)}` : 'Tu rutina'}</h1>
-        ${r.w ? `<p class="semana-rutina">${r.w === 7 ? 'Todos los días' : `${r.w} ${r.w === 1 ? 'día' : 'días'} a la semana${r.w <= 3 ? ', mejor no seguidos' : ''}`}</p>` : ''}
-        ${vistaPrevia() ? `<p class="moodle-aviso">${TEXTO_ESTADO['vista-previa']}</p>` : ''}
-        ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>Hoy: ${Math.min(vecesHoy, r.x)} de ${r.x} veces</p>` : ''}
+        ${r.de ? `<div class="de">${t('Tu rutina de {de}', { de: esc(r.de) })}</div>` : ''}
+        <h1>${r.para ? t('Hola, {nombre}', { nombre: esc(r.para) }) : t('Tu rutina')}</h1>
+        ${r.w ? `<p class="semana-rutina">${r.w === 7 ? t('Todos los días') : r.w <= 3 ? tn(r.w, '{n} día a la semana, mejor no seguidos', '{n} días a la semana, mejor no seguidos') : tn(r.w, '{n} día a la semana', '{n} días a la semana')}</p>` : ''}
+        ${vistaPrevia() ? `<p class="moodle-aviso">${t(TEXTO_ESTADO['vista-previa'])}</p>` : ''}
+        ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>${t('Hoy: {n} de {x} veces', { n: Math.min(vecesHoy, r.x), x: r.x })}</p>` : ''}
       </header>
       <section class="lista">
         ${sesionDeAyer(hist) >= 0 ? preguntaManana() : ''}
@@ -1660,29 +1700,29 @@ async function vistaRutina(codigo) {
             const banda = bandaDe(def, e.b);
             // The still of the exercise, of their figure and their side (the left side, in mirror), and in words what to
             // do: how many, at what rhythm with the exercise's own verbs, with what. No curve: that is the professional's.
-            const material = [banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(banda.nombre)}</span>` : def.material !== 'Sin material' ? esc(def.material) : '', def.unLado && LADOS[e.l] ? esc(LADOS[e.l]) : '']
+            const material = [banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(t(banda.nombre))}</span>` : def.material !== 'Sin material' ? esc(t(def.material)) : '', def.unLado && LADOS[e.l] ? esc(t(LADOS[e.l])) : '']
               .filter(Boolean).join(' · ');
             return `<article class="tarjeta tarjeta-ejercicio" data-i="${e.i}" data-t="${e.t.join(',')}">
               <div class="tarjeta-cabeza">
                 <span class="tarjeta-poster"><img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
                 <div>
-                  <h3>${esc(def.nombre)}</h3>
-                  <p class="tarjeta-dosis num">${e.s} ${e.s === 1 ? 'serie' : 'series'} · ${e.r} ${e.r === 1 ? unidad(def).uno : unidad(def).varios}</p>
+                  <h3>${esc(t(def.nombre))}</h3>
+                  <p class="tarjeta-dosis num">${tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}</p>
                 </div>
               </div>
               <p class="tarjeta-pauta">${esc(textoTempo(e.t))}</p>
               ${material ? `<p class="tarjeta-material">${material}</p>` : ''}
-              ${e.n ? `<div class="nota">${esc(e.n)}</div>` : ''}
+              ${e.n ? `<div class="nota">${esc(t(e.n))}</div>` : ''}
             </article>`;
           })
           .join('')}
         ${tarjetaVoz()}
         ${enMoodle ? '' : `<section class="tarjeta recordatorio" aria-labelledby="recordar-titulo">
-          <h3 id="recordar-titulo">Que no se te olvide</h3>
-          <p>Pon un aviso cada día en el calendario de tu teléfono, con el enlace a esta rutina.</p>
+          <h3 id="recordar-titulo">${t('Que no se te olvide')}</h3>
+          <p>${t('Pon un aviso cada día en el calendario de tu teléfono, con el enlace a esta rutina.')}</p>
           <div class="recordatorio-fila">
-            <label class="hora"><span>A las</span><input type="time" value="10:00" data-r="hora-recordatorio"></label>
-            <button type="button" class="boton secundario" data-r="recordatorio">Añadir al calendario</button>
+            <label class="hora"><span>${t('A las')}</span><input type="time" value="10:00" data-r="hora-recordatorio"></label>
+            <button type="button" class="boton secundario" data-r="recordatorio">${t('Añadir al calendario')}</button>
           </div>
           <p class="recordatorio-hecho" aria-live="polite"></p>
         </section>`}
@@ -1691,17 +1731,17 @@ async function vistaRutina(codigo) {
       </section>
       <footer class="pie pie-fijo">
         ${ejercicios[0] ? `<span class="pie-poster" aria-hidden="true"><img src="${poster(ejercicios[0].i, r.c, bandaDe(EJERCICIOS[ejercicios[0].i], ejercicios[0].b)?.clave)}" alt="" width="112" height="84" decoding="async"${ejercicios[0].l === 'izq' ? ' class="espejo"' : ''}></span>` : ''}
-        <p class="pie-resumen num">${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'} · ${minutos(totalSeg)}</p>
+        <p class="pie-resumen num">${tn(ejercicios.length, '{n} ejercicio', '{n} ejercicios')} · ${minutos(totalSeg)}</p>
         ${(() => {
           const c = enCurso();
           return c
-            ? `<button type="button" class="boton" data-r="seguir-donde">${ICONO.play}Seguir donde lo dejaste</button>
-               <button type="button" class="boton fantasma" data-r="empezar">Empezar desde el principio</button>`
-            : `<button type="button" class="boton" data-r="empezar">${ICONO.play}Empezar</button>`;
+            ? `<button type="button" class="boton" data-r="seguir-donde">${ICONO.play}${t('Seguir donde lo dejaste')}</button>
+               <button type="button" class="boton fantasma" data-r="empezar">${t('Empezar desde el principio')}</button>`
+            : `<button type="button" class="boton" data-r="empezar">${ICONO.play}${t('Empezar')}</button>`;
         })()}
         <div class="a-grupo">
-          <button type="button" class="boton secundario" data-r="grupo">${ICONO.pantalla}Ponerla en pantalla grande</button>
-          <p>Para seguirla en grupo en una tele, un proyector o una pizarra. Sin preguntas a nadie y sin guardar nada.</p>
+          <button type="button" class="boton secundario" data-r="grupo">${ICONO.pantalla}${t('Ponerla en pantalla grande')}</button>
+          <p>${t('Para seguirla en grupo en una tele, un proyector o una pizarra. Sin preguntas a nadie y sin guardar nada.')}</p>
         </div>
       </footer>
     </div>`;
@@ -1732,7 +1772,7 @@ async function vistaRutina(codigo) {
     guardada ||= guardarParaSinConexion(r.c, ejercicios).catch(() => false);
     if (!(await guardada)) return;
     const p = app.querySelector('.sin-conexion');
-    if (p) p.textContent = 'Guardada en este teléfono: puedes hacerla aunque no tengas conexión.';
+    if (p) p.textContent = t('Guardada en este teléfono: puedes hacerla aunque no tengas conexión.');
   }
 
   // Queue: every exercise, every side, every set.
@@ -1792,7 +1832,7 @@ async function vistaRutina(codigo) {
       // Left while rating the exercise: back to the rating, with the figure loaded for the screen around it.
       sesion.retomada = false;
       const { e } = actual();
-      app.querySelector('.j-nombre').textContent = EJERCICIOS[e.i].nombre;
+      app.querySelector('.j-nombre').textContent = t(EJERCICIOS[e.i].nombre);
       app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
       await figuraEn(app.querySelector('.escena'), r.c).catch(() => {});
       return valorar();
@@ -1828,19 +1868,19 @@ async function vistaRutina(codigo) {
     // The hint goes by itself after a few seconds: it was covering the figure when the scene got small.
     setTimeout(() => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'), 5000);
     const completa = grupo && document.fullscreenEnabled
-      ? `<button type="button" class="redondo" data-r="completa" aria-pressed="${!!document.fullscreenElement}" aria-label="Pantalla completa">${document.fullscreenElement ? ICONO.salirCompleta : ICONO.completa}</button>`
+      ? `<button type="button" class="redondo" data-r="completa" aria-pressed="${!!document.fullscreenElement}" aria-label="${t('Pantalla completa')}">${document.fullscreenElement ? ICONO.salirCompleta : ICONO.completa}</button>`
       : '';
     app.innerHTML = `<div class="jugador${grupo ? ' grupo' : ''}">
       <div class="jugador-arriba">
-        <button type="button" class="redondo" data-r="salir" aria-label="Salir">${ICONO.cerrar}</button>
+        <button type="button" class="redondo" data-r="salir" aria-label="${t('Salir')}">${ICONO.cerrar}</button>
         <div class="titulo"><h2 class="j-nombre"></h2><div class="sub j-sub num"></div></div>
-        ${hayVoz() ? `<button type="button" class="redondo" data-r="voz" aria-pressed="${vozActiva()}" aria-label="Voz que guía">${vozActiva() ? ICONO.voz : ICONO.sinVoz}</button>` : ''}
+        ${hayVoz() ? `<button type="button" class="redondo" data-r="voz" aria-pressed="${vozActiva()}" aria-label="${t('Voz que guía')}">${vozActiva() ? ICONO.voz : ICONO.sinVoz}</button>` : ''}
         ${completa}
       </div>
       <div class="escena">
         <span class="chip lado-etiqueta j-lado oculto"></span>
-        <div class="girar-pista">${ICONO.girar} Arrastra para girar la figura</div>
-        <button type="button" class="recolocar oculto" data-r="recolocar">${ICONO.girar}Recolocar</button>
+        <div class="girar-pista">${ICONO.girar} ${t('Arrastra para girar la figura')}</div>
+        <button type="button" class="recolocar oculto" data-r="recolocar">${ICONO.girar}${t('Recolocar')}</button>
       </div>
       <div class="mando j-mando"></div>
     </div>`;
@@ -1850,7 +1890,7 @@ async function vistaRutina(codigo) {
   // Under the name: the set, and the band to use when the professional said its colour.
   const subtitulo = (e, serie) => {
     const banda = bandaDe(EJERCICIOS[e.i], e.b);
-    return `Serie ${serie} de ${e.s}${banda ? ` · ${banda.nombre.toLowerCase()}` : ''}`;
+    return `${t('Serie {n} de {total}', { n: serie, total: e.s })}${banda ? ` · ${t(banda.nombre).toLowerCase()}` : ''}`;
   };
 
   async function prepararSerie() {
@@ -1859,10 +1899,10 @@ async function vistaRutina(codigo) {
     const { e, lado } = actual();
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
-    app.querySelector('.j-nombre').textContent = def.nombre;
+    app.querySelector('.j-nombre').textContent = t(def.nombre);
     app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
     const etiquetaLado = app.querySelector('.j-lado');
-    etiquetaLado.textContent = LADOS[lado];
+    etiquetaLado.textContent = t(LADOS[lado]);
     etiquetaLado.classList.toggle('oculto', !def.unLado);
     let f;
     try {
@@ -1880,9 +1920,9 @@ async function vistaRutina(codigo) {
       // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
       if (sesion.item !== item) return;
       const sin3d = !document.createElement('canvas').getContext('webgl2');
-      const porque = sin3d ? 'Este teléfono no puede mover la figura en 3D.' : 'Revisa la conexión y prueba otra vez.';
-      app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>No se ha podido cargar la figura.</p><p>${porque}</p></div>
-        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><button type="button" class="boton" data-r="reintentar">Probar otra vez</button><span></span></div>`;
+      const porque = sin3d ? t('Este teléfono no puede mover la figura en 3D.') : t('Revisa la conexión y prueba otra vez.');
+      app.querySelector('.j-mando').innerHTML = `<div class="centro"><p>${t('No se ha podido cargar la figura.')}</p><p>${porque}</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">${t('Cómo se hace')}</button><button type="button" class="boton" data-r="reintentar">${t('Probar otra vez')}</button><span></span></div>`;
       return;
     }
     if (sesion.item !== item) return;
@@ -1901,20 +1941,21 @@ async function vistaRutina(codigo) {
     const { e } = actual();
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
-    app.querySelector('.j-sub').textContent = `Ejercicio ${ejercicios.indexOf(e) + 1} de ${ejercicios.length}`;
+    app.querySelector('.j-sub').textContent = t('Ejercicio {n} de {total}', { n: ejercicios.indexOf(e) + 1, total: ejercicios.length });
+    const queHace = def.material && def.material !== 'Sin material' ? t(def.material) : '';
     const material = banda
-      ? `${muestraBanda(banda)}${esc(banda.nombre.toLowerCase())}`
-      : def.material && def.material !== 'Sin material' ? esc(def.material[0].toLowerCase() + def.material.slice(1)) : '';
+      ? `${muestraBanda(banda)}${esc(t(banda.nombre).toLowerCase())}`
+      : queHace ? esc(queHace[0].toLowerCase() + queHace.slice(1)) : '';
     app.querySelector('.j-mando').innerHTML = `<div class="prepara">
-        <h3 class="prepara-titulo">${grupo ? 'Posición de partida' : 'Ponte en posición'}</h3>
-        <p class="prepara-partida">${esc(def.partida)}</p>
-        ${material ? `<p class="prepara-material"><span>${grupo ? 'Hace falta' : 'Necesitas'}</span> ${material}</p>` : ''}
+        <h3 class="prepara-titulo">${grupo ? t('Posición de partida') : t('Ponte en posición')}</h3>
+        <p class="prepara-partida">${esc(t(def.partida))}</p>
+        ${material ? `<p class="prepara-material"><span>${grupo ? t('Hace falta') : t('Necesitas')}</span> ${material}</p>` : ''}
       </div>
       <div class="prepara-botones">
-        <button type="button" class="boton" data-r="en-posicion">${grupo ? 'Todos en posición' : 'Estoy en posición'}</button>
-        <button type="button" class="boton secundario" data-r="como">Cómo se hace</button>
+        <button type="button" class="boton" data-r="en-posicion">${grupo ? t('Todos en posición') : t('Estoy en posición')}</button>
+        <button type="button" class="boton secundario" data-r="como">${t('Cómo se hace')}</button>
       </div>`;
-    if (grupo) decir(def.nombre);
+    if (grupo) decir(t(def.nombre));
   }
 
   function cuentaAtras(n) {
@@ -1922,8 +1963,8 @@ async function vistaRutina(codigo) {
     const mando = app.querySelector('.j-mando');
     const { e } = actual();
     const pauta = pautaTempo(figura?.textos, e.t);
-    mando.innerHTML = `<div class="centro"><p>Prepárate</p><h3 class="num cuenta-atras">${n}</h3><p>${esc(pauta)}</p></div>
-      <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">Cómo se hace</button><span></span><button type="button" class="boton fantasma" data-r="ya">Empezar ya</button></div>`;
+    mando.innerHTML = `<div class="centro"><p>${t('Prepárate')}</p><h3 class="num cuenta-atras">${n}</h3><p>${esc(pauta)}</p></div>
+      <div class="mando-botones"><button type="button" class="boton fantasma" data-r="como">${t('Cómo se hace')}</button><span></span><button type="button" class="boton fantasma" data-r="ya">${t('Empezar ya')}</button></div>`;
     tono(660, 0.08);
     if (n <= 3) decir(numero(n));
     clearTimeout(sesion.temporizador);
@@ -1936,23 +1977,24 @@ async function vistaRutina(codigo) {
     clearTimeout(sesion.temporizador);
     const { e } = actual();
     const mando = app.querySelector('.j-mando');
-    const deTotal = `de ${e.r}${EJERCICIOS[e.i].unidad ? ` ${e.r === 1 ? unidad(EJERCICIOS[e.i]).uno : unidad(EJERCICIOS[e.i]).varios}` : ''}`;
+    const deTotal = deTotalUnidad(EJERCICIOS[e.i], e.r);
     // The count for a screen reader, said once per repetition: the phases change too often to be read aloud.
     mando.innerHTML = `<p class="sr j-anuncio" aria-live="polite"></p><div class="cuenta">
         <div class="grande num"><span class="j-rep">1</span> <small>${deTotal}</small></div>
-        <div class="fase j-fase">${esc(figura?.textos?.subir || 'Ida')}</div>
+        <div class="fase j-fase">${esc(t(figura?.textos?.subir || 'Ida'))}</div>
       </div>
       ${svgTempo(e.t, { punto: true })}
       <div class="mando-botones mando-serie">
-        <button type="button" class="boton secundario" data-r="como">Cómo se hace</button>
-        <button type="button" class="principal" data-r="pausa" aria-pressed="false">${ICONO.pausa}<span>Pausa</span></button>
-        <button type="button" class="boton secundario" data-r="saltar">Terminar serie</button>
+        <button type="button" class="boton secundario" data-r="como">${t('Cómo se hace')}</button>
+        <button type="button" class="principal" data-r="pausa" aria-pressed="false">${ICONO.pausa}<span>${t('Pausa')}</span></button>
+        <button type="button" class="boton secundario" data-r="saltar">${t('Terminar serie')}</button>
       </div>`;
     const svg = mando.querySelector('.tempo');
     const elFase = mando.querySelector('.j-fase');
     const elRep = mando.querySelector('.j-rep');
     const elAnuncio = mando.querySelector('.j-anuncio');
-    const nombres = { subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos };
+    // The words of each phase, the exercise's own or the neutral ones, in the language in use (on screen and aloud).
+    const nombres = Object.fromEntries(Object.entries({ subir: 'Ida', mantener: 'Mantén', bajar: 'Vuelta', reposo: 'Respira', ...figura.textos }).map(([k, v]) => [k, t(v)]));
     // The phrases of an exercise have different lengths: the box takes the height of the longest once, so the sheet
     // (and the figure above it) does not jump from phase to phase.
     const primera = elFase.textContent;
@@ -1991,7 +2033,7 @@ async function vistaRutina(codigo) {
       }
     });
     f.on('fin', () => {
-      decir(`${numero(e.r, masculino)}. Hecho`);
+      decir(`${numero(e.r, masculino)}. ${t('Hecho')}`);
       sesion.hechas[sesion.item][sesion.serie] = e.r;
       tono(660, 0.12);
       setTimeout(() => tono(990, 0.25), 130);
@@ -2055,19 +2097,19 @@ async function vistaRutina(codigo) {
       // Already released.
     }
     const duro = minutos((new Date() - sesion.inicio) / 1000);
-    app.querySelector('.j-nombre').textContent = r.de ? `Rutina de ${r.de}` : 'La rutina';
-    app.querySelector('.j-sub').textContent = `${ejercicios.length} ${ejercicios.length === 1 ? 'ejercicio' : 'ejercicios'}`;
+    app.querySelector('.j-nombre').textContent = r.de ? t('Rutina de {de}', { de: r.de }) : t('La rutina');
+    app.querySelector('.j-sub').textContent = tn(ejercicios.length, '{n} ejercicio', '{n} ejercicios');
     app.querySelector('.j-mando').innerHTML = `<div class="grupo-fin">
-        <h3>Rutina terminada</h3>
-        <p class="num">${duro[0].toUpperCase() + duro.slice(1)} de trabajo.</p>
+        <h3>${t('Rutina terminada')}</h3>
+        <p class="num">${t('{tiempo} de trabajo.', { tiempo: mayuscula(duro) })}</p>
       </div>
       <div class="prepara-botones">
-        <button type="button" class="boton" data-r="grupo-otra">${ICONO.play}Otra vez</button>
-        <button type="button" class="boton secundario" data-r="dejar">Salir</button>
+        <button type="button" class="boton" data-r="grupo-otra">${ICONO.play}${t('Otra vez')}</button>
+        <button type="button" class="boton secundario" data-r="dejar">${t('Salir')}</button>
       </div>`;
     tono(660, 0.12);
     setTimeout(() => tono(990, 0.25), 130);
-    decir('Rutina terminada. Buen trabajo.');
+    decir(t('Rutina terminada. Buen trabajo.'));
   }
   // Whoever drives it from the computer may have a presenter's remote: → or «Av Pág» goes on (in position, the rest or
   // the countdown cut short), the space pauses or resumes the set.
@@ -2098,7 +2140,7 @@ async function vistaRutina(codigo) {
   document.addEventListener('fullscreenchange', alCambiarCompleta);
 
   function descanso(segundos, cambiaLado = false) {
-    decir(cambiaLado ? 'Descansa. Ahora, el otro lado' : 'Descansa');
+    decir(cambiaLado ? t('Descansa. Ahora, el otro lado') : t('Descansa'));
     sesion.estado = 'descanso';
     const mando = app.querySelector('.j-mando');
     const { e, lado } = actual();
@@ -2106,12 +2148,12 @@ async function vistaRutina(codigo) {
     let quedan = segundos;
     const radio = 56;
     const largo = 2 * Math.PI * radio;
-    mando.innerHTML = `<div class="centro"><h3>Descansa</h3><p>${cambiaLado ? `Ahora, ${LADOS[lado].toLowerCase()}` : `Siguiente: serie ${sesion.serie + 1} de ${e.s}`}</p></div>
+    mando.innerHTML = `<div class="centro"><h3>${t('Descansa')}</h3><p>${cambiaLado ? t('Ahora, {lado}', { lado: t(LADOS[lado]).toLowerCase() }) : t('Siguiente: serie {n} de {total}', { n: sesion.serie + 1, total: e.s })}</p></div>
       <svg class="anillo" viewBox="0 0 132 132"><circle class="fondo-anillo" cx="66" cy="66" r="${radio}"/><circle class="avance" cx="66" cy="66" r="${radio}" stroke-dasharray="${largo}" stroke-dashoffset="0" transform="rotate(-90 66 66)"/><text x="66" y="66" class="num">${quedan}</text></svg>
-      <div class="mando-botones"><button type="button" class="boton fantasma" data-r="mas">+15 s</button><span></span><button type="button" class="boton fantasma" data-r="ya">Seguir ya</button></div>`;
+      <div class="mando-botones"><button type="button" class="boton fantasma" data-r="mas">+15 s</button><span></span><button type="button" class="boton fantasma" data-r="ya">${t('Seguir ya')}</button></div>`;
     if (cambiaLado) {
       app.querySelector('.j-sub').textContent = subtitulo(e, 1);
-      app.querySelector('.j-lado').textContent = LADOS[lado];
+      app.querySelector('.j-lado').textContent = t(LADOS[lado]);
       figura.lado(lado);
     } else {
       app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
@@ -2148,9 +2190,9 @@ async function vistaRutina(codigo) {
     const x = (sesion.extra ||= {})[e.i] || {};
     const boton = (v, texto) => `<button type="button" class="chip-elegir" data-r="dificultad" data-v="${v}" aria-pressed="${x.c === v}">${texto}</button>`;
     return `<section class="valorar-extra" aria-labelledby="v-extra">
-        <h4 class="pregunta-suave" id="v-extra">¿Algo más para ${quien}? <span>Si quieres</span></h4>
-        <div class="chips-elegir" role="group" aria-labelledby="v-extra">${boton('cuesta', 'Me ha costado')}${boton('no', 'No he podido hacerlo')}</div>
-        <label class="nota-persona"><span>Una nota</span><textarea data-r="nota-ejercicio" rows="2" maxlength="300" placeholder="Por ejemplo: me molestó la rodilla al bajar">${esc(x.n || '')}</textarea></label>
+        <h4 class="pregunta-suave" id="v-extra">${t('¿Algo más para {quien}? <span>Si quieres</span>', { quien })}</h4>
+        <div class="chips-elegir" role="group" aria-labelledby="v-extra">${boton('cuesta', t('Me ha costado'))}${boton('no', t('No he podido hacerlo'))}</div>
+        <label class="nota-persona"><span>${t('Una nota')}</span><textarea data-r="nota-ejercicio" rows="2" maxlength="300" placeholder="${t('Por ejemplo: me molestó la rodilla al bajar')}">${esc(x.n || '')}</textarea></label>
       </section>`;
   }
 
@@ -2161,38 +2203,38 @@ async function vistaRutina(codigo) {
     figura?.parar();
     app.querySelector('.jugador')?.classList.add('valorando');
     const { e } = actual();
-    app.querySelector('.j-sub').textContent = `Ejercicio ${ejercicios.indexOf(e) + 1} de ${ejercicios.length}`;
+    app.querySelector('.j-sub').textContent = t('Ejercicio {n} de {total}', { n: ejercicios.indexOf(e) + 1, total: ejercicios.length });
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
     const items = cola.map((c, i) => ({ c, i })).filter(({ c }) => c.e === e);
     const dosLados = items.length > 1;
     const ultimo = sesion.item + 1 >= cola.length;
-    const seguir = ultimo ? 'Terminar' : 'Siguiente ejercicio';
+    const seguir = ultimo ? t('Terminar') : t('Siguiente ejercicio');
     const lado = (c) => `<img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${c.lado === 'izq' ? ' class="espejo"' : ''}>`;
     const cabeza = `<div class="valorar-cabeza"><span class="tarjeta-poster">${lado(items[0].c)}</span>
-      <div><h3>Hecho</h3><p class="num">${e.s} ${e.s === 1 ? 'serie' : 'series'}${dosLados ? ' de cada lado' : ''} · ${e.r} ${e.r === 1 ? unidad(def).uno : unidad(def).varios}</p></div></div>`;
+      <div><h3>${t('Hecho')}</h3><p class="num">${dosLados ? tn(e.s, '{n} serie de cada lado', '{n} series de cada lado') : tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}</p></div></div>`;
     let cuerpo = '';
     let pie = '';
     if (sesion.paso === 'reps') {
-      cuerpo = `<section class="valorar-paso" aria-labelledby="v-reps"><h4 class="pregunta" id="v-reps" tabindex="-1">¿Hiciste ${unidad(def).todas}?</h4>
-        <div class="dos-botones"><button type="button" class="boton" data-r="todas">Sí, ${unidad(def).todas.split(' ')[0]}</button><button type="button" class="boton secundario" data-r="menos">Hice menos</button></div></section>`;
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-reps"><h4 class="pregunta" id="v-reps" tabindex="-1">${fraseUnidad(def, 'pregunta')}</h4>
+        <div class="dos-botones"><button type="button" class="boton" data-r="todas">${fraseUnidad(def, 'si')}</button><button type="button" class="boton secundario" data-r="menos">${t('Hice menos')}</button></div></section>`;
     } else if (sesion.paso === 'menos') {
-      cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">¿${unidad(def).todas.startsWith('todos') ? 'Cuántos' : 'Cuántas'} hiciste en cada serie?</h4>
-        ${items.map(({ c, i }) => `<div class="series-lado">${dosLados ? `<h5>${LADOS[c.lado]}</h5>` : ''}${sesion.hechas[i]
-          .map((v, n) => `<div class="serie-fila"><span>Serie ${n + 1}</span>${paso(`h-${i}-${n}`, v, `${dosLados ? LADOS[c.lado] + ', s' : 'S'}erie ${n + 1}`, 0, 50)}</div>`)
+      cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">${fraseUnidad(def, 'cuantas')}</h4>
+        ${items.map(({ c, i }) => `<div class="series-lado">${dosLados ? `<h5>${t(LADOS[c.lado])}</h5>` : ''}${sesion.hechas[i]
+          .map((v, n) => `<div class="serie-fila"><span>${t('Serie {n}', { n: n + 1 })}</span>${paso(`h-${i}-${n}`, v, dosLados ? t('{lado}, serie {n}', { lado: t(LADOS[c.lado]), n: n + 1 }) : t('Serie {n}', { n: n + 1 }), 0, 50)}</div>`)
           .join('')}</div>`).join('')}</section>`;
-      pie = `<button type="button" class="boton" data-r="reps-listo">Listo</button>`;
+      pie = `<button type="button" class="boton" data-r="reps-listo">${t('Listo')}</button>`;
     } else {
       const todas = items.every(({ i }) => sesion.hechas[i].every((v) => v >= e.r));
       const marcada = Number.isInteger(sesion.molestia[e.i]);
-      cuerpo = `<p class="valorar-hecho">${todas ? mayuscula(unidad(def).todas) : `Hiciste menos ${unidad(def).varios}`} <button type="button" class="enlace" data-r="menos">Cambiar</button></p>
-        <section class="valorar-paso" aria-labelledby="v-molestia"><h4 class="pregunta" id="v-molestia" tabindex="-1">¿Cuánta molestia notaste?</h4>
+      cuerpo = `<p class="valorar-hecho">${todas ? fraseUnidad(def, 'todas') : fraseUnidad(def, 'menos')} <button type="button" class="enlace" data-r="menos">${t('Cambiar')}</button></p>
+        <section class="valorar-paso" aria-labelledby="v-molestia"><h4 class="pregunta" id="v-molestia" tabindex="-1">${t('¿Cuánta molestia notaste?')}</h4>
         <div class="escala" role="group" aria-labelledby="v-molestia">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-r="molestia" data-v="${n}" aria-pressed="${sesion.molestia[e.i] === n}" class="num">${n}</button>`).join('')}</div>
-        <div class="escala-pie"><span>0 · nada</span><span>10 · mucha</span></div>
+        <div class="escala-pie"><span>${t('0 · nada')}</span><span>${t('10 · mucha')}</span></div>
         <p class="aviso-molestia" aria-live="polite"></p></section>
         ${extraValorar(e)}`;
-      pie = `<button type="button" class="boton" data-r="continuar"${marcada ? '' : ' aria-disabled="true"'} data-seguir="${seguir}">${marcada ? seguir : 'Marca tu molestia para seguir'}</button>
-        <button type="button" class="boton fantasma" data-r="sin-molestia">Prefiero no decirlo</button>`;
+      pie = `<button type="button" class="boton" data-r="continuar"${marcada ? '' : ' aria-disabled="true"'} data-seguir="${seguir}">${marcada ? seguir : t('Marca tu molestia para seguir')}</button>
+        <button type="button" class="boton fantasma" data-r="sin-molestia">${t('Prefiero no decirlo')}</button>`;
     }
     app.querySelector('.j-mando').innerHTML = `<div class="valorar">${cabeza}${cuerpo}${pie ? `<div class="valorar-pie">${pie}</div>` : ''}</div>`;
   }
@@ -2223,20 +2265,21 @@ async function vistaRutina(codigo) {
     const hist = almacen.leer(clave, []);
     hist.push(dia);
     almacen.guardar(clave, hist.slice(-200));
-    const trabajo = `${((t) => t[0].toUpperCase() + t.slice(1))(minutos((ahora - sesion.inicio) / 1000))} de trabajo.`;
+    const trabajo = t('{tiempo} de trabajo.', { tiempo: mayuscula(minutos((ahora - sesion.inicio) / 1000)) });
     // In a Moodle course the session goes to the course by itself; the way out leads back to it.
     const pie = enMoodle
       ? `<p class="moodle-estado" aria-live="polite"></p>
-        ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}Volver al curso</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${TEXTO_CERRAR}</p>` : ''}
-        <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>`
-      : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}Mandar por WhatsApp</button>
-        <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}Mandar por Telegram</button>
-        <button type="button" class="boton fantasma" data-r="volver">Volver a la rutina</button>
+        ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}${t('Volver al curso')}</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${t(TEXTO_CERRAR)}</p>` : ''}
+        <button type="button" class="boton fantasma" data-r="volver">${t('Volver a la rutina')}</button>`
+      : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}${t('Mandar por WhatsApp')}</button>
+        <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}${t('Mandar por Telegram')}</button>
+        <button type="button" class="boton fantasma" data-r="volver">${t('Volver a la rutina')}</button>
         ${tarjetaAMano()}`;
+    const faltan = [...new Set(cola.filter((c) => !dia.e.some((x) => x.i === c.e.i)).map((c) => EJERCICIOS[c.e.i].nombre))].map((n) => esc(t(n)));
     app.innerHTML = `<div class="rutina">
-      <header class="saludo"><div class="de">Hecho</div><h1>${parcial ? 'Lo de hoy, guardado' : 'Rutina de hoy, completa'}</h1>${
-        parcial ? `<p>Te faltó: ${[...new Set(cola.filter((c) => !dia.e.some((x) => x.i === c.e.i)).map((c) => EJERCICIOS[c.e.i].nombre))].map(esc).join(', ')}.</p>` : ''
-      }<p>${trabajo} ${r.de && !enMoodle ? `Mándale a ${esc(r.de)} cómo te ha ido.` : ''}</p></header>
+      <header class="saludo"><div class="de">${t('Hecho')}</div><h1>${parcial ? t('Lo de hoy, guardado') : t('Rutina de hoy, completa')}</h1>${
+        parcial ? `<p>${t('Te faltó: {ejercicios}.', { ejercicios: faltan.join(', ') })}</p>` : ''
+      }<p>${trabajo} ${r.de && !enMoodle ? t('Mándale a {de} cómo te ha ido.', { de: esc(r.de) }) : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
         ${pie}
@@ -2252,13 +2295,13 @@ async function vistaRutina(codigo) {
     if (instalada || !window.matchMedia('(pointer: coarse)').matches || almacen.leer('a-mano', false)) return '';
     const iphone = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const pasos = iphone
-      ? [[ICONO.compartirIos, 'Toca <b>Compartir</b>, abajo, en la barra del navegador.'], [ICONO.mas, 'Toca <b>Añadir a pantalla de inicio</b>.']]
-      : [[ICONO.puntos, 'Toca los <b>tres puntos</b>, arriba a la derecha.'], [ICONO.mas, 'Toca <b>Añadir a pantalla de inicio</b>.']];
+      ? [[ICONO.compartirIos, t('Toca <b>Compartir</b>, abajo, en la barra del navegador.')], [ICONO.mas, t('Toca <b>Añadir a pantalla de inicio</b>.')]]
+      : [[ICONO.puntos, t('Toca los <b>tres puntos</b>, arriba a la derecha.')], [ICONO.mas, t('Toca <b>Añadir a pantalla de inicio</b>.')]];
     return `<section class="tarjeta a-mano" aria-labelledby="a-mano-titulo">
-      <h3 id="a-mano-titulo">Tenla a mano</h3>
-      <p>Así mañana no tendrás que buscar el mensaje: ponla en la pantalla de inicio del teléfono, como una app.</p>
+      <h3 id="a-mano-titulo">${t('Tenla a mano')}</h3>
+      <p>${t('Así mañana no tendrás que buscar el mensaje: ponla en la pantalla de inicio del teléfono, como una app.')}</p>
       <ol class="a-mano-pasos">${pasos.map(([icono, texto]) => `<li><span class="a-mano-icono" aria-hidden="true">${icono}</span><span>${texto}</span></li>`).join('')}</ol>
-      <button type="button" class="boton secundario" data-r="ya-la-tengo">Ya la tengo</button>
+      <button type="button" class="boton secundario" data-r="ya-la-tengo">${t('Ya la tengo')}</button>
     </section>`;
   }
 
@@ -2280,17 +2323,18 @@ async function vistaRutina(codigo) {
     dialogo.className = 'hoja hoja-corregir';
     dialogo.setAttribute('aria-labelledby', 'corregir-titulo');
     const pintar = () => {
-      const nombre = (x) => `${esc(EJERCICIOS[x.i]?.nombre || x.i)}${EJERCICIOS[x.i]?.unLado && x.l ? ` · ${LADOS[x.l].toLowerCase()}` : ''}`;
-      dialogo.innerHTML = `<h2 id="corregir-titulo" tabindex="-1">${nuevo ? 'Apuntar una vez sin la app' : `Corregir el ${esc(fechaCorta(dia.f))}`}</h2>
-        ${nuevo ? `<div class="segmentos" role="group" aria-label="Qué día"><button type="button" data-c="dia" data-v="${diaDeSesion(ahora)}" aria-pressed="${dia.f === diaDeSesion(ahora)}">Hoy</button><button type="button" data-c="dia" data-v="${ayer}" aria-pressed="${dia.f === ayer}">Ayer</button></div>` : ''}
+      const nombre = (x) => `${esc(EJERCICIOS[x.i] ? t(EJERCICIOS[x.i].nombre) : x.i)}${EJERCICIOS[x.i]?.unLado && x.l ? ` · ${t(LADOS[x.l]).toLowerCase()}` : ''}`;
+      const serie = (n) => t('Serie {n}', { n });
+      dialogo.innerHTML = `<h2 id="corregir-titulo" tabindex="-1">${nuevo ? t('Apuntar una vez sin la app') : t('Corregir el {fecha}', { fecha: esc(fechaCorta(dia.f)) })}</h2>
+        ${nuevo ? `<div class="segmentos" role="group" aria-label="${t('Qué día')}"><button type="button" data-c="dia" data-v="${diaDeSesion(ahora)}" aria-pressed="${dia.f === diaDeSesion(ahora)}">${t('Hoy')}</button><button type="button" data-c="dia" data-v="${ayer}" aria-pressed="${dia.f === ayer}">${t('Ayer')}</button></div>` : ''}
         ${dia.e.map((x, j) => `<section class="corregir-ejercicio"><h3>${nombre(x)}</h3>
-          <div class="series-lado">${x.p.map((v, n) => `<div class="serie-fila"><span>Serie ${n + 1}</span>${paso(`c-${j}-${n}`, v, `Serie ${n + 1}`, 0, 50)}</div>`).join('')}</div>
-          <p class="pregunta-suave">Molestia</p>
-          <div class="escala" role="group" aria-label="Molestia en ${nombre(x)}">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-c="m" data-j="${j}" data-v="${n}" aria-pressed="${x.m === n}" class="num">${n}</button>`).join('')}</div>
-          <div class="chips-elegir">${[['cuesta', 'Me ha costado'], ['no', 'No he podido hacerlo']].map(([v, t]) => `<button type="button" class="chip-elegir" data-c="dificultad" data-j="${j}" data-v="${v}" aria-pressed="${x.c === v}">${t}</button>`).join('')}</div>
-          <label class="nota-persona"><span>Una nota</span><textarea data-c="nota" data-j="${j}" rows="2" maxlength="300">${esc(x.n || '')}</textarea></label>
+          <div class="series-lado">${x.p.map((v, n) => `<div class="serie-fila"><span>${serie(n + 1)}</span>${paso(`c-${j}-${n}`, v, serie(n + 1), 0, 50)}</div>`).join('')}</div>
+          <p class="pregunta-suave">${t('Molestia')}</p>
+          <div class="escala" role="group" aria-label="${t('Molestia en {ejercicio}', { ejercicio: nombre(x) })}">${Array.from({ length: 11 }, (_, n) => `<button type="button" data-c="m" data-j="${j}" data-v="${n}" aria-pressed="${x.m === n}" class="num">${n}</button>`).join('')}</div>
+          <div class="chips-elegir">${[['cuesta', t('Me ha costado')], ['no', t('No he podido hacerlo')]].map(([v, rotulo]) => `<button type="button" class="chip-elegir" data-c="dificultad" data-j="${j}" data-v="${v}" aria-pressed="${x.c === v}">${rotulo}</button>`).join('')}</div>
+          <label class="nota-persona"><span>${t('Una nota')}</span><textarea data-c="nota" data-j="${j}" rows="2" maxlength="300">${esc(x.n || '')}</textarea></label>
         </section>`).join('')}
-        <div class="hoja-como-pie dos-botones"><button type="button" class="boton" data-c="guardar">Guardar</button><button type="button" class="boton secundario" data-c="cancelar">Cancelar</button></div>`;
+        <div class="hoja-como-pie dos-botones"><button type="button" class="boton" data-c="guardar">${t('Guardar')}</button><button type="button" class="boton secundario" data-c="cancelar">${t('Cancelar')}</button></div>`;
     };
     pintar();
     dialogo.addEventListener('input', (ev) => {
@@ -2349,25 +2393,26 @@ async function vistaRutina(codigo) {
     const hora = `${String(hh || 0).padStart(2, '0')}${String(mm || 0).padStart(2, '0')}00`;
     const url = `${location.origin}${location.pathname}#r=${codigo}`;
     const ahora = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
-    const titulo = r.x > 1 ? `Tu rutina de ejercicios (${r.x} veces al día)` : 'Tu rutina de ejercicios';
-    const aviso = r.de ? `${titulo}, de ${r.de}` : titulo;
+    // The event is the person's, in their language: the link inside it reads the same in any.
+    const titulo = r.x > 1 ? t('Tu rutina de ejercicios ({x} veces al día)', { x: r.x }) : t('Tu rutina de ejercicios');
+    const aviso = r.de ? t('{titulo}, de {de}', { titulo, de: r.de }) : titulo;
     const ics = archivoCalendario([
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Oksigenia//Jepyso//ES', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'BEGIN:VCALENDAR', 'VERSION:2.0', `PRODID:-//Oksigenia//Jepyso//${idioma().toUpperCase()}`, 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
       'BEGIN:VEVENT', `UID:${hashCorto(codigo)}-${fecha}@jepyso`, `DTSTAMP:${ahora}`, `DTSTART:${fecha}T${hora}`,
       `DURATION:PT${Math.max(5, Math.round(totalSeg / 60))}M`, 'RRULE:FREQ=DAILY', `SUMMARY:${textoCalendario(aviso)}`,
-      `DESCRIPTION:${textoCalendario(`Ábrela aquí: ${url}`)}`, `URL:${url}`,
+      `DESCRIPTION:${textoCalendario(t('Ábrela aquí: {url}', { url }))}`, `URL:${url}`,
       'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:PT0M', `DESCRIPTION:${textoCalendario(titulo)}`, 'END:VALARM',
       'END:VEVENT', 'END:VCALENDAR',
     ]);
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
-    a.download = 'rutina.ics';
+    a.download = t('rutina.ics');
     document.body.append(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 60000);
     const hecho = app.querySelector('.recordatorio-hecho');
-    if (hecho) hecho.textContent = `Ábrelo y elige «Añadir» en tu calendario: te avisará cada día a las ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}.`;
+    if (hecho) hecho.textContent = t('Ábrelo y elige «Añadir» en tu calendario: te avisará cada día a las {hora}.', { hora: `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` });
   }
 
   async function mandar(canal = 'wa') {
@@ -2386,7 +2431,10 @@ async function vistaRutina(codigo) {
     almacen.guardar(`envT:${clave}`, new Date().toISOString());
     const cod = await codificar(resumen);
     const url = `${location.origin}${location.pathname}#s=${cod}`;
-    const texto = `${r.para ? r.para + ': ' : ''}así va mi rutina (${hist.length} ${hist.length === 1 ? 'vez' : 'veces'}).`;
+    // The message is the person's, in their language; the summary in the link reads the same in any.
+    const texto = r.para
+      ? tn(hist.length, '{nombre}: así va mi rutina ({n} vez).', '{nombre}: así va mi rutina ({n} veces).', { nombre: r.para })
+      : tn(hist.length, 'así va mi rutina ({n} vez).', 'así va mi rutina ({n} veces).');
     window.open(enlaceMensaje(canal, texto, url), '_blank', 'noopener');
   }
 
@@ -2403,11 +2451,11 @@ async function vistaRutina(codigo) {
     const dialogo = document.createElement('dialog');
     dialogo.className = 'hoja hoja-como';
     dialogo.setAttribute('aria-labelledby', 'como-titulo');
-    dialogo.innerHTML = `<h2 id="como-titulo" tabindex="-1">${esc(def.nombre)}</h2>
+    dialogo.innerHTML = `<h2 id="como-titulo" tabindex="-1">${esc(t(def.nombre))}</h2>
       ${explicacion(def)}
-      ${banda ? `<p class="con-banda">${muestraBanda(banda)}<span>Usa la ${esc(banda.nombre.toLowerCase())}.</span></p>` : ''}
-      ${e.n ? `<p class="nota">${esc(e.n)}</p>` : ''}
-      <div class="hoja-como-pie"><button type="button" class="boton">Entendido</button></div>`;
+      ${banda ? `<p class="con-banda">${muestraBanda(banda)}<span>${t('Usa la {banda}.', { banda: esc(t(banda.nombre).toLowerCase()) })}</span></p>` : ''}
+      ${e.n ? `<p class="nota">${esc(t(e.n))}</p>` : ''}
+      <div class="hoja-como-pie"><button type="button" class="boton">${t('Entendido')}</button></div>`;
     document.body.appendChild(dialogo);
     dialogo.addEventListener('close', () => {
       dialogo.remove();
@@ -2448,13 +2496,13 @@ async function vistaRutina(codigo) {
         ponerQuien(v);
       }
       el.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === el)));
-      return vozActiva() && decir('Voz encendida');
+      return vozActiva() && decir(t('Voz encendida'));
     }
     if (a === 'voz') {
       ponerVoz(!vozActiva());
       el.setAttribute('aria-pressed', String(vozActiva()));
       el.innerHTML = vozActiva() ? ICONO.voz : ICONO.sinVoz;
-      return vozActiva() && decir('Voz encendida');
+      return vozActiva() && decir(t('Voz encendida'));
     }
     if (a === 'mandar') return mandar(el.dataset.canal);
     if (a === 'recordatorio') return recordatorio();
@@ -2472,10 +2520,10 @@ async function vistaRutina(codigo) {
       sesion.antes = sesion.estado;
       sesion.estado = 'salir';
       app.querySelector('.j-mando').innerHTML = grupo
-        ? `<div class="centro"><p>¿Salir de la rutina?</p><p>El grupo va por el ejercicio ${ejercicios.indexOf(actual().e) + 1} de ${ejercicios.length}.</p></div>
-        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Salir</button></div>`
-        : `<div class="centro"><p>¿Dejas la rutina aquí?</p><p>${enMoodle ? 'Lo que has hecho se guarda en el curso.' : 'Lo que has hecho se guarda y puedes mandarlo.'}</p></div>
-        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">Seguir</button><span></span><button type="button" class="boton fantasma" data-r="dejar">Dejarla</button></div>`;
+        ? `<div class="centro"><p>${t('¿Salir de la rutina?')}</p><p>${t('El grupo va por el ejercicio {n} de {total}.', { n: ejercicios.indexOf(actual().e) + 1, total: ejercicios.length })}</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">${t('Seguir')}</button><span></span><button type="button" class="boton fantasma" data-r="dejar">${t('Salir')}</button></div>`
+        : `<div class="centro"><p>${t('¿Dejas la rutina aquí?')}</p><p>${enMoodle ? t('Lo que has hecho se guarda en el curso.') : t('Lo que has hecho se guarda y puedes mandarlo.')}</p></div>
+        <div class="mando-botones"><button type="button" class="boton fantasma" data-r="seguir-rutina">${t('Seguir')}</button><span></span><button type="button" class="boton fantasma" data-r="dejar">${t('Dejarla')}</button></div>`;
       return;
     }
     if (a === 'seguir-rutina') return sesion.antes === 'valorar' ? valorar() : prepararSerie();
@@ -2498,13 +2546,13 @@ async function vistaRutina(codigo) {
         callar();
       }
       else figura.seguir();
-      el.innerHTML = `${pausar ? ICONO.play : ICONO.pausa}<span>${pausar ? 'Seguir' : 'Pausa'}</span>`;
+      el.innerHTML = `${pausar ? ICONO.play : ICONO.pausa}<span>${pausar ? t('Seguir') : t('Pausa')}</span>`;
       el.setAttribute('aria-pressed', String(pausar));
       app.querySelector('.jugador')?.classList.toggle('en-pausa', pausar);
       const fase = app.querySelector('.j-fase');
       if (fase && pausar) {
         fase.dataset.antes = fase.textContent;
-        fase.textContent = 'En pausa';
+        fase.textContent = t('En pausa');
       } else if (fase?.dataset.antes) fase.textContent = fase.dataset.antes;
       return;
     }
@@ -2545,7 +2593,11 @@ async function vistaRutina(codigo) {
         seguir.textContent = seguir.dataset.seguir;
       }
       const aviso = app.querySelector('.aviso-molestia');
-      if (aviso) aviso.textContent = pasaDelTope(v, tope) ? `Es más de ${tope}: ${destinoMarca(r.de || 'quien te dio la rutina')}. La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.` : '';
+      if (aviso) {
+        aviso.textContent = pasaDelTope(v, tope)
+          ? `${t('Es más de {tope}: {destino}.', { tope, destino: destinoMarca(r.de || t('quien te dio la rutina')) })} ${t('La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.')}`
+          : '';
+      }
       return;
     }
     if (a === 'manana') {
@@ -2615,16 +2667,16 @@ function resumenDia(dia, tope = TOPE_MOLESTIA) {
   try {
     return pintarDia(dia, tope);
   } catch {
-    return '<article class="tarjeta dia"><p>Este día no se puede leer.</p></article>';
+    return `<article class="tarjeta dia"><p>${t('Este día no se puede leer.')}</p></article>`;
   }
 }
 
 function pintarDia(dia, tope) {
   const fecha = new Date(dia.f + 'T12:00:00');
-  const titulo = new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long' }).format(fecha);
+  const titulo = new Intl.DateTimeFormat(locale(), { weekday: 'long', day: 'numeric', month: 'long' }).format(fecha);
   const marcado = diaMarcado(dia, tope);
   return `<article class="tarjeta dia ${marcado ? 'marcado' : ''}"><h3>${titulo.charAt(0).toUpperCase() + titulo.slice(1)}${dia.h ? ` · ${esc(dia.h)}` : ''}${
-    marcado ? ` <span class="marca-dia">Pasa de ${tope}</span>` : ''
+    marcado ? ` <span class="marca-dia">${t('Pasa de {tope}', { tope })}</span>` : ''
   }</h3>
     ${dia.e
       .map((x) => {
@@ -2632,22 +2684,22 @@ function pintarDia(dia, tope) {
         if (!def) return '';
         const bien = x.p.every((v) => v >= x.r);
         return `<div class="hecho">
-          <span class="nombre">${esc(def.nombre)}${def.unLado ? ` · ${LADOS[x.l].toLowerCase()}` : ''}</span>
-          ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">Molestia ${x.m}/10</span>` : '<span></span>'}
-          <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${esc(v)} de ${esc(x.r)}"></span>`).join('')}</div>
-          ${x.c === 'cuesta' ? '<span class="chip">Costó</span>' : x.c === 'no' ? '<span class="chip alta">No se pudo hacer</span>' : ''}
+          <span class="nombre">${esc(t(def.nombre))}${def.unLado ? ` · ${t(LADOS[x.l]).toLowerCase()}` : ''}</span>
+          ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">${t('Molestia {v}/10', { v: x.m })}</span>` : '<span></span>'}
+          <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${t('{n} de {total}', { n: esc(v), total: esc(x.r) })}"></span>`).join('')}</div>
+          ${x.c === 'cuesta' ? `<span class="chip">${t('Costó')}</span>` : x.c === 'no' ? `<span class="chip alta">${t('No se pudo hacer')}</span>` : ''}
           ${x.n ? `<p class="nota-dia">«${esc(x.n)}»</p>` : ''}
           <span class="detalle num">${
             bien
-              ? `${x.p.length} ${x.p.length === 1 ? 'serie' : 'series'} de ${x.r}, ${x.p.length === 1 ? 'completa' : 'completas'}`
-              : `${mayuscula(unidad(def).varios)} por serie: ${x.p.slice(0, -1).join(', ')}${x.p.length > 1 ? ' y ' : ''}${x.p.at(-1)} de ${x.r}`
+              ? tn(x.p.length, '{n} serie de {r}, completa', '{n} series de {r}, completas', { r: x.r })
+              : fraseUnidad(def, 'porSerie', { lista: enLista(x.p.map(String)), r: x.r })
           }</span>
         </div>`;
       })
       .join('')}
     ${
       typeof dia.a === 'number'
-        ? `<div class="manana-linea"><span>A la mañana siguiente</span><span class="chip ${pasaDelTope(dia.a, tope) ? 'alta' : ''}">Molestia ${dia.a}/10</span></div>`
+        ? `<div class="manana-linea"><span>${t('A la mañana siguiente')}</span><span class="chip ${pasaDelTope(dia.a, tope) ? 'alta' : ''}">${t('Molestia {v}/10', { v: dia.a })}</span></div>`
         : ''
     }
   </article>`;
@@ -2657,9 +2709,9 @@ function pintarDia(dia, tope) {
 function listaDias(fechas) {
   const nombres = fechas.map((f) => {
     const d = new Date(f + 'T12:00:00');
-    return `el ${new Intl.DateTimeFormat('es', { weekday: 'long' }).format(d)} ${d.getDate()}`;
+    return t('el {dia} {n}', { dia: new Intl.DateTimeFormat(locale(), { weekday: 'long' }).format(d), n: d.getDate() });
   });
-  return nombres.length > 1 ? `${nombres.slice(0, -1).join(', ')} y ${nombres.at(-1)}` : nombres[0];
+  return enLista(nombres);
 }
 
 // Text in a calendar file: backslash, semicolon, comma and line breaks escaped.
@@ -2700,22 +2752,22 @@ async function vistaResumen(codigo) {
     // Read below as a summary that cannot be opened.
   }
   if (!s) {
-    app.innerHTML = avisoRoto('Este resumen no se puede abrir', 'Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a la persona que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.');
+    app.innerHTML = avisoRoto(t('Este resumen no se puede abrir'), t('Suele pasar cuando el enlace se corta al copiarlo y pegarlo. Pídele a la persona que te lo reenvíe, y ábrelo tocándolo en el mensaje, sin copiarlo.'));
     return () => {};
   }
   const dias = [...s.dias].reverse();
   const tope = Number.isInteger(s.m) ? s.m : TOPE_MOLESTIA;
   const marcados = [...new Set(dias.filter((d) => diaMarcado(d, tope)).map((d) => d.f))].reverse();
   const molestia = marcados.length
-    ? `La molestia pasó de ${tope} ${listaDias(marcados)}.`
-    : `La molestia no pasó de ${tope} ningún día.`;
+    ? t('La molestia pasó de {tope} {dias}.', { tope, dias: listaDias(marcados) })
+    : t('La molestia no pasó de {tope} ningún día.', { tope });
   app.innerHTML = `<div class="rutina">
     <header class="saludo">
-      <div class="de">Resumen para ${esc(s.de || 'ti')}</div>
-      <h1>${esc(s.para || 'La persona')} ha hecho su rutina ${dias.length} ${dias.length === 1 ? 'vez' : 'veces'}</h1>
+      <div class="de">${s.de ? t('Resumen para {de}', { de: esc(s.de) }) : t('Resumen para ti')}</div>
+      <h1>${tn(dias.length, '{nombre} ha hecho su rutina {n} vez', '{nombre} ha hecho su rutina {n} veces', { nombre: esc(s.para || t('La persona')) })}</h1>
       <p class="${marcados.length ? 'molestia-alta' : ''}">${molestia}</p>
       <p class="en-ficha" aria-live="polite">${guardarEnFicha(s)}</p>
-      <p>Lo que ha hecho, de lo más reciente a lo más antiguo.</p>
+      <p>${t('Lo que ha hecho, de lo más reciente a lo más antiguo.')}</p>
     </header>
     <section class="lista">${dias.map((d) => resumenDia(d, tope)).join('')}</section>
   </div>`;
@@ -2740,34 +2792,37 @@ function guardarEnFicha(s, destino = '') {
   let p = suya || (destino === 'nombre' ? porNombre : null);
   if (!p && destino !== 'nueva') {
     if (porNombre) {
-      return `<button type="button" class="boton secundario" data-accion="guardar-resumen" data-destino="nombre">Guardar en la ficha de ${esc(porNombre.nombre)}</button>`;
+      return `<button type="button" class="boton secundario" data-accion="guardar-resumen" data-destino="nombre">${t('Guardar en la ficha de {nombre}', { nombre: esc(nombreDe(porNombre)) })}</button>`;
     }
-    if (!caben(lista)) return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
-    const texto = lista.length ? `Guardar en una ficha nueva para ${esc(s.para || 'esta persona')}` : 'Guardar en mis personas';
+    if (!caben(lista)) return t('No se ha guardado en una ficha: ya tienes {n} personas con ficha, el máximo de la versión gratis.', { n: limite() });
+    const texto = !lista.length ? t('Guardar en mis personas')
+      : s.para ? t('Guardar en una ficha nueva para {nombre}', { nombre: esc(s.para) }) : t('Guardar en una ficha nueva para esta persona');
     return `<button type="button" class="boton secundario" data-accion="guardar-resumen" data-destino="nueva">${texto}</button>`;
   }
-  if (!p && !caben(lista)) return `No se ha guardado en una ficha: ya tienes ${limite()} personas con ficha, el máximo de la versión gratis.`;
+  if (!p && !caben(lista)) return t('No se ha guardado en una ficha: ya tienes {n} personas con ficha, el máximo de la versión gratis.', { n: limite() });
   const nueva = !p;
+  // «Sin nombre» is data, the same in every language (entrada.js); nombreDe() shows it in the language in use.
   if (!p) p = crearPersona(lista, s.para || 'Sin nombre');
   const n = apuntarResumen(p, s);
-  if (!guardarPersonas(lista)) return SIN_SITIO;
-  const que = nueva ? `Ficha nueva para ${esc(p.nombre)}` : n ? `Guardado en la ficha de ${esc(p.nombre)}` : `Ya estaba en la ficha de ${esc(p.nombre)}`;
+  if (!guardarPersonas(lista)) return t(SIN_SITIO);
+  const nombre = { nombre: esc(nombreDe(p)) };
+  const que = nueva ? t('Ficha nueva para {nombre}', nombre) : n ? t('Guardado en la ficha de {nombre}', nombre) : t('Ya estaba en la ficha de {nombre}', nombre);
   if (!fichaAbierta(p)) {
     if (cuentaDeVales()) pedirVale(p.id);
-    else return `${que}. Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.`;
+    else return `${que}. ${t('Para abrirla, entra con tu cuenta de Google en <a href="#personas">Mis personas</a>.')}`;
   }
-  return `${que}. <a href="#persona=${esc(p.id)}">Ver su ficha</a>`;
+  return `${que}. <a href="#persona=${esc(p.id)}">${t('Ver su ficha')}</a>`;
 }
 
 // ---------- The professional's people ----------
 // «jueves, 13 de noviembre», for the person's own days.
 const fechaCorta = (f) => {
   const d = new Date(f + 'T12:00:00');
-  return Number.isNaN(d.getTime()) ? 'día sin fecha' : new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long' }).format(d);
+  return Number.isNaN(d.getTime()) ? t('día sin fecha') : new Intl.DateTimeFormat(locale(), { weekday: 'long', day: 'numeric', month: 'long' }).format(d);
 };
 const fechaLarga = (f) => {
   const d = new Date(f + 'T12:00:00');
-  return Number.isNaN(d.getTime()) ? 'sin fecha' : new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long' }).format(d);
+  return Number.isNaN(d.getTime()) ? t('sin fecha') : new Intl.DateTimeFormat(locale(), { day: 'numeric', month: 'long' }).format(d);
 };
 const ultimaFecha = (p) => [p.ultimoResumen, ...p.rutinas.map((r) => r.f)].filter(Boolean).sort().at(-1) || p.creada;
 
@@ -2786,18 +2841,18 @@ function filaPersona(p) {
   if (!fichaAbierta(p)) {
     const sinPlaza = fichaSinPlaza(p.id);
     return `<li><a class="persona-fila cerrada" href="#persona=${esc(p.id)}">
-    <span class="nombre">${ICONO.candado}${esc(p.nombre)}</span>
-    <span class="meta">${sinPlaza ? `Tu cuenta de Google ya tiene ${LIMITE_GRATIS} fichas` : 'Entra con tu cuenta de Google para abrirla'}</span>
+    <span class="nombre">${ICONO.candado}${esc(nombreDe(p))}</span>
+    <span class="meta">${sinPlaza ? t('Tu cuenta de Google ya tiene {n} fichas', { n: LIMITE_GRATIS }) : t('Entra con tu cuenta de Google para abrirla')}</span>
   </a></li>`;
   }
   const marcado = ultimoMarcado(p);
   const callado = sinNoticias(p);
-  const rutinas = p.rutinas.length ? `${p.rutinas.length} ${p.rutinas.length === 1 ? 'rutina' : 'rutinas'}` : 'sin rutinas';
-  const resumen = p.ultimoResumen ? `último resumen el ${fechaLarga(p.ultimoResumen)}` : 'sin resúmenes todavía';
+  const rutinas = p.rutinas.length ? tn(p.rutinas.length, '{n} rutina', '{n} rutinas') : t('sin rutinas');
+  const resumen = p.ultimoResumen ? t('último resumen el {fecha}', { fecha: fechaLarga(p.ultimoResumen) }) : t('sin resúmenes todavía');
   return `<li><a class="persona-fila" href="#persona=${esc(p.id)}">
-    <span class="nombre">${esc(p.nombre)}</span>
+    <span class="nombre">${esc(nombreDe(p))}</span>
     <span class="meta">${rutinas} · ${resumen}</span>
-    ${marcado || callado ? `<span class="marcas">${marcado ? `<span class="chip alta">Pasó de ${marcado.tope} ${listaDias([marcado.f])}</span>` : ''}${callado ? `<span class="chip">${callado.dias} días sin noticias</span>` : ''}</span>` : ''}
+    ${marcado || callado ? `<span class="marcas">${marcado ? `<span class="chip alta">${t('Pasó de {tope} {dias}', { tope: marcado.tope, dias: listaDias([marcado.f]) })}</span>` : ''}${callado ? `<span class="chip">${tn(callado.dias, '{n} día sin noticias', '{n} días sin noticias')}</span>` : ''}</span>` : ''}
   </a></li>`;
 }
 
@@ -2805,20 +2860,20 @@ function filaPersona(p) {
 // only can see. Syncing joins what this device has with what the Drive has, and keeps it in both places.
 const ultimaSincronia = () => {
   const f = almacen.leer('drive-ultima', '');
-  if (!f) return 'Todavía sin conectar.';
+  if (!f) return t('Todavía sin conectar.');
   const d = new Date(f);
-  const hora = d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
-  return `Última vez: ${diaLocal(d) === diaLocal() ? 'hoy' : `el ${fechaLarga(diaLocal(d))}`}, a las ${hora}.`;
+  const hora = d.toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' });
+  return diaLocal(d) === diaLocal() ? t('Última vez: hoy, a las {hora}.', { hora }) : t('Última vez: el {fecha}, a las {hora}.', { fecha: fechaLarga(diaLocal(d)), hora });
 };
 
 function seccionDrive() {
   const pendiente = licenciaPendiente();
   return `<section class="general nube">
-    <h2>Tu Google Drive</h2>
-    <p class="ayuda">Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.</p>
-    ${pendiente ? `<p class="ayuda"><strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta ${esc(licencia().cuenta)}.</p>` : ''}
-    ${licencia().valida ? `<p class="ayuda plan">Plan ${esc(nombrePlan(topeLicencia()))}: hasta ${topeLicencia()} personas con ficha, de por vida. Licencia de ${esc(licencia().cuenta)}.</p>` : ''}
-    <div class="botones"><button type="button" class="boton" data-accion="drive">Sincronizar con Google Drive</button></div>
+    <h2>${t('Tu Google Drive')}</h2>
+    <p class="ayuda">${t('Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.')}</p>
+    ${pendiente ? `<p class="ayuda">${t('<strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta {cuenta}.', { cuenta: esc(licencia().cuenta) })}</p>` : ''}
+    ${licencia().valida ? `<p class="ayuda plan">${t('Plan {nombre}: hasta {n} personas con ficha, de por vida. Licencia de {cuenta}.', { nombre: esc(nombrePlan(topeLicencia())), n: topeLicencia(), cuenta: esc(licencia().cuenta) })}</p>` : ''}
+    <div class="botones"><button type="button" class="boton" data-accion="drive">${t('Sincronizar con Google Drive')}</button></div>
     <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
   </section>`;
 }
@@ -2830,11 +2885,11 @@ function seccionCuenta() {
   const quedan = fichasQuedan();
   const cerradas = leerPersonas().filter((p) => !fichaAbierta(p)).length;
   const estado = correo
-    ? `<p class="cuenta-dentro">Con la cuenta <strong>${esc(correo)}</strong>${Number.isInteger(quedan) ? ` · ${quedan === 0 ? 'no le quedan fichas nuevas' : `le ${quedan === 1 ? 'queda 1 ficha nueva' : `quedan ${quedan} fichas nuevas`}`}` : ''}</p>`
+    ? `<p class="cuenta-dentro">${t('Con la cuenta <strong>{correo}</strong>', { correo: esc(correo) })}${Number.isInteger(quedan) ? ` · ${quedan === 0 ? t('no le quedan fichas nuevas') : tn(quedan, 'le queda {n} ficha nueva', 'le quedan {n} fichas nuevas')}` : ''}</p>`
     : '<div class="hueco-google"></div>';
   return `<section class="general cuenta-fichas${cerradas && !correo ? ' pide' : ''}">
-    <h2>Tus fichas, con tu cuenta de Google</h2>
-    ${correo ? '' : `<p class="ayuda">La versión gratis tiene ${LIMITE_GRATIS} fichas por cuenta de Google. Entra con la tuya para abrirlas y para hacer fichas nuevas. Oksigenia solo guarda una huella de tu cuenta y el código de cada ficha: los nombres, las rutinas y los resúmenes se quedan en este aparato.</p>`}
+    <h2>${t('Tus fichas, con tu cuenta de Google')}</h2>
+    ${correo ? '' : `<p class="ayuda">${t('La versión gratis tiene {n} fichas por cuenta de Google. Entra con la tuya para abrirlas y para hacer fichas nuevas. Oksigenia solo guarda una huella de tu cuenta y el código de cada ficha: los nombres, las rutinas y los resúmenes se quedan en este aparato.', { n: LIMITE_GRATIS })}</p>`}
     ${estado}
     <p class="aviso-vales" aria-live="polite">${esc(avisoVales())}</p>
   </section>`;
@@ -2843,13 +2898,14 @@ function seccionCuenta() {
 // Where to paste a licence, in Personas, for the free version.
 function seccionLicencia() {
   return `<details class="general licencia-pegar">
-    <summary>¿Tienes una licencia de Jepyso?</summary>
-    <p class="ayuda">Pégala aquí, o abre el enlace que te llegó con ella. Se activa al conectar tu Drive con la cuenta de la licencia.</p>
-    <div class="licencia-fila"><input type="text" data-accion="licencia" autocomplete="off" spellcheck="false" aria-label="Tu licencia"><button type="button" class="boton secundario" data-accion="guardar-licencia">Guardar</button></div>
+    <summary>${t('¿Tienes una licencia de Jepyso?')}</summary>
+    <p class="ayuda">${t('Pégala aquí, o abre el enlace que te llegó con ella. Se activa al conectar tu Drive con la cuenta de la licencia.')}</p>
+    <div class="licencia-fila"><input type="text" data-accion="licencia" autocomplete="off" spellcheck="false" aria-label="${t('Tu licencia')}"><button type="button" class="boton secundario" data-accion="guardar-licencia">${t('Guardar')}</button></div>
     <p class="aviso-licencia" aria-live="polite"></p>
   </details>`;
 }
 
+// Shown through t(), as the keys of their translation.
 const MOTIVOS_LICENCIA = {
   formato: 'Eso no es una licencia de Jepyso: cópiala entera, sin espacios.',
   firma: 'Esa licencia no es válida: no la ha firmado Oksigenia, o ha cambiado al copiarla.',
@@ -2860,25 +2916,28 @@ async function sincronizarDrive(boton) {
   const aviso = app.querySelector('.aviso-nube');
   boton.disabled = true;
   try {
-    aviso.textContent = 'Conectando con Google…';
+    aviso.textContent = t('Conectando con Google…');
     await conectar();
     // With a licence: it counts once the Drive is connected with its account; with another account, nothing is synced.
     if (licencia().valida) {
       const cuenta = await cuentaDrive();
       if (!(await cuentaDelDrive(cuenta))) {
         olvidar();
-        aviso.textContent = `Tu licencia es de ${licencia().cuenta}, y has conectado el Drive de ${cuenta || 'otra cuenta'}. Conéctalo con la cuenta de la licencia.`;
+        aviso.textContent = t('Tu licencia es de {licencia}, y has conectado el Drive de {cuenta}. Conéctalo con la cuenta de la licencia.', { licencia: licencia().cuenta, cuenta: cuenta || t('otra cuenta') });
         return;
       }
     }
-    aviso.textContent = 'Sincronizando…';
+    aviso.textContent = t('Sincronizando…');
     const local = { personas: leerPersonas(), plantillas: leerPlantillas(), borradas: leerBorradas() };
     const r = await sincronizar(local, (junto) => {
       const bien = guardarPersonas(junto.personas) && almacen.guardar('plantillas', junto.plantillas) && almacen.guardar('borradas', junto.borradas);
-      if (!bien) throw new Error(SIN_SITIO);
+      if (!bien) throw new Error(t(SIN_SITIO));
     });
     almacen.guardar('drive-ultima', new Date().toISOString());
-    aviso.textContent = `Hecho: ${r.personas} ${r.personas === 1 ? 'persona' : 'personas'} y ${r.plantillas} ${r.plantillas === 1 ? 'plantilla' : 'plantillas'} en tu Drive y en este aparato.`;
+    aviso.textContent = t('Hecho: {personas} y {plantillas} en tu Drive y en este aparato.', {
+      personas: tn(r.personas, '{n} persona', '{n} personas'),
+      plantillas: tn(r.plantillas, '{n} plantilla', '{n} plantillas'),
+    });
   } catch (err) {
     aviso.textContent = err.message;
   } finally {
@@ -2896,24 +2955,24 @@ function vistaPersonas() {
     if (cap) cap.innerHTML = todas.length ? capacidad(todas) : '';
     const ul = app.querySelector('.lista-personas');
     ul.innerHTML = todas.length
-      ? lista.map(filaPersona).join('') || '<li class="vacio">Nadie con ese nombre.</li>'
-      : '<li class="vacio">Todavía no hay nadie. Cuando mandes una rutina con el nombre de la persona, aparece aquí con su ficha.</li>';
+      ? lista.map(filaPersona).join('') || `<li class="vacio">${t('Nadie con ese nombre.')}</li>`
+      : `<li class="vacio">${t('Todavía no hay nadie. Cuando mandes una rutina con el nombre de la persona, aparece aquí con su ficha.')}</li>`;
   };
   app.innerHTML = `<div class="personas">
-    ${barraApp('Personas', { accion: botonNueva })}
+    ${barraApp(t('Personas'), { accion: botonNueva })}
     <div class="armar-cuerpo">
-      <input type="search" class="buscar" data-accion="buscar-persona" autocomplete="off" placeholder="Buscar por nombre" aria-label="Buscar personas por nombre">
+      <input type="search" class="buscar" data-accion="buscar-persona" autocomplete="off" placeholder="${t('Buscar por nombre')}" aria-label="${t('Buscar personas por nombre')}">
       <div class="hueco-capacidad"></div>
       ${valesEnMarcha() ? seccionCuenta() : ''}
       <ul class="lista-personas"></ul>
-      <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.</p></details>
+      <details class="ayuda-plegada"><summary>${t('Cómo funciona')}</summary><p>${t('Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.')}</p></details>
       ${esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
       <section class="general copia">
-        <h2>Copia</h2>
-        <p class="ayuda">Al cargarla se añade lo que falte; no se borra nada.</p>
+        <h2>${t('Copia')}</h2>
+        <p class="ayuda">${t('Al cargarla se añade lo que falte; no se borra nada.')}</p>
         <div class="botones">
-          <button type="button" class="boton secundario" data-accion="exportar">Guardar copia</button>
-          <label class="boton secundario">Cargar copia<input type="file" accept=".json,application/json" data-accion="importar" class="oculto"></label>
+          <button type="button" class="boton secundario" data-accion="exportar">${t('Guardar copia')}</button>
+          <label class="boton secundario">${t('Cargar copia')}<input type="file" accept=".json,application/json" data-accion="importar" class="oculto"></label>
         </div>
         <p class="aviso-copia" aria-live="polite"></p>
       </section>
@@ -2934,7 +2993,7 @@ function vistaPersonas() {
       const aviso = app.querySelector('.aviso-licencia');
       const l = await guardarLicencia(app.querySelector('[data-accion="licencia"]')?.value);
       if (!l.valida) {
-        aviso.textContent = MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato;
+        aviso.textContent = t(MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato);
         return;
       }
       return vistaPersonas();
@@ -2947,14 +3006,14 @@ function vistaPersonas() {
     const archivo = new Blob([JSON.stringify(copia(leerPersonas()))], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(archivo);
-    a.download = `jepyso-personas-${diaLocal()}.json`;
+    a.download = t('jepyso-personas-{fecha}.json', { fecha: diaLocal() });
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
       URL.revokeObjectURL(a.href);
       a.remove();
     }, 1000);
-    app.querySelector('.aviso-copia').textContent = 'Copia guardada en tus descargas.';
+    app.querySelector('.aviso-copia').textContent = t('Copia guardada en tus descargas.');
   };
   app.onchange = async (ev) => {
     if (ev.target.dataset.accion !== 'importar' || !ev.target.files[0]) return;
@@ -2963,16 +3022,19 @@ function vistaPersonas() {
       const lista = leerPersonas();
       const r = cargarCopia(lista, JSON.parse(await ev.target.files[0].text()));
       if (!guardarPersonas(lista)) {
-        aviso.textContent = SIN_SITIO;
+        aviso.textContent = t(SIN_SITIO);
         return;
       }
-      aviso.textContent = `Copia cargada: ${r.total} ${r.total === 1 ? 'persona' : 'personas'}${r.nuevas ? `, ${r.nuevas} ${r.nuevas === 1 ? 'nueva' : 'nuevas'}` : ', ninguna nueva'}.${
-        r.fuera ? ` ${r.fuera} no ${r.fuera === 1 ? 'cabe' : 'caben'}: la versión gratis guarda hasta ${limite()}.` : ''}`;
+      const cargadas = t('Copia cargada: {personas}, {nuevas}.', {
+        personas: tn(r.total, '{n} persona', '{n} personas'),
+        nuevas: r.nuevas ? tn(r.nuevas, '{n} nueva', '{n} nuevas') : t('ninguna nueva'),
+      });
+      aviso.textContent = `${cargadas}${r.fuera ? ` ${tn(r.fuera, '{n} no cabe: la versión gratis guarda hasta {max}.', '{n} no caben: la versión gratis guarda hasta {max}.', { max: limite() })}` : ''}`;
       await comprobarVales();
       pintarLista();
       if (cuentaDeVales()) pedirVales().then(() => location.hash === '#personas' && pintarLista());
     } catch {
-      aviso.textContent = 'Ese archivo no es una copia de Jepyso.';
+      aviso.textContent = t('Ese archivo no es una copia de Jepyso.');
     }
     ev.target.value = '';
   };
@@ -3000,16 +3062,16 @@ function tablaSemanas(p) {
   const lista = semanas(p.dias, tope);
   if (!lista.length) return '';
   return `<section class="general evolucion">
-    <h2>Evolución por semanas</h2>
-    <p class="ayuda">La molestia más alta de cada semana. La raya marca su molestia aceptable, ${tope}. Según el modelo de control del dolor, no debería subir de una semana a la siguiente.</p>
+    <h2>${t('Evolución por semanas')}</h2>
+    <p class="ayuda">${t('La molestia más alta de cada semana. La raya marca su molestia aceptable, {tope}. Según el modelo de control del dolor, no debería subir de una semana a la siguiente.', { tope })}</p>
     <table class="semanas">
-      <thead><tr><th scope="col">Semana del</th><th scope="col">Sesiones</th><th scope="col">Durante</th><th scope="col">Al levantarse</th></tr></thead>
+      <thead><tr><th scope="col">${t('Semana del')}</th><th scope="col">${t('Sesiones')}</th><th scope="col">${t('Durante')}</th><th scope="col">${t('Al levantarse')}</th></tr></thead>
       <tbody>${lista
         .map((s) => `<tr class="${s.sube ? 'sube' : ''}">
-          <th scope="row">${fechaLarga(s.desde)}${s.sube ? ' <span class="marca-dia">Sube</span>' : ''}</th>
-          <td class="num" data-etiqueta="Sesiones">${s.sesiones}</td>
-          <td data-etiqueta="Durante">${barraMolestia(s.durante, tope)}</td>
-          <td data-etiqueta="Al levantarse">${barraMolestia(s.manana, tope)}</td>
+          <th scope="row">${fechaLarga(s.desde)}${s.sube ? ` <span class="marca-dia">${t('Sube')}</span>` : ''}</th>
+          <td class="num" data-etiqueta="${t('Sesiones')}">${s.sesiones}</td>
+          <td data-etiqueta="${t('Durante')}">${barraMolestia(s.durante, tope)}</td>
+          <td data-etiqueta="${t('Al levantarse')}">${barraMolestia(s.manana, tope)}</td>
         </tr>`)
         .join('')}</tbody>
     </table>
@@ -3021,17 +3083,17 @@ function tablaSemanas(p) {
 function vistaFichaCerrada(p) {
   const sinPlaza = fichaSinPlaza(p.id);
   app.innerHTML = `<div class="personas persona ficha-cerrada">
-    ${barraApp(esc(p.nombre), { volver: '#personas' })}
+    ${barraApp(esc(nombreDe(p)), { volver: '#personas' })}
     <div class="armar-cuerpo">
       <section class="general cuenta-fichas pide">
-        <h2>${ICONO.candado}${sinPlaza ? 'Esta ficha no cabe en tu cuenta' : 'Entra para abrir esta ficha'}</h2>
+        <h2>${ICONO.candado}${sinPlaza ? t('Esta ficha no cabe en tu cuenta') : t('Entra para abrir esta ficha')}</h2>
         <p class="ayuda">${sinPlaza
-          ? `Tu cuenta de Google ya tiene sus ${LIMITE_GRATIS} fichas gratis. Borra una que ya no uses, aquí o en otro aparato. ${ampliarPlan()}`
-          : `En la versión gratis, cada ficha va con tu cuenta de Google: ${LIMITE_GRATIS} por cuenta. Entra con la tuya y la ficha se abre en este aparato, también sin conexión.`}</p>
+          ? `${t('Tu cuenta de Google ya tiene sus {n} fichas gratis. Borra una que ya no uses, aquí o en otro aparato.', { n: LIMITE_GRATIS })} ${ampliarPlan()}`
+          : t('En la versión gratis, cada ficha va con tu cuenta de Google: {n} por cuenta. Entra con la tuya y la ficha se abre en este aparato, también sin conexión.', { n: LIMITE_GRATIS })}</p>
         ${cuentaDeVales() ? '' : '<div class="hueco-google"></div>'}
         <p class="aviso-vales" aria-live="polite">${esc(avisoVales())}</p>
       </section>
-      ${sinPlaza ? '<div class="botones"><button type="button" class="boton fantasma" data-accion="borrar-cerrada">Borrar esta ficha</button></div>' : ''}
+      ${sinPlaza ? `<div class="botones"><button type="button" class="boton fantasma" data-accion="borrar-cerrada">${t('Borrar esta ficha')}</button></div>` : ''}
     </div>
   </div>`;
   const hueco = app.querySelector('.hueco-google');
@@ -3041,10 +3103,10 @@ function vistaFichaCerrada(p) {
     const el = ev.target.closest('[data-accion="borrar-cerrada"]');
     if (!el) return;
     if (!confirmar) {
-      el.textContent = `¿Borrar la ficha de ${p.nombre}? Toca otra vez`;
+      el.textContent = t('¿Borrar la ficha de {nombre}? Toca otra vez', { nombre: nombreDe(p) });
       confirmar = setTimeout(() => {
         confirmar = null;
-        if (el.isConnected) el.textContent = 'Borrar esta ficha';
+        if (el.isConnected) el.textContent = t('Borrar esta ficha');
       }, 4000);
       return;
     }
@@ -3063,7 +3125,7 @@ function vistaPersona(id) {
   const lista = leerPersonas();
   const p = lista.find((x) => x.id === id);
   if (!p) {
-    app.innerHTML = `<div class="personas"><header class="armar-cabecera"><a class="ir-personas" href="#personas">Mis personas</a><h1>Esta ficha no está en este navegador</h1><p>Si la tienes en otro aparato, trae su copia desde Mis personas.</p></header></div>`;
+    app.innerHTML = `<div class="personas"><header class="armar-cabecera"><a class="ir-personas" href="#personas">${t('Mis personas')}</a><h1>${t('Esta ficha no está en este navegador')}</h1><p>${t('Si la tienes en otro aparato, trae su copia desde Mis personas.')}</p></header></div>`;
     return () => {};
   }
   if (!fichaAbierta(p)) return vistaFichaCerrada(p);
@@ -3071,50 +3133,51 @@ function vistaPersona(id) {
   const dias = [...p.dias].reverse();
   const callado = sinNoticias(p);
   const urlCallado = callado ? `${location.origin}${location.pathname}#r=${callado.codigo}` : '';
-  const textoCallado = `Hola, ${p.nombre}. ¿Qué tal vas con la rutina? Si algún ejercicio te cuesta o te molesta, dímelo y lo ajustamos. Aquí la tienes otra vez:`;
+  // The professional's message, in their language; the routine in the link reads the same in any.
+  const textoCallado = t('Hola, {nombre}. ¿Qué tal vas con la rutina? Si algún ejercicio te cuesta o te molesta, dímelo y lo ajustamos. Aquí la tienes otra vez:', { nombre: p.nombre });
   app.innerHTML = `<div class="personas persona">
-    ${barraApp(esc(p.nombre), { volver: '#personas' })}
+    ${barraApp(esc(nombreDe(p)), { volver: '#personas' })}
     <div class="ficha-cabeza">
-      <p>Ficha desde el ${fechaLarga(p.creada)} · molestia aceptable ${tope}</p>
-      <div class="botones"><button type="button" class="boton" data-accion="rutina-para">${ICONO.mas}Nueva rutina para ${esc(p.nombre)}</button></div>
+      <p>${t('Ficha desde el {fecha} · molestia aceptable {tope}', { fecha: fechaLarga(p.creada), tope })}</p>
+      <div class="botones"><button type="button" class="boton" data-accion="rutina-para">${ICONO.mas}${t('Nueva rutina para {nombre}', { nombre: esc(nombreDe(p)) })}</button></div>
     </div>
     <div class="armar-cuerpo">
       <div class="persona-ficha">
       ${callado ? `<section class="general sin-noticias" aria-labelledby="sin-noticias">
-        <h2 id="sin-noticias">${callado.dias} días sin noticias</h2>
-        <p>Le mandaste la rutina el ${fechaLarga(callado.f)} y todavía no te ha llegado nada. Las dos primeras semanas son las que más cuestan: es buen momento para preguntarle qué tal va.</p>
+        <h2 id="sin-noticias">${tn(callado.dias, '{n} día sin noticias', '{n} días sin noticias')}</h2>
+        <p>${t('Le mandaste la rutina el {fecha} y todavía no te ha llegado nada. Las dos primeras semanas son las que más cuestan: es buen momento para preguntarle qué tal va.', { fecha: fechaLarga(callado.f) })}</p>
         <div class="botones">
-          <a class="boton" href="${esc(enlaceMensaje('wa', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.whatsapp}Escribirle por WhatsApp</a>
-          <a class="boton secundario" href="${esc(enlaceMensaje('tg', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.telegram}Por Telegram</a>
+          <a class="boton" href="${esc(enlaceMensaje('wa', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.whatsapp}${t('Escribirle por WhatsApp')}</a>
+          <a class="boton secundario" href="${esc(enlaceMensaje('tg', textoCallado, urlCallado))}" target="_blank" rel="noopener">${ICONO.telegram}${t('Por Telegram')}</a>
           ${botonCompartir('accion')}
         </div>
       </section>` : ''}
       <section class="general notas">
-        <h2><label for="notas">Notas</label></h2>
-        <textarea id="notas" data-accion="notas" rows="3" placeholder="Lo que quieras recordar de esta persona">${esc(p.notas)}</textarea>
+        <h2><label for="notas">${t('Notas')}</label></h2>
+        <textarea id="notas" data-accion="notas" rows="3" placeholder="${t('Lo que quieras recordar de esta persona')}">${esc(p.notas)}</textarea>
       </section>
       ${tablaSemanas(p)}
       <section class="general mandadas">
-        <h2>Rutinas que le has mandado</h2>
-        ${p.rutinas.length ? '' : '<p class="ayuda">Ninguna desde este navegador. Las que le mandes con su nombre se apuntan aquí.</p>'}
+        <h2>${t('Rutinas que le has mandado')}</h2>
+        ${p.rutinas.length ? '' : `<p class="ayuda">${t('Ninguna desde este navegador. Las que le mandes con su nombre se apuntan aquí.')}</p>`}
         <ul class="rutinas-mandadas">${[...p.rutinas]
           .reverse()
           .map((r) => `<li>
-            <span><strong>${fechaLarga(r.f)}</strong> · ${r.e.map((i) => esc(EJERCICIOS[i]?.nombre || i)).join(', ')}</span>
+            <span><strong>${fechaLarga(r.f)}</strong> · ${r.e.map((i) => esc(EJERCICIOS[i] ? t(EJERCICIOS[i].nombre) : i)).join(', ')}</span>
             <span class="botones-fila">
-              <button type="button" class="boton fantasma" data-accion="abrir-rutina" data-codigo="${esc(r.codigo)}">Abrir en el constructor</button>
-              <button type="button" class="boton fantasma" data-accion="copiar-rutina" data-codigo="${esc(r.codigo)}">Copiar enlace</button>
+              <button type="button" class="boton fantasma" data-accion="abrir-rutina" data-codigo="${esc(r.codigo)}">${t('Abrir en el constructor')}</button>
+              <button type="button" class="boton fantasma" data-accion="copiar-rutina" data-codigo="${esc(r.codigo)}">${t('Copiar enlace')}</button>
             </span>
           </li>`)
           .join('')}</ul>
       </section>
       <section class="borrar-ficha">
-        <button type="button" class="boton fantasma" data-accion="borrar-persona">Borrar su ficha</button>
+        <button type="button" class="boton fantasma" data-accion="borrar-persona">${t('Borrar su ficha')}</button>
       </section>
       </div>
       <section class="lo-hecho">
-        <h2>Lo que ha hecho</h2>
-        ${dias.length ? dias.map((d) => resumenDia(d, tope)).join('') : '<p class="vacio">Aún no te ha mandado ningún resumen. Cuando lo abras, se guarda aquí.</p>'}
+        <h2>${t('Lo que ha hecho')}</h2>
+        ${dias.length ? dias.map((d) => resumenDia(d, tope)).join('') : `<p class="vacio">${t('Aún no te ha mandado ningún resumen. Cuando lo abras, se guarda aquí.')}</p>`}
       </section>
     </div>
   </div>`;
@@ -3127,7 +3190,7 @@ function vistaPersona(id) {
     if (!fresca) return;
     fresca.notas = p.notas;
     fresca.cambiada = p.cambiada;
-    if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${SIN_SITIO}</p>`);
+    if (!guardarPersonas(todas)) app.querySelector('.notas h2').insertAdjacentHTML('afterend', `<p class="aviso-nube">${t(SIN_SITIO)}</p>`);
   };
   // Saved a moment after the last key (every save reads and writes all the files), and at once on leaving the file,
   // closing or reloading the page.
@@ -3157,7 +3220,7 @@ function vistaPersona(id) {
       clearTimeout(confirmar);
       confirmar = null;
       const b = app.querySelector('[data-accion="borrar-persona"]');
-      if (b) b.textContent = 'Borrar su ficha';
+      if (b) b.textContent = t('Borrar su ficha');
     }
     if (a === 'compartir') return compartir(textoCallado, urlCallado);
     if (a === 'rutina-para') {
@@ -3180,17 +3243,17 @@ function vistaPersona(id) {
       const url = `${location.origin}${location.pathname}#r=${el.dataset.codigo}`;
       try {
         await navigator.clipboard.writeText(url);
-        el.textContent = 'Copiado';
+        el.textContent = t('Copiado');
       } catch {
-        el.textContent = 'No se pudo copiar';
+        el.textContent = t('No se pudo copiar');
       }
     } else if (a === 'borrar-persona') {
       // A first touch asks; the second one deletes. Waiting, or touching anything else, leaves it as it was.
       if (!confirmar) {
-        el.textContent = `¿Borrar la ficha de ${p.nombre}? Toca otra vez`;
+        el.textContent = t('¿Borrar la ficha de {nombre}? Toca otra vez', { nombre: nombreDe(p) });
         confirmar = setTimeout(() => {
           confirmar = null;
-          if (el.isConnected) el.textContent = 'Borrar su ficha';
+          if (el.isConnected) el.textContent = t('Borrar su ficha');
         }, 4000);
         return;
       }
@@ -3245,7 +3308,7 @@ window.addEventListener('jepyso-lleno', () => {
   const aviso = document.createElement('div');
   aviso.className = 'nueva-version aviso-almacen';
   aviso.setAttribute('role', 'alert');
-  aviso.innerHTML = `<p>${SIN_SITIO}</p><button type="button" class="nueva-version-cerrar" aria-label="Cerrar">${ICONO.cerrar}</button>`;
+  aviso.innerHTML = `<p>${t(SIN_SITIO)}</p><button type="button" class="nueva-version-cerrar" aria-label="${t('Cerrar')}">${ICONO.cerrar}</button>`;
   aviso.querySelector('button').addEventListener('click', () => aviso.remove());
   document.body.append(aviso);
 });
@@ -3261,8 +3324,8 @@ function mostrarVersionNueva() {
   const aviso = document.createElement('div');
   aviso.className = 'nueva-version';
   aviso.setAttribute('role', 'status');
-  aviso.innerHTML = `<span>Hay una versión nueva de Jepyso.</span><button type="button" class="boton">Actualizar</button>
-    <button type="button" class="nueva-version-cerrar" aria-label="Ahora no">${ICONO.cerrar}</button>`;
+  aviso.innerHTML = `<span>${t('Hay una versión nueva de Jepyso.')}</span><button type="button" class="boton">${t('Actualizar')}</button>
+    <button type="button" class="nueva-version-cerrar" aria-label="${t('Ahora no')}">${ICONO.cerrar}</button>`;
   aviso.querySelector('.boton').addEventListener('click', () => location.reload());
   // «Not now»: it goes until the next time Jepyso is opened, which already brings the new version.
   aviso.querySelector('.nueva-version-cerrar').addEventListener('click', () => aviso.remove());
@@ -3305,27 +3368,27 @@ function vistaPlantillas() {
       ? lista.map((p, i) => `<li class="plantilla-fila">
           <button type="button" class="plantilla-usar" data-accion="usar" data-i="${i}">
             <span class="nombre">${esc(p.nombre)}</span>
-            <span class="meta">${p.orden.length} ${p.orden.length === 1 ? 'ejercicio' : 'ejercicios'} · ${p.orden.map((id) => esc(EJERCICIOS[id]?.nombre || id)).join(', ')}</span>
+            <span class="meta">${tn(p.orden.length, '{n} ejercicio', '{n} ejercicios')} · ${p.orden.map((id) => esc(EJERCICIOS[id] ? t(EJERCICIOS[id].nombre) : id)).join(', ')}</span>
           </button>
-          <button type="button" class="plantilla-quitar" data-accion="quitar" data-i="${i}" aria-label="Borrar la plantilla ${esc(p.nombre)}">${ICONO.cerrar}</button>
+          <button type="button" class="plantilla-quitar" data-accion="quitar" data-i="${i}" aria-label="${t('Borrar la plantilla {nombre}', { nombre: esc(p.nombre) })}">${ICONO.cerrar}</button>
         </li>`).join('')
-      : '<li class="vacio">Todavía no hay plantillas. Arma una rutina y, en sus ejercicios, «Guardar la rutina como plantilla».</li>';
+      : `<li class="vacio">${t('Todavía no hay plantillas. Arma una rutina y, en sus ejercicios, «Guardar la rutina como plantilla».')}</li>`;
   };
   app.innerHTML = `<div class="personas plantillas-app">
-    ${barraApp('Plantillas', { accion: botonNueva })}
+    ${barraApp(t('Plantillas'), { accion: botonNueva })}
     <div class="armar-cuerpo">
       <ul class="lista-plantillas-app"></ul>
       <section class="programas">
-        <h2>Programas de referencia</h2>
-        <p class="ayuda">Otago y Vivifrail, dos programas probados para prevenir caídas en personas mayores, con la dosis de partida de cada nivel. Se abren como una plantilla: cambia lo que haga falta antes de mandarla.</p>
+        <h2>${t('Programas de referencia')}</h2>
+        <p class="ayuda">${t('Otago y Vivifrail, dos programas probados para prevenir caídas en personas mayores, con la dosis de partida de cada nivel. Se abren como una plantilla: cambia lo que haga falta antes de mandarla.')}</p>
         <ul class="lista-plantillas-app">${PROGRAMAS.map((p) => `<li class="plantilla-fila">
           <button type="button" class="plantilla-usar" data-accion="programa" data-id="${esc(p.id)}">
-            <span class="nombre">${esc(p.nombre)}</span>
-            <span class="meta">${esc(p.descripcion)} · ${p.orden.length} ejercicios</span>
+            <span class="nombre">${esc(t(p.nombre))}</span>
+            <span class="meta">${esc(t(p.descripcion))} · ${tn(p.orden.length, '{n} ejercicio', '{n} ejercicios')}</span>
           </button>
         </li>`).join('')}</ul>
       </section>
-      <details class="ayuda-plegada"><summary>Cómo funciona</summary><p>Una plantilla guarda los ejercicios y sus ajustes. Al usarla se abre una rutina nueva con ellos, para cambiar lo que haga falta y mandarla. Se guardan en este aparato.</p></details>
+      <details class="ayuda-plegada"><summary>${t('Cómo funciona')}</summary><p>${t('Una plantilla guarda los ejercicios y sus ajustes. Al usarla se abre una rutina nueva con ellos, para cambiar lo que haga falta y mandarla. Se guardan en este aparato.')}</p></details>
     </div>
   </div>`;
   pintarLista();
@@ -3351,7 +3414,7 @@ function vistaPlantillas() {
       } else {
         el.dataset.confirmar = '1';
         el.classList.add('confirmar');
-        el.textContent = '¿Borrar?';
+        el.textContent = t('¿Borrar?');
         clearTimeout(confirmar);
         confirmar = setTimeout(pintarLista, 4000);
       }
@@ -3376,7 +3439,7 @@ async function ir() {
     h = '#personas';
     if (!l.valida) setTimeout(() => {
       const aviso = app.querySelector('.aviso-licencia');
-      if (aviso) aviso.textContent = MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato;
+      if (aviso) aviso.textContent = t(MOTIVOS_LICENCIA[l.motivo] || MOTIVOS_LICENCIA.formato);
     }, 0);
   }
   marcoApp(h);

@@ -1,20 +1,23 @@
 // The goniometer of the builder, for the professional: the joint that moves most in the exercise (from its sheet, the
 // angles at the start and at the top), its angle in degrees while the figure plays, on a protractor with the range it
 // sweeps. Jepyso's exercises are written in degrees; this shows them.
+import { t } from './idioma.js';
+
 const NS = 'http://www.w3.org/2000/svg';
 const ZONAS = { cadera: 'Cadera', rodilla: 'Rodilla', hombro: 'Hombro', codo: 'Codo', tobillo: 'Tobillo', tronco: 'Tronco',
-  cuello: 'Cuello', muneca: 'Muñeca' };
+  cuello: 'Cuello', muneca: 'Muñeca', pelvis: 'Pelvis' };
 const PALABRAS = { flexion: 'flexión', extension: 'extensión', rotacion: 'rotación', abduccion: 'abducción', aduccion: 'aducción',
-  inclinacion: 'inclinación' };
+  inclinacion: 'inclinación', basculacion: 'basculación', externa: 'externa', interna: 'interna' };
 const REPOSO_S = 1;
 const R = 64;
 
-// «rodilla_derecha_flexion» → «Rodilla · flexión».
+// «rodilla_derecha_flexion» → «Rodilla · flexión». The movement is translated whole («rotación externa», «external
+// rotation»): each language puts its words in its own order.
 function articulacion(clave) {
   const p = clave.split('_');
   const conLado = p[1] === 'izquierda' || p[1] === 'derecha';
   const mov = p.slice(conLado ? 2 : 1).map((x) => PALABRAS[x] || x).join(' ');
-  return `${ZONAS[p[0]] || p[0]} · ${mov}`;
+  return `${t(ZONAS[p[0]] || p[0])} · ${t(mov)}`;
 }
 
 const medidas = new Map();
@@ -63,7 +66,7 @@ export function dibujar(cont, m) {
       <path class="gonio-arco" d="M ${-R} 0 A ${R} ${R} 0 0 1 ${R} 0"/><path class="gonio-barrido"/>
       <line class="gonio-fijo"/><line class="gonio-brazo"/><circle class="gonio-eje" r="4.5"/></svg>
     <div class="gonio-lectura"><span class="gonio-que">${m.que}</span><span class="gonio-grados num">${Math.round(m.a0)}°</span>
-      <span class="gonio-rango num">de ${menor}° a ${mayor}°</span></div>`;
+      <span class="gonio-rango num">${t('de {menor}° a {mayor}°', { menor, mayor })}</span></div>`;
   cont.dataset.id = m.id;
   cont.hidden = false;
 }
