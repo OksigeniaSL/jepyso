@@ -1,0 +1,5 @@
+# The OAuth client ids of the Microsoft and Dropbox registrations of Jepyso (docs of the connectors): public by design,
+# the app signs in from the browser with PKCE and no secret, as with Google's client id. Not keys.
+9248123a4abcd427e63d8a13c4b2f99d0cc1d650:app/onedrive.js:generic-api-key:10
+7dbb4fd753720996c56056694e061c0debc83558:tests/nube.mjs:generic-api-key:349
+7dbb4fd753720996c56056694e061c0debc83558:tests/nube.mjs:generic-api-key:351
