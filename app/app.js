@@ -926,6 +926,8 @@ function vistaArmar() {
       const f = await figuraEn(sitio, b.cuerpo);
       f.oyentes = {};
       await f.cargarCuerpo();
+      // An exercise chosen meanwhile has asked for the figure already: this call must not overtake it.
+      if (b.orden.length || b.mirado) return;
       const espera = [DE_PIE, ...DE_PIE_MUESTRA].find((id) => f.manifiesto.ejercicios[id]);
       if (!espera || (await f.poner(espera)) === false || b.orden.length || b.mirado) return;
       f.parar();
