@@ -73,6 +73,9 @@ const d = await import(`${w}/datos.js`);
 const hay = new Set([
   ...Object.keys(JSON.parse(fs.readFileSync(`${w}/modelos/ejercicios.json`, 'utf8')).ejercicios),
 ].filter((id) => JSON.parse(fs.readFileSync(`${w}/modelos/b/ejercicios.json`, 'utf8')).ejercicios[id]));
+// The plugin's pages show the name, position and material in the user's language: the English ones come from the app's
+// dictionary (idiomas/en-ejercicios.js) under «en».
+const enEj = fs.existsSync(`${w}/idiomas/en-ejercicios.js`) ? (await import(`${w}/idiomas/en-ejercicios.js`)).default : {};
 const ejercicios = {};
 for (const id of d.ORDEN) {
   const e = d.EJERCICIOS[id];
@@ -80,6 +83,7 @@ for (const id of d.ORDEN) {
   ejercicios[id] = {
     nombre: e.nombre, unLado: !!e.unLado, unidad: e.unidad || 'reps', uno: u.uno, varios: u.varios,
     posicion: e.posicion, material: e.material, disponible: hay.has(id),
+    en: { nombre: enEj[e.nombre] || e.nombre, posicion: enEj[e.posicion] || e.posicion, material: enEj[e.material] || e.material },
   };
 }
 fs.writeFileSync(`${w}/catalogo.json`, `${JSON.stringify({ v: 1, ejercicios }, null, 1)}\n`);
