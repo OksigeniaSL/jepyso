@@ -105,8 +105,19 @@ img { max-width: 100%; height: auto; display: block; }
 .pie-enlaces { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; }
 .pie-enlaces a, .enlace-acceso { min-height: 44px; display: inline-flex; align-items: center; }
 .enlace-acceso { font: inherit; color: inherit; background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; cursor: pointer; }
-.firma { color: var(--tinta-suave); }
-.firma a { color: inherit; }
+.firma { color: var(--tinta-suave); margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+.firma a { color: inherit; min-height: 44px; display: inline-flex; align-items: center; }
+/* Oksigenia's space: its mark as on oksigenia.com, the signature and its contact, and its accounts as 44 px marks. */
+.pie-oksigenia { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; border-top: 1px solid var(--linea); padding-top: 12px; }
+.oksigenia { display: flex; flex-wrap: wrap; align-items: center; gap: 0 22px; }
+.oksigenia-marca { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--tinta); text-decoration: none; font-family: var(--letra-titulo); font-weight: 800; font-size: 19px; letter-spacing: 0.01em; }
+.logo-oksigenia { width: 28px; height: 28px; flex: none; }
+.redes { list-style: none; margin: 0 -10px; padding: 0; display: flex; flex-wrap: wrap; gap: 2px; }
+.redes a { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 50%; color: var(--tinta-suave); }
+.redes svg { width: 20px; height: 20px; fill: currentColor; }
+.redes a:focus-visible { color: var(--tinta); outline: 2px solid currentColor; outline-offset: 2px; }
+@media (hover: hover) { .redes a:hover { color: var(--tinta); background: var(--superficie); } }
+@media (max-width: 520px) { .firma .separa { display: none; } .firma { flex-direction: column; align-items: flex-start; } .firma a { min-height: 36px; } }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 

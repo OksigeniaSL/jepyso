@@ -36,12 +36,28 @@ RUTAS = {
 }
 PIE = {
     'es': {'precios_corto': 'Precios', 'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
-           'firma': 'Jepyso · un producto de Oksigenia', 'otra': 'English', 'abrir': 'Abrir la app'},
+           'firma': 'Jepyso · un producto de Oksigenia', 'otra': 'English', 'abrir': 'Abrir la app',
+           'redes': 'Oksigenia en las redes', 'en_red': 'Oksigenia en {red}'},
     'en': {'precios_corto': 'Pricing', 'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
-           'firma': 'Jepyso · an Oksigenia product', 'otra': 'Español', 'abrir': 'Open the app'},
+           'firma': 'Jepyso · an Oksigenia product', 'otra': 'Español', 'abrir': 'Open the app',
+           'redes': 'Oksigenia on social media', 'en_red': 'Oksigenia on {red}'},
 }
 
 e = html.escape
+
+# Oksigenia's space in the footer: its accounts, as on oksigenia.com and ayvurenda.com (same order and icons, from
+# redes.json). Enrique, 16-11-2026: «para que Oksigenia tenga su espacio».
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'redes.json'), encoding='utf-8') as _f:
+    REDES = json.load(_f)
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logo-oksigenia.svg'), encoding='utf-8') as _f:
+    LOGO_OKSIGENIA = _f.read().strip()  # the symbol of oksigenia.com's logo, in the colour of the text
+CORREO_OKSIGENIA = 'contacto@oksigenia.com'
+
+
+def redes(lengua):
+    p = PIE[lengua]
+    enlaces = ''.join(f'<li><a href="{e(r["url"])}" aria-label="{e(p["en_red"].format(red=r["red"]))}" rel="me">{r["svg"]}</a></li>' for r in REDES)
+    return f'<ul class="redes" aria-label="{e(p["redes"])}">{enlaces}</ul>'
 
 
 def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
@@ -89,7 +105,13 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
       <a href="{r['aviso']}">{p['aviso']}</a>
       <button type="button" class="enlace-acceso" data-acceso>{p['acceso']}</button>
     </nav>
-    <p class="firma"><a href="https://oksigenia.com{'/en' if lengua == 'en' else ''}">{p['firma']}</a></p>
+    <div class="pie-oksigenia">
+      <div class="oksigenia">
+        <a class="oksigenia-marca" href="https://oksigenia.com{'/en' if lengua == 'en' else ''}" aria-label="Oksigenia">{LOGO_OKSIGENIA}<span aria-hidden="true">OKSIGENIA</span></a>
+        <p class="firma"><a href="https://oksigenia.com{'/en' if lengua == 'en' else ''}">{p['firma']}</a><span class="separa" aria-hidden="true">·</span><a href="mailto:{CORREO_OKSIGENIA}">{CORREO_OKSIGENIA}</a></p>
+      </div>
+      {redes(lengua)}
+    </div>
   </footer>
   <oksigenia-access-panel trigger="none" locale="{lengua}" position="bottom-left" storage-key="jepyso-sitio"
     controls="text-size,line-height,letter-spacing,readable-font,dyslexia-font,contrast,highlight-links,colorblind,reading-guide,big-cursor,big-targets,pause-anim,focus"></oksigenia-access-panel>
