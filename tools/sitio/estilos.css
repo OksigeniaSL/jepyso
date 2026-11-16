@@ -150,6 +150,12 @@ img { max-width: 100%; height: auto; display: block; }
   border-left: 1px solid var(--linea); }
 .escenario-figura { position: absolute; inset: 24% 0 150px 0; background: url('/imagenes/yeso-puente.webp') center / contain no-repeat; }
 .con-figura .escenario-figura { background: none; }
+/* Each step frames the figure in the room its layer leaves free: beside the routine and the summary, above the chat
+   and the voice. The figure re-frames itself to its new box (Figura.ajustar). */
+.escenario[data-paso="1"] .escenario-figura { inset: 6% 0 40px min(390px, 50%); }
+.escenario[data-paso="2"] .escenario-figura { inset: 6% 0 200px 0; }
+.escenario[data-paso="3"] .escenario-figura { inset: 15% 0 120px 0; }
+.escenario[data-paso="4"] .escenario-figura { inset: 6% min(390px, 50%) 40px 0; }
 .escenario-figura canvas { width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 0.8s ease; }
 .con-figura .escenario-figura canvas { opacity: 1; }
 .escenario .registro { position: absolute; inset: 14px; pointer-events: none; }
@@ -185,7 +191,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* 1: the routine being built, as the app lists it. */
 .rutina, .serie, .resumen { padding: 18px 20px; background: var(--superficie); border: 1px solid var(--linea); box-shadow: var(--sombra); }
-.rutina { top: 40px; left: 40px; width: min(380px, calc(100% - 80px)); }
+.rutina { top: 40px; left: 40px; width: min(330px, calc(100% - 80px)); }
 .rutina ol { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: n; }
 .rutina li { display: grid; grid-template-columns: 26px 1fr; padding: 10px 0; border-top: 1px solid var(--linea); counter-increment: n; }
 .rutina li::before { content: counter(n); grid-row: span 2; font: 500 15px/1.3 var(--letra-mono); color: var(--tinta-suave); }
@@ -216,7 +222,7 @@ img { max-width: 100%; height: auto; display: block; }
 .voces .activa { background: var(--tinta); color: var(--superficie); }
 
 /* 4: what comes back, as the professional reads it. */
-.resumen { top: 40px; right: 40px; width: min(380px, calc(100% - 80px)); padding-bottom: 14px; }
+.resumen { top: 40px; right: 40px; width: min(330px, calc(100% - 80px)); padding-bottom: 14px; }
 .resumen h3 { margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 500; }
 .resumen .baja { margin-top: 6px; font-weight: 700; }
 .resumen ul { margin: 12px 0 0; padding: 0; list-style: none; }
@@ -290,6 +296,11 @@ img { max-width: 100%; height: auto; display: block; }
   .sala { grid-template-columns: minmax(0, 1fr); }
   .escenario { grid-row: 1; height: 46vh; z-index: 3; border-left: 0; border-bottom: 1px solid var(--linea); }
   .escenario-figura { inset: 0 0 118px 0; }
+  /* On a phone the cards go under the figure, which keeps the top of the room. */
+  .escenario[data-paso="1"] .escenario-figura, .escenario[data-paso="4"] .escenario-figura { inset: 6px 0 150px 0; }
+  .escenario[data-paso="2"] .escenario-figura { inset: 6px 0 128px 0; }
+  .escenario[data-paso="3"] .escenario-figura { inset: 64px 0 74px 0; }
+  .escenario .rutina, .escenario .resumen { top: auto; bottom: 14px; }
   .relato { padding: 0 var(--lado); }
   .paso { min-height: 62vh; padding: 36px 0; }
   .paso-portada { min-height: 0; padding-top: 28px; }
