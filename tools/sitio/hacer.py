@@ -16,7 +16,7 @@ DEST = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'dist', 'sitio')
 APP = 'https://app.jepyso.com/'
 SITIO = 'https://jepyso.com'
 INDEXNOW = 'a82c52154787ee1d911b4ccb67a68f07'
-ACTUALIZADO = {'es': '14 de noviembre de 2026', 'en': '14 November 2026'}
+ACTUALIZADO = {'es': '16 de noviembre de 2026', 'en': '16 November 2026'}
 PANEL_V = '0.12.0'
 
 # --- The company, as in oksigenia.com's legal notice.
@@ -99,8 +99,8 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
 
 
 # --- Plans and pricing (Enrique, 15-11-2026, docs/decisiones.md of hq). Sold only here, on the web: the app of Google
-# Play sells nothing. The payment links are the coordinator's (Stripe); each one asks for the Google account the licence
-# goes to.
+# Play sells nothing. The payment links are the coordinator's (Stripe); each one asks for the email of the cloud account
+# (Google Drive, Dropbox or OneDrive) the licence goes to.
 PAGO = {
     'profesional': 'https://buy.stripe.com/cNieVe4k4c0Q8Xc3gXbAs0q',
     'centro': 'https://buy.stripe.com/8x2dRa6sc5CsddsdVBbAs0r',
@@ -112,19 +112,19 @@ PRECIOS = {
       <p class="entradilla">Pago único, de por vida y sin cuotas. Para quien hace la rutina, Jepyso es siempre gratis: no instala nada ni crea ninguna cuenta.</p>
       <div class="tres">
         <div class="tarjeta plan"><h2>Gratis</h2><p class="precio">0 €</p><ul><li>Rutinas por enlace, todas las que quieras</li><li>Fichas y seguimiento de hasta <strong>5 personas</strong></li><li>En tu navegador, con copia en un archivo</li></ul><a class="boton secundario" href="{APP}">Empezar gratis</a></div>
-        <div class="tarjeta plan"><h2>Profesional</h2><p class="precio">59 €</p><ul><li>Fichas y seguimiento de hasta <strong>50 personas</strong></li><li>En tu Google Drive, en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['profesional']}">Comprar Profesional</a></div>
-        <div class="tarjeta plan"><h2>Centro</h2><p class="precio">149 €</p><ul><li>Fichas y seguimiento de hasta <strong>300 personas</strong></li><li>En tu Google Drive, en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['centro']}">Comprar Centro</a></div>
+        <div class="tarjeta plan"><h2>Profesional</h2><p class="precio">59 €</p><ul><li>Fichas y seguimiento de hasta <strong>50 personas</strong></li><li>En tu nube (Google Drive, Dropbox o OneDrive), en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['profesional']}">Comprar Profesional</a></div>
+        <div class="tarjeta plan"><h2>Centro</h2><p class="precio">149 €</p><ul><li>Fichas y seguimiento de hasta <strong>300 personas</strong></li><li>En tu nube (Google Drive, Dropbox o OneDrive), en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['centro']}">Comprar Centro</a></div>
       </div>
       <p>¿Ya tienes Profesional? <a href="{PAGO['ampliar']}">Pasa a Centro pagando la diferencia: 90 €</a>.</p>
       <h2>Antes de pagar</h2>
-      <p><strong>Escribe en el pago la cuenta de Google con la que entras en Jepyso.</strong> La licencia va ligada a esa cuenta y a su Google Drive: con otra cuenta no se activa.</p>
+      <p><strong>Escribe en el pago el correo de la cuenta de tu nube:</strong> la de Google Drive, Dropbox o OneDrive donde vas a guardar las fichas. La licencia va ligada a esa cuenta: con otra no se activa.</p>
       <h2>Después de pagar</h2>
-      <p>En unos minutos te llega un correo con el enlace que activa tu licencia y, aparte, la factura. Abre el enlace en el aparato donde usas Jepyso y conecta tu Google Drive con esa misma cuenta. Si lo usas en más aparatos, ábrelo también en cada uno.</p>
+      <p>En unos minutos te llega un correo con el enlace que activa tu licencia y, aparte, la factura. Abre el enlace en el aparato donde usas Jepyso y conecta tu nube con esa misma cuenta. Si lo usas en más aparatos, ábrelo también en cada uno.</p>
       <h2>Condiciones</h2>
       <ul>
         <li>La licencia es de por vida: no caduca ni se renueva.</li>
         <li>Jepyso puede dejar de mantenerse algún día. Su código es libre, así que quien quiera puede seguirlo, y tu licencia sigue funcionando con la última versión publicada.</li>
-        <li>Si cambias de cuenta de Google, escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> y te mandamos la licencia para la cuenta nueva. Las fichas se llevan con el archivo de copia.</li>
+        <li>Si cambias de cuenta o de nube, escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> y te mandamos la licencia para la cuenta nueva. Las fichas se llevan con el archivo de copia.</li>
         <li>El pago lo procesa Stripe: Oksigenia no ve los datos de tu tarjeta.</li>
         <li>El uso de Jepyso se rige por sus <a href="/condiciones/">condiciones de uso</a>, y los datos, por su <a href="/privacidad/">política de privacidad</a>.</li>
       </ul>
@@ -134,19 +134,19 @@ PRECIOS = {
       <p class="entradilla">One payment, for life, no subscription. For the person who does the routine, Jepyso is always free: nothing to install and no account to create.</p>
       <div class="tres">
         <div class="tarjeta plan"><h2>Free</h2><p class="precio">€0</p><ul><li>Routines as a link, as many as you like</li><li>Files and follow-up of up to <strong>5 people</strong></li><li>In your browser, with a backup file</li></ul><a class="boton secundario" href="{APP}">Start for free</a></div>
-        <div class="tarjeta plan"><h2>Professional</h2><p class="precio">€59</p><ul><li>Files and follow-up of up to <strong>50 people</strong></li><li>In your Google Drive, on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['profesional']}">Buy Professional</a></div>
-        <div class="tarjeta plan"><h2>Centre</h2><p class="precio">€149</p><ul><li>Files and follow-up of up to <strong>300 people</strong></li><li>In your Google Drive, on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['centro']}">Buy Centre</a></div>
+        <div class="tarjeta plan"><h2>Professional</h2><p class="precio">€59</p><ul><li>Files and follow-up of up to <strong>50 people</strong></li><li>In your cloud (Google Drive, Dropbox or OneDrive), on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['profesional']}">Buy Professional</a></div>
+        <div class="tarjeta plan"><h2>Centre</h2><p class="precio">€149</p><ul><li>Files and follow-up of up to <strong>300 people</strong></li><li>In your cloud (Google Drive, Dropbox or OneDrive), on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['centro']}">Buy Centre</a></div>
       </div>
       <p>Already on Professional? <a href="{PAGO['ampliar']}">Move to Centre by paying the difference: €90</a>.</p>
       <h2>Before you pay</h2>
-      <p><strong>Write in the payment the Google account you sign in to Jepyso with.</strong> The licence is tied to that account and its Google Drive: it does not work with another one.</p>
+      <p><strong>Write in the payment the email of your cloud account:</strong> the Google Drive, Dropbox or OneDrive account where you will keep your files. The licence is tied to that account: it does not work with another one.</p>
       <h2>After you pay</h2>
-      <p>Within minutes you get an email with the link that activates your licence and, separately, the invoice. Open the link on the device where you use Jepyso and connect your Google Drive with that same account. If you use it on more devices, open it on each one too.</p>
+      <p>Within minutes you get an email with the link that activates your licence and, separately, the invoice. Open the link on the device where you use Jepyso and connect your cloud with that same account. If you use it on more devices, open it on each one too.</p>
       <h2>Terms</h2>
       <ul>
         <li>The licence is for life: it does not expire and is not renewed.</li>
         <li>Jepyso may stop being maintained one day. Its code is free, so anyone who wants can carry it on, and your licence keeps working with the last published version.</li>
-        <li>If you change your Google account, write to us at <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> and we send you the licence for the new account. Your files go with the backup file.</li>
+        <li>If you change account or cloud, write to us at <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a> and we send you the licence for the new account. Your files go with the backup file.</li>
         <li>Payment is processed by Stripe: Oksigenia never sees your card details.</li>
         <li>The use of Jepyso is governed by its <a href="/en/terms/">terms of use</a>, and data by its <a href="/en/privacy/">privacy policy</a>.</li>
       </ul>
@@ -234,7 +234,7 @@ T = {
         'aceptable': 'Aceptable', 'hoy': 'Hoy', 'marcado': 'Martes · marcado',
         'datos_e': 'Tus datos, contigo', 'datos_h': 'Oksigenia no recibe nada',
         'datos_p': 'Ni la rutina, ni lo que hace la persona, ni sus molestias: Jepyso no tiene servidor de datos.',
-        'tu_tel': ('Tu teléfono', 'Tus fichas, y con un plan, también en tu Google Drive'),
+        'tu_tel': ('Tu teléfono', 'Tus fichas, y con un plan, también en tu nube'),
         'su_tel': ('Su teléfono', 'Lo que apunta se queda ahí hasta que te lo manda'),
         'ida': 'La rutina, dentro del enlace', 'vuelta': 'Lo que hizo, en otro enlace',
         'nada': '<a href="/privacidad/">Así lo cuenta la política de privacidad.</a>',
@@ -245,8 +245,8 @@ T = {
                       ('Vivifrail', 'Cuatro niveles según el SPPB, de la A a la D: de quien se levanta con mucha ayuda a quien está en buena forma.')],
         'planes_e': 'Planes', 'planes_h': 'Gratis para empezar. Un solo pago para tu consulta',
         'planes': [('Gratis', '0 €', 5, 'Rutinas por enlace, todas las que quieras, y las fichas de hasta <b>5 personas</b>, en tu teléfono.', 'Empezar gratis', APP, ' secundario'),
-                   ('Profesional', '59 €', 50, 'Las fichas de hasta <b>50 personas</b>, en tu Google Drive y en todos tus aparatos.', 'Ver Profesional', '/precios/', ''),
-                   ('Centro', '149 €', 300, 'Las fichas de hasta <b>300 personas</b>, en tu Google Drive y en todos tus aparatos.', 'Ver Centro', '/precios/', '')],
+                   ('Profesional', '59 €', 50, 'Las fichas de hasta <b>50 personas</b>, en tu nube y en todos tus aparatos.', 'Ver Profesional', '/precios/', ''),
+                   ('Centro', '149 €', 300, 'Las fichas de hasta <b>300 personas</b>, en tu nube y en todos tus aparatos.', 'Ver Centro', '/precios/', '')],
         'planes_nota': 'Pago único, de por vida, sin cuotas. Para quien hace la rutina, siempre gratis. <a href="/precios/">Todo sobre los planes</a>',
         'centro': ('En tu centro', 'Dentro de la plataforma del centro', 'Para colegios, universidades y centros de formación: las rutinas, como una actividad más del curso, con su gente y sus grupos.', 'Escríbenos'),
         'cierre': 'Manda la primera rutina hoy', 'abrir': 'Abrir la app',
@@ -282,7 +282,7 @@ T = {
         'aceptable': 'Acceptable', 'hoy': 'Today', 'marcado': 'Tuesday · flagged',
         'datos_e': 'Your data stays with you', 'datos_h': 'Oksigenia receives nothing',
         'datos_p': 'Not the routine, not what the person does, not their discomfort: Jepyso has no data server.',
-        'tu_tel': ('Your phone', 'Your files, and with a plan, in your Google Drive too'),
+        'tu_tel': ('Your phone', 'Your files, and with a plan, in your own cloud too'),
         'su_tel': ('Their phone', 'What they record stays there until they send it to you'),
         'ida': 'The routine, inside the link', 'vuelta': 'What they did, in another link',
         'nada': '<a href="/en/privacy/">This is how our privacy policy puts it.</a>',
@@ -293,8 +293,8 @@ T = {
                       ('Vivifrail', 'Four levels by SPPB score, from A to D: from those who need a lot of help to stand up to those in good shape.')],
         'planes_e': 'Plans', 'planes_h': 'Free to start. One payment for your practice',
         'planes': [('Free', '€0', 5, 'Routines as links, as many as you like, and the files of up to <b>5 people</b>, on your phone.', 'Start for free', APP, ' secundario'),
-                   ('Professional', '€59', 50, 'The files of up to <b>50 people</b>, in your Google Drive and on all your devices.', 'See Professional', '/en/pricing/', ''),
-                   ('Centre', '€149', 300, 'The files of up to <b>300 people</b>, in your Google Drive and on all your devices.', 'See Centre', '/en/pricing/', '')],
+                   ('Professional', '€59', 50, 'The files of up to <b>50 people</b>, in your own cloud and on all your devices.', 'See Professional', '/en/pricing/', ''),
+                   ('Centre', '€149', 300, 'The files of up to <b>300 people</b>, in your own cloud and on all your devices.', 'See Centre', '/en/pricing/', '')],
         'planes_nota': 'One payment, for life, no subscription. For the person doing the routine, always free. <a href="/en/pricing/">Everything about the plans</a>',
         'centro': ('In your organisation', 'Inside your organisation’s platform', 'For schools, universities and training centres: routines as one more activity of the course, with its people and its groups.', 'Write to us'),
         'cierre': 'Send your first routine today', 'abrir': 'Open the app',
@@ -485,17 +485,18 @@ PRIVACIDAD = {
     'es': ('Política de privacidad de Jepyso', f'Última actualización: {ACTUALIZADO["es"]}.', [
         '<p>Jepyso es una aplicación de Oksigenia SL (ver el <a href="/aviso-legal/">aviso legal</a>). Con ella, un profesional del ejercicio arma rutinas y se las manda a cada persona por un enlace; la persona las hace en su móvil siguiendo a una figura en 3D.</p>',
         '<h2>Oksigenia no guarda tus datos</h2>',
-        '<p>Jepyso no tiene servidor de datos: todo lo que maneja se queda en tus aparatos o en tu propia nube. Lo único que lleva un servidor de Oksigenia es la cuenta de las fichas gratis de cada profesional, sin saber qué hay en ellas.</p>',
+        '<p>Jepyso no tiene servidor de datos: todo lo que maneja se queda en tus aparatos o en tu propia nube. Un servidor de Oksigenia lleva solo dos cosas, sin saber qué hay en tus fichas: la cuenta de las fichas gratis de cada profesional y si cada licencia de pago sigue vigente.</p>',
         '<ul>',
         '<li><strong>Las rutinas</strong> viajan dentro del enlace que manda el profesional. Al abrirlo, esa parte del enlace no llega a ningún servidor: la lee el navegador de quien lo abre. Mientras va de un aparato a otro, viaja como cualquier mensaje de la aplicación con la que se manda (WhatsApp, Telegram u otra), con las condiciones de esa aplicación.</li>',
         '<li><strong>Lo que apunta la persona</strong> (repeticiones, molestia y, si quiere, una nota) se guarda en su navegador y, si quiere, se lo manda al profesional por WhatsApp o Telegram, como un enlace más.</li>',
         '<li><strong>Las fichas del profesional</strong> (personas, rutinas, seguimiento y plantillas) se guardan en su navegador. Puede guardar una copia en un archivo cuando quiera.</li>',
         '<li><strong>Las fichas de la versión gratis</strong> van con la cuenta de Google del profesional, hasta cinco por cuenta. Al entrar con Google, el navegador recibe de Google una prueba de qué cuenta es y se la manda al servidor de Jepyso, que la comprueba con Google y apunta solo una huella de la cuenta (un código del que no se puede sacar la dirección de correo) y el código al azar de cada ficha. No guarda el correo, el nombre ni nada de lo que hay dentro de las fichas: los nombres de tus personas, sus rutinas y sus resúmenes se quedan en tu navegador. Al borrar una ficha, su código se borra también del servidor. Con la versión de pago no hace falta.</li>',
-        '<li><strong>Con Google Drive</strong> (versión de pago), las fichas se guardan además en una carpeta «Jepyso» del Drive del propio profesional. Jepyso pide a Google un solo permiso, el de los archivos que crea la propia app (<code>https://www.googleapis.com/auth/drive.file</code>): no puede ver ni tocar el resto del Drive. Para comprobar la licencia de la versión de pago, lee la dirección de la cuenta con la que se conecta el Drive, y la compara en el propio navegador con la de la licencia. La conexión se hace desde el navegador, directamente entre tu aparato y Google, y el permiso dura poco y no se guarda. Puedes quitárselo cuando quieras en la configuración de tu cuenta de Google («Seguridad», «Aplicaciones de terceros»); tus archivos siguen siendo tuyos y puedes borrarlos desde tu Drive.</li>',
+        '<li><strong>En tu nube</strong> (versión de pago), las fichas se guardan además en una carpeta «Jepyso» de la nube del propio profesional: Google Drive, Dropbox o OneDrive, la que elija. Jepyso solo pide permiso para esa carpeta y no puede ver ni tocar el resto: a Google, el de los archivos que crea la propia app (<code>https://www.googleapis.com/auth/drive.file</code>); a Dropbox, el de la carpeta de la app («Aplicaciones/Jepyso») y los datos básicos de la cuenta; a Microsoft, el de la carpeta de la app en OneDrive (<code>Files.ReadWrite.AppFolder</code>) y el perfil básico (<code>User.Read</code>). Para comprobar la licencia de la versión de pago, lee la dirección de la cuenta con la que se conecta la nube y la compara, en el propio navegador, con la de la licencia. La conexión se hace desde el navegador, directamente entre tu aparato y el servicio, y el permiso dura poco y no se guarda. Puedes quitárselo cuando quieras en la configuración de tu cuenta (en Google, «Seguridad», «Aplicaciones de terceros»; en Dropbox, «Configuración», «Aplicaciones conectadas»; en Microsoft, en <a href="https://account.live.com/consent/Manage">account.live.com/consent/Manage</a> o, con una cuenta del trabajo, en «Mis aplicaciones»); tus archivos siguen siendo tuyos y puedes borrarlos desde tu nube.</li>',
+        '<li><strong>La licencia de pago</strong>: cada vez que la app sincroniza con tu nube, pregunta al servidor de Jepyso si tu licencia sigue vigente. Solo le manda el número de la licencia; nada de tus fichas.</li>',
         '<li><strong>El recordatorio en el calendario</strong> es un archivo que se hace en tu teléfono y abre tu propio calendario; no pasa por ningún servidor.</li>',
         '<li><strong>La voz</strong> que guía la serie son grabaciones que vienen con la app, con voz de mujer o de hombre, a elegir; si una no está a mano, la dice una voz del propio teléfono. Lo que dice no se manda a ninguna parte.</li>',
         '<li><strong>La app de Android</strong> es esta misma web, empaquetada: guarda lo mismo, en el mismo sitio, y no pide permisos del teléfono.</li>',
-        '<li><strong>Si compras una licencia</strong>, el pago lo procesa Stripe: Oksigenia no ve los datos de tu tarjeta. Guardamos lo que hace falta para mandarte la licencia y la factura: tu nombre, tu correo y la cuenta de Google de la licencia.</li>',
+        '<li><strong>Si compras una licencia</strong>, el pago lo procesa Stripe: Oksigenia no ve los datos de tu tarjeta. Guardamos lo que hace falta para mandarte la licencia y la factura: tu nombre, tu correo y el de la cuenta de la nube de la licencia.</li>',
         '<li><strong>Para borrar lo que guarda el servidor</strong> de la versión gratis (la huella de tu cuenta y el código de cada ficha), borra tus fichas en la app o escríbenos a <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</li>',
         '</ul>',
         '<h2>Uso de los datos de Google</h2>',
@@ -507,17 +508,18 @@ PRIVACIDAD = {
     'en': ('Jepyso privacy policy', f'Last updated: {ACTUALIZADO["en"]}.', [
         '<p>Jepyso is an app by Oksigenia SL (see the <a href="/en/legal/">legal notice</a>). With it, an exercise professional builds routines and sends them to each person as a link; the person does them on their phone, following a 3D figure.</p>',
         '<h2>Oksigenia does not keep your data</h2>',
-        '<p>Jepyso has no data server: everything it handles stays on your devices or in your own cloud. The only thing an Oksigenia server keeps is the count of each professional’s free files, without knowing what is in them.</p>',
+        '<p>Jepyso has no data server: everything it handles stays on your devices or in your own cloud. An Oksigenia server keeps only two things, without knowing what is in your files: the count of each professional’s free files and whether each paid licence is still valid.</p>',
         '<ul>',
         '<li><strong>Routines</strong> travel inside the link the professional sends. When it is opened, that part of the link never reaches a server: the browser of whoever opens it reads it. On its way from one device to another, it travels like any message of the app used to send it (WhatsApp, Telegram or another), under that app’s terms.</li>',
         '<li><strong>What the person records</strong> (repetitions, discomfort and, if they like, a note) is kept in their browser and, if they want, sent to the professional over WhatsApp or Telegram, as one more link.</li>',
         '<li><strong>The professional’s files</strong> (people, routines, follow-up and templates) are kept in their browser. They can save a copy to a file at any time.</li>',
         '<li><strong>The free version’s files</strong> go with the professional’s Google account, up to five per account. On signing in with Google, the browser gets from Google a proof of which account it is and sends it to Jepyso’s server, which checks it with Google and records only a fingerprint of the account (a code from which the email address cannot be worked out) and the random code of each file. It does not keep the email, the name or anything inside the files: your people’s names, their routines and their summaries stay in your browser. When a file is deleted, its code is deleted from the server too. The paid version does not need it.</li>',
-        '<li><strong>With Google Drive</strong> (paid version), the files are also kept in a «Jepyso» folder in the professional’s own Drive. Jepyso asks Google for a single permission, for the files the app itself creates (<code>https://www.googleapis.com/auth/drive.file</code>): it cannot see or change the rest of the Drive. To check the paid version’s licence, it reads the address of the account the Drive is connected with and compares it, in the browser itself, with the licence’s. The connection goes from the browser, straight between your device and Google; the permission is short-lived and is not stored. You can remove it at any time in your Google account settings («Security», «Third-party apps»); your files stay yours and you can delete them from your Drive.</li>',
+        '<li><strong>In your cloud</strong> (paid version), the files are also kept in a “Jepyso” folder in the professional’s own cloud: Google Drive, Dropbox or OneDrive, whichever they choose. Jepyso only asks for permission for that folder and cannot see or change the rest: from Google, for the files the app itself creates (<code>https://www.googleapis.com/auth/drive.file</code>); from Dropbox, for the app folder (“Apps/Jepyso”) and the basic account details; from Microsoft, for the app folder in OneDrive (<code>Files.ReadWrite.AppFolder</code>) and the basic profile (<code>User.Read</code>). To check the paid version’s licence, it reads the address of the account the cloud is connected with and compares it, in the browser itself, with the licence’s. The connection goes from the browser, straight between your device and the service; the permission is short-lived and is not stored. You can remove it at any time in your account settings (in Google, “Security”, “Third-party apps”; in Dropbox, “Settings”, “Connected apps”; in Microsoft, at <a href="https://account.live.com/consent/Manage">account.live.com/consent/Manage</a> or, with a work account, in “My Apps”); your files stay yours and you can delete them from your cloud.</li>',
+        '<li><strong>The paid licence</strong>: each time the app syncs with your cloud, it asks Jepyso’s server whether your licence is still valid. It sends only the licence number; nothing from your files.</li>',
         '<li><strong>The calendar reminder</strong> is a file made on your phone that opens your own calendar; it goes through no server.</li>',
         '<li><strong>The voice</strong> that guides a set is recordings that come with the app, a woman’s or a man’s voice, as you choose; if one is not at hand, a voice of the phone itself says it. Nothing it says is sent anywhere.</li>',
         '<li><strong>The Android app</strong> is this same website, packaged: it keeps the same things in the same place and asks for no phone permissions.</li>',
-        '<li><strong>If you buy a licence</strong>, payment is processed by Stripe: Oksigenia never sees your card details. We keep what is needed to send you the licence and the invoice: your name, your email and the Google account of the licence.</li>',
+        '<li><strong>If you buy a licence</strong>, payment is processed by Stripe: Oksigenia never sees your card details. We keep what is needed to send you the licence and the invoice: your name, your email and that of the licence’s cloud account.</li>',
         '<li><strong>To delete what the server keeps</strong> for the free version (the fingerprint of your account and the code of each file), delete your files in the app or write to us at <a href="mailto:contacto@oksigenia.com">contacto@oksigenia.com</a>.</li>',
         '</ul>',
         '<h2>Use of Google user data</h2>',
@@ -533,8 +535,8 @@ CONDICIONES = {
         '<p>Jepyso es una aplicación de Oksigenia SL (ver el <a href="/aviso-legal/">aviso legal</a>). Con ella, un profesional del ejercicio arma rutinas y se las manda a cada persona por un enlace; la persona las hace en su móvil siguiendo a una figura en 3D. Al usar Jepyso aceptas estas condiciones.</p>',
         '<h2>Quién decide la rutina</h2><p>La rutina de cada persona la decide su profesional: los ejercicios, el ritmo, las series y la molestia que se acepta. Jepyso es la herramienta con la que la manda y la sigue; no diagnostica, no receta y no sustituye al profesional.</p>',
         '<h2>Si haces una rutina</h2><p>Hazla como te la mandó tu profesional. Si notas una molestia mayor de la acordada, para y cuéntaselo. Para y avisa a quien te dio la rutina si notas un dolor fuerte o distinto del de siempre, mareo, dolor en el pecho, falta de aire, u hormigueo o dolor que baja por un brazo o una pierna. No hace falta cuenta ni instalar nada, y la rutina no cuesta nada a quien la hace.</p>',
-        '<h2>Si mandas rutinas</h2><p>Las rutinas que mandas y lo que apuntas de cada persona son tuyos, y eres tú quien responde de ellos ante tus pacientes o clientes. Jepyso los guarda en tu navegador y, en la versión de pago, en tu propio Google Drive; Oksigenia no los recibe (ver la <a href="/privacidad/">política de privacidad</a>). Haz copia de vez en cuando: si borras los datos del navegador y no tienes copia ni Drive conectado, se pierden.</p>',
-        '<h2>Versión gratuita y versión de pago</h2><p>Mandar rutinas por un enlace es gratis, y la versión gratis guarda las fichas de hasta cinco personas por cuenta de Google. La versión de pago añade, entre otras cosas, las fichas sin límite y guardadas en tu Drive; se activa con una licencia personal, ligada a la cuenta de Google de tu Drive, y su precio y lo que incluye se indican al contratarla.</p>',
+        '<h2>Si mandas rutinas</h2><p>Las rutinas que mandas y lo que apuntas de cada persona son tuyos, y eres tú quien responde de ellos ante tus pacientes o clientes. Jepyso los guarda en tu navegador y, en la versión de pago, en tu propia nube (Google Drive, Dropbox o OneDrive); Oksigenia no los recibe (ver la <a href="/privacidad/">política de privacidad</a>). Haz copia de vez en cuando: si borras los datos del navegador y no tienes copia ni nube conectada, se pierden.</p>',
+        '<h2>Versión gratuita y versión de pago</h2><p>Mandar rutinas por un enlace es gratis, y la versión gratis guarda las fichas de hasta cinco personas por cuenta de Google. La versión de pago añade, entre otras cosas, las fichas de más personas, según el plan, guardadas en tu nube; se activa con una licencia personal, ligada a la cuenta de tu nube, y su precio y lo que incluye se indican al contratarla.</p>',
         '<h2>Los ejercicios y las figuras</h2><p>Las figuras en 3D, sus movimientos y los textos de los ejercicios son de Oksigenia SL: puedes usarlos dentro de Jepyso, pero no copiarlos para otros fines. El código de la aplicación es software libre (GNU GPL v3 o posterior) y está publicado en <a href="https://github.com/OksigeniaSL/jepyso">github.com/OksigeniaSL/jepyso</a>.</p>',
         '<h2>Cambios y disponibilidad</h2><p>Jepyso se mejora a menudo: pueden cambiar sus pantallas, sus ejercicios y estas condiciones. Si cambian estas condiciones, se actualiza la fecha de arriba. Se ofrece tal como está, y Oksigenia pone el cuidado razonable en que funcione bien.</p>',
         '<h2>Ley</h2><p>Estas condiciones se rigen por la ley española.</p>',
@@ -544,8 +546,8 @@ CONDICIONES = {
         '<p>Jepyso is an app by Oksigenia SL (see the <a href="/en/legal/">legal notice</a>). With it, an exercise professional builds routines and sends them to each person as a link; the person does them on their phone, following a 3D figure. By using Jepyso you accept these terms.</p>',
         '<h2>Who decides the routine</h2><p>Each person’s routine is decided by their professional: the exercises, the pace, the sets and the discomfort that is acceptable. Jepyso is the tool they use to send it and follow it up; it does not diagnose, does not prescribe and does not replace the professional.</p>',
         '<h2>If you do a routine</h2><p>Do it as your professional set it. If you feel more discomfort than agreed, stop and tell them. Stop and tell whoever gave you the routine if you feel a strong or unusual pain, dizziness, chest pain, shortness of breath, or tingling or pain running down an arm or a leg. You need no account and nothing to install, and the routine costs nothing to the person who does it.</p>',
-        '<h2>If you send routines</h2><p>The routines you send and what you record about each person are yours, and you answer for them to your patients or clients. Jepyso keeps them in your browser and, in the paid version, in your own Google Drive; Oksigenia does not receive them (see the <a href="/en/privacy/">privacy policy</a>). Keep a copy now and then: if you clear your browser’s data and have no copy and no Drive connected, they are lost.</p>',
-        '<h2>Free and paid versions</h2><p>Sending routines as a link is free, and the free version keeps the files of up to five people per Google account. The paid version adds, among other things, unlimited files kept in your Drive; it is switched on with a personal licence, tied to the Google account of your Drive, and its price and what it includes are shown when you buy it.</p>',
+        '<h2>If you send routines</h2><p>The routines you send and what you record about each person are yours, and you answer for them to your patients or clients. Jepyso keeps them in your browser and, in the paid version, in your own cloud (Google Drive, Dropbox or OneDrive); Oksigenia does not receive them (see the <a href="/en/privacy/">privacy policy</a>). Keep a copy now and then: if you clear your browser’s data and have no copy and no cloud connected, they are lost.</p>',
+        '<h2>Free and paid versions</h2><p>Sending routines as a link is free, and the free version keeps the files of up to five people per Google account. The paid version adds, among other things, the files of more people, depending on the plan, kept in your cloud; it is switched on with a personal licence, tied to your cloud account, and its price and what it includes are shown when you buy it.</p>',
         '<h2>Exercises and figures</h2><p>The 3D figures, their movements and the exercise texts belong to Oksigenia SL: you can use them within Jepyso, but not copy them for other purposes. The app’s code is free software (GNU GPL v3 or later) and is published at <a href="https://github.com/OksigeniaSL/jepyso">github.com/OksigeniaSL/jepyso</a>.</p>',
         '<h2>Changes and availability</h2><p>Jepyso is improved often: its screens, its exercises and these terms may change. If these terms change, the date above is updated. It is provided as it is, and Oksigenia takes reasonable care that it works well.</p>',
         '<h2>Law</h2><p>These terms are governed by Spanish law.</p>',

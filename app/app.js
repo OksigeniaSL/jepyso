@@ -79,6 +79,8 @@ const ICONO = {
 const FIGURAS = [['a', 'Figura 1'], ['b', 'Figura 2']];
 // The figure at ease, with nothing in the hands: the first frame of this exercise.
 const DE_PIE = 'extension_espalda_pie';
+// When the copy does not bring it (the free sample of the Moodle activity), the start of a standing exercise it does.
+const DE_PIE_MUESTRA = ['talones', 'sentadilla', 'equilibrio'];
 
 // The choice of body with the still of each one standing (tools/posters/figuras.mjs): the names alone did not say how
 // they differ.
@@ -923,7 +925,9 @@ function vistaArmar() {
     try {
       const f = await figuraEn(sitio, b.cuerpo);
       f.oyentes = {};
-      if ((await f.poner(DE_PIE)) === false || b.orden.length || b.mirado) return;
+      await f.cargarCuerpo();
+      const espera = [DE_PIE, ...DE_PIE_MUESTRA].find((id) => f.manifiesto.ejercicios[id]);
+      if (!espera || (await f.poner(espera)) === false || b.orden.length || b.mirado) return;
       f.parar();
       f.posar(f.fases.subir[0]);
       f.musculos?.fuerza(0);
