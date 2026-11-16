@@ -6,8 +6,11 @@
        map's (tests/csp.mjs checks it); a copy without the import map (tools/construir.sh) needs nothing more. The three
        style hashes are the fixed styles of Oksigenia's accessibility panel 0.12.0 at position="bottom-left": its
        effects, its own sheet and the colour-blind filters' SVG (that one is an attribute, hence 'unsafe-hashes').
-       They change with the panel's version or its attributes; the walk fails on any refusal and prints the new hash. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Fr0fF0sjU47PxvRygowzV9fmZP537864zpBdG8tWPmc=' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-hashes' 'sha256-S7ClRAmGJq3evHjIDEpITgQRsrKVzPiY8x2s1HkH4Kg=' 'sha256-4wOm3BwddL5VP97matJWlHbRkq9UhogcJWNPtIU220A=' 'sha256-HXpdsTS7aV+r+X2zQtxJcxGFkx9YDkRb2LwtnZjFr/E=' https://accounts.google.com/gsi/style; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+       They change with the panel's version or its attributes; the walk fails on any refusal and prints the new hash.
+       connect-src: Google Drive (drive.js), Dropbox (dropbox.js) and Microsoft Graph with its token address
+       (onedrive.js), and the storage a OneDrive file is downloaded from: files.1drv.com and microsoftpersonalcontent.com
+       for personal accounts, sharepoint.com for work or school ones. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Fr0fF0sjU47PxvRygowzV9fmZP537864zpBdG8tWPmc=' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-hashes' 'sha256-S7ClRAmGJq3evHjIDEpITgQRsrKVzPiY8x2s1HkH4Kg=' 'sha256-4wOm3BwddL5VP97matJWlHbRkq9UhogcJWNPtIU220A=' 'sha256-HXpdsTS7aV+r+X2zQtxJcxGFkx9YDkRb2LwtnZjFr/E=' https://accounts.google.com/gsi/style; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/ https://api.dropboxapi.com https://content.dropboxapi.com https://login.microsoftonline.com https://graph.microsoft.com https://*.files.1drv.com https://*.microsoftpersonalcontent.com https://*.sharepoint.com; frame-src https://accounts.google.com/gsi/; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#e4e6e3" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121517" media="(prefers-color-scheme: dark)">

@@ -1,9 +1,10 @@
 // The paid version's licence (the coordinator's design, 14-11-2026). A key signed by Oksigenia with Ed25519:
 // base64url(payload) + "." + base64url(signature), no padding. The payload is the JSON
-// {"p":"jepyso","s":"consulta","c":"<Google account, lower case>","f":"YYYY-MM-DD","n":"<order>"}, signed byte for byte.
-// One payment, no expiry. It is checked here, with no connection, against Oksigenia's public key, and it only counts
-// with the Drive connected to that same account: a key passed to a colleague is no use to them. It arrives in a link
-// (#licencia=…, a fragment: no server sees it) or pasted. Nothing about it is sent anywhere.
+// {"p":"jepyso","s":"consulta","c":"<the account's e-mail, lower case>","f":"YYYY-MM-DD","n":"<order>"}, signed byte
+// for byte. One payment, no expiry. It is checked here, with no connection, against Oksigenia's public key, and it only
+// counts with the cloud connected to that same account (Google Drive, Dropbox or OneDrive, whose e-mail must be the
+// licence's): a key passed to a colleague is no use to them. It arrives in a link (#licencia=…, a fragment: no server
+// sees it) or pasted. Nothing about it is sent anywhere.
 import { almacen } from './datos.js';
 import { t } from './idioma.js';
 
@@ -124,8 +125,9 @@ export async function guardarLicencia(clave) {
   return l;
 }
 
-// After connecting the Drive: the account it was connected with. True when it is the licence's (and then it counts on
-// this browser from now on); false when the licence is for another account.
+// After connecting the cloud (Google Drive, Dropbox or OneDrive, nube.js): the e-mail of the account it was connected
+// with. True when it is the licence's (and then it counts on this browser from now on); false when the licence is for
+// another account. The same for every service: one licence, one account, so another service gives no more files.
 export async function cuentaDelDrive(email) {
   const cuenta = String(email || '').trim().toLowerCase();
   if (!estado.valida) return false;

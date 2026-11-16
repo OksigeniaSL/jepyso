@@ -12,7 +12,7 @@ import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
 } from './personas.js';
-import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
+import { NUBES, nubeElegida, elegirNube, ultimaVez, apuntarVez, nubeAnterior, sincronizar } from './nube.js';
 import { comprobarLicencia, licencia, licenciaPendiente, licenciaAnulada, comprobarVigencia, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
 import { ampliarPlan } from './tienda.js';
 import {
@@ -327,9 +327,9 @@ function abrirAyuda() {
   dialogo.innerHTML = `<h2 id="ayuda-titulo" tabindex="-1">${t('Ayuda')}</h2>
     ${pregunta(t('¿Cómo le mando una rutina a alguien?'), t('Ármala en «Nueva rutina» y pulsa «Crear enlace»: se lo mandas por WhatsApp, Telegram u otra app. Lo abre en su teléfono, sin instalar nada.'))}
     ${pregunta(t('¿Qué hace la persona?'), t('Sigue a la figura, que lleva el ritmo, el lado y las series que pusiste. Al acabar apunta lo que hizo y la molestia que notó, y te manda su resumen con un enlace: ábrelo en este aparato y se guarda en su ficha.'))}
-    ${pregunta(t('¿Dónde se guardan mis fichas?'), t('En este aparato, y con un plan de pago también en tu Google Drive, para tenerlas en todos tus aparatos. Desde «Personas» puedes guardar una copia en un archivo cuando quieras.'))}
+    ${pregunta(t('¿Dónde se guardan mis fichas?'), t('En este aparato, y con un plan de pago también en tu nube (Google Drive, OneDrive o Dropbox), para tenerlas en todos tus aparatos. Desde «Personas» puedes guardar una copia en un archivo cuando quieras.'))}
     ${pregunta(t('¿Cuántas personas caben?'), `${t('Gratis, {n} con ficha; con un plan, las que diga tu licencia. Las rutinas se mandan igual a cualquiera, con ficha o sin ella.', { n: LIMITE_GRATIS })} ${ampliarPlan()}`)}
-    ${pregunta(t('¿Cómo activo mi licencia?'), t('Abre el enlace que te llegó con ella, o pégala en «Personas», en «¿Tienes una licencia de Jepyso?». Después conecta el Drive con la cuenta de la licencia.'))}
+    ${pregunta(t('¿Cómo activo mi licencia?'), t('Abre el enlace que te llegó con ella, o pégala en «Personas», en «¿Tienes una licencia de Jepyso?». Después conecta tu nube con la cuenta de la licencia.'))}
     ${pregunta(t('¿Se puede cambiar la voz?'), t('Sí: al abrir su rutina, cada persona elige voz de mujer, voz de hombre o sin voz.'))}
     <section class="ayuda-contacto">
       <h3>${t('Contacto')}</h3>
@@ -2856,27 +2856,38 @@ function filaPersona(p) {
   </a></li>`;
 }
 
-// The paid version keeps the files in the professional's own Google Drive (drive.js): a folder «Jepyso» that the app
-// only can see. Syncing joins what this device has with what the Drive has, and keeps it in both places.
-const ultimaSincronia = () => {
-  const f = almacen.leer('drive-ultima', '');
+// The paid version keeps the files in the professional's own cloud (nube.js): Google Drive, Dropbox or OneDrive, as
+// they choose on this device, each with one folder the app only can see. Syncing joins what this device has with what
+// that cloud has, and keeps it in both places.
+const ultimaSincronia = (id) => {
+  const f = ultimaVez(id);
   if (!f) return t('Todavía sin conectar.');
   const d = new Date(f);
   const hora = d.toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' });
   return diaLocal(d) === diaLocal() ? t('Última vez: hoy, a las {hora}.', { hora }) : t('Última vez: el {fecha}, a las {hora}.', { fecha: fechaLarga(diaLocal(d)), hora });
 };
 
-function seccionDrive() {
+// The three services side by side, the chosen one pressed; what it keeps and where; the licence; and one button.
+// Moving to a service this device has never synced with says what happens: this device's data joins what is there,
+// and the other one keeps what it had. With a cancelled licence there is nothing to choose or sync.
+function seccionNube() {
+  const id = nubeElegida();
+  const nube = NUBES[id];
   const pendiente = licenciaPendiente();
+  const antes = nubeAnterior(id);
   return `<section class="general nube">
-    <h2>${t('Tu Google Drive')}</h2>
-    <p class="ayuda">${t('Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.')}</p>
-    ${pendiente ? `<p class="ayuda">${t('<strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta {cuenta}.', { cuenta: esc(licencia().cuenta) })}</p>` : ''}
+    <h2>${t('Tu nube')}</h2>
+    ${licenciaAnulada() ? '' : `<div class="segmentos" role="group" aria-label="${t('Dónde se guardan tus fichas')}">${Object.entries(NUBES)
+    .map(([k, n]) => `<button type="button" data-accion="elegir-nube" data-valor="${k}" aria-pressed="${k === id}">${n.nombre}</button>`)
+    .join('')}</div>`}
+    <p class="ayuda">${t('Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu {nube}, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.', { nube: nube.corto })}</p>
+    ${antes && !licenciaAnulada() ? `<p class="ayuda cambio-nube">${t('Al sincronizar, lo de este aparato se junta con lo que haya en tu {nube}. Lo que tienes en {antes} se queda allí, sin tocar.', { nube: nube.nombre, antes: NUBES[antes].nombre })}</p>` : ''}
+    ${pendiente ? `<p class="ayuda">${t('<strong>Para activar tu licencia,</strong> conecta el {nube} con la cuenta {cuenta}.', { nube: nube.corto, cuenta: esc(licencia().cuenta) })}</p>` : ''}
     ${licenciaAnulada()
     ? `<p class="ayuda licencia-anulada">${t('<strong>Esta licencia ya no vale:</strong> Oksigenia la ha pasado a otra cuenta. Tus fichas siguen aquí y se pueden leer, pero no se sincronizan ni se crean nuevas. Pega abajo tu licencia nueva.')}</p>`
     : `${licencia().valida ? `<p class="ayuda plan">${t('Plan {nombre}: hasta {n} personas con ficha, de por vida. Licencia de {cuenta}.', { nombre: esc(nombrePlan(topeLicencia())), n: topeLicencia(), cuenta: esc(licencia().cuenta) })}</p>` : ''}
-    <div class="botones"><button type="button" class="boton" data-accion="drive">${t('Sincronizar con Google Drive')}</button></div>`}
-    <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
+    <div class="botones"><button type="button" class="boton" data-accion="sincronizar-nube">${t('Sincronizar con {nube}', { nube: nube.nombre })}</button></div>`}
+    <p class="aviso-nube" aria-live="polite">${ultimaSincronia(id)}</p>
   </section>`;
 }
 
@@ -2901,7 +2912,7 @@ function seccionCuenta() {
 function seccionLicencia() {
   return `<details class="general licencia-pegar">
     <summary>${t('¿Tienes una licencia de Jepyso?')}</summary>
-    <p class="ayuda">${t('Pégala aquí, o abre el enlace que te llegó con ella. Se activa al conectar tu Drive con la cuenta de la licencia.')}</p>
+    <p class="ayuda">${t('Pégala aquí, o abre el enlace que te llegó con ella. Se activa al conectar tu nube (Google Drive, OneDrive o Dropbox) con la cuenta de la licencia.')}</p>
     <div class="licencia-fila"><input type="text" data-accion="licencia" autocomplete="off" spellcheck="false" aria-label="${t('Tu licencia')}"><button type="button" class="boton secundario" data-accion="guardar-licencia">${t('Guardar')}</button></div>
     <p class="aviso-licencia" aria-live="polite"></p>
   </details>`;
@@ -2914,18 +2925,23 @@ const MOTIVOS_LICENCIA = {
   navegador: 'Este navegador no puede comprobar licencias. Actualízalo, o usa Chrome, Edge, Safari o Firefox al día.',
 };
 
-async function sincronizarDrive(boton) {
-  const aviso = app.querySelector('.aviso-nube');
-  boton.disabled = true;
+// Syncs with the chosen cloud. The licence counts against the connected account's e-mail, whichever the service: one
+// licence, one account. While it runs, the service cannot be changed.
+async function sincronizarNube(seccion) {
+  const aviso = seccion.querySelector('.aviso-nube');
+  const id = nubeElegida();
+  const nube = NUBES[id];
+  const botones = [...seccion.querySelectorAll('button')];
+  for (const b of botones) b.disabled = true;
   try {
-    aviso.textContent = t('Conectando con Google…');
-    await conectar();
-    // With a licence: it counts once the Drive is connected with its account; with another account, nothing is synced.
+    aviso.textContent = t('Conectando con {empresa}…', { empresa: nube.empresa });
+    await nube.conectar();
+    // With a licence: it counts once the cloud is connected with its account; with another account, nothing is synced.
     if (licencia().valida) {
-      const cuenta = await cuentaDrive();
+      const cuenta = await nube.cuenta();
       if (!(await cuentaDelDrive(cuenta))) {
-        olvidar();
-        aviso.textContent = t('Tu licencia es de {licencia}, y has conectado el Drive de {cuenta}. Conéctalo con la cuenta de la licencia.', { licencia: licencia().cuenta, cuenta: cuenta || t('otra cuenta') });
+        nube.olvidar();
+        aviso.textContent = t('Tu licencia es de {licencia}, y has conectado el {nube} de {cuenta}. Conéctalo con la cuenta de la licencia.', { licencia: licencia().cuenta, nube: nube.corto, cuenta: cuenta || t('otra cuenta') });
         return;
       }
       // Still alive? A licence moved to another account syncs no more (the page shows why).
@@ -2936,19 +2952,21 @@ async function sincronizarDrive(boton) {
     }
     aviso.textContent = t('Sincronizando…');
     const local = { personas: leerPersonas(), plantillas: leerPlantillas(), borradas: leerBorradas() };
-    const r = await sincronizar(local, (junto) => {
+    const r = await sincronizar(id, local, (junto) => {
       const bien = guardarPersonas(junto.personas) && almacen.guardar('plantillas', junto.plantillas) && almacen.guardar('borradas', junto.borradas);
       if (!bien) throw new Error(t(SIN_SITIO));
     });
-    almacen.guardar('drive-ultima', new Date().toISOString());
-    aviso.textContent = t('Hecho: {personas} y {plantillas} en tu Drive y en este aparato.', {
+    apuntarVez(id);
+    seccion.querySelector('.cambio-nube')?.remove();
+    aviso.textContent = t('Hecho: {personas} y {plantillas} en tu {nube} y en este aparato.', {
+      nube: nube.corto,
       personas: tn(r.personas, '{n} persona', '{n} personas'),
       plantillas: tn(r.plantillas, '{n} plantilla', '{n} plantillas'),
     });
   } catch (err) {
     aviso.textContent = err.message;
   } finally {
-    boton.disabled = false;
+    for (const b of botones) b.disabled = false;
   }
 }
 
@@ -2973,7 +2991,7 @@ function vistaPersonas() {
       ${valesEnMarcha() ? seccionCuenta() : ''}
       <ul class="lista-personas"></ul>
       <details class="ayuda-plegada"><summary>${t('Cómo funciona')}</summary><p>${t('Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.')}</p></details>
-      ${licenciaAnulada() ? `${seccionDrive()}${seccionLicencia()}` : esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
+      ${licenciaAnulada() ? `${seccionNube()}${seccionLicencia()}` : esDePago() || licenciaPendiente() ? seccionNube() : seccionLicencia()}
       <section class="general copia">
         <h2>${t('Copia')}</h2>
         <p class="ayuda">${t('Al cargarla se añade lo que falte; no se borra nada.')}</p>
@@ -3005,8 +3023,18 @@ function vistaPersonas() {
       }
       return vistaPersonas();
     }
-    if (ev.target.closest('[data-accion="drive"]')) {
-      await sincronizarDrive(ev.target.closest('[data-accion="drive"]'));
+    // Another service: the section says what it keeps and where; nothing is synced until the button.
+    const otra = ev.target.closest('[data-accion="elegir-nube"]');
+    if (otra) {
+      if (otra.getAttribute('aria-pressed') === 'true') return;
+      elegirNube(otra.dataset.valor);
+      const seccion = otra.closest('.nube');
+      seccion.outerHTML = seccionNube();
+      app.querySelector(`.nube [data-valor="${otra.dataset.valor}"]`)?.focus();
+      return;
+    }
+    if (ev.target.closest('[data-accion="sincronizar-nube"]')) {
+      await sincronizarNube(ev.target.closest('.nube'));
       return pintarLista();
     }
     if (!ev.target.closest('[data-accion="exportar"]')) return;

@@ -1,8 +1,8 @@
 // Google Drive as the professional's own cloud (the paid version): a folder «Jepyso» that the app creates and one file
 // inside it, «jepyso.json». With the drive.file scope the app sees only the files it creates; the rest of the Drive is
 // out of its reach. No server: Google's token model, in the browser. The token lives a short while, only in memory, and
-// a new one needs a tap, because Google opens its window only from a gesture.
-import { fusionar, empaquetar, esDatos } from './sincronia.js';
+// a new one needs a tap, because Google opens its window only from a gesture. Joining what the Drive has with this
+// device is the same for every cloud (nube.js): this file only reads and writes the file.
 import { t } from './idioma.js';
 
 // Oksigenia's OAuth client (project jepyso-514617, in Oksigenia's Google account). Public by design: it names the app.
@@ -94,9 +94,7 @@ async function carpeta() {
   return (await r.json()).id;
 }
 
-async function escribir(idCarpeta, id, datos) {
-  // Without indentation: with a year of follow-up it was two and a half times bigger to send and to read.
-  const cuerpo = JSON.stringify(datos);
+async function subir(idCarpeta, id, cuerpo) {
   if (id) {
     await pedir(`${SUBIDA}/files/${id}?uploadType=media`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: cuerpo });
     return id;
@@ -112,20 +110,25 @@ async function escribir(idCarpeta, id, datos) {
   return (await r.json()).id;
 }
 
-// Brings the Drive and this device together: reads what the Drive has, joins it with what is here (sincronia.js) and
-// keeps the result in both places. What is here and how to keep it come from the app, so this file knows nothing of
-// where things live. A device that writes in between loses nothing: its own copy joins again at its next sync.
-export async function sincronizar(local, guardarLocal) {
+// Where the file lives, found again on every read: the folder «Jepyso» (made the first time) and the file in it, if
+// there is one yet. The write that follows in the same sync uses what the read found.
+let sitio = null;
+async function ubicar() {
   const idCarpeta = await carpeta();
   const [ya] = await buscar(`name='${comillas(ARCHIVO)}' and '${idCarpeta}' in parents and trashed=false`);
-  let remoto = {};
-  if (ya) {
-    const d = await (await pedir(`${API}/files/${ya.id}?alt=media`)).json();
-    if (!esDatos(d)) throw new Error(t('El archivo jepyso.json de tu Drive no es de Jepyso: no se ha tocado nada.'));
-    remoto = d;
-  }
-  const junto = fusionar(local, remoto);
-  guardarLocal(junto);
-  await escribir(idCarpeta, ya?.id, empaquetar(junto));
-  return { personas: junto.personas.length, plantillas: junto.plantillas.length };
+  sitio = { carpeta: idCarpeta, archivo: ya?.id };
+  return sitio;
+}
+
+// What the Drive keeps, as text, or null while there is no file yet (nube.js joins and checks it).
+export async function leer() {
+  const { archivo } = await ubicar();
+  if (!archivo) return null;
+  return (await pedir(`${API}/files/${archivo}?alt=media`)).text();
+}
+
+// Writes the file whole: over the one there, or a new one in the folder the first time.
+export async function escribir(texto) {
+  const { carpeta: idCarpeta, archivo } = sitio || (await ubicar());
+  sitio = { carpeta: idCarpeta, archivo: await subir(idCarpeta, archivo, texto) };
 }

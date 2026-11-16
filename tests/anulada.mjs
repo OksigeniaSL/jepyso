@@ -30,7 +30,7 @@ try {
     await pagina.waitForSelector('.lista-personas .persona-fila');
     const aviso = pagina.locator('.licencia-anulada');
     comprobar((await aviso.count()) === 1, `${locale}: Personas no dice que la licencia está anulada`);
-    comprobar((await pagina.locator('[data-accion="drive"]').count()) === 0, `${locale}: con la licencia anulada sigue ofreciendo sincronizar`);
+    comprobar((await pagina.locator('[data-accion="sincronizar-nube"]').count()) === 0, `${locale}: con la licencia anulada sigue ofreciendo sincronizar`);
     comprobar((await pagina.locator('.licencia-pegar').count()) === 1, `${locale}: con la licencia anulada no ofrece pegar la nueva`);
     comprobar((await pagina.locator('.persona-fila.cerrada').count()) === 0, `${locale}: con la licencia anulada, sus fichas salen cerradas`);
     comprobar((await pagina.locator('.persona-fila').count()) === 7, `${locale}: no salen las siete fichas`);

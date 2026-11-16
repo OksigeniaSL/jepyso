@@ -589,7 +589,7 @@ try {
     vigilar(pago, `pago-${tema}`);
     await pago.goto(url(tema, '&pago=1#personas'));
     await pago.waitForSelector('.lista-personas');
-    comprobar(await pago.locator('.nube [data-accion="drive"]').isVisible(), `${tema}: la versión de pago no ofrece el Drive en Personas`);
+    comprobar(await pago.locator('.nube [data-accion="sincronizar-nube"]').isVisible(), `${tema}: la versión de pago no ofrece el Drive en Personas`);
     comprobar((await pago.textContent('.aviso-nube')).includes('sin conectar'), `${tema}: el Drive no dice que aún no se ha conectado`);
     await pago.goto(url(tema, '&pago=0#personas'));
     await pago.waitForSelector('.lista-personas');
