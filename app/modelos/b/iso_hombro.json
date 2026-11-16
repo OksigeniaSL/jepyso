@@ -8,7 +8,7 @@
    "fase": "subir",
    "inicio": 0.0,
    "fin": 1.0,
-   "texto": "Empuja la pared con el codo"
+   "texto": "Empuja la pared con el antebrazo"
   },
   {
    "fase": "mantener",

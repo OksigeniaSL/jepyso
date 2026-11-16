@@ -86,15 +86,20 @@ fs.writeFileSync(`${w}/catalogo.json`, `${JSON.stringify({ v: 1, ejercicios }, n
 // The recorded voice (voz/): the count and the player's own sentences, and the phases and names of the exercises this
 // copy brings. The rest of the library's sentences stay out.
 const root = process.argv[3];
+// The English voices (voz/*-en) are indexed by the English sentence: the same filter, through the app's dictionaries.
+const en = fs.existsSync(`${w}/idiomas/en.js`)
+  ? { ...(await import(`${w}/idiomas/en-ejercicios.js`)).default, ...(await import(`${w}/idiomas/en.js`)).default }
+  : {};
 for (const quien of fs.existsSync(`${w}/voz`) ? fs.readdirSync(`${w}/voz`) : []) {
+  const tr = quien.endsWith('-en') ? (s) => [en[s] || s, ...s.split('. ').map((p) => en[p] || p)] : (s) => [s];
   const carpeta = `${w}/voz/${quien}`;
   if (!fs.existsSync(`${carpeta}/indice.json`)) continue;
   const indice = JSON.parse(fs.readFileSync(`${carpeta}/indice.json`, 'utf8'));
   const fasesDe = (carpeta) => fs.readdirSync(carpeta).filter((f) => f.endsWith('.json') && f !== 'ejercicios.json')
     .flatMap((f) => (JSON.parse(fs.readFileSync(`${carpeta}/${f}`, 'utf8')).fases || []).map((x) => x.texto).filter(Boolean));
-  const propias = new Set([...fasesDe(`${root}/app/modelos`), ...fasesDe(`${root}/app/modelos/b`), ...d.ORDEN.map((id) => d.EJERCICIOS[id].nombre)]);
-  const deEsta = new Set([...fasesDe(`${w}/modelos`), ...fasesDe(`${w}/modelos/b`), ...[...hay].map((id) => d.EJERCICIOS[id].nombre)]);
-  const generales = new Set(['Hecho', 'Descansa', 'Descansa. Ahora, el otro lado', 'Rutina terminada. Buen trabajo.', 'Voz encendida', 'Ida', 'Mantén', 'Vuelta', 'Respira']);
+  const propias = new Set([...fasesDe(`${root}/app/modelos`), ...fasesDe(`${root}/app/modelos/b`), ...d.ORDEN.map((id) => d.EJERCICIOS[id].nombre)].flatMap(tr));
+  const deEsta = new Set([...fasesDe(`${w}/modelos`), ...fasesDe(`${w}/modelos/b`), ...[...hay].map((id) => d.EJERCICIOS[id].nombre)].flatMap(tr));
+  const generales = new Set(['Hecho', 'Descansa', 'Descansa. Ahora, el otro lado', 'Rutina terminada. Buen trabajo.', 'Voz encendida', 'Ida', 'Mantén', 'Vuelta', 'Respira'].flatMap(tr));
   for (const [texto, clave] of Object.entries(indice)) {
     if (propias.has(texto) && !deEsta.has(texto) && !generales.has(texto)) {
       delete indice[texto];

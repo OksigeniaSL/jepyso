@@ -1058,7 +1058,7 @@ export const EJERCICIOS = {
       'Mantén el agarre un momento.',
       'Suelta y vuelve a estirar los dedos.',
     ],
-    notar: 'En el empeine y en los dedos.',
+    notar: 'En la planta del pie y en los dedos.',
     error: 'Levantar el talón. Se queda en el suelo; solo trabajan los dedos.',
     masDificil: 'Pon un peso pequeño en el borde de la toalla, como una lata.',
     fuentes: ['AAOS, programa de tobillo y pie (ejercicio 8)', 'United Lincolnshire Hospitals (NHS), tobillo', 'Servicio OCATS (NHS), tobillo y pie'],

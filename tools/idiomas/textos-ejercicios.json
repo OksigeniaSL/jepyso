@@ -3429,7 +3429,7 @@
   ]
  },
  {
-  "es": "En el empeine y en los dedos.",
+  "es": "En la planta del pie y en los dedos.",
   "donde": [
    "toalla_dedos.notar"
   ]
@@ -5870,7 +5870,7 @@
   ]
  },
  {
-  "es": "Calentamiento, dos series de fuerza y equilibrio andando",
+  "es": "Calentamiento, fuerza en dos series y equilibrio andando",
   "donde": [
    "programa otago-c.descripcion"
   ]
@@ -6515,7 +6515,7 @@
   ]
  },
  {
-  "es": "Baja la mano y tira de los dedos",
+  "es": "Tira de los dedos hacia ti",
   "donde": [
    "modelos/estira_flexores.json.fase subir",
    "modelos/b/estira_flexores.json.fase subir"
@@ -6687,7 +6687,7 @@
   ]
  },
  {
-  "es": "Empuja la pared con el codo",
+  "es": "Empuja la pared con el antebrazo",
   "donde": [
    "modelos/iso_hombro.json.fase subir",
    "modelos/b/iso_hombro.json.fase subir"

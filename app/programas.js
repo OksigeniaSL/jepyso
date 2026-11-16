@@ -50,7 +50,7 @@ export const PROGRAMAS = [
     ['escalon', 1, 10, [2, 1, 2], 'ambos'],
     ['caminar', 1, 30, [1, 0, 1], null, CAMINAR_OTAGO],
   ]),
-  programa('otago-c', 'Otago, nivel C', 'Calentamiento, dos series de fuerza y equilibrio andando', OTAGO, [
+  programa('otago-c', 'Otago, nivel C', 'Calentamiento, fuerza en dos series y equilibrio andando', OTAGO, [
     ...calentamiento, ...fuerza(2),
     ['talones', 2, 10, [3, 0, 4]],
     ['puntas', 2, 10, [3, 0, 4]],
