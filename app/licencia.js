@@ -62,13 +62,17 @@ export async function leerLicencia(clave) {
 
 // The state for this browser, checked once at start (comprobarLicencia) and kept in memory for the synchronous
 // question «is this the paid version?».
-let estado = { clave: '', valida: false, cuenta: '', activa: false };
+let estado = { clave: '', valida: false, cuenta: '', activa: false, anulada: false };
 
 export async function comprobarLicencia() {
   const clave = almacen.leer('licencia', '');
   const l = clave ? await leerLicencia(clave) : { valida: false };
   const comprobada = almacen.leer('licencia-cuenta', '');
-  estado = { clave, valida: l.valida, motivo: l.motivo, cuenta: l.cuenta || '', tope: l.tope || 0, activa: l.valida && comprobada === l.cuenta };
+  const anulada = l.valida && !!l.pedido && almacen.leer('licencia-anulada', '') === l.pedido;
+  estado = {
+    clave, valida: l.valida, motivo: l.motivo, cuenta: l.cuenta || '', pedido: l.pedido || '', tope: l.tope || 0, anulada,
+    activa: l.valida && comprobada === l.cuenta && !anulada,
+  };
   return estado;
 }
 
@@ -76,7 +80,40 @@ export const licencia = () => estado;
 export const licenciaActiva = () => estado.activa;
 export const topeLicencia = () => estado.tope || TOPE_MAXIMO;
 // A key that verifies but whose account has not yet been seen on the Drive connection.
-export const licenciaPendiente = () => estado.valida && !estado.activa;
+export const licenciaPendiente = () => estado.valida && !estado.activa && !estado.anulada;
+// A licence Oksigenia cancelled (passed to another account): its files are read, not synced, and no new ones are made.
+export const licenciaAnulada = () => estado.valida && estado.anulada;
+
+// Whether the licence is still alive, asked to Oksigenia's server on every sync with the Drive, which already needs a
+// connection (the coordinator, 16-11-2026: a licence moved to a new e-mail cancels the old one, so changing account
+// gives no more room). The answer, «estado», is signed with the licence key, {"p":"jepyso","t":"estado","n",
+// "viva","f"}: about this order and dated within a week, so neither an invented answer nor an old one kept counts.
+// Without connection, without an answer or with one that does not check, nothing changes. True while it is alive.
+const DIAS_RESPUESTA = 7;
+const reciente = (f) => {
+  const dia = Date.parse(`${f}T12:00:00Z`);
+  return Number.isFinite(dia) && Math.abs(Date.now() - dia) <= (DIAS_RESPUESTA + 1) * 86400000;
+};
+export async function comprobarVigencia() {
+  if (!estado.valida || !estado.pedido) return !estado.anulada;
+  let respuesta;
+  try {
+    const r = await fetch('/api/licencia/estado', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ n: estado.pedido }), cache: 'no-store',
+    });
+    respuesta = r.ok ? await r.json() : null;
+  } catch {
+    respuesta = null;
+  }
+  const { datos } = respuesta && typeof respuesta.estado === 'string' ? await verificarFirma(respuesta.estado) : {};
+  if (!datos || datos.p !== 'jepyso' || datos.t !== 'estado' || datos.n !== estado.pedido || typeof datos.viva !== 'boolean' || !reciente(datos.f)) {
+    return !estado.anulada;
+  }
+  if (!datos.viva) almacen.guardar('licencia-anulada', estado.pedido);
+  else if (almacen.leer('licencia-anulada', '') === estado.pedido) almacen.guardar('licencia-anulada', '');
+  await comprobarLicencia();
+  return datos.viva;
+}
 
 export async function guardarLicencia(clave) {
   const l = await leerLicencia(clave);

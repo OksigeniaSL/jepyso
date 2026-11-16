@@ -13,7 +13,7 @@ import {
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
 } from './personas.js';
 import { conectar, sincronizar, cuentaDrive, olvidar } from './drive.js';
-import { comprobarLicencia, licencia, licenciaPendiente, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
+import { comprobarLicencia, licencia, licenciaPendiente, licenciaAnulada, comprobarVigencia, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
 import { ampliarPlan } from './tienda.js';
 import {
   valesEnMarcha, fichaAbierta, fichaSinPlaza, cuentaDeVales, fichasQuedan, avisoVales, alCambiarVales, comprobarVales, pedirVale, pedirVales,
@@ -2872,8 +2872,10 @@ function seccionDrive() {
     <h2>${t('Tu Google Drive')}</h2>
     <p class="ayuda">${t('Tus fichas y tus plantillas se guardan en una carpeta «Jepyso» de tu Drive, y así las tienes en todos tus aparatos. Jepyso solo ve esa carpeta.')}</p>
     ${pendiente ? `<p class="ayuda">${t('<strong>Para activar tu licencia,</strong> conecta el Drive con la cuenta {cuenta}.', { cuenta: esc(licencia().cuenta) })}</p>` : ''}
-    ${licencia().valida ? `<p class="ayuda plan">${t('Plan {nombre}: hasta {n} personas con ficha, de por vida. Licencia de {cuenta}.', { nombre: esc(nombrePlan(topeLicencia())), n: topeLicencia(), cuenta: esc(licencia().cuenta) })}</p>` : ''}
-    <div class="botones"><button type="button" class="boton" data-accion="drive">${t('Sincronizar con Google Drive')}</button></div>
+    ${licenciaAnulada()
+    ? `<p class="ayuda licencia-anulada">${t('<strong>Esta licencia ya no vale:</strong> Oksigenia la ha pasado a otra cuenta. Tus fichas siguen aquí y se pueden leer, pero no se sincronizan ni se crean nuevas. Pega abajo tu licencia nueva.')}</p>`
+    : `${licencia().valida ? `<p class="ayuda plan">${t('Plan {nombre}: hasta {n} personas con ficha, de por vida. Licencia de {cuenta}.', { nombre: esc(nombrePlan(topeLicencia())), n: topeLicencia(), cuenta: esc(licencia().cuenta) })}</p>` : ''}
+    <div class="botones"><button type="button" class="boton" data-accion="drive">${t('Sincronizar con Google Drive')}</button></div>`}
     <p class="aviso-nube" aria-live="polite">${ultimaSincronia()}</p>
   </section>`;
 }
@@ -2926,6 +2928,11 @@ async function sincronizarDrive(boton) {
         aviso.textContent = t('Tu licencia es de {licencia}, y has conectado el Drive de {cuenta}. Conéctalo con la cuenta de la licencia.', { licencia: licencia().cuenta, cuenta: cuenta || t('otra cuenta') });
         return;
       }
+      // Still alive? A licence moved to another account syncs no more (the page shows why).
+      if (!(await comprobarVigencia())) {
+        ir();
+        return;
+      }
     }
     aviso.textContent = t('Sincronizando…');
     const local = { personas: leerPersonas(), plantillas: leerPlantillas(), borradas: leerBorradas() };
@@ -2966,7 +2973,7 @@ function vistaPersonas() {
       ${valesEnMarcha() ? seccionCuenta() : ''}
       <ul class="lista-personas"></ul>
       <details class="ayuda-plegada"><summary>${t('Cómo funciona')}</summary><p>${t('Cada rutina que mandas y cada resumen que te devuelven quedan en la ficha de su persona. Se guardan en este aparato; con una copia te las llevas a otro.')}</p></details>
-      ${esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
+      ${licenciaAnulada() ? `${seccionDrive()}${seccionLicencia()}` : esDePago() || licenciaPendiente() ? seccionDrive() : seccionLicencia()}
       <section class="general copia">
         <h2>${t('Copia')}</h2>
         <p class="ayuda">${t('Al cargarla se añade lo que falte; no se borra nada.')}</p>

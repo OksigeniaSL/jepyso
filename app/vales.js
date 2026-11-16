@@ -7,7 +7,7 @@
 // browser still keeps five files at most (personas.js), so two accounts do not make ten files in one browser. The paid
 // version needs no tickets.
 import { almacen } from './datos.js';
-import { verificarFirma } from './licencia.js';
+import { verificarFirma, licenciaAnulada } from './licencia.js';
 import { CLIENTE, cargarGoogle } from './drive.js';
 import { leerPersonas, guardarPersonas, esDePago, esEntornoDePruebas } from './personas.js';
 import { esId } from './entrada.js';
@@ -23,7 +23,8 @@ let aviso = ''; // the last thing that went wrong, said under Google's button
 let alCambiar = () => {};
 
 // On a public address, always; on this laptop only with ?vales=1, so the other tests keep their files open.
-export const valesEnMarcha = () => !esDePago() && (!esEntornoDePruebas() || almacen.leer('vales', '') === 'si');
+// A cancelled licence keeps its files open to read (licencia.js): the tickets are for the free version.
+export const valesEnMarcha = () => !esDePago() && !licenciaAnulada() && (!esEntornoDePruebas() || almacen.leer('vales', '') === 'si');
 export const fichaAbierta = (p) => !valesEnMarcha() || validas.has(p.id);
 export const fichaSinPlaza = (id) => sinPlaza.has(id);
 export const cuentaDeVales = () => (cuenta && cuenta.caduca > Date.now() + 30_000 ? cuenta.correo : '');

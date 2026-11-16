@@ -539,4 +539,6 @@ export default {
   'Guardado en el curso.': 'Saved in the course.',
   'Guardado en este teléfono. Se pasará al curso en cuanto haya conexión.': 'Saved on this phone. It will go to the course as soon as there is a connection.',
   'Vista previa: lo que hagas aquí no se guarda en el curso.': 'Preview: what you do here is not saved in the course.',
+  '<strong>Esta licencia ya no vale:</strong> Oksigenia la ha pasado a otra cuenta. Tus fichas siguen aquí y se pueden leer, pero no se sincronizan ni se crean nuevas. Pega abajo tu licencia nueva.':
+    '<strong>This licence is no longer valid:</strong> Oksigenia has moved it to another account. Your files are still here and you can read them, but they are not synced and no new ones can be made. Paste your new licence below.',
 };

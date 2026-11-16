@@ -35,6 +35,7 @@ curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127
 node "$HERE/accesorios.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/seguir.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/rueda.mjs" "http://127.0.0.1:$PORT"
+node "$HERE/anulada.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/andar.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/programas.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/noticias.mjs" "http://127.0.0.1:$PORT"

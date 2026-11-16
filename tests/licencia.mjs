@@ -44,4 +44,43 @@ assert.equal(limite(), 50, `con la licencia del plan Profesional caben ${limite(
 assert.equal(L.nombrePlan(L.topeLicencia()), 'Profesional');
 await L.comprobarLicencia();
 assert.equal(esDePago(), true, 'al volver a abrir la app, la licencia comprobada se pierde');
-console.log('licencia: la firma de Oksigenia, ligada a la cuenta del Drive');
+
+// Whether the licence is still alive (comprobarVigencia, asked on every sync with the Drive). Without an answer, or
+// with one that does not check, nothing changes.
+const respuestas = [];
+globalThis.fetch = async (url, op) => {
+  respuestas.push([url, JSON.parse(op.body).n]);
+  const r = respuestas.siguiente;
+  if (r instanceof Error) throw r;
+  return { ok: true, json: async () => r };
+};
+respuestas.siguiente = new Error('sin red');
+assert.equal(await L.comprobarVigencia(), true, 'sin red, la licencia deja de valer');
+assert.deepEqual(respuestas.at(-1), ['/api/licencia/estado', 'prueba-plan'], 'no pregunta por su pedido');
+const inventado = Buffer.from(JSON.stringify({ p: 'jepyso', t: 'estado', n: 'prueba-plan', viva: false, f: '2026-11-16' })).toString('base64url');
+respuestas.siguiente = { viva: false, estado: `${inventado}.${firma50}` };
+assert.equal(await L.comprobarVigencia(), true, 'una respuesta sin la firma de Oksigenia anula la licencia');
+assert.equal(esDePago(), true);
+// Signed by the coordinator for the test order, dated 16-11-2026: the clock is put on that day, so they never get old.
+const ANULADA = 'eyJwIjoiamVweXNvIiwidCI6ImVzdGFkbyIsIm4iOiJwcnVlYmEtcGxhbiIsInZpdmEiOmZhbHNlLCJmIjoiMjAyNi0xMS0xNiJ9.XYWf_qelXBVBVb0ewC-JegmVUVdHJdL52zl8bdbIPx3J6fdOWgkrmhdwOqrpqrTNJqOqKXtbMB-Rzn_uufQHDA';
+const VIVA = 'eyJwIjoiamVweXNvIiwidCI6ImVzdGFkbyIsIm4iOiJwcnVlYmEtcGxhbiIsInZpdmEiOnRydWUsImYiOiIyMDI2LTExLTE2In0.WIiOMTRZj7zg8PpSqwsddWlG0tFX5khYpmQToqZ-J8tFRdBmfqG4M-VhLMiaEgvFxN8YXtUshRt3HpkLh6zvAg';
+{
+  const ahora = Date.now;
+  Date.now = () => Date.parse('2026-11-16T10:00:00Z');
+  respuestas.siguiente = { viva: false, estado: ANULADA };
+  assert.equal(await L.comprobarVigencia(), false, 'una licencia anulada sigue viva');
+  assert.equal(L.licenciaAnulada(), true);
+  assert.equal(esDePago(), false, 'una licencia anulada sigue siendo de pago');
+  assert.equal(limite(), 5, `con la licencia anulada caben ${limite()} fichas nuevas`);
+  await L.comprobarLicencia();
+  assert.equal(L.licenciaAnulada(), true, 'al volver a abrir la app, la anulación se olvida');
+  respuestas.siguiente = { viva: true, estado: VIVA };
+  assert.equal(await L.comprobarVigencia(), true);
+  assert.equal(esDePago(), true, 'una licencia que vuelve a estar viva no cuenta');
+  // An answer more than a week old is not believed.
+  Date.now = () => Date.parse('2026-12-01T10:00:00Z');
+  respuestas.siguiente = { viva: false, estado: ANULADA };
+  assert.equal(await L.comprobarVigencia(), true, 'una respuesta vieja anula la licencia');
+  Date.now = ahora;
+}
+console.log('licencia: la firma de Oksigenia, ligada a la cuenta del Drive; anulada, sus fichas se leen y no crece');
