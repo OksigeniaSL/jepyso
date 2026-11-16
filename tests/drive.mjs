@@ -1,6 +1,6 @@
-// The Drive connector (app/drive.js) against a small fake of Google: the token window and the Drive files API. Two
-// devices meet through the folder «Jepyso», a deletion travels, a foreign jepyso.json is left untouched, and an
-// expired token is said, not hidden.
+// The Drive connector (app/drive.js), synced through the cloud layer (app/nube.js), against a small fake of Google: the
+// token window and the Drive files API. Two devices meet through the folder «Jepyso», a deletion travels, a foreign
+// jepyso.json is left untouched, and an expired token is said, not hidden.
 // Usage: node drive.mjs <app folder>
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
@@ -27,7 +27,12 @@ globalThis.window = {
 const archivos = new Map();
 let siguiente = 1;
 let caducado = false;
-const respuesta = (cuerpo, estado = 200) => ({ ok: estado < 400, status: estado, json: async () => (typeof cuerpo === 'string' ? JSON.parse(cuerpo) : cuerpo) });
+const respuesta = (cuerpo, estado = 200) => ({
+  ok: estado < 400,
+  status: estado,
+  json: async () => (typeof cuerpo === 'string' ? JSON.parse(cuerpo) : cuerpo),
+  text: async () => (typeof cuerpo === 'string' ? cuerpo : JSON.stringify(cuerpo)),
+});
 globalThis.fetch = async (url, { method = 'GET', headers = {}, body } = {}) => {
   if (headers.Authorization !== 'Bearer tok') return respuesta({}, 401);
   if (caducado) return respuesta({}, 401);
@@ -66,6 +71,8 @@ globalThis.fetch = async (url, { method = 'GET', headers = {}, body } = {}) => {
 };
 
 const drive = await import(pathToFileURL(join(app, 'drive.js')).href);
+const nube = await import(pathToFileURL(join(app, 'nube.js')).href);
+const sincronizar = (local, guardar) => nube.sincronizar('google', local, guardar);
 
 // A device: its people, templates and deletions, kept as the app keeps them.
 const aparato = (personas, plantillas = []) => {
@@ -79,7 +86,7 @@ assert.ok(drive.conectado(), 'no queda conectado tras el permiso');
 
 // The phone syncs first: the folder and the file are created.
 const movil = aparato([persona('ana', { notas: 'Rodilla' })], [{ nombre: 'Rodilla', cambiada: '2026-11-13T09:00:00Z' }]);
-const r1 = await drive.sincronizar(movil.local(), movil.guardar);
+const r1 = await sincronizar(movil.local(), movil.guardar);
 assert.equal(r1.personas, 1);
 const carpetas = [...archivos.values()].filter((f) => f.mimeType === 'application/vnd.google-apps.folder');
 assert.equal(carpetas.length, 1, 'no crea una sola carpeta «Jepyso»');
@@ -89,9 +96,9 @@ assert.equal(datos().app, 'jepyso');
 
 // The tablet brings someone else and gets Ana; the phone then gets Luis. One folder, one file.
 const tableta = aparato([persona('luis')]);
-await drive.sincronizar(tableta.local(), tableta.guardar);
+await sincronizar(tableta.local(), tableta.guardar);
 assert.deepEqual(tableta.d.personas.map((p) => p.id).sort(), ['ana', 'luis'], 'la tableta no recibe lo del móvil');
-await drive.sincronizar(movil.local(), movil.guardar);
+await sincronizar(movil.local(), movil.guardar);
 assert.deepEqual(movil.d.personas.map((p) => p.id).sort(), ['ana', 'luis'], 'el móvil no recibe lo de la tableta');
 assert.equal([...archivos.values()].filter((f) => f.name === 'jepyso.json').length, 1, 'se duplica el archivo de datos');
 assert.equal([...archivos.values()].filter((f) => f.name === 'Jepyso').length, 1, 'se duplica la carpeta');
@@ -99,20 +106,20 @@ assert.equal([...archivos.values()].filter((f) => f.name === 'Jepyso').length, 1
 // Luis is deleted on the phone; after both sync, he is gone from both.
 movil.d.personas = movil.d.personas.filter((p) => p.id !== 'luis');
 movil.d.borradas.personas.luis = '2026-11-13T10:00:00Z';
-await drive.sincronizar(movil.local(), movil.guardar);
-await drive.sincronizar(tableta.local(), tableta.guardar);
+await sincronizar(movil.local(), movil.guardar);
+await sincronizar(tableta.local(), tableta.guardar);
 assert.deepEqual(tableta.d.personas.map((p) => p.id), ['ana'], 'una ficha borrada en el móvil sigue en la tableta');
 assert.ok(!datos().personas.some((p) => p.id === 'luis'), 'una ficha borrada sigue en el Drive');
 
 // A jepyso.json that is not Jepyso's is left as it was.
 const ajeno = [...archivos.values()].find((f) => f.name === 'jepyso.json');
 ajeno.contenido = '{"otra":"cosa"}';
-await assert.rejects(() => drive.sincronizar(movil.local(), movil.guardar), /no es de Jepyso/);
+await assert.rejects(() => sincronizar(movil.local(), movil.guardar), /no es de Jepyso/);
 assert.equal(ajeno.contenido, '{"otra":"cosa"}', 'se escribe encima de un archivo ajeno');
 
 // An expired token is said, and the next sync asks for a new one.
 caducado = true;
-await assert.rejects(() => drive.sincronizar(movil.local(), movil.guardar), /caducado/);
+await assert.rejects(() => sincronizar(movil.local(), movil.guardar), /caducado/);
 assert.ok(!drive.conectado(), 'tras un 401 sigue dándose por conectado');
 
 // Without the permission, the error says so.

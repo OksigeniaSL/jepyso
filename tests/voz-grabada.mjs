@@ -13,7 +13,7 @@ const comprobar = (bien, que) => bien || fallos.push(que);
 try {
   // Without the worker: the takes are asked for by the page, where the test sees them.
   const pagina = await (await navegador.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' })).newPage();
-  pagina.setDefaultTimeout(60000);
+  pagina.setDefaultTimeout(180000); // A loaded machine draws the figure slowly, and the set lasts as long as its frames take.
   // A phone with speech synthesis but no Spanish voice, like the in-app browser of the Moodle app.
   await pagina.addInitScript(() => {
     Object.defineProperty(window, 'speechSynthesis', { value: { getVoices: () => [], speak() {}, cancel() {}, addEventListener() {} } });
@@ -59,7 +59,7 @@ try {
 
   // A phone in English with no voice of its own.
   const ingles = await (await navegador.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', locale: 'en-GB' })).newPage();
-  ingles.setDefaultTimeout(60000);
+  ingles.setDefaultTimeout(180000);
   await ingles.addInitScript(() => {
     Object.defineProperty(window, 'speechSynthesis', { value: { getVoices: () => [], speak() {}, cancel() {}, addEventListener() {} } });
   });

@@ -14,7 +14,7 @@ const CLAVE = 'personas';
 // in the professional's own cloud, hold as many as their licence says: Profesional 50, Centro 300 (Enrique, 15-11).
 export const LIMITE_GRATIS = 5;
 // The paid version: no limit, and the files in the professional's own cloud. It comes with a licence (licencia.js),
-// tied to the Google account of the professional's Drive. ?pago=1 switches it on without one only on this laptop, for
+// tied to the account of the professional's cloud. ?pago=1 switches it on without one only on this laptop, for
 // the tests: never on a public address, where anyone reading the open code would find it (the bench is public too).
 export const esEntornoDePruebas = () => typeof location !== 'undefined' && ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
 export const esDePago = () => licenciaActiva() || (esEntornoDePruebas() && almacen.leer('version', '') === 'pago');

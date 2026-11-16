@@ -12,7 +12,9 @@ CSP = ("default-src 'self'; script-src 'self' https://accounts.google.com/gsi/cl
        "'sha256-4wOm3BwddL5VP97matJWlHbRkq9UhogcJWNPtIU220A=' 'sha256-HXpdsTS7aV+r+X2zQtxJcxGFkx9YDkRb2LwtnZjFr/E=' "
        "https://accounts.google.com/gsi/style; img-src 'self' data: blob:; "
        "media-src 'self' blob:; worker-src 'self' blob:; "
-       "connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/; "
+       "connect-src 'self' https://www.googleapis.com https://accounts.google.com/gsi/ https://api.dropboxapi.com "
+       "https://content.dropboxapi.com https://login.microsoftonline.com https://graph.microsoft.com "
+       "https://*.files.1drv.com https://*.microsoftpersonalcontent.com https://*.sharepoint.com; "
        "frame-src https://accounts.google.com/gsi/; form-action 'none'; frame-ancestors 'none'; base-uri 'none'")
 
 

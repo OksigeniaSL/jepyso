@@ -7,9 +7,10 @@
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1'; // the set of the first versions; later sets are named when they are fetched
 const PUNTERO = 'jepyso-activa'; // which set of the app is the current one
-const FIJOS = 'jepyso-fijos-15';
+const FIJOS = 'jepyso-fijos-16';
 const ARCHIVOS = [
   'index.html',
+  'conectar.html',
   'estilos.css',
   'tema.js',
   'app.js',
@@ -26,6 +27,11 @@ const ARCHIVOS = [
   'programas.js',
   'sincronia.js',
   'drive.js',
+  'dropbox.js',
+  'onedrive.js',
+  'oauth.js',
+  'nube.js',
+  'conectar.js',
   'figura.js',
   'mapa.js',
   'goniometro.js',
@@ -163,11 +169,13 @@ async function comprobar(peticion, clave) {
   if (!actual || !mismosBytes(await actual.arrayBuffer(), await r.arrayBuffer())) await renovar();
 }
 
-// A page load (any query, any fragment) is index.html. Files of the app come from the page's set; one that is not in
-// it (an older set without it) comes from the network.
+// A page load (any query, any fragment) is index.html, except the app's other page, conectar.html, where the Dropbox
+// and Microsoft windows come back. Files of the app come from the page's set; one that is not in it (an older set
+// without it) comes from the network.
+const OTRAS_PAGINAS = ['conectar.html'];
 async function deLaApp(ev, ruta) {
   const cache = await caches.open(await cacheDe(ev));
-  const clave = ev.request.mode === 'navigate' || ruta === '' ? 'index.html' : ruta;
+  const clave = (ev.request.mode === 'navigate' && !OTRAS_PAGINAS.includes(ruta)) || ruta === '' ? 'index.html' : ruta;
   const guardada = await cache.match(clave);
   if (guardada) {
     ev.waitUntil(comprobar(ev.request.mode === 'navigate' ? new Request(clave) : ev.request, clave).catch(() => {}));

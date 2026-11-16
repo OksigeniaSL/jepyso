@@ -5,7 +5,7 @@
   "abdominal": {
    "glb": "modelos/b/abdominal.glb",
    "ficha": "modelos/b/abdominal.json",
-   "bytes": 41292,
+   "bytes": 41544,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -19,7 +19,7 @@
   "abduccion_lado": {
    "glb": "modelos/b/abduccion_lado.glb",
    "ficha": "modelos/b/abduccion_lado.json",
-   "bytes": 41020,
+   "bytes": 41268,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -31,7 +31,7 @@
   "abduccion_pie": {
    "glb": "modelos/b/abduccion_pie.glb",
    "ficha": "modelos/b/abduccion_pie.json",
-   "bytes": 68260,
+   "bytes": 68852,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -43,7 +43,7 @@
   "abduccion_pie_lastre": {
    "glb": "modelos/b/abduccion_pie_lastre.glb",
    "ficha": "modelos/b/abduccion_pie_lastre.json",
-   "bytes": 90552,
+   "bytes": 91220,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -67,7 +67,7 @@
   "abrir_cerrar": {
    "glb": "modelos/b/abrir_cerrar.glb",
    "ficha": "modelos/b/abrir_cerrar.json",
-   "bytes": 91568,
+   "bytes": 91148,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -79,7 +79,7 @@
   "almeja": {
    "glb": "modelos/b/almeja.glb",
    "ficha": "modelos/b/almeja.json",
-   "bytes": 41388,
+   "bytes": 41640,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -228,7 +228,7 @@
   "arco_corto": {
    "glb": "modelos/b/arco_corto.glb",
    "ficha": "modelos/b/arco_corto.json",
-   "bytes": 47316,
+   "bytes": 47564,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -240,7 +240,7 @@
   "basculacion": {
    "glb": "modelos/b/basculacion.glb",
    "ficha": "modelos/b/basculacion.json",
-   "bytes": 42012,
+   "bytes": 42260,
    "lado": "ambos",
    "musculos": {
     "principales": [],
@@ -276,7 +276,7 @@
   "bird_dog": {
    "glb": "modelos/b/bird_dog.glb",
    "ficha": "modelos/b/bird_dog.json",
-   "bytes": 46100,
+   "bytes": 53064,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -333,7 +333,7 @@
   "circulos_tobillo": {
    "glb": "modelos/b/circulos_tobillo.glb",
    "ficha": "modelos/b/circulos_tobillo.json",
-   "bytes": 41304,
+   "bytes": 41432,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -370,7 +370,7 @@
   "cuadriceps": {
    "glb": "modelos/b/cuadriceps.glb",
    "ficha": "modelos/b/cuadriceps.json",
-   "bytes": 46972,
+   "bytes": 47220,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -382,7 +382,7 @@
   "cuadriceps_pie": {
    "glb": "modelos/b/cuadriceps_pie.glb",
    "ficha": "modelos/b/cuadriceps_pie.json",
-   "bytes": 74028,
+   "bytes": 74488,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -414,7 +414,7 @@
   "curl_isquios": {
    "glb": "modelos/b/curl_isquios.glb",
    "ficha": "modelos/b/curl_isquios.json",
-   "bytes": 69760,
+   "bytes": 70432,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -426,7 +426,7 @@
   "curl_isquios_lastre": {
    "glb": "modelos/b/curl_isquios_lastre.glb",
    "ficha": "modelos/b/curl_isquios_lastre.json",
-   "bytes": 93092,
+   "bytes": 93556,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -464,7 +464,7 @@
   "dorsal_banda": {
    "glb": "modelos/b/dorsal_banda.glb",
    "ficha": "modelos/b/dorsal_banda.json",
-   "bytes": 87568,
+   "bytes": 88968,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -476,7 +476,7 @@
   "equilibrio": {
    "glb": "modelos/b/equilibrio.glb",
    "ficha": "modelos/b/equilibrio.json",
-   "bytes": 68632,
+   "bytes": 69320,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -489,7 +489,7 @@
   "equilibrio_sin_apoyo": {
    "glb": "modelos/b/equilibrio_sin_apoyo.glb",
    "ficha": "modelos/b/equilibrio_sin_apoyo.json",
-   "bytes": 66892,
+   "bytes": 67292,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -502,7 +502,7 @@
   "escalon": {
    "glb": "modelos/b/escalon.glb",
    "ficha": "modelos/b/escalon.json",
-   "bytes": 52756,
+   "bytes": 53148,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -540,7 +540,7 @@
   "estira_flexores": {
    "glb": "modelos/b/estira_flexores.glb",
    "ficha": "modelos/b/estira_flexores.json",
-   "bytes": 73028,
+   "bytes": 72268,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -564,7 +564,7 @@
   "eversion_banda": {
    "glb": "modelos/b/eversion_banda.glb",
    "ficha": "modelos/b/eversion_banda.json",
-   "bytes": 83676,
+   "bytes": 80240,
    "lado": "derecho",
    "musculos": {
     "principales": [],
@@ -649,7 +649,7 @@
   "gato_camello": {
    "glb": "modelos/b/gato_camello.glb",
    "ficha": "modelos/b/gato_camello.json",
-   "bytes": 44884,
+   "bytes": 45092,
    "lado": "ambos",
    "musculos": {
     "principales": [],
@@ -671,7 +671,7 @@
   "gluteos": {
    "glb": "modelos/b/gluteos.glb",
    "ficha": "modelos/b/gluteos.json",
-   "bytes": 41044,
+   "bytes": 41296,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -697,7 +697,7 @@
   "inversion_banda": {
    "glb": "modelos/b/inversion_banda.glb",
    "ficha": "modelos/b/inversion_banda.json",
-   "bytes": 88204,
+   "bytes": 88516,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -809,7 +809,7 @@
   "pierna_recta": {
    "glb": "modelos/b/pierna_recta.glb",
    "ficha": "modelos/b/pierna_recta.json",
-   "bytes": 40696,
+   "bytes": 40844,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -821,7 +821,7 @@
   "plancha": {
    "glb": "modelos/b/plancha.glb",
    "ficha": "modelos/b/plancha.json",
-   "bytes": 46448,
+   "bytes": 45788,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -836,7 +836,7 @@
   "plancha_lateral": {
    "glb": "modelos/b/plancha_lateral.glb",
    "ficha": "modelos/b/plancha_lateral.json",
-   "bytes": 47476,
+   "bytes": 47396,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -850,7 +850,7 @@
   "plancha_lateral_rodilla": {
    "glb": "modelos/b/plancha_lateral_rodilla.glb",
    "ficha": "modelos/b/plancha_lateral_rodilla.json",
-   "bytes": 46076,
+   "bytes": 45544,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -864,7 +864,7 @@
   "plancha_rodillas": {
    "glb": "modelos/b/plancha_rodillas.glb",
    "ficha": "modelos/b/plancha_rodillas.json",
-   "bytes": 43936,
+   "bytes": 43664,
    "lado": "ambos",
    "musculos": {
     "principales": [
@@ -879,7 +879,7 @@
   "plantar_banda": {
    "glb": "modelos/b/plantar_banda.glb",
    "ficha": "modelos/b/plantar_banda.json",
-   "bytes": 74552,
+   "bytes": 73864,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -966,7 +966,7 @@
   "rodilla_pecho": {
    "glb": "modelos/b/rodilla_pecho.glb",
    "ficha": "modelos/b/rodilla_pecho.json",
-   "bytes": 61740,
+   "bytes": 65892,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -980,7 +980,7 @@
   "rodillas_lado": {
    "glb": "modelos/b/rodillas_lado.glb",
    "ficha": "modelos/b/rodillas_lado.json",
-   "bytes": 52480,
+   "bytes": 55140,
    "lado": "ambos",
    "musculos": {
     "principales": [],
@@ -1002,7 +1002,7 @@
   "rotacion_lado": {
    "glb": "modelos/b/rotacion_lado.glb",
    "ficha": "modelos/b/rotacion_lado.json",
-   "bytes": 64060,
+   "bytes": 64076,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -1138,7 +1138,7 @@
   "talon": {
    "glb": "modelos/b/talon.glb",
    "ficha": "modelos/b/talon.json",
-   "bytes": 41488,
+   "bytes": 41740,
    "lado": "derecho",
    "musculos": {
     "principales": [
@@ -1238,7 +1238,7 @@
   "tobillos": {
    "glb": "modelos/b/tobillos.glb",
    "ficha": "modelos/b/tobillos.json",
-   "bytes": 41656,
+   "bytes": 41908,
    "lado": "ambos",
    "musculos": {
     "principales": [

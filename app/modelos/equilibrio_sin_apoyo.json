@@ -32,12 +32,10 @@
  "angulos": {
   "partida": {
    "rodilla_izquierda_flexion": 4.0,
-   "tobillo_izquierda_flexion": 4.2,
    "cadera_derecha_abduccion": -0.0
   },
   "llegada": {
    "rodilla_izquierda_flexion": 40.0,
-   "tobillo_izquierda_flexion": 0.0,
    "cadera_derecha_abduccion": -6.7
   }
  },
@@ -54,16 +52,16 @@
  ],
  "camara": {
   "pos": [
-   -3.873,
+   -3.827,
    2.073,
-   0.882
+   0.875
   ],
   "mira": [
    -0.049,
-   0.849,
+   0.864,
    0.194
   ]
  },
  "archivo": "equilibrio_sin_apoyo.glb",
- "bytes": 66592
+ "bytes": 66952
 }

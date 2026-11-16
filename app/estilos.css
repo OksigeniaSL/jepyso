@@ -1358,6 +1358,18 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .aviso-licencia { margin: 0; color: var(--tinta); }
 .aviso-licencia:empty { display: none; }
 
+/* The professional's cloud, in Personas: the three services as one row of segments across the card, like the voice's
+   choice, and the note when moving to a new one. */
+.nube .segmentos { display: flex; width: 100%; }
+.nube .segmentos button { flex: 1 1 0; padding: 8px 6px; }
+.nube .cambio-nube { color: var(--tinta); }
+
+/* The page the Dropbox and Microsoft windows come back to (conectar.html): it closes at once; opened by hand, a line
+   and the way back to the app. */
+.conectar { display: grid; gap: 16px; justify-items: start; padding: 32px 16px; }
+.conectar-aviso { margin: 0; font-size: 17px; }
+.conectar .boton[hidden] { display: none; }
+
 /* The free files' Google account (vales.js). A file without its ticket: its name behind a padlock, quieter than the
    open ones; the section that opens them is marked with the live colour while some wait. Google's own button sits in
    its space as Google draws it. */
