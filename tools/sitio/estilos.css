@@ -109,3 +109,225 @@ img { max-width: 100%; height: auto; display: block; }
 .firma a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* ---------------------------------------------------------------------------------------------------------------
+   The home, «the room» (Jujol, 16-11-2026, portada.js): the app's figure stays in its plaster room on the right while
+   the story goes down on the left, and each step changes what it does and what lies over it. Full width, under a
+   header that stays. The rest of the site keeps the column above. */
+@font-face { font-family: 'Red Hat Mono'; src: url('/fuentes/red-hat-mono.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+:root {
+  --letra-mono: 'Red Hat Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --superficie-2: #d9dcd9; --linea-fuerte: #737c7e; --vivo: #c9553a;
+  --sombra: 0 30px 60px -36px rgb(29 34 37 / 0.45);
+  --lado: clamp(16px, 4vw, 56px); --cab: 72px;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --superficie-2: #22272a; --linea-fuerte: #6b7478; --vivo: #e06a4c; --sombra: 0 30px 60px -30px rgb(0 0 0 / 0.8); }
+}
+.enlace-precios { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+@media (max-width: 560px) { .enlace-precios { display: none; } }
+
+.inicio .cabecera { position: sticky; top: 0; z-index: 20; max-width: none; height: var(--cab); padding: 0 var(--lado);
+  background: color-mix(in srgb, var(--fondo) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--linea) 60%, transparent); }
+.inicio main { max-width: none; padding: 0; }
+.etiqueta { margin: 0; font-family: var(--letra-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tinta-suave); }
+
+.sala { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+.relato { position: relative; z-index: 2; padding: 0 clamp(20px, 4vw, 64px) 0 var(--lado); }
+.paso { min-height: 82vh; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: 48px 0; }
+.paso h2 { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.05; font-weight: 500; letter-spacing: -0.02em; }
+.paso p:not(.etiqueta) { font-size: 19px; color: var(--tinta-suave); }
+.paso:last-child { min-height: calc(100vh - var(--cab)); }
+/* The title runs over the room: it is the room's title, not a column's. */
+.paso-portada { min-height: calc(100vh - var(--cab)); justify-content: flex-start; padding-top: clamp(40px, 9vh, 96px); }
+.paso-portada h1 { width: min(150%, 1180px); font-size: clamp(46px, 6.2vw, 104px); font-weight: 500; line-height: 0.96; letter-spacing: -0.04em; }
+.paso-portada h1 span { display: block; }
+.paso-portada .entradilla { margin-top: 10px; font-size: 20px; line-height: 1.5; color: var(--tinta-suave); }
+.paso-portada .botones { margin-top: 8px; }
+
+.escenario { position: sticky; top: var(--cab); height: calc(100vh - var(--cab)); overflow: hidden; background: var(--figura-fondo);
+  border-left: 1px solid var(--linea); }
+.escenario-figura { position: absolute; inset: 24% 0 150px 0; background: url('/imagenes/yeso-puente.webp') center / contain no-repeat; }
+.con-figura .escenario-figura { background: none; }
+/* Each step frames the figure in the room its layer leaves free: beside the routine and the summary, above the chat
+   and the voice. The figure re-frames itself to its new box (Figura.ajustar). */
+.escenario[data-paso="1"] .escenario-figura { inset: 6% 0 40px min(390px, 50%); }
+.escenario[data-paso="2"] .escenario-figura { inset: 6% 0 200px 0; }
+.escenario[data-paso="3"] .escenario-figura { inset: 15% 0 120px 0; }
+.escenario[data-paso="4"] .escenario-figura { inset: 6% min(390px, 50%) 40px 0; }
+.escenario-figura canvas { width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 0.8s ease; }
+.con-figura .escenario-figura canvas { opacity: 1; }
+.escenario .registro { position: absolute; inset: 14px; pointer-events: none; }
+.registro::before, .registro::after, .registro i::before, .registro i::after { content: ''; position: absolute; width: 18px; height: 18px;
+  border: 0 solid var(--linea-fuerte); }
+.registro::before { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
+.registro::after { right: 0; bottom: 0; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+.registro i::before { right: 0; top: 0; border-right-width: 1.5px; border-top-width: 1.5px; }
+.registro i::after { left: 0; bottom: 0; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+
+/* What lies over the figure, one layer per step; only the step's own shows. */
+.capa { position: absolute; margin: 0; opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; pointer-events: none; }
+.escenario[data-paso="0"] [data-en="0"], .escenario[data-paso="1"] [data-en="1"], .escenario[data-paso="2"] [data-en="2"],
+.escenario[data-paso="3"] [data-en="3"], .escenario[data-paso="4"] [data-en="4"] { opacity: 1; transform: none; }
+
+/* 0: your prescription as the figure plays it: the phase in big, the tempo as a ruler with its cursor, the count. */
+.pauta { left: 40px; right: 40px; bottom: 30px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 6px 20px; }
+.pauta-nombre { grid-column: 1 / -1; }
+.fase { margin: 0; font: 500 clamp(40px, 4.6vw, 68px)/1 var(--letra-titulo); letter-spacing: -0.03em; }
+.fase[data-fase="mantener"] { color: var(--vivo-texto); }
+.cuenta { justify-self: end; font-size: 14px; }
+.cuenta b { font: 500 34px/1 var(--letra-titulo); color: var(--tinta); letter-spacing: -0.02em; }
+.tempo { grid-column: 1 / -1; position: relative; display: flex; height: 34px; margin-top: 8px; border-top: 1.5px solid var(--tinta); }
+.tempo span { padding: 6px 0 0 8px; font: 400 12px/1.2 var(--letra-mono); color: var(--tinta-suave); border-left: 1px solid var(--linea-fuerte); }
+.tempo span b { font-weight: 600; color: var(--tinta); text-transform: uppercase; }
+.tempo .t2 { flex: 2; }
+.tempo .t1 { flex: 1; }
+.tempo .reposo { border-left-style: dashed; }
+.tempo-cursor { position: absolute; top: -7px; left: 0; width: 2px; height: 22px; background: var(--vivo); }
+.tempo-cursor::before { content: ''; position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--vivo); }
+.tempo-texto { display: none; }
+.girar { top: 34px; right: 40px; }
+
+/* 1: the routine being built, as the app lists it. */
+.rutina, .serie, .resumen { padding: 18px 20px; background: var(--superficie); border: 1px solid var(--linea); box-shadow: var(--sombra); }
+.rutina { top: 40px; left: 40px; width: min(330px, calc(100% - 80px)); }
+.rutina ol { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: n; }
+.rutina li { display: grid; grid-template-columns: 26px 1fr; padding: 10px 0; border-top: 1px solid var(--linea); counter-increment: n; }
+.rutina li::before { content: counter(n); grid-row: span 2; font: 500 15px/1.3 var(--letra-mono); color: var(--tinta-suave); }
+.rutina li b { font-size: 16px; line-height: 1.3; }
+.rutina li span { font: 400 13px/1.4 var(--letra-mono); color: var(--tinta-suave); }
+.rutina li.activa { box-shadow: inset 3px 0 0 var(--tinta); padding-left: 10px; margin-left: -10px; }
+.molestia-aceptable { margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--linea); font-size: 14px; color: var(--tinta-suave); }
+.molestia-aceptable b { color: var(--tinta); }
+
+/* 2: the link, in a chat bubble, and the QR for the practice. */
+.mensaje { left: 40px; right: 40px; bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.burbuja { position: relative; width: min(360px, 100%); padding: 14px 16px 22px; background: var(--superficie); border: 1px solid var(--linea);
+  border-radius: 14px 14px 14px 2px; box-shadow: var(--sombra); font-size: 16px; }
+.burbuja-enlace { display: block; margin-top: 6px; font: 500 15px/1.3 var(--letra-mono); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.burbuja small { position: absolute; right: 12px; bottom: 6px; font-size: 11px; color: var(--tinta-suave); }
+.qr { display: grid; justify-items: center; gap: 8px; }
+.qr canvas { width: 132px; height: 132px; border: 10px solid #f2f3f1; image-rendering: pixelated; }
+
+/* 3: the set and the voice that guides, its words as the figure moves. */
+.serie { top: 40px; left: 40px; padding: 14px 18px; }
+.serie-cifras { margin-top: 6px; font-size: 18px; color: var(--tinta-suave); }
+.serie-cifras b { color: var(--tinta); }
+.voz { left: 40px; right: 40px; bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.voz-quien { display: flex; align-items: center; gap: 14px; margin: 0; font: 500 clamp(26px, 2.7vw, 40px)/1.08 var(--letra-titulo); letter-spacing: -0.02em; }
+.voz-quien svg { width: 34px; height: 34px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.voces { display: flex; margin: 0; border: 1px solid var(--linea-fuerte); font-size: 14px; font-weight: 600; }
+.voces span { padding: 10px 14px; }
+.voces .activa { background: var(--tinta); color: var(--superficie); }
+
+/* 4: what comes back, as the professional reads it. */
+.resumen { top: 40px; right: 40px; width: min(330px, calc(100% - 80px)); padding-bottom: 14px; }
+.resumen h3 { margin-top: 8px; font-size: 26px; line-height: 1.1; font-weight: 500; }
+.resumen .baja { margin-top: 6px; font-weight: 700; }
+.resumen ul { margin: 12px 0 0; padding: 0; list-style: none; }
+.resumen li { display: grid; grid-template-columns: 96px 1fr 22px; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--linea); font-size: 14px; }
+.resumen li i { height: 8px; background: var(--superficie-2); }
+.resumen li i.m2 { background: linear-gradient(90deg, var(--tinta) 20%, var(--superficie-2) 0); }
+.resumen li i.m4 { background: linear-gradient(90deg, var(--tinta) 40%, var(--superficie-2) 0); }
+.resumen li i.m5 { background: linear-gradient(90deg, var(--tinta) 50%, var(--superficie-2) 0); }
+.resumen li b { font: 600 15px/1 var(--letra-mono); text-align: right; }
+
+/* The sections after the room. */
+.bloque-sala { padding: clamp(64px, 9vw, 128px) var(--lado); border-top: 1px solid var(--linea); }
+.bloque-sala h2 { margin-top: 12px; font-size: clamp(32px, 3.8vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.02em; }
+.bloque-sala p:not(.etiqueta):not(.precio) { margin-top: 18px; font-size: 19px; color: var(--tinta-suave); }
+.metodo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.regla { position: relative; height: 210px; }
+.regla-zona { position: absolute; left: 0; top: 70px; width: 50%; height: 46px; border-left: 1.5px solid var(--tinta); border-right: 1.5px solid var(--tinta);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--tinta) 14%, transparent) 0 2px, transparent 2px 9px); }
+.regla-zona span { position: absolute; left: 10px; top: -26px; }
+.regla-marcas { position: absolute; left: 0; right: 0; top: 116px; display: flex; justify-content: space-between; margin: 0; padding: 0; list-style: none; border-top: 1.5px solid var(--tinta); }
+.regla-marcas li { position: relative; width: 0; }
+.regla-marcas li::before { content: ''; position: absolute; top: 0; left: 0; width: 1.5px; height: 14px; background: var(--tinta); }
+.regla-marcas li span { position: absolute; top: 20px; left: 0; transform: translateX(-50%); font: 500 15px/1 var(--letra-mono); }
+.regla-dia { position: absolute; top: 0; transform: translateX(-50%); display: grid; justify-items: center; gap: 2px; }
+.regla-dia.en3 { left: 30%; }
+.regla-dia.en7 { left: 70%; }
+.regla-dia b { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--tinta); color: var(--superficie); font: 600 20px/1 var(--letra-titulo); }
+.regla-dia span { font: 400 12px/1.2 var(--letra-mono); color: var(--tinta-suave); white-space: nowrap; }
+.regla-dia.marcado b { background: var(--vivo); color: #fff; }
+.regla-dia.marcado span { color: var(--vivo-texto); }
+
+.viaje { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 0 24px; margin-top: 44px; align-items: center; }
+.objeto { grid-row: span 2; display: grid; gap: 6px; align-content: end; min-height: 160px; padding: 24px; border: 1px solid var(--linea-fuerte); background: var(--superficie); }
+.objeto b { font: 500 26px/1.1 var(--letra-titulo); }
+.objeto span { color: var(--tinta-suave); }
+.flecha { position: relative; height: 56px; display: flex; align-items: flex-end; padding-bottom: 8px; border-bottom: 1.5px solid var(--tinta); }
+.flecha::after { content: ''; position: absolute; right: -1px; bottom: -6px; border: 6px solid transparent; border-left: 10px solid var(--tinta); border-right: 0; }
+.flecha.vuelta { grid-column: 2; align-items: flex-start; justify-content: flex-end; padding: 8px 0 0; border-bottom: 0; border-top: 1.5px dashed var(--tinta); }
+.flecha.vuelta::after { right: auto; left: -1px; top: -6.5px; bottom: auto; border-left: 0; border-right: 10px solid var(--tinta); }
+.nada { padding-top: 18px; border-top: 1px solid var(--linea); }
+.nada b { color: var(--tinta); }
+
+.planes-tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 44px; border: 1px solid var(--linea-fuerte); }
+.planes-tres .plan { display: flex; flex-direction: column; gap: 14px; padding: 28px; background: var(--superficie); }
+.planes-tres .plan + .plan { border-left: 1px solid var(--linea-fuerte); }
+.planes-tres .plan h3 { font-size: 22px; font-weight: 600; }
+.planes-tres .precio { margin: 0; font: 400 clamp(56px, 6vw, 88px)/1 var(--letra-titulo); letter-spacing: -0.04em; }
+.planes-tres .plan p:not(.precio) { flex: 1; margin-top: 0; }
+.planes-tres .boton { align-self: flex-start; }
+/* The people of each plan, one mark each, like the ticks of a ruler. */
+.gente { display: flex; flex-wrap: wrap; gap: 4px 3px; min-height: 64px; align-content: flex-start; }
+.gente i { width: 3px; height: 14px; background: var(--tinta); }
+.gente-5 i { width: 4px; height: 26px; margin-right: 6px; }
+.planes-nota { font-size: 16px !important; }
+
+.donde { display: grid; grid-template-columns: minmax(0, 1fr); }
+.tesela { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 32px; border: 1px solid var(--linea-fuerte); }
+.tesela h3 { font-size: 30px; line-height: 1.1; font-weight: 500; }
+.tesela p:not(.etiqueta) { margin: 0 0 8px !important; }
+
+.sala-cierre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: clamp(64px, 9vw, 120px) var(--lado);
+  background: var(--tinta); color: var(--fondo); }
+.sala-cierre h2 { font-size: clamp(36px, 5vw, 72px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; }
+.sala-cierre .boton { background: var(--fondo); color: var(--tinta); border-color: var(--fondo); }
+
+@media (prefers-reduced-motion: reduce) { .capa, .escenario-figura canvas { transition: none; } }
+
+/* On a phone: the room on top, smaller, and the story under it. */
+@media (max-width: 960px) {
+  :root { --cab: 64px; }
+  .sala { grid-template-columns: minmax(0, 1fr); }
+  .escenario { grid-row: 1; height: 46vh; z-index: 3; border-left: 0; border-bottom: 1px solid var(--linea); }
+  .escenario-figura { inset: 0 0 118px 0; }
+  /* On a phone the cards go under the figure, which keeps the top of the room. */
+  .escenario[data-paso="1"] .escenario-figura, .escenario[data-paso="4"] .escenario-figura { inset: 6px 0 150px 0; }
+  .escenario[data-paso="2"] .escenario-figura { inset: 6px 0 128px 0; }
+  .escenario[data-paso="3"] .escenario-figura { inset: 64px 0 74px 0; }
+  .escenario .rutina, .escenario .resumen { top: auto; bottom: 14px; }
+  .relato { padding: 0 var(--lado); }
+  .paso { min-height: 62vh; padding: 36px 0; }
+  .paso-portada { min-height: 0; padding-top: 28px; }
+  .paso:last-child { min-height: 62vh; }
+  .paso-portada h1 { width: auto; font-size: clamp(38px, 10.5vw, 56px); }
+  .paso p:not(.etiqueta), .paso-portada .entradilla { font-size: 17px; }
+  .pauta { left: 18px; right: 18px; bottom: 14px; }
+  .fase { font-size: 34px; }
+  .cuenta b { font-size: 24px; }
+  .tempo { height: 14px; }
+  .tempo span { font-size: 0; padding: 0; }
+  .tempo-texto { display: block; grid-column: 1 / -1; font-size: 11px; }
+  .girar, .qr { display: none; }
+  .rutina, .resumen, .serie { top: 14px; left: 14px; right: auto; width: calc(100% - 28px); padding: 10px 12px; }
+  .rutina li:nth-child(n+3), .molestia-aceptable, .resumen li:nth-child(n+3) { display: none; }
+  .resumen h3 { font-size: 20px; }
+  .mensaje, .voz { left: 14px; right: 14px; bottom: 14px; }
+  .voz-quien { font-size: 26px; }
+  .metodo { grid-template-columns: minmax(0, 1fr); }
+  .regla-zona span { top: 50%; left: 8px; transform: translateY(-50%); padding: 2px 4px; background: var(--fondo); }
+  .viaje { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .objeto { grid-row: auto; min-height: 0; }
+  .flecha, .flecha.vuelta { grid-column: auto; height: 64px; margin-left: 24px; padding: 0 0 0 14px; align-items: center; justify-content: flex-start;
+    border: 0; border-left: 1.5px solid var(--tinta); }
+  .flecha.vuelta { border-left-style: dashed; }
+  .flecha::after, .flecha.vuelta::after { display: none; }
+  .planes-tres { grid-template-columns: minmax(0, 1fr); }
+  .planes-tres .plan + .plan { border-left: 0; border-top: 1px solid var(--linea-fuerte); }
+  .bloque-sala p:not(.etiqueta):not(.precio) { font-size: 17px; }
+}
