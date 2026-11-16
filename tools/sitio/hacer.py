@@ -163,26 +163,62 @@ PORTADA_HEAD = '''
   <script type="module" src="/portada.js"></script>'''
 
 # The exercises the room plays: the figure, three.js and these clips are copied from app/ (copiar_figura).
-FIGURA_EJERCICIOS = ('puente', 'silla', 'hombro')
+FIGURA_EJERCICIOS = ('puente', 'silla', 'remo', 'hombro')
 EJEMPLO = 'https://app.jepyso.com/#r=7Kq2mX'
+
+
+def catalogo_datos():
+    """The sample of the catalogue on the home (Kimi, 16-11, adopted by Jepyso): per zone of app/datos.js, how many
+    exercises and the first three of ORDEN with a still, none twice; the English, from app/idiomas/en-ejercicios.js."""
+    app = os.path.join(RAIZ, 'app')
+    with open(os.path.join(app, 'datos.js'), encoding='utf-8') as f:
+        src = f.read()
+    cat = src[src.index('export const EJERCICIOS = {'):src.index('export const ORDEN')]
+    marcas = list(re.finditer(r'^  (\w+): \{$', cat, re.M))
+    nombres, zonas = {}, {}
+    for i, m in enumerate(marcas):
+        bloque = cat[m.end():marcas[i + 1].start() if i + 1 < len(marcas) else len(cat)]
+        n = re.search(r"nombre: '([^']+)'", bloque)
+        z = re.search(r'zonas: \[([^\]]*)\]', bloque)
+        if not n:
+            continue
+        nombres[m.group(1)] = n.group(1)
+        for zona in re.findall(r"'(\w+)'", z.group(1)) if z else []:
+            zonas.setdefault(zona, []).append(m.group(1))
+    lista = src[src.index('export const ORDEN = ['):]
+    orden = re.findall(r"'(\w+)'", lista[:lista.index('];')])
+    etiquetas = re.findall(r"^  (\w+): '([^']+)',$", src[src.index('export const ZONAS = {'):src.index('export const MUSCULOS')], re.M)
+    posters = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(app, 'modelos', 'posters'))}
+    usados, filas = set(), []
+    for zona, etiqueta in etiquetas:
+        ids = sorted(zonas.get(zona, []), key=lambda k: orden.index(k) if k in orden else len(orden))
+        muestra = [k for k in ids if k in posters and k not in usados][:3]
+        usados.update(muestra)
+        filas.append((etiqueta, len(ids), muestra))
+    with open(os.path.join(app, 'idiomas', 'en-ejercicios.js'), encoding='utf-8') as f:
+        ingles = dict(re.findall(r"^\s*'((?:[^'\\]|\\.)*)':\s*'((?:[^'\\]|\\.)*)',?\s*$", f.read(), re.M))
+    return filas, nombres, ingles, len(nombres)
+
+
+CATALOGO, NOMBRES_EJ, INGLES_EJ, TOTAL_EJ = catalogo_datos()
 
 T = {
     'es': {
         'titulo': 'Jepyso · Rutinas de ejercicio que se mandan por un enlace',
         'desc': 'Arma la rutina de ejercicios de cada persona y mándasela por un enlace. La hace en su teléfono siguiendo a una figura en 3D, a tu ritmo, sin instalar nada.',
-        'h1': 'La rutina que mandas, <span>al ritmo que mandas</span>',
+        'h1': 'La rutina que mandas, al ritmo que mandas',
         'entradilla': 'Arma la rutina de cada persona y mándasela por un enlace. La hace en su teléfono siguiendo a esta figura, que sube, mantiene y baja al ritmo que pones, del lado que toca y serie tras serie. Sin instalar nada y sin crear cuentas.',
         'empezar': 'Empezar gratis', 'ver_planes': 'Ver los planes',
         'escena': 'La figura de Jepyso haciendo los ejercicios de una rutina de ejemplo',
         'pasos': [
             ('01 · Arma', 'Arma la rutina', 'Para fisioterapia, entrenamiento, Educación Física o un centro de mayores, en cualquier sitio. Elige entre casi cien ejercicios, por zona, por músculo o por nombre, con los programas Otago y Vivifrail dentro. Pon las series, las repeticiones, cuánto sube, cuánto mantiene, cuánto baja, el lado y la molestia que aceptas. La figura te enseña cómo lo hará.'),
-            ('02 · Manda', 'Mándala por un enlace', 'Por WhatsApp, por Telegram, por correo o con un código QR en la consulta. La rutina va dentro del enlace: la persona solo tiene que abrirlo. No instala nada, no se crea una cuenta y no paga.'),
+            ('02 · Manda', 'Mándala por un enlace', 'Por WhatsApp, por Telegram, por correo o con un código QR en la consulta. La rutina va dentro del enlace: la persona solo tiene que abrirlo. No instala nada, no se crea una cuenta y no paga.', 'Quien sabe abrir un WhatsApp sabe abrir su rutina. No hace falta más.'),
             ('03 · Hace', 'La hace con la figura', 'La figura cumple la pauta: la fase en grande, la cuenta atrás, un sonido y una vibración en cada repetición, y una voz que guía, la de Mira o la de Altair, a elegir. Sin conexión, una vez abierta.'),
             ('04 · Vuelve', 'Te devuelve lo que hizo', 'Al acabar apunta lo que hizo y la molestia que notó, y te lo manda en otro enlace. Lo ves en su ficha, día a día y semana a semana. Quien no te ha mandado nada en dos semanas te sale a la vista, con el mensaje listo para escribirle.'),
         ],
         'pauta': {'puente': 'Tu pauta · puente de glúteo · 2 × 10', 'silla': 'Tu pauta · levantarse de la silla · 2 × 8',
                   'hombro': 'Tu pauta · rotación externa con banda · lado derecho'},
-        'fase0': 'Sube la cadera', 'sube': 'Sube', 'mantiene': 'Mantiene', 'baja': 'Baja', 'de': 'de', 'girar': 'Gírala con el dedo',
+        'fase0': 'Sube la cadera', 'sube': 'Sube', 'mantiene': 'Mantiene', 'baja': 'Baja', 'de': 'de', 'girar': ('Gírala con el dedo', 'Gírala con el ratón'),
         'rutina': 'Rutina de Ana · 3 días a la semana',
         'filas': [('Levantarse de la silla', '2 × 8 · 2 · 1 · 2 s'), ('Puente de glúteo', '2 × 10 · 2 · 1 · 2 s'), ('Rotación externa con banda', '2 × 12 · lado derecho')],
         'aceptable_txt': 'Molestia aceptable <b>5</b> de 10',
@@ -191,15 +227,22 @@ T = {
         'voz0': '«Lleva la mano hacia fuera»',
         'resumen': 'Resumen para Carlos', 'resumen_h': 'Ana ha hecho su rutina 3 veces', 'resumen_baja': 'La molestia bajó de 5 a 2',
         'dias': [('Sábado 14', 2), ('Jueves 12', 4), ('Martes 10', 5)],
+        'regla_cab': 'Rutina de Ana · molestia aceptable 5', 'regla_pie': 'A la mañana siguiente: «¿Cómo estaba la zona al levantarte?»',
         'metodo_e': 'La molestia, con método', 'metodo_h': 'Cada rutina lleva la molestia que aceptas',
         'metodo_p': 'Pones hasta dónde puede llegar, de 0 a 10. Si la persona la pasa, se le dice y el día te sale marcado. A la mañana siguiente se le pregunta cómo estaba la zona al levantarse. Es el modelo de control del dolor, el más citado para dosificar el ejercicio cuando hay molestia.',
         'regla_aria': 'Escala de molestia de 0 a 10, aceptable hasta 5; el martes llegó a 7 y salió marcado',
         'aceptable': 'Aceptable', 'hoy': 'Hoy', 'marcado': 'Martes · marcado',
-        'datos_e': 'Tus datos, contigo', 'datos_h': 'Jepyso no tiene servidor de datos',
+        'datos_e': 'Tus datos, contigo', 'datos_h': 'Oksigenia no recibe nada',
+        'datos_p': 'Ni la rutina, ni lo que hace la persona, ni sus molestias: Jepyso no tiene servidor de datos.',
         'tu_tel': ('Tu teléfono', 'Tus fichas, y con un plan, también en tu Google Drive'),
         'su_tel': ('Su teléfono', 'Lo que apunta se queda ahí hasta que te lo manda'),
         'ida': 'La rutina, dentro del enlace', 'vuelta': 'Lo que hizo, en otro enlace',
-        'nada': '<b>Oksigenia no recibe nada de eso.</b> Ni la rutina, ni lo que hace la persona, ni sus molestias. <a href="/privacidad/">Así lo cuenta la política de privacidad.</a>',
+        'nada': '<a href="/privacidad/">Así lo cuenta la política de privacidad.</a>',
+        'una_vez': 'una vez',
+        'catalogo_e': 'Lo que hay dentro', 'catalogo_h': 'Casi cien ejercicios, por zonas', 'ejercicios': 'ejercicios',
+        'catalogo_p': 'Cada uno con su figura, sus pasos, el error más común y una forma más fácil cuando la hay. Un ejercicio puede servir para varias zonas.',
+        'programas': [('Otago', 'Cuatro niveles, de la A a la D: calentamiento, fuerza con tobillera y equilibrio, del que se hace agarrado al más exigente.'),
+                      ('Vivifrail', 'Cuatro niveles según el SPPB, de la A a la D: de quien se levanta con mucha ayuda a quien está en buena forma.')],
         'planes_e': 'Planes', 'planes_h': 'Gratis para empezar. Un solo pago para tu consulta',
         'planes': [('Gratis', '0 €', 5, 'Rutinas por enlace, todas las que quieras, y las fichas de hasta <b>5 personas</b>, en tu teléfono.', 'Empezar gratis', APP, ' secundario'),
                    ('Profesional', '59 €', 50, 'Las fichas de hasta <b>50 personas</b>, en tu Google Drive y en todos tus aparatos.', 'Ver Profesional', '/precios/', ''),
@@ -211,19 +254,19 @@ T = {
     'en': {
         'titulo': 'Jepyso · Exercise routines sent as a link',
         'desc': 'Build each person’s exercise routine and send it as a link. They do it on their phone, following a 3D figure at the pace you set, with nothing to install.',
-        'h1': 'The routine you set, <span>at the pace you set</span>',
+        'h1': 'The routine you set, at the pace you set',
         'entradilla': 'Build each person’s routine and send it as a link. They do it on their phone following this figure, which goes up, holds and comes down at the pace you set, on the right side and set after set. Nothing to install and no accounts.',
         'empezar': 'Start for free', 'ver_planes': 'See the plans',
         'escena': 'Jepyso’s figure doing the exercises of an example routine',
         'pasos': [
             ('01 · Build', 'Build the routine', 'For physiotherapy, training, PE or a care home, anywhere. Choose from nearly a hundred exercises by body area, muscle or name, with the Otago and Vivifrail programmes included. Set the sets, the repetitions, how long it goes up, holds and comes down, the side and the discomfort you accept. The figure shows you how it will be done.'),
-            ('02 · Send', 'Send it as a link', 'Over WhatsApp, Telegram, email or with a QR code in your practice. The routine travels inside the link: the person only has to open it. Nothing to install, no account to create and nothing to pay.'),
+            ('02 · Send', 'Send it as a link', 'Over WhatsApp, Telegram, email or with a QR code in your practice. The routine travels inside the link: the person only has to open it. Nothing to install, no account to create and nothing to pay.', 'If they can open a WhatsApp message, they can open their routine. That is all it takes.'),
             ('03 · Do', 'They do it with the figure', 'The figure keeps to your prescription: the phase in large type, the countdown, a sound and a vibration on each repetition, and a voice that guides them. Offline, once opened.'),
             ('04 · Back', 'What they did comes back to you', 'When they finish, they record what they did and the discomfort they felt, and send it back in another link. You see it in their file, day by day and week by week. Anyone who has sent you nothing in two weeks stands out, with the message ready to write to them.'),
         ],
         'pauta': {'puente': 'Your prescription · glute bridge · 2 × 10', 'silla': 'Your prescription · sit to stand · 2 × 8',
                   'hombro': 'Your prescription · external rotation with a band · right side'},
-        'fase0': 'Lift your hips', 'sube': 'Up', 'mantiene': 'Hold', 'baja': 'Down', 'de': 'of', 'girar': 'Turn it with your finger',
+        'fase0': 'Lift your hips', 'sube': 'Up', 'mantiene': 'Hold', 'baja': 'Down', 'de': 'of', 'girar': ('Turn it with your finger', 'Turn it with your mouse'),
         'rutina': 'Ana’s routine · 3 days a week',
         'filas': [('Sit to stand', '2 × 8 · 2 · 1 · 2 s'), ('Glute bridge', '2 × 10 · 2 · 1 · 2 s'), ('External rotation with a band', '2 × 12 · right side')],
         'aceptable_txt': 'Acceptable discomfort <b>5</b> out of 10',
@@ -232,15 +275,22 @@ T = {
         'voz0': '“Take your hand out to the side”',
         'resumen': 'Summary for Carlos', 'resumen_h': 'Ana has done her routine 3 times', 'resumen_baja': 'Her discomfort went down from 5 to 2',
         'dias': [('Saturday 14', 2), ('Thursday 12', 4), ('Tuesday 10', 5)],
+        'regla_cab': 'Ana’s routine · acceptable discomfort 5', 'regla_pie': 'The next morning: “How did the area feel when you got up?”',
         'metodo_e': 'Discomfort, with a method', 'metodo_h': 'Each routine carries the discomfort you accept',
         'metodo_p': 'You set how far it may go, from 0 to 10. If the person goes past it, they are told and the day is flagged for you. The next morning they are asked how the area felt when they got up. It is the pain-monitoring model, the most cited for dosing exercise when there is discomfort.',
         'regla_aria': 'Discomfort scale from 0 to 10, acceptable up to 5; on Tuesday it reached 7 and was flagged',
         'aceptable': 'Acceptable', 'hoy': 'Today', 'marcado': 'Tuesday · flagged',
-        'datos_e': 'Your data stays with you', 'datos_h': 'Jepyso has no data server',
+        'datos_e': 'Your data stays with you', 'datos_h': 'Oksigenia receives nothing',
+        'datos_p': 'Not the routine, not what the person does, not their discomfort: Jepyso has no data server.',
         'tu_tel': ('Your phone', 'Your files, and with a plan, in your Google Drive too'),
         'su_tel': ('Their phone', 'What they record stays there until they send it to you'),
         'ida': 'The routine, inside the link', 'vuelta': 'What they did, in another link',
-        'nada': '<b>Oksigenia receives none of it.</b> Not the routine, not what the person does, not their discomfort. <a href="/en/privacy/">This is how our privacy policy puts it.</a>',
+        'nada': '<a href="/en/privacy/">This is how our privacy policy puts it.</a>',
+        'una_vez': 'once',
+        'catalogo_e': 'What is inside', 'catalogo_h': 'Nearly a hundred exercises, by area', 'ejercicios': 'exercises',
+        'catalogo_p': 'Each with its figure, its steps, the most common mistake and an easier way when there is one. An exercise can serve more than one area.',
+        'programas': [('Otago', 'Four levels, from A to D: warm-up, strength with an ankle weight and balance, from holding on to the most demanding.'),
+                      ('Vivifrail', 'Four levels by SPPB score, from A to D: from those who need a lot of help to stand up to those in good shape.')],
         'planes_e': 'Plans', 'planes_h': 'Free to start. One payment for your practice',
         'planes': [('Free', '€0', 5, 'Routines as links, as many as you like, and the files of up to <b>5 people</b>, on your phone.', 'Start for free', APP, ' secundario'),
                    ('Professional', '€59', 50, 'The files of up to <b>50 people</b>, in your Google Drive and on all your devices.', 'See Professional', '/en/pricing/', ''),
@@ -258,14 +308,19 @@ def inicio(lengua):
       <div class="paso" data-paso="{n}"{' id="como"' if n == 1 else ''}>
         <p class="etiqueta">{e(et)}</p>
         <h2>{e(h)}</h2>
-        <p>{e(p)}</p>
-      </div>''' for n, (et, h, p) in enumerate(t['pasos'], 1))
+        <p>{e(p)}</p>{f'{chr(10)}        <p class="paso-nota">{e(nota[0])}</p>' if nota else ''}
+      </div>''' for n, (et, h, p, *nota) in enumerate(t['pasos'], 1))
+    traducir = (lambda x: INGLES_EJ.get(x, x)) if lengua == 'en' else (lambda x: x)
+    zonas = ''.join(f'''
+        <div class="zona"><h3>{e(traducir(etiqueta))}</h3><p class="etiqueta">{n} {t['ejercicios']}</p>
+          <ul>{''.join(f'<li><img src="/imagenes/ejercicios/{k}.webp" alt="" width="192" height="144" loading="lazy"><span>{e(traducir(NOMBRES_EJ[k]))}</span></li>' for k in muestra)}</ul></div>''' for etiqueta, n, muestra in CATALOGO)
+    programas = ''.join(f'<div class="programa"><h3>{e(nombre)}</h3><p>{e(texto)}</p></div>' for nombre, texto in t['programas'])
     pauta_datos = ' '.join(f'data-{k}="{e(v)}"' for k, v in t['pauta'].items())
     filas = ''.join(f'<li{" class=\"activa\"" if i == 0 else ""}><b>{e(a)}</b><span>{e(b)}</span></li>' for i, (a, b) in enumerate(t['filas']))
     dias = ''.join(f'<li><span>{e(d)}</span><i class="m{m}"></i><b>{m}</b></li>' for d, m in t['dias'])
     marcas = ''.join(f'<li><span>{i}</span></li>' for i in range(11))
     planes = ''.join(f'''
-        <div class="plan"><h3>{e(nombre)}</h3><p class="precio">{precio}</p><div class="gente gente-{n}" aria-hidden="true">{'<i></i>' * n}</div>
+        <div class="plan"><h3>{e(nombre)}</h3><p class="precio">{precio}{f'<small>{t["una_vez"]}</small>' if n > 5 else ''}</p><div class="gente gente-{n}" aria-hidden="true">{'<i></i>' * n}</div>
           <p>{texto}</p><a class="boton{clase}" href="{enlace}">{e(boton)}</a></div>''' for nombre, precio, n, texto, boton, enlace, clase in t['planes'])
     c = t['centro']
     return f'''    <section class="sala">
@@ -286,7 +341,7 @@ def inicio(lengua):
           <div class="tempo"><span class="t2"><b>{t['sube']}</b> 2 s</span><span class="t1"><b>{t['mantiene']}</b> 1 s</span><span class="t2"><b>{t['baja']}</b> 2 s</span><span class="t1 reposo"></span><i class="tempo-cursor"></i></div>
           <p class="etiqueta tempo-texto">{t['sube']} 2 s · {t['mantiene'].lower()} 1 s · {t['baja'].lower()} 2 s</p>
         </div>
-        <p class="capa girar etiqueta" data-en="0" aria-hidden="true">{e(t['girar'])}</p>
+        <p class="capa girar etiqueta" data-en="0" aria-hidden="true"><span class="girar-dedo">{e(t['girar'][0])}</span><span class="girar-raton">{e(t['girar'][1])}</span></p>
         <div class="capa rutina" data-en="1" aria-hidden="true">
           <p class="etiqueta">{e(t['rutina'])}</p>
           <ol>{filas}</ol>
@@ -309,22 +364,36 @@ def inicio(lengua):
         </div>
       </div>
     </section>
+    <section class="bloque-sala catalogo">
+      <p class="etiqueta">{e(t['catalogo_e'])}</p>
+      <h2>{e(t['catalogo_h'])}</h2>
+      <p>{e(t['catalogo_p'])}</p>
+      <div class="zonas">{zonas}
+      </div>
+      <div class="programas">{programas}
+      </div>
+    </section>
     <section class="bloque-sala metodo">
       <div>
         <p class="etiqueta">{e(t['metodo_e'])}</p>
         <h2>{e(t['metodo_h'])}</h2>
         <p>{e(t['metodo_p'])}</p>
       </div>
+      <div class="regla-tarjeta">
+      <p class="etiqueta">{e(t['regla_cab'])}</p>
       <div class="regla" role="img" aria-label="{e(t['regla_aria'])}">
         <div class="regla-zona"><span class="etiqueta">{e(t['aceptable'])}</span></div>
         <ol class="regla-marcas" aria-hidden="true">{marcas}</ol>
         <div class="regla-dia en3" aria-hidden="true"><b>3</b><span>{e(t['hoy'])}</span></div>
         <div class="regla-dia en7 marcado" aria-hidden="true"><b>7</b><span>{e(t['marcado'])}</span></div>
       </div>
+      <p class="regla-pie">{e(t['regla_pie'])}</p>
+      </div>
     </section>
     <section class="bloque-sala datos">
       <p class="etiqueta">{e(t['datos_e'])}</p>
       <h2>{e(t['datos_h'])}</h2>
+      <p class="datos-entrada">{e(t['datos_p'])}</p>
       <div class="viaje">
         <div class="objeto"><b>{e(t['tu_tel'][0])}</b><span>{e(t['tu_tel'][1])}</span></div>
         <div class="flecha"><span class="etiqueta">{e(t['ida'])}</span></div>
@@ -531,6 +600,10 @@ def main():
     shutil.copytree(os.path.join(app, 'vendor', 'oksigenia-access-panel'), os.path.join(DEST, 'vendor', 'oksigenia-access-panel'))
     shutil.copytree(os.path.join(app, 'vendor', 'qrcode'), os.path.join(DEST, 'vendor', 'qrcode'))
     copiar_figura(app, DEST)
+    os.makedirs(os.path.join(DEST, 'imagenes', 'ejercicios'))
+    for _, _, muestra in CATALOGO:
+        for k in muestra:
+            shutil.copy(os.path.join(app, 'modelos', 'posters', f'{k}.webp'), os.path.join(DEST, 'imagenes', 'ejercicios'))
     for lengua in ('es', 'en'):
         r = RUTAS[lengua]
         i = INICIO[lengua]

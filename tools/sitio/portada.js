@@ -34,7 +34,7 @@ async function iniciar() {
   const f = new Figura(lienzo, { ...manifiesto, _base: '/figura/' });
   // The wheel moves the page, not the figure's camera; it still turns with a finger or by dragging.
   f.controles.enableZoom = false;
-  const EJERCICIO = ['puente', 'silla', 'silla', 'hombro', 'silla'];
+  const EJERCICIO = ['puente', 'silla', 'remo', 'hombro', 'silla'];
   const LADO = { hombro: 'der' };
   const PALABRA = en ? { subir: 'Up', mantener: 'Hold', bajar: 'Down', reposo: 'Rest' } : { subir: 'Sube', mantener: 'Mantén', bajar: 'Baja', reposo: 'Descansa' };
   const nombre = document.querySelector('.pauta-nombre');

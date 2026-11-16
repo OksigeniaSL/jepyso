@@ -139,10 +139,12 @@ img { max-width: 100%; height: auto; display: block; }
 .paso h2 { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.05; font-weight: 500; letter-spacing: -0.02em; }
 .paso p:not(.etiqueta) { font-size: 19px; color: var(--tinta-suave); }
 .paso:last-child { min-height: calc(100vh - var(--cab)); }
-/* The title runs over the room: it is the room's title, not a column's. */
-.paso-portada { min-height: calc(100vh - var(--cab)); justify-content: flex-start; padding-top: clamp(40px, 9vh, 96px); }
-.paso-portada h1 { width: min(150%, 1180px); font-size: clamp(46px, 6.2vw, 104px); font-weight: 500; line-height: 0.96; letter-spacing: -0.04em; }
-.paso-portada h1 span { display: block; }
+.paso .paso-nota { padding-left: 14px; border-left: 2px solid var(--tinta); color: var(--tinta) !important; font-size: 17px !important; }
+/* The title stays in its column at any width (Enrique, 16-11: crossing into the room read as a fault): its size follows
+   the column's width (cqi), with the window's as the fallback. */
+.paso-portada { min-height: calc(100vh - var(--cab)); justify-content: center; padding: 48px 0 clamp(48px, 10vh, 120px); container-type: inline-size; }
+.paso-portada h1 { font-size: clamp(38px, 3.6vw, 76px); font-size: clamp(38px, 10.6cqi, 84px); font-weight: 500; line-height: 0.98; letter-spacing: -0.035em;
+  overflow-wrap: break-word; text-wrap: balance; }
 .paso-portada .entradilla { margin-top: 10px; font-size: 20px; line-height: 1.5; color: var(--tinta-suave); }
 .paso-portada .botones { margin-top: 8px; }
 
@@ -158,7 +160,8 @@ img { max-width: 100%; height: auto; display: block; }
 .escenario[data-paso="4"] .escenario-figura { inset: 6% min(390px, 50%) 40px 0; }
 .escenario-figura canvas { width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 0.8s ease; }
 .con-figura .escenario-figura canvas { opacity: 1; }
-.escenario .registro { position: absolute; inset: 14px; pointer-events: none; }
+/* The right corners a little further in: a scrollbar laid over the page (or a capture without it) takes up to 16 px. */
+.escenario .registro { position: absolute; z-index: 4; inset: 14px 26px 14px 14px; pointer-events: none; }
 .registro::before, .registro::after, .registro i::before, .registro i::after { content: ''; position: absolute; width: 18px; height: 18px;
   border: 0 solid var(--linea-fuerte); }
 .registro::before { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
@@ -187,7 +190,10 @@ img { max-width: 100%; height: auto; display: block; }
 .tempo-cursor { position: absolute; top: -7px; left: 0; width: 2px; height: 22px; background: var(--vivo); }
 .tempo-cursor::before { content: ''; position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--vivo); }
 .tempo-texto { display: none; }
-.girar { top: 34px; right: 40px; }
+.girar { top: 34px; right: 50px; }
+/* Turned with a finger on a touch screen, with the mouse where there is one. */
+.girar-raton { display: none; }
+@media (hover: hover) and (pointer: fine) { .girar-dedo { display: none; } .girar-raton { display: inline; } }
 
 /* 1: the routine being built, as the app lists it. */
 .rutina, .serie, .resumen { padding: 18px 20px; background: var(--superficie); border: 1px solid var(--linea); box-shadow: var(--sombra); }
@@ -237,8 +243,24 @@ img { max-width: 100%; height: auto; display: block; }
 .bloque-sala { padding: clamp(64px, 9vw, 128px) var(--lado); border-top: 1px solid var(--linea); }
 .bloque-sala h2 { margin-top: 12px; font-size: clamp(32px, 3.8vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.02em; }
 .bloque-sala p:not(.etiqueta):not(.precio) { margin-top: 18px; font-size: 19px; color: var(--tinta-suave); }
+/* The catalogue's sample: per area, how many and three of its stills, as the app's library shows them. */
+.zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 40px; border-top: 1px solid var(--linea-fuerte); border-left: 1px solid var(--linea-fuerte); }
+.zona { padding: 20px 18px 18px; border-right: 1px solid var(--linea-fuerte); border-bottom: 1px solid var(--linea-fuerte); }
+.zona h3 { font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
+.zona .etiqueta { margin-top: 4px; }
+.zona ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.zona li { display: grid; gap: 6px; align-content: start; font-size: 13px; line-height: 1.3; color: var(--tinta-suave); }
+.zona img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--figura-fondo); }
+.programas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+.programa { padding: 22px 24px; background: var(--superficie); border: 1px solid var(--linea); }
+.programa h3 { font-size: 26px; font-weight: 500; }
+.programa p { margin-top: 6px !important; font-size: 17px !important; }
+
 .metodo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
-.regla { position: relative; height: 210px; }
+/* The scale, on a card of the routine, as the professional sets it in the app. */
+.regla-tarjeta { padding: 22px 28px 18px; background: var(--superficie); border: 1px solid var(--linea); box-shadow: var(--sombra); }
+.regla-pie { margin: 6px 0 0 !important; padding-top: 12px; border-top: 1px solid var(--linea); font-size: 15px !important; }
+.regla { position: relative; height: 190px; margin-top: 18px; }
 .regla-zona { position: absolute; left: 0; top: 70px; width: 50%; height: 46px; border-left: 1.5px solid var(--tinta); border-right: 1.5px solid var(--tinta);
   background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--tinta) 14%, transparent) 0 2px, transparent 2px 9px); }
 .regla-zona span { position: absolute; left: 10px; top: -26px; }
@@ -262,14 +284,17 @@ img { max-width: 100%; height: auto; display: block; }
 .flecha::after { content: ''; position: absolute; right: -1px; bottom: -6px; border: 6px solid transparent; border-left: 10px solid var(--tinta); border-right: 0; }
 .flecha.vuelta { grid-column: 2; align-items: flex-start; justify-content: flex-end; padding: 8px 0 0; border-bottom: 0; border-top: 1.5px dashed var(--tinta); }
 .flecha.vuelta::after { right: auto; left: -1px; top: -6.5px; bottom: auto; border-left: 0; border-right: 10px solid var(--tinta); }
+/* What weighs most when choosing, said as a title. */
+.datos h2 { font-size: clamp(40px, 5.4vw, 84px); line-height: 0.98; letter-spacing: -0.035em; }
+.datos .datos-entrada { font-size: 21px !important; color: var(--tinta) !important; }
 .nada { padding-top: 18px; border-top: 1px solid var(--linea); }
-.nada b { color: var(--tinta); }
 
 .planes-tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 44px; border: 1px solid var(--linea-fuerte); }
 .planes-tres .plan { display: flex; flex-direction: column; gap: 14px; padding: 28px; background: var(--superficie); }
 .planes-tres .plan + .plan { border-left: 1px solid var(--linea-fuerte); }
 .planes-tres .plan h3 { font-size: 22px; font-weight: 600; }
 .planes-tres .precio { margin: 0; font: 400 clamp(56px, 6vw, 88px)/1 var(--letra-titulo); letter-spacing: -0.04em; }
+.planes-tres .precio small { margin-left: 12px; font: 500 14px/1 var(--letra-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-suave); vertical-align: 0.9em; }
 .planes-tres .plan p:not(.precio) { flex: 1; margin-top: 0; }
 .planes-tres .boton { align-self: flex-start; }
 /* The people of each plan, one mark each, like the ticks of a ruler. */
@@ -293,8 +318,12 @@ img { max-width: 100%; height: auto; display: block; }
 /* On a phone: the room on top, smaller, and the story under it. */
 @media (max-width: 960px) {
   :root { --cab: 64px; }
+  /* The title and the promise first, the room after them (Kimi, 16-11): the steps go on under the room. */
   .sala { grid-template-columns: minmax(0, 1fr); }
-  .escenario { grid-row: 1; height: 46vh; z-index: 3; border-left: 0; border-bottom: 1px solid var(--linea); }
+  .relato { display: contents; }
+  .paso-portada { order: 1; padding-left: var(--lado) !important; padding-right: var(--lado) !important; }
+  .escenario { order: 2; height: 46vh; z-index: 3; border-left: 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+  .paso:not(.paso-portada) { order: 3; padding-left: var(--lado); padding-right: var(--lado); }
   .escenario-figura { inset: 0 0 118px 0; }
   /* On a phone the cards go under the figure, which keeps the top of the room. */
   .escenario[data-paso="1"] .escenario-figura, .escenario[data-paso="4"] .escenario-figura { inset: 6px 0 150px 0; }
@@ -305,7 +334,7 @@ img { max-width: 100%; height: auto; display: block; }
   .paso { min-height: 62vh; padding: 36px 0; }
   .paso-portada { min-height: 0; padding-top: 28px; }
   .paso:last-child { min-height: 62vh; }
-  .paso-portada h1 { width: auto; font-size: clamp(38px, 10.5vw, 56px); }
+  .paso-portada h1 { font-size: clamp(38px, 10.5vw, 56px); }
   .paso p:not(.etiqueta), .paso-portada .entradilla { font-size: 17px; }
   .pauta { left: 18px; right: 18px; bottom: 14px; }
   .fase { font-size: 34px; }
@@ -320,6 +349,13 @@ img { max-width: 100%; height: auto; display: block; }
   .mensaje, .voz { left: 14px; right: 14px; bottom: 14px; }
   .voz-quien { font-size: 26px; }
   .metodo { grid-template-columns: minmax(0, 1fr); }
+  .zonas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .zona { padding: 14px 12px; }
+  .zona h3 { font-size: 18px; }
+  .zona ul { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .zona li:nth-child(n+2) { display: none; }
+  .programas { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .regla-tarjeta { padding: 16px 14px 14px; }
   .regla-zona span { top: 50%; left: 8px; transform: translateY(-50%); padding: 2px 4px; background: var(--fondo); }
   .viaje { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .objeto { grid-row: auto; min-height: 0; }
