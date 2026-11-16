@@ -1,0 +1,7149 @@
+[
+ {
+  "es": "Puente de glúteo",
+  "donde": [
+   "puente.nombre",
+   "modelos/puente.json.nombre",
+   "modelos/b/puente.json.nombre"
+  ]
+ },
+ {
+  "es": "puente de cadera",
+  "donde": [
+   "puente.otrosNombres"
+  ]
+ },
+ {
+  "es": "elevación de pelvis",
+  "donde": [
+   "puente.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca arriba",
+  "donde": [
+   "puente.posicion",
+   "talon.posicion",
+   "pierna_recta.posicion"
+  ]
+ },
+ {
+  "es": "Esterilla",
+  "donde": [
+   "puente.material",
+   "pierna_recta.material",
+   "rodilla_pecho.material"
+  ]
+ },
+ {
+  "es": "Boca arriba, con los brazos a los lados, las rodillas dobladas y los pies apoyados, separados a la anchura de la cadera.",
+  "donde": [
+   "puente.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y los glúteos.",
+  "donde": [
+   "puente.pasos"
+  ]
+ },
+ {
+  "es": "Sube la cadera hasta que hombros, cadera y rodillas queden en línea, con el peso sobre los omóplatos.",
+  "donde": [
+   "puente.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba sin arquear la zona lumbar.",
+  "donde": [
+   "puente.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio hasta apoyar la cadera.",
+  "donde": [
+   "puente.pasos"
+  ]
+ },
+ {
+  "es": "En los glúteos y en la parte de atrás de los muslos. También trabaja la musculatura de la zona lumbar.",
+  "donde": [
+   "puente.notar"
+  ]
+ },
+ {
+  "es": "Hacer fuerza con el cuello. El peso va sobre los omóplatos, y el cuello, suelto.",
+  "donde": [
+   "puente.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 9)",
+  "donde": [
+   "puente.fuentes"
+  ]
+ },
+ {
+  "es": "King’s College Hospital (NHS), prótesis de cadera",
+  "donde": [
+   "puente.fuentes",
+   "pierna_recta.fuentes",
+   "almeja.fuentes"
+  ]
+ },
+ {
+  "es": "Levantarse de la silla",
+  "donde": [
+   "silla.nombre"
+  ]
+ },
+ {
+  "es": "sit to stand",
+  "donde": [
+   "silla.otrosNombres"
+  ]
+ },
+ {
+  "es": "sentarse y levantarse",
+  "donde": [
+   "silla.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado",
+  "donde": [
+   "silla.posicion",
+   "extension_rodilla.posicion",
+   "cuello_giro.posicion"
+  ]
+ },
+ {
+  "es": "Silla firme",
+  "donde": [
+   "silla.material",
+   "marcha_sentado.material",
+   "talones_sentado.material"
+  ]
+ },
+ {
+  "es": "Sentado en la parte delantera de una silla firme, sin ruedas y apoyada en la pared, con los pies apoyados a la anchura de los hombros y los brazos cruzados sobre el pecho.",
+  "donde": [
+   "silla.partida"
+  ]
+ },
+ {
+  "es": "Inclina el tronco hacia delante.",
+  "donde": [
+   "silla.pasos"
+  ]
+ },
+ {
+  "es": "Ponte de pie sin ayudarte de las manos, con la espalda recta y la cabeza alta.",
+  "donde": [
+   "silla.pasos"
+  ]
+ },
+ {
+  "es": "Siéntate despacio, llevando la cadera hacia atrás.",
+  "donde": [
+   "silla.pasos"
+  ]
+ },
+ {
+  "es": "Dejarte caer en la silla. La bajada, despacio, también es parte del ejercicio.",
+  "donde": [
+   "silla.error"
+  ]
+ },
+ {
+  "es": "Si te cuesta levantarte, empuja con una mano en el asiento.",
+  "donde": [
+   "silla.ayuda"
+  ]
+ },
+ {
+  "es": "King’s College Hospital (NHS), prótesis de cadera y dolor lumbar",
+  "donde": [
+   "silla.fuentes",
+   "escalon.fuentes"
+  ]
+ },
+ {
+  "es": "Wrightington, Wigan and Leigh (NHS), dolor lumbar",
+  "donde": [
+   "silla.fuentes",
+   "gato_camello.fuentes",
+   "rodillas_lado.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación externa con banda",
+  "donde": [
+   "hombro.nombre"
+  ]
+ },
+ {
+  "es": "De pie",
+  "donde": [
+   "hombro.posicion",
+   "talones.posicion",
+   "curl_isquios.posicion"
+  ]
+ },
+ {
+  "es": "Banda elástica",
+  "donde": [
+   "hombro.material",
+   "rotacion_interna.material",
+   "remo.material"
+  ]
+ },
+ {
+  "es": "De pie y de lado a una puerta, con la banda atada al pomo a la altura de la cintura y el brazo que no trabaja junto a la puerta. El codo del otro brazo, doblado en ángulo recto y pegado al costado.",
+  "donde": [
+   "hombro.partida"
+  ]
+ },
+ {
+  "es": "Sujeta la banda con el antebrazo delante del abdomen. Una toalla pequeña entre el codo y el costado ayuda a no separarlo.",
+  "donde": [
+   "hombro.pasos"
+  ]
+ },
+ {
+  "es": "Gira el brazo hacia fuera estirando la banda, sin separar el codo.",
+  "donde": [
+   "hombro.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio.",
+  "donde": [
+   "hombro.pasos",
+   "abduccion_pie.pasos",
+   "bird_dog.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de atrás del hombro.",
+  "donde": [
+   "hombro.notar",
+   "cruzado.notar",
+   "baston.notar"
+  ]
+ },
+ {
+  "es": "Separar el codo del costado para llegar más lejos.",
+  "donde": [
+   "hombro.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 9)",
+  "donde": [
+   "hombro.fuentes"
+  ]
+ },
+ {
+  "es": "Deslizamiento de talón",
+  "donde": [
+   "talon.nombre",
+   "modelos/talon.json.nombre",
+   "modelos/b/talon.json.nombre"
+  ]
+ },
+ {
+  "es": "heel slide",
+  "donde": [
+   "talon.otrosNombres"
+  ]
+ },
+ {
+  "es": "Cama o esterilla",
+  "donde": [
+   "talon.material"
+  ]
+ },
+ {
+  "es": "Boca arriba en la cama o en el suelo, con las dos piernas estiradas.",
+  "donde": [
+   "talon.partida"
+  ]
+ },
+ {
+  "es": "Dobla la rodilla deslizando el talón hacia el glúteo, sin despegarlo.",
+  "donde": [
+   "talon.pasos"
+  ]
+ },
+ {
+  "es": "Llega hasta donde puedas y mantén un momento.",
+  "donde": [
+   "talon.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio a estirar la pierna.",
+  "donde": [
+   "talon.pasos",
+   "rodilla_pecho.pasos"
+  ]
+ },
+ {
+  "es": "Levantar el talón. Tiene que ir deslizando por la superficie todo el rato.",
+  "donde": [
+   "talon.error"
+  ]
+ },
+ {
+  "es": "Sandwell and West Birmingham (NHS), prótesis de cadera",
+  "donde": [
+   "talon.fuentes",
+   "abduccion_pie.fuentes",
+   "gluteos.fuentes"
+  ]
+ },
+ {
+  "es": "Calderdale and Huddersfield (NHS), prótesis de rodilla",
+  "donde": [
+   "talon.fuentes",
+   "cuadriceps.fuentes",
+   "cojin_rodillas.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación de pierna recta",
+  "donde": [
+   "pierna_recta.nombre",
+   "modelos/pierna_recta.json.nombre",
+   "modelos/b/pierna_recta.json.nombre"
+  ]
+ },
+ {
+  "es": "SLR",
+  "donde": [
+   "pierna_recta.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca arriba, apoyado sobre los antebrazos con los codos bajo los hombros. La pierna que trabaja, estirada; la otra, doblada y con el pie apoyado.",
+  "donde": [
+   "pierna_recta.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el muslo de la pierna estirada.",
+  "donde": [
+   "pierna_recta.pasos"
+  ]
+ },
+ {
+  "es": "Súbela recta hasta que el talón quede a un palmo del suelo.",
+  "donde": [
+   "pierna_recta.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba sin doblar la rodilla.",
+  "donde": [
+   "pierna_recta.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio.",
+  "donde": [
+   "pierna_recta.pasos",
+   "almeja.pasos",
+   "talones.pasos"
+  ]
+ },
+ {
+  "es": "En la parte delantera del muslo.",
+  "donde": [
+   "pierna_recta.notar",
+   "cuadriceps.notar",
+   "extension_rodilla.notar"
+  ]
+ },
+ {
+  "es": "Doblar la rodilla al subir. La pierna sube entera, recta, y el cuello y los hombros van sueltos.",
+  "donde": [
+   "pierna_recta.error"
+  ]
+ },
+ {
+  "es": "Puedes hacerlo con la cabeza y los hombros apoyados en almohadas.",
+  "donde": [
+   "pierna_recta.ayuda"
+  ]
+ },
+ {
+  "es": "AAOS, programa de rodilla (ejercicio 8)",
+  "donde": [
+   "pierna_recta.fuentes"
+  ]
+ },
+ {
+  "es": "Apretar el muslo",
+  "donde": [
+   "cuadriceps.nombre",
+   "modelos/cuadriceps.json.nombre",
+   "modelos/b/cuadriceps.json.nombre"
+  ]
+ },
+ {
+  "es": "cuádriceps isométrico",
+  "donde": [
+   "cuadriceps.otrosNombres"
+  ]
+ },
+ {
+  "es": "isométrico de cuádriceps",
+  "donde": [
+   "cuadriceps.otrosNombres"
+  ]
+ },
+ {
+  "es": "Toalla enrollada",
+  "donde": [
+   "cuadriceps.material"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las piernas estiradas y una toalla enrollada bajo el talón de la pierna que trabaja, de modo que la rodilla quede en el aire.",
+  "donde": [
+   "cuadriceps.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el muslo y empuja la parte de atrás de la rodilla hacia abajo, hasta estirarla del todo.",
+  "donde": [
+   "cuadriceps.pasos"
+  ]
+ },
+ {
+  "es": "Mantén la fuerza.",
+  "donde": [
+   "cuadriceps.pasos",
+   "cojin_rodillas.pasos"
+  ]
+ },
+ {
+  "es": "Relaja.",
+  "donde": [
+   "cuadriceps.pasos"
+  ]
+ },
+ {
+  "es": "Mover la pierna. Aquí no se ve movimiento: es apretar el muslo con la rodilla recta.",
+  "donde": [
+   "cuadriceps.error"
+  ]
+ },
+ {
+  "es": "Sin la toalla, con la pierna apoyada del todo, también vale.",
+  "donde": [
+   "cuadriceps.ayuda"
+  ]
+ },
+ {
+  "es": "Sandwell and West Birmingham (NHS), prótesis de rodilla y de cadera",
+  "donde": [
+   "cuadriceps.fuentes",
+   "tobillos.fuentes"
+  ]
+ },
+ {
+  "es": "Rodilla al pecho",
+  "donde": [
+   "rodilla_pecho.nombre",
+   "modelos/rodilla_pecho.json.nombre",
+   "modelos/b/rodilla_pecho.json.nombre"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las piernas estiradas.",
+  "donde": [
+   "rodilla_pecho.partida"
+  ]
+ },
+ {
+  "es": "Dobla una rodilla y llévala hacia el pecho, sujetándola con las manos por la espinilla.",
+  "donde": [
+   "rodilla_pecho.pasos"
+  ]
+ },
+ {
+  "es": "Acércala con suavidad hasta donde llegue, con la zona lumbar pegada al suelo.",
+  "donde": [
+   "rodilla_pecho.pasos"
+  ]
+ },
+ {
+  "es": "Mantén.",
+  "donde": [
+   "rodilla_pecho.pasos",
+   "cruzado.pasos",
+   "arco_corto.pasos"
+  ]
+ },
+ {
+  "es": "En los glúteos y en la zona lumbar.",
+  "donde": [
+   "rodilla_pecho.notar"
+  ]
+ },
+ {
+  "es": "Despegar la zona lumbar del suelo al tirar de la rodilla.",
+  "donde": [
+   "rodilla_pecho.error"
+  ]
+ },
+ {
+  "es": "AAOS, programas de cadera (ejercicio 3) y de columna (ejercicio 5)",
+  "donde": [
+   "rodilla_pecho.fuentes"
+  ]
+ },
+ {
+  "es": "King’s College Hospital (NHS), dolor lumbar",
+  "donde": [
+   "rodilla_pecho.fuentes",
+   "basculacion.fuentes",
+   "gato_camello.fuentes"
+  ]
+ },
+ {
+  "es": "Basculación pélvica",
+  "donde": [
+   "basculacion.nombre",
+   "modelos/basculacion.json.nombre",
+   "modelos/b/basculacion.json.nombre"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las rodillas dobladas, los pies apoyados y los brazos a los lados. Bajo la zona lumbar queda un pequeño hueco.",
+  "donde": [
+   "basculacion.partida"
+  ]
+ },
+ {
+  "es": "Bascula la pelvis hacia atrás hasta que la zona lumbar toque el suelo.",
+  "donde": [
+   "basculacion.pasos"
+  ]
+ },
+ {
+  "es": "Mantén un momento.",
+  "donde": [
+   "basculacion.pasos",
+   "gato_camello.pasos",
+   "cuello_giro.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio a la posición de partida.",
+  "donde": [
+   "basculacion.pasos"
+  ]
+ },
+ {
+  "es": "Aguantar la respiración o apretar el abdomen. Respira con calma: solo se mueve la pelvis.",
+  "donde": [
+   "basculacion.error"
+  ]
+ },
+ {
+  "es": "South Tees (NHS), basculación pélvica",
+  "donde": [
+   "basculacion.fuentes"
+  ]
+ },
+ {
+  "es": "Cojín entre las rodillas",
+  "donde": [
+   "cojin_rodillas.nombre",
+   "modelos/cojin_rodillas.json.nombre",
+   "modelos/b/cojin_rodillas.json.nombre"
+  ]
+ },
+ {
+  "es": "aductores isométricos",
+  "donde": [
+   "cojin_rodillas.otrosNombres"
+  ]
+ },
+ {
+  "es": "aducción isométrica",
+  "donde": [
+   "cojin_rodillas.otrosNombres"
+  ]
+ },
+ {
+  "es": "Cojín o toalla grande",
+  "donde": [
+   "cojin_rodillas.material"
+  ]
+ },
+ {
+  "es": "Boca arriba con la cabeza en una almohada, las rodillas dobladas, los pies apoyados y un cojín o una toalla grande enrollada entre las rodillas.",
+  "donde": [
+   "cojin_rodillas.partida"
+  ]
+ },
+ {
+  "es": "Aprieta las rodillas contra el cojín.",
+  "donde": [
+   "cojin_rodillas.pasos"
+  ]
+ },
+ {
+  "es": "Afloja despacio.",
+  "donde": [
+   "cojin_rodillas.pasos"
+  ]
+ },
+ {
+  "es": "Apretar tanto que duela. Basta con algo más de la mitad de tu fuerza.",
+  "donde": [
+   "cojin_rodillas.error"
+  ]
+ },
+ {
+  "es": "South West London Elective Orthopaedic Centre, prótesis de rodilla",
+  "donde": [
+   "cojin_rodillas.fuentes"
+  ]
+ },
+ {
+  "es": "Bombeo de tobillos",
+  "donde": [
+   "tobillos.nombre",
+   "modelos/tobillos.json.nombre",
+   "modelos/b/tobillos.json.nombre"
+  ]
+ },
+ {
+  "es": "Sin material",
+  "donde": [
+   "tobillos.material",
+   "cruzado.material",
+   "gluteos.material"
+  ]
+ },
+ {
+  "es": "Tumbado o sentado, con las piernas estiradas.",
+  "donde": [
+   "tobillos.partida"
+  ]
+ },
+ {
+  "es": "Lleva las puntas de los pies hacia ti todo lo que puedas.",
+  "donde": [
+   "tobillos.pasos"
+  ]
+ },
+ {
+  "es": "Estíralas hacia abajo todo lo que puedas.",
+  "donde": [
+   "tobillos.pasos"
+  ]
+ },
+ {
+  "es": "Moverlos a medias. Los pies van todo lo que dan de sí, arriba y abajo.",
+  "donde": [
+   "tobillos.error"
+  ]
+ },
+ {
+  "es": "Ayuda a mover la circulación de las piernas.",
+  "donde": [
+   "tobillos.para"
+  ]
+ },
+ {
+  "es": "Almeja",
+  "donde": [
+   "almeja.nombre",
+   "modelos/almeja.json.nombre",
+   "modelos/b/almeja.json.nombre"
+  ]
+ },
+ {
+  "es": "clamshell",
+  "donde": [
+   "almeja.otrosNombres"
+  ]
+ },
+ {
+  "es": "De lado",
+  "donde": [
+   "almeja.posicion",
+   "abduccion_lado.posicion",
+   "rotacion_lado.posicion"
+  ]
+ },
+ {
+  "es": "Tumbado de lado, con la pierna que trabaja arriba, las caderas algo dobladas y las rodillas en ángulo recto. Pies, rodillas y caderas, uno encima de otro, y la cabeza apoyada en el brazo.",
+  "donde": [
+   "almeja.partida"
+  ]
+ },
+ {
+  "es": "Con los pies juntos, sube la rodilla de arriba todo lo que puedas sin mover la pelvis.",
+  "donde": [
+   "almeja.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba.",
+  "donde": [
+   "almeja.pasos",
+   "abduccion_lado.pasos"
+  ]
+ },
+ {
+  "es": "Echar el cuerpo hacia atrás para subir más la rodilla. Quédate bien de lado.",
+  "donde": [
+   "almeja.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de cadera (ejercicio 8)",
+  "donde": [
+   "almeja.fuentes"
+  ]
+ },
+ {
+  "es": "Abducción de cadera de lado",
+  "donde": [
+   "abduccion_lado.nombre",
+   "modelos/abduccion_lado.json.nombre",
+   "modelos/b/abduccion_lado.json.nombre"
+  ]
+ },
+ {
+  "es": "Tumbado de lado, con la pierna que trabaja arriba y estirada, y la de abajo doblada para estar estable. La cabeza, apoyada en el brazo.",
+  "donde": [
+   "abduccion_lado.partida"
+  ]
+ },
+ {
+  "es": "Sube despacio la pierna de arriba, estirada, hasta unos 45 grados.",
+  "donde": [
+   "abduccion_lado.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio y descansa un momento.",
+  "donde": [
+   "abduccion_lado.pasos"
+  ]
+ },
+ {
+  "es": "En la cara de fuera del muslo y en el glúteo.",
+  "donde": [
+   "abduccion_lado.notar"
+  ]
+ },
+ {
+  "es": "Girar la pierna para subirla más. La cara de fuera del muslo mira al techo todo el rato.",
+  "donde": [
+   "abduccion_lado.error"
+  ]
+ },
+ {
+  "es": "AAOS, programas de rodilla (ejercicio 10) y de cadera (ejercicio 5)",
+  "donde": [
+   "abduccion_lado.fuentes"
+  ]
+ },
+ {
+  "es": "Extensión de rodilla sentado",
+  "donde": [
+   "extension_rodilla.nombre",
+   "modelos/extension_rodilla.json.nombre",
+   "modelos/b/extension_rodilla.json.nombre"
+  ]
+ },
+ {
+  "es": "Silla",
+  "donde": [
+   "extension_rodilla.material",
+   "cuello_giro.material",
+   "cuello_lado.material"
+  ]
+ },
+ {
+  "es": "Sentado en una silla con la espalda erguida, el muslo apoyado en el asiento y los pies en el suelo.",
+  "donde": [
+   "extension_rodilla.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el muslo y estira despacio la rodilla, subiendo el pie hasta donde puedas.",
+  "donde": [
+   "extension_rodilla.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba apretando.",
+  "donde": [
+   "extension_rodilla.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio hasta apoyar el pie.",
+  "donde": [
+   "extension_rodilla.pasos"
+  ]
+ },
+ {
+  "es": "Subir la pierna de golpe, con impulso. Sube y baja despacio.",
+  "donde": [
+   "extension_rodilla.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de rodilla (ejercicio 7)",
+  "donde": [
+   "extension_rodilla.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación de talones",
+  "donde": [
+   "talones.nombre",
+   "modelos/talones.json.nombre",
+   "modelos/b/talones.json.nombre"
+  ]
+ },
+ {
+  "es": "Apoyo firme",
+  "donde": [
+   "talones.material",
+   "curl_isquios.material",
+   "sentadilla.material"
+  ]
+ },
+ {
+  "es": "De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las dos manos en él. Los pies, a la anchura de la cadera.",
+  "donde": [
+   "talones.partida"
+  ]
+ },
+ {
+  "es": "Sube los talones todo lo que puedas, hasta quedarte de puntillas.",
+  "donde": [
+   "talones.pasos",
+   "talones_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba un momento.",
+  "donde": [
+   "talones.pasos",
+   "talones_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "En la pantorrilla.",
+  "donde": [
+   "talones.notar",
+   "plantar_banda.notar",
+   "talones_sin_apoyo.notar"
+  ]
+ },
+ {
+  "es": "Doblar las rodillas para ayudarte. Se quedan estiradas.",
+  "donde": [
+   "talones.error"
+  ]
+ },
+ {
+  "es": "Cuando te resulte fácil, hazlo apoyado en una sola pierna.",
+  "donde": [
+   "talones.masDificil"
+  ]
+ },
+ {
+  "es": "AAOS, programas de rodilla (ejercicio 6) y de tobillo y pie (ejercicio 5)",
+  "donde": [
+   "talones.fuentes"
+  ]
+ },
+ {
+  "es": "Curl de isquios de pie",
+  "donde": [
+   "curl_isquios.nombre",
+   "modelos/curl_isquios.json.nombre",
+   "modelos/b/curl_isquios.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie y erguido, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las dos manos en él y las rodillas juntas.",
+  "donde": [
+   "curl_isquios.partida"
+  ]
+ },
+ {
+  "es": "Dobla la rodilla y sube el talón hacia atrás, hasta donde puedas sin dolor.",
+  "donde": [
+   "curl_isquios.pasos",
+   "curl_isquios_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Mantén arriba, con el muslo vertical.",
+  "donde": [
+   "curl_isquios.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de atrás del muslo.",
+  "donde": [
+   "curl_isquios.notar",
+   "curl_isquios_lastre.notar"
+  ]
+ },
+ {
+  "es": "Adelantar la rodilla. El muslo se queda vertical y las rodillas, juntas.",
+  "donde": [
+   "curl_isquios.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de rodilla (ejercicio 5)",
+  "donde": [
+   "curl_isquios.fuentes"
+  ]
+ },
+ {
+  "es": "Media sentadilla",
+  "donde": [
+   "sentadilla.nombre",
+   "modelos/sentadilla.json.nombre",
+   "modelos/b/sentadilla.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las manos en él, y los pies a la anchura de los hombros.",
+  "donde": [
+   "sentadilla.partida"
+  ]
+ },
+ {
+  "es": "Con el pecho alto, baja la cadera un palmo, como si fueras a sentarte.",
+  "donde": [
+   "sentadilla.pasos",
+   "sentadilla_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Mantén abajo, con el peso en los talones.",
+  "donde": [
+   "sentadilla.pasos"
+  ]
+ },
+ {
+  "es": "Sube empujando con los talones.",
+  "donde": [
+   "sentadilla.pasos",
+   "sentadilla_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Delante y detrás de los muslos, y en los glúteos.",
+  "donde": [
+   "sentadilla.notar",
+   "sentadilla_sin_apoyo.notar"
+  ]
+ },
+ {
+  "es": "Doblarte por la cintura. El pecho, alto, y la espalda, recta.",
+  "donde": [
+   "sentadilla.error",
+   "sentadilla_sin_apoyo.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de rodilla (ejercicio 4)",
+  "donde": [
+   "sentadilla.fuentes"
+  ]
+ },
+ {
+  "es": "Abducción de cadera de pie",
+  "donde": [
+   "abduccion_pie.nombre",
+   "modelos/abduccion_pie.json.nombre",
+   "modelos/b/abduccion_pie.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él y la otra en la cadera.",
+  "donde": [
+   "abduccion_pie.partida"
+  ]
+ },
+ {
+  "es": "Con la pierna estirada, llévala hacia el lado todo lo que puedas.",
+  "donde": [
+   "abduccion_pie.pasos"
+  ]
+ },
+ {
+  "es": "Inclinar el tronco hacia el otro lado. El tronco se queda erguido.",
+  "donde": [
+   "abduccion_pie.error"
+  ]
+ },
+ {
+  "es": "Equilibrio a una pierna",
+  "donde": [
+   "equilibrio.nombre",
+   "modelos/equilibrio.json.nombre",
+   "modelos/b/equilibrio.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie junto a una encimera o una mesa pesada, con las dos manos apoyadas. Mejor con calzado cómodo.",
+  "donde": [
+   "equilibrio.partida"
+  ]
+ },
+ {
+  "es": "Levanta un pie y quédate sobre la otra pierna, con la rodilla estirada.",
+  "donde": [
+   "equilibrio.pasos"
+  ]
+ },
+ {
+  "es": "Suelta las manos del apoyo y vuelve a ponerlas cuando lo necesites.",
+  "donde": [
+   "equilibrio.pasos"
+  ]
+ },
+ {
+  "es": "Baja el pie.",
+  "donde": [
+   "equilibrio.pasos",
+   "equilibrio_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Alejarte del apoyo. Tenlo siempre al alcance de la mano.",
+  "donde": [
+   "equilibrio.error",
+   "equilibrio_sin_apoyo.error"
+  ]
+ },
+ {
+  "es": "Descalzo cuesta más, y con los ojos cerrados, más aún.",
+  "donde": [
+   "equilibrio.masDificil"
+  ]
+ },
+ {
+  "es": "AAOS, programa de tobillo y pie (ejercicio 10)",
+  "donde": [
+   "equilibrio.fuentes"
+  ]
+ },
+ {
+  "es": "Brazo y pierna contrarios a cuatro patas",
+  "donde": [
+   "bird_dog.nombre",
+   "modelos/bird_dog.json.nombre",
+   "modelos/b/bird_dog.json.nombre"
+  ]
+ },
+ {
+  "es": "bird dog",
+  "donde": [
+   "bird_dog.otrosNombres"
+  ]
+ },
+ {
+  "es": "perro de muestra",
+  "donde": [
+   "bird_dog.otrosNombres"
+  ]
+ },
+ {
+  "es": "A cuatro patas",
+  "donde": [
+   "bird_dog.posicion",
+   "gato_camello.posicion"
+  ]
+ },
+ {
+  "es": "A cuatro patas, con las manos bajo los hombros y las rodillas bajo las caderas. La espalda, plana.",
+  "donde": [
+   "bird_dog.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y sube un brazo estirado hasta la altura del hombro.",
+  "donde": [
+   "bird_dog.pasos"
+  ]
+ },
+ {
+  "es": "Sube y estira la pierna contraria hasta dejarla en línea con el cuerpo.",
+  "donde": [
+   "bird_dog.pasos"
+  ]
+ },
+ {
+  "es": "Mantén, apretando los glúteos.",
+  "donde": [
+   "bird_dog.pasos"
+  ]
+ },
+ {
+  "es": "En la zona lumbar y en los glúteos.",
+  "donde": [
+   "bird_dog.notar"
+  ]
+ },
+ {
+  "es": "Arquear la espalda al subir la pierna. El abdomen, apretado, y la espalda, plana.",
+  "donde": [
+   "bird_dog.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 6)",
+  "donde": [
+   "bird_dog.fuentes"
+  ]
+ },
+ {
+  "es": "Gato-camello",
+  "donde": [
+   "gato_camello.nombre",
+   "modelos/gato_camello.json.nombre",
+   "modelos/b/gato_camello.json.nombre"
+  ]
+ },
+ {
+  "es": "cat camel",
+  "donde": [
+   "gato_camello.otrosNombres"
+  ]
+ },
+ {
+  "es": "gato y camello",
+  "donde": [
+   "gato_camello.otrosNombres"
+  ]
+ },
+ {
+  "es": "A cuatro patas, con las manos bajo los hombros, las rodillas a la anchura de la cadera y la espalda en su postura natural.",
+  "donde": [
+   "gato_camello.partida"
+  ]
+ },
+ {
+  "es": "Redondea la espalda hacia el techo todo lo que puedas, llevando la cabeza hacia el pecho.",
+  "donde": [
+   "gato_camello.pasos"
+  ]
+ },
+ {
+  "es": "Baja y arquea la espalda al revés, levantando la cabeza.",
+  "donde": [
+   "gato_camello.pasos"
+  ]
+ },
+ {
+  "es": "Ir deprisa. Muévete despacio y sin forzar.",
+  "donde": [
+   "gato_camello.error"
+  ]
+ },
+ {
+  "es": "Péndulo de hombro",
+  "donde": [
+   "pendulo.nombre",
+   "modelos/pendulo.json.nombre",
+   "modelos/b/pendulo.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie, inclinado",
+  "donde": [
+   "pendulo.posicion"
+  ]
+ },
+ {
+  "es": "Mesa o encimera",
+  "donde": [
+   "pendulo.material"
+  ]
+ },
+ {
+  "es": "De pie, inclinado hacia delante con una mano apoyada en una mesa o una encimera. El otro brazo cuelga suelto.",
+  "donde": [
+   "pendulo.partida"
+  ]
+ },
+ {
+  "es": "Balancea el brazo suelto adelante y atrás, con suavidad.",
+  "donde": [
+   "pendulo.pasos"
+  ]
+ },
+ {
+  "es": "Después, de lado a lado.",
+  "donde": [
+   "pendulo.pasos"
+  ]
+ },
+ {
+  "es": "Y después, en pequeños círculos.",
+  "donde": [
+   "pendulo.pasos"
+  ]
+ },
+ {
+  "es": "Redondear la espalda o bloquear las rodillas.",
+  "donde": [
+   "pendulo.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 1)",
+  "donde": [
+   "pendulo.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento cruzado de hombro",
+  "donde": [
+   "cruzado.nombre",
+   "modelos/cruzado.json.nombre",
+   "modelos/b/cruzado.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie, con los hombros relajados.",
+  "donde": [
+   "cruzado.partida"
+  ]
+ },
+ {
+  "es": "Lleva un brazo estirado cruzando el pecho.",
+  "donde": [
+   "cruzado.pasos"
+  ]
+ },
+ {
+  "es": "Sujétalo con la otra mano por encima del codo y acércalo con suavidad hasta donde llegue.",
+  "donde": [
+   "cruzado.pasos"
+  ]
+ },
+ {
+  "es": "Suelta despacio.",
+  "donde": [
+   "cruzado.pasos",
+   "escapulas.pasos",
+   "estira_flexores.pasos"
+  ]
+ },
+ {
+  "es": "Tirar del codo. La mano sujeta el brazo por encima de él.",
+  "donde": [
+   "cruzado.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 2)",
+  "donde": [
+   "cruzado.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación externa con bastón",
+  "donde": [
+   "baston.nombre",
+   "modelos/baston.json.nombre",
+   "modelos/b/baston.json.nombre"
+  ]
+ },
+ {
+  "es": "Bastón o palo ligero",
+  "donde": [
+   "baston.material"
+  ]
+ },
+ {
+  "es": "De pie, con los codos doblados en ángulo recto y pegados al cuerpo. Sujeta el bastón con una mano y apoya el otro extremo en la palma de la otra.",
+  "donde": [
+   "baston.partida"
+  ]
+ },
+ {
+  "es": "Con el codo del lado que estiras pegado al costado, empuja el bastón con la otra mano para llevar ese brazo hacia fuera.",
+  "donde": [
+   "baston.pasos"
+  ]
+ },
+ {
+  "es": "Para al notar tirantez, sin dolor, y mantén.",
+  "donde": [
+   "baston.pasos"
+  ]
+ },
+ {
+  "es": "Girar la cadera o el tronco. Las caderas miran al frente todo el rato.",
+  "donde": [
+   "baston.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 4)",
+  "donde": [
+   "baston.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación interna con banda",
+  "donde": [
+   "rotacion_interna.nombre",
+   "modelos/rotacion_interna.json.nombre",
+   "modelos/b/rotacion_interna.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie y de lado a una puerta, con la banda atada al pomo a la altura de la cintura y el brazo que trabaja junto a la puerta. El codo, doblado en ángulo recto y pegado al costado.",
+  "donde": [
+   "rotacion_interna.partida"
+  ]
+ },
+ {
+  "es": "Lleva la mano hacia el abdomen estirando la banda, sin separar el codo del costado.",
+  "donde": [
+   "rotacion_interna.pasos"
+  ]
+ },
+ {
+  "es": "En el pecho y en el hombro.",
+  "donde": [
+   "rotacion_interna.notar"
+  ]
+ },
+ {
+  "es": "Separar el codo del costado.",
+  "donde": [
+   "rotacion_interna.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 8)",
+  "donde": [
+   "rotacion_interna.fuentes"
+  ]
+ },
+ {
+  "es": "Remo con banda de pie",
+  "donde": [
+   "remo.nombre",
+   "modelos/remo.json.nombre",
+   "modelos/b/remo.json.nombre"
+  ]
+ },
+ {
+  "es": "De pie y de frente a una puerta, con la banda atada al pomo a la altura de la cintura. Sujétala con el codo doblado y junto al costado.",
+  "donde": [
+   "remo.partida"
+  ]
+ },
+ {
+  "es": "Lleva el codo hacia atrás, pegado al cuerpo, juntando los omóplatos.",
+  "donde": [
+   "remo.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de atrás del hombro y en la parte alta de la espalda.",
+  "donde": [
+   "remo.notar",
+   "rotacion_lado.notar"
+  ]
+ },
+ {
+  "es": "Separar el brazo del costado al tirar.",
+  "donde": [
+   "remo.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 6)",
+  "donde": [
+   "remo.fuentes"
+  ]
+ },
+ {
+  "es": "Cuádriceps en arco corto",
+  "donde": [
+   "arco_corto.nombre",
+   "modelos/arco_corto.json.nombre",
+   "modelos/b/arco_corto.json.nombre"
+  ]
+ },
+ {
+  "es": "inner range quads",
+  "donde": [
+   "arco_corto.otrosNombres"
+  ]
+ },
+ {
+  "es": "rodillo bajo la rodilla",
+  "donde": [
+   "arco_corto.otrosNombres"
+  ]
+ },
+ {
+  "es": "Toalla enrollada o cojín firme",
+  "donde": [
+   "arco_corto.material"
+  ]
+ },
+ {
+  "es": "Boca arriba, con una toalla enrollada o un cojín firme bajo la rodilla que trabaja. La rodilla queda algo doblada y el talón, en el suelo.",
+  "donde": [
+   "arco_corto.partida"
+  ]
+ },
+ {
+  "es": "Lleva la punta del pie hacia ti y aprieta el muslo.",
+  "donde": [
+   "arco_corto.pasos"
+  ]
+ },
+ {
+  "es": "Estira la rodilla levantando el talón, sin despegar el muslo del rodillo.",
+  "donde": [
+   "arco_corto.pasos"
+  ]
+ },
+ {
+  "es": "En el muslo, por delante.",
+  "donde": [
+   "arco_corto.notar"
+  ]
+ },
+ {
+  "es": "Despegar el muslo del rodillo. Solo se mueve la pierna, de la rodilla para abajo.",
+  "donde": [
+   "arco_corto.error"
+  ]
+ },
+ {
+  "es": "Con el muslo apretado, levanta la pierna entera del rodillo.",
+  "donde": [
+   "arco_corto.masDificil"
+  ]
+ },
+ {
+  "es": "NHS Lothian y Royal United Hospitals Bath (NHS), lesión de rodilla",
+  "donde": [
+   "arco_corto.fuentes"
+  ]
+ },
+ {
+  "es": "Apretar los glúteos",
+  "donde": [
+   "gluteos.nombre",
+   "modelos/gluteos.json.nombre",
+   "modelos/b/gluteos.json.nombre"
+  ]
+ },
+ {
+  "es": "glúteos isométricos",
+  "donde": [
+   "gluteos.otrosNombres"
+  ]
+ },
+ {
+  "es": "isométrico de glúteo",
+  "donde": [
+   "gluteos.otrosNombres"
+  ]
+ },
+ {
+  "es": "Tumbado boca arriba con las piernas estiradas y los brazos a los lados. También se puede hacer sentado.",
+  "donde": [
+   "gluteos.partida"
+  ]
+ },
+ {
+  "es": "Aprieta los glúteos con fuerza.",
+  "donde": [
+   "gluteos.pasos"
+  ]
+ },
+ {
+  "es": "Afloja.",
+  "donde": [
+   "gluteos.pasos",
+   "abdominal.pasos",
+   "iso_hombro.pasos"
+  ]
+ },
+ {
+  "es": "Aguantar la respiración. Respira con calma mientras aprietas.",
+  "donde": [
+   "gluteos.error"
+  ]
+ },
+ {
+  "es": "Rodillas a un lado y a otro",
+  "donde": [
+   "rodillas_lado.nombre",
+   "modelos/rodillas_lado.json.nombre",
+   "modelos/b/rodillas_lado.json.nombre"
+  ]
+ },
+ {
+  "es": "knee rolls",
+  "donde": [
+   "rodillas_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "rotación lumbar tumbado",
+  "donde": [
+   "rodillas_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las rodillas juntas y dobladas, los pies apoyados y los brazos a los lados o algo abiertos.",
+  "donde": [
+   "rodillas_lado.partida"
+  ]
+ },
+ {
+  "es": "Deja caer despacio las dos rodillas juntas hacia un lado.",
+  "donde": [
+   "rodillas_lado.pasos"
+  ]
+ },
+ {
+  "es": "Para un momento.",
+  "donde": [
+   "rodillas_lado.pasos"
+  ]
+ },
+ {
+  "es": "Llévalas despacio al otro lado y vuelve al centro.",
+  "donde": [
+   "rodillas_lado.pasos"
+  ]
+ },
+ {
+  "es": "Despegar los hombros del suelo. La parte de arriba del cuerpo se queda quieta; solo giran la pelvis y las piernas.",
+  "donde": [
+   "rodillas_lado.error"
+  ]
+ },
+ {
+  "es": "Addenbrooke’s (NHS), movilidad de la espalda",
+  "donde": [
+   "rodillas_lado.fuentes",
+   "abdominal.fuentes",
+   "extension_lumbar.fuentes"
+  ]
+ },
+ {
+  "es": "Bicho muerto",
+  "donde": [
+   "bicho_muerto.nombre",
+   "modelos/bicho_muerto.json.nombre",
+   "modelos/b/bicho_muerto.json.nombre"
+  ]
+ },
+ {
+  "es": "dead bug",
+  "donde": [
+   "bicho_muerto.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca arriba, con los brazos estirados hacia el techo y las piernas en el aire, con las caderas y las rodillas dobladas en ángulo recto.",
+  "donde": [
+   "bicho_muerto.partida"
+  ]
+ },
+ {
+  "es": "Pega la zona lumbar al suelo y aprieta el abdomen.",
+  "donde": [
+   "bicho_muerto.pasos"
+  ]
+ },
+ {
+  "es": "Baja a la vez un brazo por encima de la cabeza y estira la pierna contraria hacia delante, solo hasta donde la zona lumbar siga pegada al suelo.",
+  "donde": [
+   "bicho_muerto.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio y hazlo con el otro brazo y la otra pierna.",
+  "donde": [
+   "bicho_muerto.pasos"
+  ]
+ },
+ {
+  "es": "Arquear la espalda al bajar la pierna. La pelvis se queda quieta y la zona lumbar, pegada al suelo.",
+  "donde": [
+   "bicho_muerto.error"
+  ]
+ },
+ {
+  "es": "Para empezar, toca con una mano la rodilla contraria en lugar de estirar el brazo y la pierna.",
+  "donde": [
+   "bicho_muerto.ayuda"
+  ]
+ },
+ {
+  "es": "Vanderbilt Sports Medicine, fuerza del tronco",
+  "donde": [
+   "bicho_muerto.fuentes",
+   "plancha_lateral.fuentes"
+  ]
+ },
+ {
+  "es": "Oxford Health (NHS), fuerza del tronco",
+  "donde": [
+   "bicho_muerto.fuentes"
+  ]
+ },
+ {
+  "es": "Activar el abdomen",
+  "donde": [
+   "abdominal.nombre",
+   "modelos/abdominal.json.nombre",
+   "modelos/b/abdominal.json.nombre"
+  ]
+ },
+ {
+  "es": "bracing",
+  "donde": [
+   "abdominal.otrosNombres"
+  ]
+ },
+ {
+  "es": "activación abdominal",
+  "donde": [
+   "abdominal.otrosNombres"
+  ]
+ },
+ {
+  "es": "meter el ombligo",
+  "donde": [
+   "abdominal.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las rodillas dobladas, los pies apoyados y los brazos a los lados.",
+  "donde": [
+   "abdominal.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen como si quisieras separarlo de la cinturilla del pantalón.",
+  "donde": [
+   "abdominal.pasos"
+  ]
+ },
+ {
+  "es": "Mantén, respirando con normalidad.",
+  "donde": [
+   "abdominal.pasos"
+  ]
+ },
+ {
+  "es": "En el abdomen.",
+  "donde": [
+   "abdominal.notar"
+  ]
+ },
+ {
+  "es": "Arquear la espalda o aguantar la respiración. La zona lumbar, pegada al suelo, y la respiración, normal.",
+  "donde": [
+   "abdominal.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 10)",
+  "donde": [
+   "abdominal.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación de cuello",
+  "donde": [
+   "cuello_giro.nombre",
+   "modelos/cuello_giro.json.nombre",
+   "modelos/b/cuello_giro.json.nombre"
+  ]
+ },
+ {
+  "es": "mirar por encima del hombro",
+  "donde": [
+   "cuello_giro.otrosNombres"
+  ]
+ },
+ {
+  "es": "rotación cervical",
+  "donde": [
+   "cuello_giro.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido, con las dos manos agarradas al asiento para que los hombros se queden abajo.",
+  "donde": [
+   "cuello_giro.partida"
+  ]
+ },
+ {
+  "es": "Gira la cabeza para mirar por encima de un hombro, hasta donde estés cómodo.",
+  "donde": [
+   "cuello_giro.pasos"
+  ]
+ },
+ {
+  "es": "Gira al otro lado y vuelve al centro.",
+  "donde": [
+   "cuello_giro.pasos"
+  ]
+ },
+ {
+  "es": "Forzar hasta que duela. Un dolor sordo y suave al principio es normal; un dolor fuerte es pasarse.",
+  "donde": [
+   "cuello_giro.error"
+  ]
+ },
+ {
+  "es": "Para si te mareas o se te nubla la vista.",
+  "donde": [
+   "cuello_giro.cuidado",
+   "cuello_lado.cuidado",
+   "retraccion.cuidado"
+  ]
+ },
+ {
+  "es": "Servicio de musculoesquelético OCATS (NHS), movilidad del cuello",
+  "donde": [
+   "cuello_giro.fuentes",
+   "cuello_lado.fuentes",
+   "retraccion.fuentes"
+  ]
+ },
+ {
+  "es": "Calderdale and Huddersfield (NHS), movilidad cervical",
+  "donde": [
+   "cuello_giro.fuentes"
+  ]
+ },
+ {
+  "es": "Inclinación de cuello",
+  "donde": [
+   "cuello_lado.nombre",
+   "modelos/cuello_lado.json.nombre",
+   "modelos/b/cuello_lado.json.nombre"
+  ]
+ },
+ {
+  "es": "oreja al hombro",
+  "donde": [
+   "cuello_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "inclinación cervical",
+  "donde": [
+   "cuello_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido, con la cara al frente y las dos manos agarradas al asiento.",
+  "donde": [
+   "cuello_lado.partida"
+  ]
+ },
+ {
+  "es": "Inclina la cabeza llevando la oreja hacia el hombro, hasta donde estés cómodo.",
+  "donde": [
+   "cuello_lado.pasos"
+  ]
+ },
+ {
+  "es": "Inclínala al otro lado y vuelve al centro.",
+  "donde": [
+   "cuello_lado.pasos"
+  ]
+ },
+ {
+  "es": "En el cuello y el hombro del lado contrario.",
+  "donde": [
+   "cuello_lado.notar"
+  ]
+ },
+ {
+  "es": "Subir el hombro hacia la oreja. Los hombros se quedan abajo y relajados; baja la oreja, no sube el hombro.",
+  "donde": [
+   "cuello_lado.error"
+  ]
+ },
+ {
+  "es": "Calderdale and Huddersfield (NHS), estiramientos",
+  "donde": [
+   "cuello_lado.fuentes",
+   "trapecio.fuentes"
+  ]
+ },
+ {
+  "es": "Juntar las escápulas",
+  "donde": [
+   "escapulas.nombre",
+   "modelos/escapulas.json.nombre",
+   "modelos/b/escapulas.json.nombre"
+  ]
+ },
+ {
+  "es": "retracción escapular",
+  "donde": [
+   "escapulas.otrosNombres"
+  ]
+ },
+ {
+  "es": "scapula setting",
+  "donde": [
+   "escapulas.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido, sin apoyar la espalda, con las manos en los muslos.",
+  "donde": [
+   "escapulas.partida"
+  ]
+ },
+ {
+  "es": "Lleva las escápulas hacia atrás y hacia abajo, juntándolas.",
+  "donde": [
+   "escapulas.pasos"
+  ]
+ },
+ {
+  "es": "En la parte alta de la espalda, entre las escápulas.",
+  "donde": [
+   "escapulas.notar"
+  ]
+ },
+ {
+  "es": "Tensar el cuello o encoger los hombros. El cuello, suelto.",
+  "donde": [
+   "escapulas.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 13)",
+  "donde": [
+   "escapulas.fuentes"
+  ]
+ },
+ {
+  "es": "Cambridge University Hospitals (NHS), fuerza del hombro",
+  "donde": [
+   "escapulas.fuentes",
+   "iso_hombro.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación del brazo en diagonal",
+  "donde": [
+   "scaption.nombre"
+  ]
+ },
+ {
+  "es": "scaption",
+  "donde": [
+   "scaption.otrosNombres"
+  ]
+ },
+ {
+  "es": "elevación en el plano de la escápula",
+  "donde": [
+   "scaption.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sin peso al principio; después, un peso pequeño, como una botella de agua",
+  "donde": [
+   "scaption.material"
+  ]
+ },
+ {
+  "es": "De pie y erguido, con los brazos a los lados. Al principio, sin peso; cuando sea fácil, un peso pequeño en la mano.",
+  "donde": [
+   "scaption.partida"
+  ]
+ },
+ {
+  "es": "Sube el brazo estirado por delante y algo hacia fuera, con el pulgar hacia arriba, hasta la altura del hombro.",
+  "donde": [
+   "scaption.pasos"
+  ]
+ },
+ {
+  "es": "Bájalo con control.",
+  "donde": [
+   "scaption.pasos"
+  ]
+ },
+ {
+  "es": "Balancear la espalda o encoger el hombro para subir el brazo.",
+  "donde": [
+   "scaption.error"
+  ]
+ },
+ {
+  "es": "Cuando te resulte fácil, súbelo por encima de la altura del hombro.",
+  "donde": [
+   "scaption.masDificil"
+  ]
+ },
+ {
+  "es": "NHS Ayrshire & Arran, hombro doloroso y débil",
+  "donde": [
+   "scaption.fuentes",
+   "flexion_pared.fuentes",
+   "iso_hombro.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación externa tumbado de lado",
+  "donde": [
+   "rotacion_lado.nombre",
+   "modelos/rotacion_lado.json.nombre",
+   "modelos/b/rotacion_lado.json.nombre"
+  ]
+ },
+ {
+  "es": "rotación externa con mancuerna",
+  "donde": [
+   "rotacion_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "side lying external rotation",
+  "donde": [
+   "rotacion_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Peso pequeño y una toalla",
+  "donde": [
+   "rotacion_lado.material"
+  ]
+ },
+ {
+  "es": "Tumbado de lado, con el brazo que trabaja arriba, el codo doblado en ángulo recto y pegado al costado, con una toalla entre el codo y el cuerpo. El antebrazo, delante del abdomen y con el peso en la mano.",
+  "donde": [
+   "rotacion_lado.partida"
+  ]
+ },
+ {
+  "es": "Con el codo pegado, gira el brazo para llevar la mano hacia el techo.",
+  "donde": [
+   "rotacion_lado.pasos"
+  ]
+ },
+ {
+  "es": "Mantén un momento arriba.",
+  "donde": [
+   "rotacion_lado.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio, contando hasta cinco.",
+  "donde": [
+   "rotacion_lado.pasos"
+  ]
+ },
+ {
+  "es": "Rodar el cuerpo hacia atrás al subir el peso. Quédate bien de lado.",
+  "donde": [
+   "rotacion_lado.error"
+  ]
+ },
+ {
+  "es": "Al principio, sin peso.",
+  "donde": [
+   "rotacion_lado.ayuda"
+  ]
+ },
+ {
+  "es": "AAOS, programa de hombro y manguito rotador (ejercicio 17)",
+  "donde": [
+   "rotacion_lado.fuentes"
+  ]
+ },
+ {
+  "es": "Wrightington, Wigan and Leigh (NHS), hombro",
+  "donde": [
+   "rotacion_lado.fuentes",
+   "deslizar_mesa.fuentes"
+  ]
+ },
+ {
+  "es": "Flexión y extensión de muñeca",
+  "donde": [
+   "muneca.nombre",
+   "modelos/muneca.json.nombre",
+   "modelos/b/muneca.json.nombre"
+  ]
+ },
+ {
+  "es": "muñeca arriba y abajo",
+  "donde": [
+   "muneca.otrosNombres"
+  ]
+ },
+ {
+  "es": "movilidad de muñeca",
+  "donde": [
+   "muneca.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado a la mesa",
+  "donde": [
+   "muneca.posicion",
+   "prono_supinacion.posicion",
+   "tendinoso.posicion"
+  ]
+ },
+ {
+  "es": "Mesa",
+  "donde": [
+   "muneca.material",
+   "prono_supinacion.material",
+   "tendinoso.material"
+  ]
+ },
+ {
+  "es": "Sentado, con el antebrazo apoyado en la mesa, la palma hacia abajo y la mano por fuera del borde, relajada.",
+  "donde": [
+   "muneca.partida"
+  ]
+ },
+ {
+  "es": "Sube la mano doblando la muñeca hacia atrás todo lo que puedas.",
+  "donde": [
+   "muneca.pasos"
+  ]
+ },
+ {
+  "es": "Bájala doblando la muñeca hacia delante todo lo que puedas.",
+  "donde": [
+   "muneca.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve al centro.",
+  "donde": [
+   "muneca.pasos",
+   "prono_supinacion.pasos"
+  ]
+ },
+ {
+  "es": "Levantar el antebrazo o el codo de la mesa. Solo se mueve la muñeca, y los dedos van sueltos.",
+  "donde": [
+   "muneca.error"
+  ]
+ },
+ {
+  "es": "Si está muy rígida, apoya también la mano de lado sobre la mesa y muévela sin levantarla.",
+  "donde": [
+   "muneca.ayuda"
+  ]
+ },
+ {
+  "es": "Calderdale and Huddersfield (NHS), mano y muñeca",
+  "donde": [
+   "muneca.fuentes",
+   "tendinoso.fuentes",
+   "abrir_cerrar.fuentes"
+  ]
+ },
+ {
+  "es": "Royal Berkshire (NHS), movilidad de la muñeca",
+  "donde": [
+   "muneca.fuentes",
+   "prono_supinacion.fuentes"
+  ]
+ },
+ {
+  "es": "Royal United Hospitals Bath (NHS), muñeca",
+  "donde": [
+   "muneca.fuentes",
+   "prono_supinacion.fuentes",
+   "estira_flexores.fuentes"
+  ]
+ },
+ {
+  "es": "Girar la palma arriba y abajo",
+  "donde": [
+   "prono_supinacion.nombre",
+   "modelos/prono_supinacion.json.nombre",
+   "modelos/b/prono_supinacion.json.nombre"
+  ]
+ },
+ {
+  "es": "pronación y supinación",
+  "donde": [
+   "prono_supinacion.otrosNombres"
+  ]
+ },
+ {
+  "es": "prono-supinación",
+  "donde": [
+   "prono_supinacion.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado, con el codo doblado en ángulo recto y pegado al costado, y el antebrazo apoyado en la mesa. La mano, abierta y relajada.",
+  "donde": [
+   "prono_supinacion.partida"
+  ]
+ },
+ {
+  "es": "Gira el antebrazo hasta tener la palma hacia abajo.",
+  "donde": [
+   "prono_supinacion.pasos"
+  ]
+ },
+ {
+  "es": "Gíralo hasta tener la palma hacia arriba.",
+  "donde": [
+   "prono_supinacion.pasos"
+  ]
+ },
+ {
+  "es": "Separar el codo o ayudarte con el hombro. Sujeta el brazo por encima del codo con la otra mano si se te mueve.",
+  "donde": [
+   "prono_supinacion.error"
+  ]
+ },
+ {
+  "es": "St George’s (NHS), muñeca",
+  "donde": [
+   "prono_supinacion.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento de la muñeca hacia atrás",
+  "donde": [
+   "estira_flexores.nombre",
+   "modelos/estira_flexores.json.nombre",
+   "modelos/b/estira_flexores.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de flexores de muñeca",
+  "donde": [
+   "estira_flexores.otrosNombres"
+  ]
+ },
+ {
+  "es": "codo de golfista",
+  "donde": [
+   "estira_flexores.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado, con el brazo estirado al frente a la altura del hombro y la palma hacia delante, con los dedos hacia arriba.",
+  "donde": [
+   "estira_flexores.partida"
+  ]
+ },
+ {
+  "es": "Con la otra mano, tira suavemente de los dedos hacia ti.",
+  "donde": [
+   "estira_flexores.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el estiramiento.",
+  "donde": [
+   "estira_flexores.pasos",
+   "estira_extensores.pasos",
+   "gemelo_pared.pasos"
+  ]
+ },
+ {
+  "es": "En la cara interna de la muñeca y del antebrazo.",
+  "donde": [
+   "estira_flexores.notar"
+  ]
+ },
+ {
+  "es": "Doblar el codo o tirar hasta que duela. Es una tirantez soportable, no dolor.",
+  "donde": [
+   "estira_flexores.error"
+  ]
+ },
+ {
+  "es": "Leicestershire Partnership (NHS), codo de golfista",
+  "donde": [
+   "estira_flexores.fuentes"
+  ]
+ },
+ {
+  "es": "NHS Fife, codo de golfista",
+  "donde": [
+   "estira_flexores.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento de la muñeca hacia delante",
+  "donde": [
+   "estira_extensores.nombre",
+   "modelos/estira_extensores.json.nombre",
+   "modelos/b/estira_extensores.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de extensores de muñeca",
+  "donde": [
+   "estira_extensores.otrosNombres"
+  ]
+ },
+ {
+  "es": "codo de tenista",
+  "donde": [
+   "estira_extensores.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado, con el brazo estirado al frente a la altura del hombro, la palma hacia abajo y la muñeca relajada.",
+  "donde": [
+   "estira_extensores.partida"
+  ]
+ },
+ {
+  "es": "Con la otra mano, empuja suavemente el dorso de la mano para doblar la muñeca hacia ti.",
+  "donde": [
+   "estira_extensores.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de arriba del antebrazo.",
+  "donde": [
+   "estira_extensores.notar"
+  ]
+ },
+ {
+  "es": "Apretar fuerte. La presión es suave, y la muñeca va relajada.",
+  "donde": [
+   "estira_extensores.error"
+  ]
+ },
+ {
+  "es": "Leicestershire Partnership (NHS), codo de tenista",
+  "donde": [
+   "estira_extensores.fuentes"
+  ]
+ },
+ {
+  "es": "United Lincolnshire Hospitals (NHS), fractura de muñeca",
+  "donde": [
+   "estira_extensores.fuentes",
+   "abrir_cerrar.fuentes",
+   "pelota.fuentes"
+  ]
+ },
+ {
+  "es": "Deslizamiento de los tendones de los dedos",
+  "donde": [
+   "tendinoso.nombre",
+   "modelos/tendinoso.json.nombre",
+   "modelos/b/tendinoso.json.nombre"
+  ]
+ },
+ {
+  "es": "tendon gliding",
+  "donde": [
+   "tendinoso.otrosNombres"
+  ]
+ },
+ {
+  "es": "deslizamiento tendinoso",
+  "donde": [
+   "tendinoso.otrosNombres"
+  ]
+ },
+ {
+  "es": "cinco posiciones de los dedos",
+  "donde": [
+   "tendinoso.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado, con el codo en la mesa, el antebrazo hacia arriba y la muñeca recta. Los dedos, estirados y juntos.",
+  "donde": [
+   "tendinoso.partida"
+  ]
+ },
+ {
+  "es": "Gancho: dobla las dos últimas articulaciones de los dedos, con los nudillos rectos.",
+  "donde": [
+   "tendinoso.pasos"
+  ]
+ },
+ {
+  "es": "Mesa: dobla los dedos solo por los nudillos, con el resto recto.",
+  "donde": [
+   "tendinoso.pasos"
+  ]
+ },
+ {
+  "es": "Puño plano: dobla los dedos hacia la palma con las puntas rectas.",
+  "donde": [
+   "tendinoso.pasos"
+  ]
+ },
+ {
+  "es": "Puño completo: cierra la mano del todo.",
+  "donde": [
+   "tendinoso.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve a estirar los dedos.",
+  "donde": [
+   "tendinoso.pasos"
+  ]
+ },
+ {
+  "es": "Pasar deprisa de una posición a otra. Quédate un momento en cada una, con la muñeca recta.",
+  "donde": [
+   "tendinoso.error"
+  ]
+ },
+ {
+  "es": "St George’s (NHS), deslizamiento de tendones",
+  "donde": [
+   "tendinoso.fuentes"
+  ]
+ },
+ {
+  "es": "Royal Berkshire (NHS), movilidad de los dedos",
+  "donde": [
+   "tendinoso.fuentes"
+  ]
+ },
+ {
+  "es": "Abrir y cerrar la mano",
+  "donde": [
+   "abrir_cerrar.nombre",
+   "modelos/abrir_cerrar.json.nombre",
+   "modelos/b/abrir_cerrar.json.nombre"
+  ]
+ },
+ {
+  "es": "puño y mano abierta",
+  "donde": [
+   "abrir_cerrar.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado, con el codo en la mesa y la mano hacia arriba, con la muñeca recta.",
+  "donde": [
+   "abrir_cerrar.partida"
+  ]
+ },
+ {
+  "es": "Cierra el puño.",
+  "donde": [
+   "abrir_cerrar.pasos"
+  ]
+ },
+ {
+  "es": "Abre la mano estirando los dedos y sepáralos todo lo que puedas.",
+  "donde": [
+   "abrir_cerrar.pasos"
+  ]
+ },
+ {
+  "es": "Doblar la muñeca. Se queda recta mientras se mueven los dedos.",
+  "donde": [
+   "abrir_cerrar.error"
+  ]
+ },
+ {
+  "es": "Apretar una pelota blanda",
+  "donde": [
+   "pelota.nombre",
+   "modelos/pelota.json.nombre",
+   "modelos/b/pelota.json.nombre"
+  ]
+ },
+ {
+  "es": "apretar masilla",
+  "donde": [
+   "pelota.otrosNombres"
+  ]
+ },
+ {
+  "es": "prensión",
+  "donde": [
+   "pelota.otrosNombres"
+  ]
+ },
+ {
+  "es": "Pelota blanda o esponja",
+  "donde": [
+   "pelota.material"
+  ]
+ },
+ {
+  "es": "Sentado, con el codo en la mesa y una pelota blanda en la palma. También sirven unos calcetines enrollados o una esponja.",
+  "donde": [
+   "pelota.partida"
+  ]
+ },
+ {
+  "es": "Aprieta la pelota con todos los dedos y el pulgar.",
+  "donde": [
+   "pelota.pasos"
+  ]
+ },
+ {
+  "es": "Suelta y estira los dedos.",
+  "donde": [
+   "pelota.pasos"
+  ]
+ },
+ {
+  "es": "Doblar la muñeca al apretar. El antebrazo y la muñeca se quedan rectos.",
+  "donde": [
+   "pelota.error"
+  ]
+ },
+ {
+  "es": "Aprieta más fuerte a medida que te resulte cómodo, o usa masilla.",
+  "donde": [
+   "pelota.masDificil"
+  ]
+ },
+ {
+  "es": "St George’s (NHS), masilla",
+  "donde": [
+   "pelota.fuentes"
+  ]
+ },
+ {
+  "es": "Deslizar el brazo por la mesa",
+  "donde": [
+   "deslizar_mesa.nombre",
+   "modelos/deslizar_mesa.json.nombre",
+   "modelos/b/deslizar_mesa.json.nombre"
+  ]
+ },
+ {
+  "es": "table slides",
+  "donde": [
+   "deslizar_mesa.otrosNombres"
+  ]
+ },
+ {
+  "es": "deslizamiento en la mesa",
+  "donde": [
+   "deslizar_mesa.otrosNombres"
+  ]
+ },
+ {
+  "es": "Mesa y una toalla",
+  "donde": [
+   "deslizar_mesa.material"
+  ]
+ },
+ {
+  "es": "Sentado erguido junto a una mesa, con la mano sobre una toalla para que resbale y el pulgar hacia arriba.",
+  "donde": [
+   "deslizar_mesa.partida"
+  ]
+ },
+ {
+  "es": "Desliza la mano hacia delante por la mesa todo lo que puedas, sin subir el hombro.",
+  "donde": [
+   "deslizar_mesa.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio y con control.",
+  "donde": [
+   "deslizar_mesa.pasos"
+  ]
+ },
+ {
+  "es": "Subir el hombro hacia la oreja. Deja que el tronco acompañe un poco, pero los hombros, abajo.",
+  "donde": [
+   "deslizar_mesa.error"
+  ]
+ },
+ {
+  "es": "Servicio OCATS (NHS), movilidad del hombro",
+  "donde": [
+   "deslizar_mesa.fuentes"
+  ]
+ },
+ {
+  "es": "Sentadilla en la pared",
+  "donde": [
+   "sentadilla_pared.nombre",
+   "modelos/sentadilla_pared.json.nombre",
+   "modelos/b/sentadilla_pared.json.nombre"
+  ]
+ },
+ {
+  "es": "wall squat",
+  "donde": [
+   "sentadilla_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "sentadilla apoyado en la pared",
+  "donde": [
+   "sentadilla_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, contra la pared",
+  "donde": [
+   "sentadilla_pared.posicion"
+  ]
+ },
+ {
+  "es": "Pared",
+  "donde": [
+   "sentadilla_pared.material",
+   "gemelo_pared.material",
+   "flexion_pared.material"
+  ]
+ },
+ {
+  "es": "De pie, con la espalda contra la pared y los pies un paso por delante, separados a la anchura de la cadera.",
+  "donde": [
+   "sentadilla_pared.partida"
+  ]
+ },
+ {
+  "es": "Dobla las rodillas y baja deslizando la espalda por la pared, hasta donde estés cómodo.",
+  "donde": [
+   "sentadilla_pared.pasos"
+  ]
+ },
+ {
+  "es": "Empuja con las piernas hasta volver a estar de pie.",
+  "donde": [
+   "sentadilla_pared.pasos"
+  ]
+ },
+ {
+  "es": "Separar la espalda de la pared o bajar más de lo cómodo.",
+  "donde": [
+   "sentadilla_pared.error"
+  ]
+ },
+ {
+  "es": "King’s College Hospital (NHS), prótesis de cadera, ejercicios avanzados",
+  "donde": [
+   "sentadilla_pared.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento de gemelo en la pared",
+  "donde": [
+   "gemelo_pared.nombre",
+   "modelos/gemelo_pared.json.nombre",
+   "modelos/b/gemelo_pared.json.nombre"
+  ]
+ },
+ {
+  "es": "heel cord stretch",
+  "donde": [
+   "gemelo_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "estiramiento de pantorrilla",
+  "donde": [
+   "gemelo_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, frente a la pared",
+  "donde": [
+   "gemelo_pared.posicion",
+   "flexion_pared.posicion"
+  ]
+ },
+ {
+  "es": "De cara a la pared, con las manos en ella a la altura del pecho. La pierna que estiras, atrás y recta, con el talón en el suelo; la otra, delante y algo doblada.",
+  "donde": [
+   "gemelo_pared.partida"
+  ]
+ },
+ {
+  "es": "Con los dos talones en el suelo, lleva la cadera hacia la pared.",
+  "donde": [
+   "gemelo_pared.pasos"
+  ]
+ },
+ {
+  "es": "En la pantorrilla de la pierna de atrás, hasta el talón.",
+  "donde": [
+   "gemelo_pared.notar"
+  ]
+ },
+ {
+  "es": "Levantar el talón de atrás o arquear la espalda.",
+  "donde": [
+   "gemelo_pared.error"
+  ]
+ },
+ {
+  "es": "Si no tienes pared a mano, apóyate en una encimera o una mesa pesada.",
+  "donde": [
+   "gemelo_pared.ayuda"
+  ]
+ },
+ {
+  "es": "AAOS, programas de rodilla y de tobillo y pie (ejercicio 1)",
+  "donde": [
+   "gemelo_pared.fuentes"
+  ]
+ },
+ {
+  "es": "Flexión contra la pared",
+  "donde": [
+   "flexion_pared.nombre",
+   "modelos/flexion_pared.json.nombre",
+   "modelos/b/flexion_pared.json.nombre"
+  ]
+ },
+ {
+  "es": "wall press up",
+  "donde": [
+   "flexion_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "push-up en la pared",
+  "donde": [
+   "flexion_pared.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, de cara a la pared y algo separado de ella, con los brazos estirados y las manos en la pared a la altura de los hombros.",
+  "donde": [
+   "flexion_pared.partida"
+  ]
+ },
+ {
+  "es": "Dobla los codos y acerca el pecho a la pared, con el cuerpo recto.",
+  "donde": [
+   "flexion_pared.pasos"
+  ]
+ },
+ {
+  "es": "Empuja hasta estirar los brazos.",
+  "donde": [
+   "flexion_pared.pasos"
+  ]
+ },
+ {
+  "es": "Doblarte por la cintura. El cuerpo va en línea recta de los talones a la cabeza.",
+  "donde": [
+   "flexion_pared.error"
+  ]
+ },
+ {
+  "es": "Aleja los pies de la pared; más adelante, hazlo sobre una encimera o una mesa.",
+  "donde": [
+   "flexion_pared.masDificil"
+  ]
+ },
+ {
+  "es": "Isométricos de hombro contra la pared",
+  "donde": [
+   "iso_hombro.nombre",
+   "modelos/iso_hombro.json.nombre",
+   "modelos/b/iso_hombro.json.nombre"
+  ]
+ },
+ {
+  "es": "isométricos de hombro",
+  "donde": [
+   "iso_hombro.otrosNombres"
+  ]
+ },
+ {
+  "es": "empujar la pared",
+  "donde": [
+   "iso_hombro.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, junto a la pared",
+  "donde": [
+   "iso_hombro.posicion"
+  ]
+ },
+ {
+  "es": "De pie y de lado a la pared, con el brazo pegado al costado y el codo doblado en ángulo recto.",
+  "donde": [
+   "iso_hombro.partida"
+  ]
+ },
+ {
+  "es": "Empuja suavemente la pared hacia fuera con el antebrazo, sin que el brazo se mueva.",
+  "donde": [
+   "iso_hombro.pasos"
+  ]
+ },
+ {
+  "es": "Mantén la fuerza, que vaya subiendo poco a poco.",
+  "donde": [
+   "iso_hombro.pasos"
+  ]
+ },
+ {
+  "es": "La tensión en el brazo, que va subiendo poco a poco.",
+  "donde": [
+   "iso_hombro.notar"
+  ]
+ },
+ {
+  "es": "Empujar tan fuerte que duela. Es una fuerza suave y sin movimiento.",
+  "donde": [
+   "iso_hombro.error"
+  ]
+ },
+ {
+  "es": "Se hace igual en otras direcciones: de cara a la pared empujando con el puño, de espaldas empujando con el codo, o de lado empujando con el dorso de la mano.",
+  "donde": [
+   "iso_hombro.ayuda"
+  ]
+ },
+ {
+  "es": "Servicio OCATS (NHS), fuerza del hombro",
+  "donde": [
+   "iso_hombro.fuentes"
+  ]
+ },
+ {
+  "es": "Extensión boca abajo con los brazos",
+  "donde": [
+   "extension_lumbar.nombre",
+   "modelos/extension_lumbar.json.nombre",
+   "modelos/b/extension_lumbar.json.nombre"
+  ]
+ },
+ {
+  "es": "McKenzie",
+  "donde": [
+   "extension_lumbar.otrosNombres"
+  ]
+ },
+ {
+  "es": "press-up",
+  "donde": [
+   "extension_lumbar.otrosNombres"
+  ]
+ },
+ {
+  "es": "cobra suave",
+  "donde": [
+   "extension_lumbar.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca abajo",
+  "donde": [
+   "extension_lumbar.posicion",
+   "plancha.posicion",
+   "extension_antebrazos.posicion"
+  ]
+ },
+ {
+  "es": "Boca abajo, con las piernas estiradas y relajadas y las manos en el suelo, bajo los hombros.",
+  "donde": [
+   "extension_lumbar.partida"
+  ]
+ },
+ {
+  "es": "Estira los codos y sube el tronco todo lo que puedas, dejando la pelvis en el suelo.",
+  "donde": [
+   "extension_lumbar.pasos"
+  ]
+ },
+ {
+  "es": "Mantén, dejando que la pelvis y el abdomen se hundan.",
+  "donde": [
+   "extension_lumbar.pasos"
+  ]
+ },
+ {
+  "es": "Despegar la pelvis del suelo. Suben el pecho y los hombros; la pelvis y las piernas se quedan abajo.",
+  "donde": [
+   "extension_lumbar.error"
+  ]
+ },
+ {
+  "es": "Para empezar, apóyate en los antebrazos en lugar de estirar los brazos.",
+  "donde": [
+   "extension_lumbar.ayuda"
+  ]
+ },
+ {
+  "es": "Para si el dolor baja hacia la pierna o notas hormigueo.",
+  "donde": [
+   "extension_lumbar.cuidado",
+   "extension_antebrazos.cuidado"
+  ]
+ },
+ {
+  "es": "Plancha",
+  "donde": [
+   "plancha.nombre",
+   "modelos/plancha.json.nombre",
+   "modelos/b/plancha.json.nombre"
+  ]
+ },
+ {
+  "es": "plank",
+  "donde": [
+   "plancha.otrosNombres"
+  ]
+ },
+ {
+  "es": "plancha frontal",
+  "donde": [
+   "plancha.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca abajo, apoyado en los antebrazos, con los codos justo debajo de los hombros.",
+  "donde": [
+   "plancha.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y los glúteos y despega la cadera y las rodillas del suelo.",
+  "donde": [
+   "plancha.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el cuerpo recto, de los hombros a los pies.",
+  "donde": [
+   "plancha.pasos"
+  ]
+ },
+ {
+  "es": "En la espalda, en el abdomen y en los glúteos.",
+  "donde": [
+   "plancha.notar"
+  ]
+ },
+ {
+  "es": "Dejar caer la pelvis hacia el suelo. El abdomen, apretado todo el rato.",
+  "donde": [
+   "plancha.error"
+  ]
+ },
+ {
+  "es": "Si no aguantas, deja las rodillas en el suelo y sube solo la cadera.",
+  "donde": [
+   "plancha.ayuda"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 7)",
+  "donde": [
+   "plancha.fuentes"
+  ]
+ },
+ {
+  "es": "Plancha lateral",
+  "donde": [
+   "plancha_lateral.nombre",
+   "modelos/plancha_lateral.json.nombre",
+   "modelos/b/plancha_lateral.json.nombre"
+  ]
+ },
+ {
+  "es": "side plank",
+  "donde": [
+   "plancha_lateral.otrosNombres"
+  ]
+ },
+ {
+  "es": "Tumbado de lado, apoyado en el antebrazo, con el codo justo debajo del hombro y las piernas juntas y estiradas.",
+  "donde": [
+   "plancha_lateral.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y sube la cadera hasta que el cuerpo quede recto.",
+  "donde": [
+   "plancha_lateral.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio y luego hazlo del otro lado.",
+  "donde": [
+   "plancha_lateral.pasos",
+   "plancha_lateral_rodilla.pasos"
+  ]
+ },
+ {
+  "es": "En la cintura, la zona lumbar y el abdomen.",
+  "donde": [
+   "plancha_lateral.notar"
+  ]
+ },
+ {
+  "es": "Subir el hombro hacia la oreja o dejar caer la cadera. El cuello, alineado con la espalda.",
+  "donde": [
+   "plancha_lateral.error",
+   "plancha_lateral_rodilla.error"
+  ]
+ },
+ {
+  "es": "Más fácil: con la rodilla de abajo doblada y apoyada.",
+  "donde": [
+   "plancha_lateral.ayuda"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 8)",
+  "donde": [
+   "plancha_lateral.fuentes"
+  ]
+ },
+ {
+  "es": "Meter el mentón",
+  "donde": [
+   "retraccion.nombre",
+   "modelos/retraccion.json.nombre",
+   "modelos/b/retraccion.json.nombre"
+  ]
+ },
+ {
+  "es": "retracción cervical",
+  "donde": [
+   "retraccion.otrosNombres"
+  ]
+ },
+ {
+  "es": "chin tuck",
+  "donde": [
+   "retraccion.otrosNombres"
+  ]
+ },
+ {
+  "es": "doble papada",
+  "donde": [
+   "retraccion.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido, con los hombros relajados y la mirada al frente.",
+  "donde": [
+   "retraccion.partida"
+  ]
+ },
+ {
+  "es": "Lleva la cabeza hacia atrás metiendo el mentón, como si quisieras hacer papada, sin inclinarla.",
+  "donde": [
+   "retraccion.pasos"
+  ]
+ },
+ {
+  "es": "Un estiramiento en la parte de atrás del cuello.",
+  "donde": [
+   "retraccion.notar"
+  ]
+ },
+ {
+  "es": "Bajar la barbilla hacia el pecho. La cabeza va hacia atrás, recta, con los ojos al frente.",
+  "donde": [
+   "retraccion.error"
+  ]
+ },
+ {
+  "es": "Calderdale and Huddersfield (NHS), fuerza del cuello",
+  "donde": [
+   "retraccion.fuentes",
+   "iso_cuello.fuentes"
+  ]
+ },
+ {
+  "es": "Wrightington, Wigan and Leigh (NHS), cuello",
+  "donde": [
+   "retraccion.fuentes",
+   "iso_cuello.fuentes",
+   "trapecio.fuentes"
+  ]
+ },
+ {
+  "es": "Isométricos de cuello",
+  "donde": [
+   "iso_cuello.nombre",
+   "modelos/iso_cuello.json.nombre",
+   "modelos/b/iso_cuello.json.nombre"
+  ]
+ },
+ {
+  "es": "isométricos cervicales",
+  "donde": [
+   "iso_cuello.otrosNombres"
+  ]
+ },
+ {
+  "es": "mano contra la cabeza",
+  "donde": [
+   "iso_cuello.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en una silla firme, erguido, con los pies apoyados y la mano en la frente.",
+  "donde": [
+   "iso_cuello.partida"
+  ]
+ },
+ {
+  "es": "Empuja suavemente la frente contra la mano, sin que la cabeza se mueva.",
+  "donde": [
+   "iso_cuello.pasos"
+  ]
+ },
+ {
+  "es": "Afloja y vuelve a la posición de partida.",
+  "donde": [
+   "iso_cuello.pasos"
+  ]
+ },
+ {
+  "es": "Mover la cabeza. La mano resiste y la cabeza se queda quieta.",
+  "donde": [
+   "iso_cuello.error"
+  ]
+ },
+ {
+  "es": "Se hace igual hacia los lados, con la mano por encima de la oreja, y girando, con la mano en el lado de la cabeza.",
+  "donde": [
+   "iso_cuello.ayuda"
+  ]
+ },
+ {
+  "es": "Estiramiento del trapecio",
+  "donde": [
+   "trapecio.nombre",
+   "modelos/trapecio.json.nombre",
+   "modelos/b/trapecio.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de trapecio superior",
+  "donde": [
+   "trapecio.otrosNombres"
+  ]
+ },
+ {
+  "es": "estiramiento del cuello",
+  "donde": [
+   "trapecio.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con los hombros abajo.",
+  "donde": [
+   "trapecio.partida"
+  ]
+ },
+ {
+  "es": "Inclina la oreja hacia un hombro y baja un poco el mentón hacia el pecho.",
+  "donde": [
+   "trapecio.pasos"
+  ]
+ },
+ {
+  "es": "Con la mano de ese lado por encima de la cabeza, ayuda un poco más, con suavidad.",
+  "donde": [
+   "trapecio.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el estiramiento y suelta despacio.",
+  "donde": [
+   "trapecio.pasos",
+   "cuadriceps_pie.pasos"
+  ]
+ },
+ {
+  "es": "A lo largo del cuello y el hombro del lado contrario.",
+  "donde": [
+   "trapecio.notar"
+  ]
+ },
+ {
+  "es": "Subir el hombro del lado que estiras. Se queda abajo y relajado.",
+  "donde": [
+   "trapecio.error"
+  ]
+ },
+ {
+  "es": "Círculos de tobillo",
+  "donde": [
+   "circulos_tobillo.nombre",
+   "modelos/circulos_tobillo.json.nombre",
+   "modelos/b/circulos_tobillo.json.nombre"
+  ]
+ },
+ {
+  "es": "alfabeto con el pie",
+  "donde": [
+   "circulos_tobillo.otrosNombres"
+  ]
+ },
+ {
+  "es": "movilidad de tobillo",
+  "donde": [
+   "circulos_tobillo.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en el suelo",
+  "donde": [
+   "circulos_tobillo.posicion",
+   "dorsal_banda.posicion",
+   "plantar_banda.posicion"
+  ]
+ },
+ {
+  "es": "Sentado con las piernas estiradas y el talón apoyado, o en una silla con el pie colgando, de modo que el pie se mueva libre.",
+  "donde": [
+   "circulos_tobillo.partida"
+  ]
+ },
+ {
+  "es": "Mueve el pie en círculos lentos, guiando con el dedo gordo, cada vez más grandes.",
+  "donde": [
+   "circulos_tobillo.pasos"
+  ]
+ },
+ {
+  "es": "Cambia de sentido.",
+  "donde": [
+   "circulos_tobillo.pasos"
+  ]
+ },
+ {
+  "es": "También puedes escribir en el aire las letras del abecedario con el pie.",
+  "donde": [
+   "circulos_tobillo.pasos"
+  ]
+ },
+ {
+  "es": "En el empeine y en todo el tobillo.",
+  "donde": [
+   "circulos_tobillo.notar"
+  ]
+ },
+ {
+  "es": "Mover la pierna entera. Solo se mueven el pie y el tobillo.",
+  "donde": [
+   "circulos_tobillo.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de tobillo y pie (ejercicio 6)",
+  "donde": [
+   "circulos_tobillo.fuentes"
+  ]
+ },
+ {
+  "es": "United Lincolnshire Hospitals (NHS), tobillo",
+  "donde": [
+   "circulos_tobillo.fuentes",
+   "inversion_banda.fuentes",
+   "eversion_banda.fuentes"
+  ]
+ },
+ {
+  "es": "Leicestershire Partnership (NHS), tobillo",
+  "donde": [
+   "circulos_tobillo.fuentes",
+   "inversion_banda.fuentes",
+   "eversion_banda.fuentes"
+  ]
+ },
+ {
+  "es": "Flexión dorsal con banda",
+  "donde": [
+   "dorsal_banda.nombre",
+   "modelos/dorsal_banda.json.nombre",
+   "modelos/b/dorsal_banda.json.nombre"
+  ]
+ },
+ {
+  "es": "puntas hacia ti con banda",
+  "donde": [
+   "dorsal_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "tibial anterior con banda",
+  "donde": [
+   "dorsal_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en el suelo con las piernas estiradas, y la banda alrededor del empeine, atada a la pata de una mesa o de un mueble pesado delante de ti.",
+  "donde": [
+   "dorsal_banda.partida"
+  ]
+ },
+ {
+  "es": "Tira de la punta del pie hacia ti contra la banda.",
+  "donde": [
+   "dorsal_banda.pasos"
+  ]
+ },
+ {
+  "es": "En la espinilla y en el empeine.",
+  "donde": [
+   "dorsal_banda.notar"
+  ]
+ },
+ {
+  "es": "Levantar el talón o doblar la rodilla. La pierna se queda estirada y el talón, en el suelo.",
+  "donde": [
+   "dorsal_banda.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de tobillo y pie (ejercicio 9)",
+  "donde": [
+   "dorsal_banda.fuentes",
+   "plantar_banda.fuentes"
+  ]
+ },
+ {
+  "es": "Servicio OCATS (NHS), tobillo y pie",
+  "donde": [
+   "dorsal_banda.fuentes",
+   "plantar_banda.fuentes",
+   "inversion_banda.fuentes"
+  ]
+ },
+ {
+  "es": "Flexión plantar con banda",
+  "donde": [
+   "plantar_banda.nombre",
+   "modelos/plantar_banda.json.nombre",
+   "modelos/b/plantar_banda.json.nombre"
+  ]
+ },
+ {
+  "es": "estirar la punta con banda",
+  "donde": [
+   "plantar_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "gemelos con banda",
+  "donde": [
+   "plantar_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en el suelo con las piernas estiradas, y la banda alrededor de la planta del pie, con los extremos en las manos.",
+  "donde": [
+   "plantar_banda.partida"
+  ]
+ },
+ {
+  "es": "Estira la punta del pie empujando la banda.",
+  "donde": [
+   "plantar_banda.pasos"
+  ]
+ },
+ {
+  "es": "Doblar la rodilla. Solo se mueve el tobillo.",
+  "donde": [
+   "plantar_banda.error"
+  ]
+ },
+ {
+  "es": "Inversión de tobillo con banda",
+  "donde": [
+   "inversion_banda.nombre",
+   "modelos/inversion_banda.json.nombre",
+   "modelos/b/inversion_banda.json.nombre"
+  ]
+ },
+ {
+  "es": "pie hacia dentro con banda",
+  "donde": [
+   "inversion_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "inversión",
+  "donde": [
+   "inversion_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado con la pierna estirada, y la banda alrededor del pie, tirando hacia fuera: sujeta con la mano o atada a algo estable.",
+  "donde": [
+   "inversion_banda.partida"
+  ]
+ },
+ {
+  "es": "Lleva el pie hacia dentro contra la banda, como si quisieras mirarte la planta.",
+  "donde": [
+   "inversion_banda.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio, controlando.",
+  "donde": [
+   "inversion_banda.pasos",
+   "eversion_banda.pasos"
+  ]
+ },
+ {
+  "es": "Girar la pierna entera. Solo se mueve el tobillo.",
+  "donde": [
+   "inversion_banda.error"
+  ]
+ },
+ {
+  "es": "Eversión de tobillo con banda",
+  "donde": [
+   "eversion_banda.nombre",
+   "modelos/eversion_banda.json.nombre",
+   "modelos/b/eversion_banda.json.nombre"
+  ]
+ },
+ {
+  "es": "pie hacia fuera con banda",
+  "donde": [
+   "eversion_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "eversión",
+  "donde": [
+   "eversion_banda.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado con la pierna estirada, y la banda alrededor del pie, tirando hacia dentro: atada a algo estable o rodeando los dos pies.",
+  "donde": [
+   "eversion_banda.partida"
+  ]
+ },
+ {
+  "es": "Lleva el pie hacia fuera contra la banda, girando los dedos pequeños hacia fuera.",
+  "donde": [
+   "eversion_banda.pasos"
+  ]
+ },
+ {
+  "es": "Mover la rodilla. Se queda quieta; solo se mueve el tobillo.",
+  "donde": [
+   "eversion_banda.error"
+  ]
+ },
+ {
+  "es": "Arrugar una toalla con los dedos del pie",
+  "donde": [
+   "toalla_dedos.nombre",
+   "modelos/toalla_dedos.json.nombre",
+   "modelos/b/toalla_dedos.json.nombre"
+  ]
+ },
+ {
+  "es": "towel curls",
+  "donde": [
+   "toalla_dedos.otrosNombres"
+  ]
+ },
+ {
+  "es": "recoger la toalla con los dedos",
+  "donde": [
+   "toalla_dedos.otrosNombres"
+  ]
+ },
+ {
+  "es": "Toalla pequeña",
+  "donde": [
+   "toalla_dedos.material"
+  ]
+ },
+ {
+  "es": "Sentado, con los pies apoyados y una toalla pequeña en el suelo bajo el pie que trabaja.",
+  "donde": [
+   "toalla_dedos.partida"
+  ]
+ },
+ {
+  "es": "Agarra la toalla con los dedos del pie y arrástrala hacia ti.",
+  "donde": [
+   "toalla_dedos.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el agarre un momento.",
+  "donde": [
+   "toalla_dedos.pasos"
+  ]
+ },
+ {
+  "es": "Suelta y vuelve a estirar los dedos.",
+  "donde": [
+   "toalla_dedos.pasos"
+  ]
+ },
+ {
+  "es": "En el empeine y en los dedos.",
+  "donde": [
+   "toalla_dedos.notar"
+  ]
+ },
+ {
+  "es": "Levantar el talón. Se queda en el suelo; solo trabajan los dedos.",
+  "donde": [
+   "toalla_dedos.error"
+  ]
+ },
+ {
+  "es": "Pon un peso pequeño en el borde de la toalla, como una lata.",
+  "donde": [
+   "toalla_dedos.masDificil"
+  ]
+ },
+ {
+  "es": "AAOS, programa de tobillo y pie (ejercicio 8)",
+  "donde": [
+   "toalla_dedos.fuentes"
+  ]
+ },
+ {
+  "es": "Subir un escalón",
+  "donde": [
+   "escalon.nombre",
+   "modelos/escalon.json.nombre",
+   "modelos/b/escalon.json.nombre"
+  ]
+ },
+ {
+  "es": "step up",
+  "donde": [
+   "escalon.otrosNombres"
+  ]
+ },
+ {
+  "es": "escalón",
+  "donde": [
+   "escalon.otrosNombres"
+  ]
+ },
+ {
+  "es": "Un escalón",
+  "donde": [
+   "escalon.material"
+  ]
+ },
+ {
+  "es": "De pie, de cara a un escalón bajo, cerca de una barandilla o de algo a lo que agarrarte si hace falta.",
+  "donde": [
+   "escalon.partida"
+  ]
+ },
+ {
+  "es": "Sube al escalón empezando por la pierna que trabaja, despacio.",
+  "donde": [
+   "escalon.pasos"
+  ]
+ },
+ {
+  "es": "Ponte recto arriba, con los dos pies en el escalón.",
+  "donde": [
+   "escalon.pasos"
+  ]
+ },
+ {
+  "es": "Baja despacio, primero la otra pierna.",
+  "donde": [
+   "escalon.pasos"
+  ]
+ },
+ {
+  "es": "Subir de un impulso. Sube y baja despacio, con el tronco erguido.",
+  "donde": [
+   "escalon.error"
+  ]
+ },
+ {
+  "es": "Cuando sea fácil, usa un escalón más alto y suelta la barandilla.",
+  "donde": [
+   "escalon.masDificil"
+  ]
+ },
+ {
+  "es": "Estiramiento de cuádriceps de pie",
+  "donde": [
+   "cuadriceps_pie.nombre",
+   "modelos/cuadriceps_pie.json.nombre",
+   "modelos/b/cuadriceps_pie.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de cuádriceps",
+  "donde": [
+   "cuadriceps_pie.otrosNombres"
+  ]
+ },
+ {
+  "es": "talón al glúteo",
+  "donde": [
+   "cuadriceps_pie.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, con una mano en una encimera, en una mesa pesada o en la pared para mantener el equilibrio.",
+  "donde": [
+   "cuadriceps_pie.partida"
+  ]
+ },
+ {
+  "es": "Dobla la rodilla y sujeta el tobillo con la mano del mismo lado.",
+  "donde": [
+   "cuadriceps_pie.pasos"
+  ]
+ },
+ {
+  "es": "Acerca el talón al glúteo con suavidad, con las rodillas juntas.",
+  "donde": [
+   "cuadriceps_pie.pasos"
+  ]
+ },
+ {
+  "es": "Arquear o girar la espalda. El tronco, recto.",
+  "donde": [
+   "cuadriceps_pie.error"
+  ]
+ },
+ {
+  "es": "AAOS, programa de rodilla (ejercicio 2)",
+  "donde": [
+   "cuadriceps_pie.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento de isquios tumbado",
+  "donde": [
+   "isquios_toalla.nombre",
+   "modelos/isquios_toalla.json.nombre",
+   "modelos/b/isquios_toalla.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de isquiotibiales",
+  "donde": [
+   "isquios_toalla.otrosNombres"
+  ]
+ },
+ {
+  "es": "pierna en alto con toalla",
+  "donde": [
+   "isquios_toalla.otrosNombres"
+  ]
+ },
+ {
+  "es": "Toalla",
+  "donde": [
+   "isquios_toalla.material"
+  ]
+ },
+ {
+  "es": "Boca arriba, con las dos rodillas dobladas y los pies apoyados. Una toalla alrededor de la planta del pie que estiras, con los extremos en las manos.",
+  "donde": [
+   "isquios_toalla.partida"
+  ]
+ },
+ {
+  "es": "Sube la pierna y estira la rodilla, tirando de la toalla con suavidad hacia la cabeza.",
+  "donde": [
+   "isquios_toalla.pasos"
+  ]
+ },
+ {
+  "es": "Baja la pierna despacio.",
+  "donde": [
+   "isquios_toalla.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de atrás del muslo y detrás de la rodilla.",
+  "donde": [
+   "isquios_toalla.notar",
+   "isquios_sentado.notar"
+  ]
+ },
+ {
+  "es": "Tirar de la rodilla o apoyar las manos en ella. Se tira del pie, con la toalla.",
+  "donde": [
+   "isquios_toalla.error"
+  ]
+ },
+ {
+  "es": "AAOS, programas de rodilla y de cadera",
+  "donde": [
+   "isquios_toalla.fuentes"
+  ]
+ },
+ {
+  "es": "Extensión boca abajo sobre los antebrazos",
+  "donde": [
+   "extension_antebrazos.nombre",
+   "modelos/extension_antebrazos.json.nombre",
+   "modelos/b/extension_antebrazos.json.nombre"
+  ]
+ },
+ {
+  "es": "esfinge",
+  "donde": [
+   "extension_antebrazos.otrosNombres"
+  ]
+ },
+ {
+  "es": "McKenzie sobre los codos",
+  "donde": [
+   "extension_antebrazos.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca abajo, con las piernas estiradas y relajadas y los antebrazos en el suelo, con los codos bajo los hombros.",
+  "donde": [
+   "extension_antebrazos.partida"
+  ]
+ },
+ {
+  "es": "Sube el pecho sobre los antebrazos y deja que la zona lumbar se hunda, con la pelvis en el suelo.",
+  "donde": [
+   "extension_antebrazos.pasos"
+  ]
+ },
+ {
+  "es": "Mantén, respirando tranquilo.",
+  "donde": [
+   "extension_antebrazos.pasos"
+  ]
+ },
+ {
+  "es": "Despegar la pelvis del suelo o encoger los hombros. Los hombros, lejos de las orejas.",
+  "donde": [
+   "extension_antebrazos.error"
+  ]
+ },
+ {
+  "es": "Con las manos bajo los hombros, estira los codos poco a poco: es la extensión con los brazos.",
+  "donde": [
+   "extension_antebrazos.masDificil"
+  ]
+ },
+ {
+  "es": "Plancha de rodillas",
+  "donde": [
+   "plancha_rodillas.nombre",
+   "modelos/plancha_rodillas.json.nombre",
+   "modelos/b/plancha_rodillas.json.nombre"
+  ]
+ },
+ {
+  "es": "plank de rodillas",
+  "donde": [
+   "plancha_rodillas.otrosNombres"
+  ]
+ },
+ {
+  "es": "plancha frontal de rodillas",
+  "donde": [
+   "plancha_rodillas.otrosNombres"
+  ]
+ },
+ {
+  "es": "Boca abajo, apoyado en los antebrazos, con los codos justo debajo de los hombros y las rodillas dobladas, con los pies en el aire.",
+  "donde": [
+   "plancha_rodillas.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y los glúteos y sube la cadera, con las rodillas en el suelo.",
+  "donde": [
+   "plancha_rodillas.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el cuerpo recto, de los hombros a las rodillas, respirando.",
+  "donde": [
+   "plancha_rodillas.pasos"
+  ]
+ },
+ {
+  "es": "En el abdomen y en los glúteos.",
+  "donde": [
+   "plancha_rodillas.notar"
+  ]
+ },
+ {
+  "es": "Dejar caer la pelvis o subirla de más. De los hombros a las rodillas, una línea recta.",
+  "donde": [
+   "plancha_rodillas.error"
+  ]
+ },
+ {
+  "es": "Cuando aguantes 30 segundos así, despega también las rodillas: es la plancha.",
+  "donde": [
+   "plancha_rodillas.masDificil"
+  ]
+ },
+ {
+  "es": "Wrightington, Wigan and Leigh (NHS), dolor lumbar (nivel 1)",
+  "donde": [
+   "plancha_rodillas.fuentes"
+  ]
+ },
+ {
+  "es": "Plancha lateral con la rodilla apoyada",
+  "donde": [
+   "plancha_lateral_rodilla.nombre",
+   "modelos/plancha_lateral_rodilla.json.nombre",
+   "modelos/b/plancha_lateral_rodilla.json.nombre"
+  ]
+ },
+ {
+  "es": "side plank modificada",
+  "donde": [
+   "plancha_lateral_rodilla.otrosNombres"
+  ]
+ },
+ {
+  "es": "plancha lateral de rodilla",
+  "donde": [
+   "plancha_lateral_rodilla.otrosNombres"
+  ]
+ },
+ {
+  "es": "Tumbado de lado, apoyado en el antebrazo con el codo justo debajo del hombro, la rodilla de abajo doblada y apoyada, y la pierna de arriba estirada.",
+  "donde": [
+   "plancha_lateral_rodilla.partida"
+  ]
+ },
+ {
+  "es": "Aprieta el abdomen y sube la cadera hasta que quede recta la línea del hombro a la rodilla.",
+  "donde": [
+   "plancha_lateral_rodilla.pasos"
+  ]
+ },
+ {
+  "es": "En la cintura y en el lado de la cadera.",
+  "donde": [
+   "plancha_lateral_rodilla.notar"
+  ]
+ },
+ {
+  "es": "Con las dos piernas estiradas: es la plancha lateral.",
+  "donde": [
+   "plancha_lateral_rodilla.masDificil"
+  ]
+ },
+ {
+  "es": "AAOS, programa de columna (ejercicio 8, «modified side plank»)",
+  "donde": [
+   "plancha_lateral_rodilla.fuentes"
+  ]
+ },
+ {
+  "es": "Marcha sentado",
+  "donde": [
+   "marcha_sentado.nombre",
+   "modelos/marcha_sentado.json.nombre",
+   "modelos/b/marcha_sentado.json.nombre"
+  ]
+ },
+ {
+  "es": "subir rodillas sentado",
+  "donde": [
+   "marcha_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "marcha en silla",
+  "donde": [
+   "marcha_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en la parte delantera de una silla firme, sin ruedas y apoyada en la pared, erguido y con los pies apoyados.",
+  "donde": [
+   "marcha_sentado.partida"
+  ]
+ },
+ {
+  "es": "Sube una rodilla hacia el pecho, sin echarte hacia atrás.",
+  "donde": [
+   "marcha_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Bájala y sube la otra, como si caminaras sentado.",
+  "donde": [
+   "marcha_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Sigue al ritmo, alternando las piernas.",
+  "donde": [
+   "marcha_sentado.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de delante de las caderas y de los muslos.",
+  "donde": [
+   "marcha_sentado.notar"
+  ]
+ },
+ {
+  "es": "Echarse hacia atrás para subir la rodilla. La espalda, recta.",
+  "donde": [
+   "marcha_sentado.error"
+  ]
+ },
+ {
+  "es": "Más deprisa, o sube un poco más cada rodilla.",
+  "donde": [
+   "marcha_sentado.masDificil"
+  ]
+ },
+ {
+  "es": "Vivifrail, programa de ejercicio multicomponente (Ministerio de Sanidad)",
+  "donde": [
+   "marcha_sentado.fuentes",
+   "abduccion_sentado.fuentes",
+   "talones_sentado.fuentes"
+  ]
+ },
+ {
+  "es": "NHS, ejercicios sentados",
+  "donde": [
+   "marcha_sentado.fuentes"
+  ]
+ },
+ {
+  "es": "Separar las rodillas sentado, con banda",
+  "donde": [
+   "abduccion_sentado.nombre"
+  ]
+ },
+ {
+  "es": "abducción de cadera sentado",
+  "donde": [
+   "abduccion_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "apertura de rodillas con banda",
+  "donde": [
+   "abduccion_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con los pies apoyados a la anchura de la cadera y una banda en lazo alrededor de los muslos, justo por encima de las rodillas.",
+  "donde": [
+   "abduccion_sentado.partida"
+  ]
+ },
+ {
+  "es": "Separa las rodillas contra la banda, sin mover los pies.",
+  "donde": [
+   "abduccion_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Aguanta.",
+  "donde": [
+   "abduccion_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Júntalas despacio, sin dejar que la banda tire de golpe.",
+  "donde": [
+   "abduccion_sentado.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de fuera de las caderas.",
+  "donde": [
+   "abduccion_sentado.notar"
+  ]
+ },
+ {
+  "es": "Levantar los talones o echarse hacia atrás. Los pies, quietos en el suelo.",
+  "donde": [
+   "abduccion_sentado.error"
+  ]
+ },
+ {
+  "es": "Una banda más dura, o aguanta más tiempo con las rodillas separadas.",
+  "donde": [
+   "abduccion_sentado.masDificil"
+  ]
+ },
+ {
+  "es": "Elevación de talones sentado",
+  "donde": [
+   "talones_sentado.nombre",
+   "modelos/talones_sentado.json.nombre",
+   "modelos/b/talones_sentado.json.nombre"
+  ]
+ },
+ {
+  "es": "subir talones sentado",
+  "donde": [
+   "talones_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "puntillas sentado",
+  "donde": [
+   "talones_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con los pies apoyados y las manos en los muslos.",
+  "donde": [
+   "talones_sentado.partida"
+  ]
+ },
+ {
+  "es": "Sube los talones todo lo que puedas, con las puntas en el suelo.",
+  "donde": [
+   "talones_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Aguanta arriba.",
+  "donde": [
+   "talones_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Bájalos despacio.",
+  "donde": [
+   "talones_sentado.pasos",
+   "brazos_arriba.pasos"
+  ]
+ },
+ {
+  "es": "En las pantorrillas.",
+  "donde": [
+   "talones_sentado.notar",
+   "andar_puntillas.notar"
+  ]
+ },
+ {
+  "es": "Hacerlo deprisa, dejando caer los talones. Arriba y abajo, con control.",
+  "donde": [
+   "talones_sentado.error"
+  ]
+ },
+ {
+  "es": "Apoya las manos en las rodillas y empuja un poco hacia abajo, o hazla de pie junto a un apoyo firme.",
+  "donde": [
+   "talones_sentado.masDificil"
+  ]
+ },
+ {
+  "es": "Otago, elevación de talones",
+  "donde": [
+   "talones_sentado.fuentes"
+  ]
+ },
+ {
+  "es": "Extensión de rodilla sentado con tobillera",
+  "donde": [
+   "extension_rodilla_lastre.nombre",
+   "modelos/extension_rodilla_lastre.json.nombre",
+   "modelos/b/extension_rodilla_lastre.json.nombre"
+  ]
+ },
+ {
+  "es": "extensión de rodilla con peso",
+  "donde": [
+   "extension_rodilla_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "rodilla delante de Otago",
+  "donde": [
+   "extension_rodilla_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "Silla y una tobillera lastrada",
+  "donde": [
+   "extension_rodilla_lastre.material"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con la espalda en el respaldo, los pies en el suelo y la tobillera bien ajustada en el tobillo que trabaja. Con el peso con el que haces de 8 a 10 repeticiones bien.",
+  "donde": [
+   "extension_rodilla_lastre.partida"
+  ]
+ },
+ {
+  "es": "Estira despacio la rodilla y sube el pie hasta que la pierna quede recta.",
+  "donde": [
+   "extension_rodilla_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Arriba, un momento.",
+  "donde": [
+   "extension_rodilla_lastre.pasos",
+   "curl_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Baja más despacio de lo que subiste, hasta apoyar el pie.",
+  "donde": [
+   "extension_rodilla_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Balancear la pierna para subir el peso. Si no puedes subirla despacio, la tobillera pesa demasiado.",
+  "donde": [
+   "extension_rodilla_lastre.error"
+  ]
+ },
+ {
+  "es": "Cuando hagas dos series de 10 bien, sube el peso de la tobillera.",
+  "donde": [
+   "extension_rodilla_lastre.masDificil",
+   "curl_isquios_lastre.masDificil",
+   "abduccion_pie_lastre.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «front knee strengthening»",
+  "donde": [
+   "extension_rodilla_lastre.fuentes"
+  ]
+ },
+ {
+  "es": "Vivifrail, pasaporte A (Ministerio de Sanidad)",
+  "donde": [
+   "extension_rodilla_lastre.fuentes"
+  ]
+ },
+ {
+  "es": "Curl de isquios de pie con tobillera",
+  "donde": [
+   "curl_isquios_lastre.nombre",
+   "modelos/curl_isquios_lastre.json.nombre",
+   "modelos/b/curl_isquios_lastre.json.nombre"
+  ]
+ },
+ {
+  "es": "flexión de rodilla con peso",
+  "donde": [
+   "curl_isquios_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "rodilla atrás de Otago",
+  "donde": [
+   "curl_isquios_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "Apoyo firme y una tobillera lastrada",
+  "donde": [
+   "curl_isquios_lastre.material",
+   "abduccion_pie_lastre.material"
+  ]
+ },
+ {
+  "es": "De pie y erguido, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), con las dos manos en él, las rodillas juntas y la tobillera bien ajustada en el tobillo que trabaja. Con el peso con el que haces de 8 a 10 repeticiones bien.",
+  "donde": [
+   "curl_isquios_lastre.partida"
+  ]
+ },
+ {
+  "es": "Arriba, un momento, con el muslo vertical.",
+  "donde": [
+   "curl_isquios_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Baja más despacio de lo que subiste.",
+  "donde": [
+   "curl_isquios_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Adelantar la rodilla o echar la cadera atrás para subir el peso. El muslo se queda vertical.",
+  "donde": [
+   "curl_isquios_lastre.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «back knee strengthening»",
+  "donde": [
+   "curl_isquios_lastre.fuentes"
+  ]
+ },
+ {
+  "es": "Abducción de cadera de pie con tobillera",
+  "donde": [
+   "abduccion_pie_lastre.nombre",
+   "modelos/abduccion_pie_lastre.json.nombre",
+   "modelos/b/abduccion_pie_lastre.json.nombre"
+  ]
+ },
+ {
+  "es": "separar la pierna con peso",
+  "donde": [
+   "abduccion_pie_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "cadera de lado de Otago",
+  "donde": [
+   "abduccion_pie_lastre.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él y la tobillera bien ajustada en el tobillo de fuera. Con el peso con el que haces de 8 a 10 repeticiones bien.",
+  "donde": [
+   "abduccion_pie_lastre.partida"
+  ]
+ },
+ {
+  "es": "Con el cuerpo recto y la punta del pie hacia delante, separa la pierna hacia el lado.",
+  "donde": [
+   "abduccion_pie_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Fuera, un momento.",
+  "donde": [
+   "abduccion_pie_lastre.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve más despacio de lo que la separaste.",
+  "donde": [
+   "abduccion_pie_lastre.pasos"
+  ]
+ },
+ {
+  "es": "En el lado de la cadera.",
+  "donde": [
+   "abduccion_pie_lastre.notar"
+  ]
+ },
+ {
+  "es": "Inclinarte hacia el apoyo o girar el pie hacia fuera. El tronco, recto, y la punta, al frente.",
+  "donde": [
+   "abduccion_pie_lastre.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «side hip strengthening»",
+  "donde": [
+   "abduccion_pie_lastre.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación de puntas",
+  "donde": [
+   "puntas.nombre",
+   "modelos/puntas.json.nombre",
+   "modelos/b/puntas.json.nombre"
+  ]
+ },
+ {
+  "es": "subir las puntas de los pies",
+  "donde": [
+   "puntas.otrosNombres"
+  ]
+ },
+ {
+  "es": "sobre los talones",
+  "donde": [
+   "puntas.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él y los pies a la anchura de la cadera.",
+  "donde": [
+   "puntas.partida"
+  ]
+ },
+ {
+  "es": "Sube las puntas de los pies todo lo que puedas, quedándote sobre los talones.",
+  "donde": [
+   "puntas.pasos",
+   "puntas_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Bájalas despacio.",
+  "donde": [
+   "puntas.pasos",
+   "puntas_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de delante de la pierna, bajo la rodilla.",
+  "donde": [
+   "puntas.notar",
+   "puntas_sin_apoyo.notar"
+  ]
+ },
+ {
+  "es": "Echar la cadera hacia atrás para subir las puntas. El cuerpo, recto.",
+  "donde": [
+   "puntas.error"
+  ]
+ },
+ {
+  "es": "Cuando te resulte fácil, hazlo sin agarrarte, con el apoyo al alcance de la mano.",
+  "donde": [
+   "puntas.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «toe raises»",
+  "donde": [
+   "puntas.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación de puntas sin apoyo",
+  "donde": [
+   "puntas_sin_apoyo.nombre",
+   "modelos/puntas_sin_apoyo.json.nombre",
+   "modelos/b/puntas_sin_apoyo.json.nombre"
+  ]
+ },
+ {
+  "es": "subir las puntas sin agarrarse",
+  "donde": [
+   "puntas_sin_apoyo.otrosNombres"
+  ]
+ },
+ {
+  "es": "Apoyo firme, al alcance",
+  "donde": [
+   "puntas_sin_apoyo.material",
+   "talones_sin_apoyo.material",
+   "sentadilla_sin_apoyo.material"
+  ]
+ },
+ {
+  "es": "De pie junto a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), sin agarrarte pero con él al alcance de la mano, y los pies a la anchura de la cadera.",
+  "donde": [
+   "puntas_sin_apoyo.partida"
+  ]
+ },
+ {
+  "es": "Alejarte del apoyo. Si pierdes el equilibrio, agárrate y sigue.",
+  "donde": [
+   "puntas_sin_apoyo.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «toe raises», nivel D",
+  "donde": [
+   "puntas_sin_apoyo.fuentes"
+  ]
+ },
+ {
+  "es": "Estiramiento de isquios sentado",
+  "donde": [
+   "isquios_sentado.nombre",
+   "modelos/isquios_sentado.json.nombre",
+   "modelos/b/isquios_sentado.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de piernas sentado",
+  "donde": [
+   "isquios_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "isquiotibiales en la silla",
+  "donde": [
+   "isquios_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en el borde de una silla firme, sin ruedas y apoyada en la pared, con la espalda recta, los pies en el suelo y las manos en los muslos.",
+  "donde": [
+   "isquios_sentado.partida"
+  ]
+ },
+ {
+  "es": "Estira una pierna hacia delante, con el talón en el suelo y la punta hacia arriba.",
+  "donde": [
+   "isquios_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Inclínate un poco hacia delante con la espalda recta, hasta notar el estiramiento, y mantén.",
+  "donde": [
+   "isquios_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve despacio y recoge la pierna.",
+  "donde": [
+   "isquios_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Redondear la espalda para llegar más lejos. Se inclina la cadera, con la espalda recta.",
+  "donde": [
+   "isquios_sentado.error"
+  ]
+ },
+ {
+  "es": "Vivifrail, estiramiento de piernas (Ministerio de Sanidad)",
+  "donde": [
+   "isquios_sentado.fuentes"
+  ]
+ },
+ {
+  "es": "Elevación de talones sin apoyo",
+  "donde": [
+   "talones_sin_apoyo.nombre",
+   "modelos/talones_sin_apoyo.json.nombre",
+   "modelos/b/talones_sin_apoyo.json.nombre"
+  ]
+ },
+ {
+  "es": "de puntillas sin agarrarse",
+  "donde": [
+   "talones_sin_apoyo.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), sin agarrarte pero con las manos cerca, por si acaso. Los pies, a la anchura de la cadera.",
+  "donde": [
+   "talones_sin_apoyo.partida"
+  ]
+ },
+ {
+  "es": "Doblar las rodillas para ayudarte, o alejarte del apoyo. Las rodillas, estiradas.",
+  "donde": [
+   "talones_sin_apoyo.error"
+  ]
+ },
+ {
+  "es": "Apoyado en una sola pierna, con el apoyo al alcance.",
+  "donde": [
+   "talones_sin_apoyo.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), fuerza: «calf raises», nivel D",
+  "donde": [
+   "talones_sin_apoyo.fuentes"
+  ]
+ },
+ {
+  "es": "Media sentadilla sin apoyo",
+  "donde": [
+   "sentadilla_sin_apoyo.nombre",
+   "modelos/sentadilla_sin_apoyo.json.nombre",
+   "modelos/b/sentadilla_sin_apoyo.json.nombre"
+  ]
+ },
+ {
+  "es": "flexión de rodillas sin agarrarse",
+  "donde": [
+   "sentadilla_sin_apoyo.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie, de frente a un apoyo firme (una encimera, una mesa pesada o el respaldo de una silla firme contra la pared), sin agarrarte pero con él al alcance de la mano, y los pies a la anchura de los hombros.",
+  "donde": [
+   "sentadilla_sin_apoyo.partida"
+  ]
+ },
+ {
+  "es": "Abajo, sin pararte, con el peso en los talones.",
+  "donde": [
+   "sentadilla_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «knee bends», niveles B a D",
+  "donde": [
+   "sentadilla_sin_apoyo.fuentes"
+  ]
+ },
+ {
+  "es": "Equilibrio a una pierna sin apoyo",
+  "donde": [
+   "equilibrio_sin_apoyo.nombre",
+   "modelos/equilibrio_sin_apoyo.json.nombre",
+   "modelos/b/equilibrio_sin_apoyo.json.nombre"
+  ]
+ },
+ {
+  "es": "a la pata coja sin agarrarse",
+  "donde": [
+   "equilibrio_sin_apoyo.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie junto a una encimera o una mesa pesada, sin agarrarte pero con ella al alcance de la mano. Mejor con calzado cómodo.",
+  "donde": [
+   "equilibrio_sin_apoyo.partida"
+  ]
+ },
+ {
+  "es": "Levanta un pie y quédate sobre la otra pierna, con la rodilla estirada y los brazos sueltos.",
+  "donde": [
+   "equilibrio_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Mantén el equilibrio. Si lo pierdes, agárrate y vuelve a empezar.",
+  "donde": [
+   "equilibrio_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Hasta 30 segundos. Descalzo cuesta más.",
+  "donde": [
+   "equilibrio_sin_apoyo.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «one leg stand», niveles C y D",
+  "donde": [
+   "equilibrio_sin_apoyo.fuentes"
+  ]
+ },
+ {
+  "es": "Andar hacia atrás",
+  "donde": [
+   "andar_atras.nombre",
+   "modelos/andar_atras.json.nombre",
+   "modelos/b/andar_atras.json.nombre"
+  ]
+ },
+ {
+  "es": "marcha atrás",
+  "donde": [
+   "andar_atras.otrosNombres"
+  ]
+ },
+ {
+  "es": "pasos hacia atrás",
+  "donde": [
+   "andar_atras.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido, junto a una encimera o una mesa larga, con una mano en ella si la necesitas. Detrás de ti, el suelo despejado, sin alfombras ni cables.",
+  "donde": [
+   "andar_atras.partida"
+  ]
+ },
+ {
+  "es": "Da un paso hacia atrás, apoyando primero la punta.",
+  "donde": [
+   "andar_atras.pasos"
+  ]
+ },
+ {
+  "es": "Sigue con la otra pierna, paso a paso, con el cuerpo erguido.",
+  "donde": [
+   "andar_atras.pasos"
+  ]
+ },
+ {
+  "es": "Al terminar, date la vuelta despacio y vuelve de la misma manera.",
+  "donde": [
+   "andar_atras.pasos",
+   "andar_tandem.pasos",
+   "andar_tandem_atras.pasos"
+  ]
+ },
+ {
+  "es": "En los glúteos y en la parte de atrás de los muslos.",
+  "donde": [
+   "andar_atras.notar"
+  ]
+ },
+ {
+  "es": "Mirarte los pies o echarte hacia delante. La mirada, al frente, y el cuerpo, erguido.",
+  "donde": [
+   "andar_atras.error"
+  ]
+ },
+ {
+  "es": "Sin agarrarte, con la encimera al lado.",
+  "donde": [
+   "andar_atras.masDificil",
+   "andar_tandem.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «backwards walking»",
+  "donde": [
+   "andar_atras.fuentes"
+  ]
+ },
+ {
+  "es": "Andar de lado",
+  "donde": [
+   "andar_lado.nombre",
+   "modelos/andar_lado.json.nombre",
+   "modelos/b/andar_lado.json.nombre"
+  ]
+ },
+ {
+  "es": "pasos laterales",
+  "donde": [
+   "andar_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "marcha lateral",
+  "donde": [
+   "andar_lado.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido, con los brazos sueltos y la mirada al frente, con sitio libre a un lado y algo firme cerca por si lo necesitas.",
+  "donde": [
+   "andar_lado.partida"
+  ]
+ },
+ {
+  "es": "Da un paso hacia el lado, con las puntas de los pies al frente.",
+  "donde": [
+   "andar_lado.pasos"
+  ]
+ },
+ {
+  "es": "Junta el otro pie.",
+  "donde": [
+   "andar_lado.pasos"
+  ]
+ },
+ {
+  "es": "Sigue así, y luego vuelve hacia el otro lado.",
+  "donde": [
+   "andar_lado.pasos"
+  ]
+ },
+ {
+  "es": "En el lado de las caderas.",
+  "donde": [
+   "andar_lado.notar"
+  ]
+ },
+ {
+  "es": "Girar los pies o el cuerpo. Las puntas y el pecho, al frente.",
+  "donde": [
+   "andar_lado.error"
+  ]
+ },
+ {
+  "es": "Pasos más largos, o un poco más deprisa.",
+  "donde": [
+   "andar_lado.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «sideways walking»",
+  "donde": [
+   "andar_lado.fuentes"
+  ]
+ },
+ {
+  "es": "Andar en tándem",
+  "donde": [
+   "andar_tandem.nombre",
+   "modelos/andar_tandem.json.nombre",
+   "modelos/b/andar_tandem.json.nombre"
+  ]
+ },
+ {
+  "es": "andar en línea",
+  "donde": [
+   "andar_tandem.otrosNombres"
+  ]
+ },
+ {
+  "es": "talón con punta",
+  "donde": [
+   "andar_tandem.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido junto a una encimera o una mesa larga, con la mano cerca de ella por si la necesitas. Mira al frente, no a los pies.",
+  "donde": [
+   "andar_tandem.partida"
+  ]
+ },
+ {
+  "es": "Pon un pie justo delante del otro, con el talón tocando la punta, como si anduvieras por una línea.",
+  "donde": [
+   "andar_tandem.pasos"
+  ]
+ },
+ {
+  "es": "Sigue así, paso a paso, con los brazos algo abiertos para el equilibrio.",
+  "donde": [
+   "andar_tandem.pasos"
+  ]
+ },
+ {
+  "es": "Separar los pies a los lados para no perder el equilibrio. Un pie justo delante del otro.",
+  "donde": [
+   "andar_tandem.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «tandem walk»",
+  "donde": [
+   "andar_tandem.fuentes"
+  ]
+ },
+ {
+  "es": "Andar en tándem hacia atrás",
+  "donde": [
+   "andar_tandem_atras.nombre",
+   "modelos/andar_tandem_atras.json.nombre",
+   "modelos/b/andar_tandem_atras.json.nombre"
+  ]
+ },
+ {
+  "es": "andar en línea hacia atrás",
+  "donde": [
+   "andar_tandem_atras.otrosNombres"
+  ]
+ },
+ {
+  "es": "punta con talón hacia atrás",
+  "donde": [
+   "andar_tandem_atras.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido junto a una encimera o una mesa larga, con una mano cerca de ella. Detrás de ti, el suelo despejado.",
+  "donde": [
+   "andar_tandem_atras.partida"
+  ]
+ },
+ {
+  "es": "Lleva un pie justo detrás del otro, con la punta tocando el talón, como si anduvieras hacia atrás por una línea.",
+  "donde": [
+   "andar_tandem_atras.pasos"
+  ]
+ },
+ {
+  "es": "Sigue así, paso a paso, con los brazos algo abiertos.",
+  "donde": [
+   "andar_tandem_atras.pasos"
+  ]
+ },
+ {
+  "es": "Mirarte los pies o separarlos a los lados. La mirada, al frente.",
+  "donde": [
+   "andar_tandem_atras.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «heel toe walking backwards»",
+  "donde": [
+   "andar_tandem_atras.fuentes"
+  ]
+ },
+ {
+  "es": "Andar de talones",
+  "donde": [
+   "andar_talones.nombre",
+   "modelos/andar_talones.json.nombre",
+   "modelos/b/andar_talones.json.nombre"
+  ]
+ },
+ {
+  "es": "andar sobre los talones",
+  "donde": [
+   "andar_talones.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido junto a una encimera o una mesa larga, con una mano en ella si la necesitas.",
+  "donde": [
+   "andar_talones.partida",
+   "andar_puntillas.partida"
+  ]
+ },
+ {
+  "es": "Sube las puntas de los pies y quédate sobre los talones.",
+  "donde": [
+   "andar_talones.pasos"
+  ]
+ },
+ {
+  "es": "Anda así, paso a paso, con las puntas arriba.",
+  "donde": [
+   "andar_talones.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de delante de las piernas, bajo las rodillas.",
+  "donde": [
+   "andar_talones.notar"
+  ]
+ },
+ {
+  "es": "Echar la cadera hacia atrás. El cuerpo, erguido.",
+  "donde": [
+   "andar_talones.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «heel walking»",
+  "donde": [
+   "andar_talones.fuentes"
+  ]
+ },
+ {
+  "es": "Andar de puntillas",
+  "donde": [
+   "andar_puntillas.nombre",
+   "modelos/andar_puntillas.json.nombre",
+   "modelos/b/andar_puntillas.json.nombre"
+  ]
+ },
+ {
+  "es": "andar sobre las puntas",
+  "donde": [
+   "andar_puntillas.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sube los talones y quédate de puntillas.",
+  "donde": [
+   "andar_puntillas.pasos"
+  ]
+ },
+ {
+  "es": "Anda así, paso a paso, sin bajar los talones.",
+  "donde": [
+   "andar_puntillas.pasos"
+  ]
+ },
+ {
+  "es": "Doblar las rodillas o dejar caer los talones. Arriba todo el camino.",
+  "donde": [
+   "andar_puntillas.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «toe walk»",
+  "donde": [
+   "andar_puntillas.fuentes"
+  ]
+ },
+ {
+  "es": "Andar en ocho",
+  "donde": [
+   "andar_ocho.nombre",
+   "modelos/andar_ocho.json.nombre",
+   "modelos/b/andar_ocho.json.nombre"
+  ]
+ },
+ {
+  "es": "vuelta en ocho",
+  "donde": [
+   "andar_ocho.otrosNombres"
+  ]
+ },
+ {
+  "es": "ocho entre dos conos",
+  "donde": [
+   "andar_ocho.otrosNombres"
+  ]
+ },
+ {
+  "es": "Dos objetos en el suelo, como dos botellas o dos conos",
+  "donde": [
+   "andar_ocho.material"
+  ]
+ },
+ {
+  "es": "De pie, con dos objetos en el suelo separados unos dos pasos largos (dos botellas de agua o dos conos) y sitio libre alrededor.",
+  "donde": [
+   "andar_ocho.partida"
+  ]
+ },
+ {
+  "es": "Anda alrededor del primer objeto, a tu paso.",
+  "donde": [
+   "andar_ocho.pasos"
+  ]
+ },
+ {
+  "es": "Cruza por el medio y rodea el segundo, dibujando un ocho.",
+  "donde": [
+   "andar_ocho.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve al punto de partida: eso es una vuelta.",
+  "donde": [
+   "andar_ocho.pasos"
+  ]
+ },
+ {
+  "es": "Girar de golpe o mirar al suelo. Gira despacio, con la mirada al frente.",
+  "donde": [
+   "andar_ocho.error"
+  ]
+ },
+ {
+  "es": "Un poco más deprisa, o con los objetos más juntos.",
+  "donde": [
+   "andar_ocho.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «walking and turning around»",
+  "donde": [
+   "andar_ocho.fuentes"
+  ]
+ },
+ {
+  "es": "Vivifrail, ochos (pasaportes C y D)",
+  "donde": [
+   "andar_ocho.fuentes"
+  ]
+ },
+ {
+  "es": "Andar pasando obstáculos",
+  "donde": [
+   "andar_obstaculos.nombre"
+  ]
+ },
+ {
+  "es": "pasar obstáculos",
+  "donde": [
+   "andar_obstaculos.otrosNombres"
+  ]
+ },
+ {
+  "es": "andar sobre obstáculos bajos",
+  "donde": [
+   "andar_obstaculos.otrosNombres"
+  ]
+ },
+ {
+  "es": "Obstáculos bajos, como libros o toallas enrolladas",
+  "donde": [
+   "andar_obstaculos.material"
+  ]
+ },
+ {
+  "es": "De pie junto a una mesa larga o una encimera, con unos obstáculos bajos en el suelo (libros, cajas de zapatos o toallas enrolladas, de un palmo como mucho), separados un paso.",
+  "donde": [
+   "andar_obstaculos.partida"
+  ]
+ },
+ {
+  "es": "Levanta bien un pie y pásalo por encima del primer obstáculo.",
+  "donde": [
+   "andar_obstaculos.pasos"
+  ]
+ },
+ {
+  "es": "Haz lo mismo con el otro pie en el siguiente.",
+  "donde": [
+   "andar_obstaculos.pasos"
+  ]
+ },
+ {
+  "es": "Sigue hasta el final, date la vuelta despacio y vuelve.",
+  "donde": [
+   "andar_obstaculos.pasos"
+  ]
+ },
+ {
+  "es": "Arrastrar los pies o mirar abajo todo el rato. Levanta la rodilla y mira un poco por delante.",
+  "donde": [
+   "andar_obstaculos.error"
+  ]
+ },
+ {
+  "es": "Obstáculos un poco más altos, o sin agarrarte.",
+  "donde": [
+   "andar_obstaculos.masDificil"
+  ]
+ },
+ {
+  "es": "Vivifrail, obstáculos (pasaporte C, Ministerio de Sanidad)",
+  "donde": [
+   "andar_obstaculos.fuentes"
+  ]
+ },
+ {
+  "es": "Andar dando toques a un globo",
+  "donde": [
+   "andar_globo.nombre"
+  ]
+ },
+ {
+  "es": "globo de mano a mano",
+  "donde": [
+   "andar_globo.otrosNombres"
+  ]
+ },
+ {
+  "es": "Un globo",
+  "donde": [
+   "andar_globo.material"
+  ]
+ },
+ {
+  "es": "De pie, con un globo en las manos y sitio libre para andar, sin muebles ni alfombras en el camino.",
+  "donde": [
+   "andar_globo.partida"
+  ]
+ },
+ {
+  "es": "Anda despacio mientras das toques al globo, de una mano a la otra.",
+  "donde": [
+   "andar_globo.pasos"
+  ]
+ },
+ {
+  "es": "Sigue el globo con la mirada, sin dejar de andar.",
+  "donde": [
+   "andar_globo.pasos"
+  ]
+ },
+ {
+  "es": "Si se cae, recógelo con calma y sigue.",
+  "donde": [
+   "andar_globo.pasos"
+  ]
+ },
+ {
+  "es": "Pararte para dar el toque. Se sigue andando.",
+  "donde": [
+   "andar_globo.error"
+  ]
+ },
+ {
+  "es": "Un poco más deprisa, o con toques más altos.",
+  "donde": [
+   "andar_globo.masDificil"
+  ]
+ },
+ {
+  "es": "Vivifrail, globo (pasaporte D, Ministerio de Sanidad)",
+  "donde": [
+   "andar_globo.fuentes"
+  ]
+ },
+ {
+  "es": "Curl de bíceps sentado",
+  "donde": [
+   "curl_sentado.nombre",
+   "modelos/curl_sentado.json.nombre",
+   "modelos/b/curl_sentado.json.nombre"
+  ]
+ },
+ {
+  "es": "levantar una botella",
+  "donde": [
+   "curl_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "flexión de codo con peso",
+  "donde": [
+   "curl_sentado.otrosNombres"
+  ]
+ },
+ {
+  "es": "Silla y dos pesos pequeños, como dos botellas de agua",
+  "donde": [
+   "curl_sentado.material"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, sin ruedas y apoyada en la pared, con los pies en el suelo, un peso en cada mano (una botella de agua sirve) y los brazos estirados a los lados.",
+  "donde": [
+   "curl_sentado.partida"
+  ]
+ },
+ {
+  "es": "Dobla los codos y sube los pesos hacia los hombros, con los codos junto al cuerpo.",
+  "donde": [
+   "curl_sentado.pasos"
+  ]
+ },
+ {
+  "es": "Bájalos despacio hasta estirar los brazos.",
+  "donde": [
+   "curl_sentado.pasos"
+  ]
+ },
+ {
+  "es": "En la parte de delante de los brazos.",
+  "donde": [
+   "curl_sentado.notar"
+  ]
+ },
+ {
+  "es": "Balancear el cuerpo o separar los codos para subir el peso. Si te cuesta, que pese menos.",
+  "donde": [
+   "curl_sentado.error"
+  ]
+ },
+ {
+  "es": "Más peso, como botellas más llenas.",
+  "donde": [
+   "curl_sentado.masDificil"
+  ]
+ },
+ {
+  "es": "Vivifrail, levantar una botella (pasaportes A a D, Ministerio de Sanidad)",
+  "donde": [
+   "curl_sentado.fuentes"
+  ]
+ },
+ {
+  "es": "Brazos arriba sentado",
+  "donde": [
+   "brazos_arriba.nombre",
+   "modelos/brazos_arriba.json.nombre",
+   "modelos/b/brazos_arriba.json.nombre"
+  ]
+ },
+ {
+  "es": "estiramiento de brazos arriba",
+  "donde": [
+   "brazos_arriba.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con los pies en el suelo y las manos en los muslos.",
+  "donde": [
+   "brazos_arriba.partida"
+  ]
+ },
+ {
+  "es": "Sube los brazos por delante hasta tenerlos por encima de la cabeza.",
+  "donde": [
+   "brazos_arriba.pasos"
+  ]
+ },
+ {
+  "es": "Estírate hacia arriba, como si quisieras tocar el techo, y mantén.",
+  "donde": [
+   "brazos_arriba.pasos"
+  ]
+ },
+ {
+  "es": "En los costados y en los hombros.",
+  "donde": [
+   "brazos_arriba.notar"
+  ]
+ },
+ {
+  "es": "Arquear la espalda o encoger los hombros. La espalda, recta.",
+  "donde": [
+   "brazos_arriba.error"
+  ]
+ },
+ {
+  "es": "Vivifrail, brazos arriba (pasaportes A a D, Ministerio de Sanidad)",
+  "donde": [
+   "brazos_arriba.fuentes"
+  ]
+ },
+ {
+  "es": "Extensión de espalda de pie",
+  "donde": [
+   "extension_espalda_pie.nombre",
+   "modelos/extension_espalda_pie.json.nombre",
+   "modelos/b/extension_espalda_pie.json.nombre"
+  ]
+ },
+ {
+  "es": "arquear la espalda de pie",
+  "donde": [
+   "extension_espalda_pie.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y erguido, con los pies a la anchura de la cadera y las manos en la cintura.",
+  "donde": [
+   "extension_espalda_pie.partida",
+   "rotacion_tronco_pie.partida"
+  ]
+ },
+ {
+  "es": "Arquea la espalda hacia atrás despacio, hasta donde te resulte cómodo.",
+  "donde": [
+   "extension_espalda_pie.pasos"
+  ]
+ },
+ {
+  "es": "Un momento atrás, respirando.",
+  "donde": [
+   "extension_espalda_pie.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve a ponerte recto.",
+  "donde": [
+   "extension_espalda_pie.pasos"
+  ]
+ },
+ {
+  "es": "Echar la cabeza muy atrás. La mirada, al frente y un poco arriba.",
+  "donde": [
+   "extension_espalda_pie.error"
+  ]
+ },
+ {
+  "es": "Para si te mareas o si el dolor baja hacia la pierna.",
+  "donde": [
+   "extension_espalda_pie.cuidado"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), calentamiento: «back extension»",
+  "donde": [
+   "extension_espalda_pie.fuentes"
+  ]
+ },
+ {
+  "es": "Rotación de tronco de pie",
+  "donde": [
+   "rotacion_tronco_pie.nombre",
+   "modelos/rotacion_tronco_pie.json.nombre",
+   "modelos/b/rotacion_tronco_pie.json.nombre"
+  ]
+ },
+ {
+  "es": "giro de tronco",
+  "donde": [
+   "rotacion_tronco_pie.otrosNombres"
+  ]
+ },
+ {
+  "es": "Gira el tronco hacia un lado todo lo que puedas sin mover la cadera.",
+  "donde": [
+   "rotacion_tronco_pie.pasos"
+  ]
+ },
+ {
+  "es": "Un momento girado.",
+  "donde": [
+   "rotacion_tronco_pie.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve al frente.",
+  "donde": [
+   "rotacion_tronco_pie.pasos"
+  ]
+ },
+ {
+  "es": "Girar también la cadera o los pies. Solo gira el tronco.",
+  "donde": [
+   "rotacion_tronco_pie.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), calentamiento: «trunk movements»",
+  "donde": [
+   "rotacion_tronco_pie.fuentes"
+  ]
+ },
+ {
+  "es": "Caminar",
+  "donde": [
+   "caminar.nombre",
+   "modelos/caminar.json.nombre",
+   "modelos/b/caminar.json.nombre"
+  ]
+ },
+ {
+  "es": "paseo",
+  "donde": [
+   "caminar.otrosNombres"
+  ]
+ },
+ {
+  "es": "andar a paso normal",
+  "donde": [
+   "caminar.otrosNombres"
+  ]
+ },
+ {
+  "es": "Calzado cómodo",
+  "donde": [
+   "caminar.material"
+  ]
+ },
+ {
+  "es": "Con calzado cómodo, por un sitio llano y sin obstáculos: la calle, un parque o el pasillo de casa. Si lo usas, con tu bastón o tu andador.",
+  "donde": [
+   "caminar.partida"
+  ]
+ },
+ {
+  "es": "Camina a tu paso, a un ritmo que te deje hablar sin ahogarte.",
+  "donde": [
+   "caminar.pasos"
+  ]
+ },
+ {
+  "es": "Mantén la espalda erguida y la mirada al frente.",
+  "donde": [
+   "caminar.pasos"
+  ]
+ },
+ {
+  "es": "Al terminar, sigue unos pasos más despacio antes de pararte.",
+  "donde": [
+   "caminar.pasos"
+  ]
+ },
+ {
+  "es": "Ir tan deprisa que no puedas hablar. Mejor más rato y más tranquilo.",
+  "donde": [
+   "caminar.error"
+  ]
+ },
+ {
+  "es": "Más minutos seguidos, o un poco más deprisa.",
+  "donde": [
+   "caminar.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), el plan de caminar",
+  "donde": [
+   "caminar.fuentes"
+  ]
+ },
+ {
+  "es": "Vivifrail, caminar (pasaportes A a D, Ministerio de Sanidad)",
+  "donde": [
+   "caminar.fuentes"
+  ]
+ },
+ {
+  "es": "Tándem quieto con apoyo",
+  "donde": [
+   "tandem_quieto.nombre"
+  ]
+ },
+ {
+  "es": "un pie delante del otro",
+  "donde": [
+   "tandem_quieto.otrosNombres"
+  ]
+ },
+ {
+  "es": "equilibrio en tándem",
+  "donde": [
+   "tandem_quieto.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie y de lado a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), con la mano más cercana en él.",
+  "donde": [
+   "tandem_quieto.partida"
+  ]
+ },
+ {
+  "es": "Pon un pie justo delante del otro, con el talón tocando la punta.",
+  "donde": [
+   "tandem_quieto.pasos",
+   "tandem_quieto_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Aguanta el equilibrio, erguido y mirando al frente.",
+  "donde": [
+   "tandem_quieto.pasos",
+   "tandem_quieto_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Vuelve a juntar los pies.",
+  "donde": [
+   "tandem_quieto.pasos",
+   "tandem_quieto_sin_apoyo.pasos"
+  ]
+ },
+ {
+  "es": "Separar los pies a los lados o mirar al suelo. Un pie justo delante del otro, y la mirada al frente.",
+  "donde": [
+   "tandem_quieto.error"
+  ]
+ },
+ {
+  "es": "Sin agarrarte, con el apoyo al alcance.",
+  "donde": [
+   "tandem_quieto.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «tandem stance», nivel A",
+  "donde": [
+   "tandem_quieto.fuentes"
+  ]
+ },
+ {
+  "es": "Tándem quieto sin apoyo",
+  "donde": [
+   "tandem_quieto_sin_apoyo.nombre"
+  ]
+ },
+ {
+  "es": "un pie delante del otro sin agarrarse",
+  "donde": [
+   "tandem_quieto_sin_apoyo.otrosNombres"
+  ]
+ },
+ {
+  "es": "De pie junto a un apoyo firme (una encimera o el respaldo de una silla firme contra la pared), sin agarrarte pero con él al alcance de la mano.",
+  "donde": [
+   "tandem_quieto_sin_apoyo.partida"
+  ]
+ },
+ {
+  "es": "Alejarte del apoyo. Si pierdes el equilibrio, agárrate y vuelve a empezar.",
+  "donde": [
+   "tandem_quieto_sin_apoyo.error"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «tandem stance», nivel B",
+  "donde": [
+   "tandem_quieto_sin_apoyo.fuentes"
+  ]
+ },
+ {
+  "es": "Brazos atrás a la silla",
+  "donde": [
+   "brazos_silla.nombre"
+  ]
+ },
+ {
+  "es": "brazos con silla",
+  "donde": [
+   "brazos_silla.otrosNombres"
+  ]
+ },
+ {
+  "es": "abrir el pecho sentado",
+  "donde": [
+   "brazos_silla.otrosNombres"
+  ]
+ },
+ {
+  "es": "Silla firme con respaldo",
+  "donde": [
+   "brazos_silla.material"
+  ]
+ },
+ {
+  "es": "Sentado en una silla firme, sin ruedas y apoyada en la pared, separado del respaldo y con los pies en el suelo.",
+  "donde": [
+   "brazos_silla.partida"
+  ]
+ },
+ {
+  "es": "Lleva los brazos atrás y agarra el respaldo con las dos manos, por detrás.",
+  "donde": [
+   "brazos_silla.pasos"
+  ]
+ },
+ {
+  "es": "Saca el pecho hacia delante y mantén, respirando.",
+  "donde": [
+   "brazos_silla.pasos"
+  ]
+ },
+ {
+  "es": "Suelta y vuelve despacio.",
+  "donde": [
+   "brazos_silla.pasos"
+  ]
+ },
+ {
+  "es": "En el pecho y en la parte de delante de los hombros.",
+  "donde": [
+   "brazos_silla.notar"
+  ]
+ },
+ {
+  "es": "Echar la cabeza hacia delante. El cuello, largo, y los hombros, lejos de las orejas.",
+  "donde": [
+   "brazos_silla.error"
+  ]
+ },
+ {
+  "es": "Vivifrail, brazos con silla (pasaporte B, Ministerio de Sanidad)",
+  "donde": [
+   "brazos_silla.fuentes"
+  ]
+ },
+ {
+  "es": "Levantarse de la silla con las manos",
+  "donde": [
+   "silla_dos_manos.nombre"
+  ]
+ },
+ {
+  "es": "sentarse y levantarse con ayuda de las manos",
+  "donde": [
+   "silla_dos_manos.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en la parte delantera de una silla firme, sin ruedas y apoyada en la pared, con los pies un poco atrás y las manos en los muslos.",
+  "donde": [
+   "silla_dos_manos.partida"
+  ]
+ },
+ {
+  "es": "Inclínate hacia delante y levántate empujando con las manos en los muslos.",
+  "donde": [
+   "silla_dos_manos.pasos"
+  ]
+ },
+ {
+  "es": "De pie y erguido, un momento.",
+  "donde": [
+   "silla_dos_manos.pasos",
+   "silla_una_mano.pasos"
+  ]
+ },
+ {
+  "es": "Siéntate despacio, echando primero la cadera atrás.",
+  "donde": [
+   "silla_dos_manos.pasos",
+   "silla_una_mano.pasos"
+  ]
+ },
+ {
+  "es": "Dejarte caer al sentarte. Baja despacio, con control.",
+  "donde": [
+   "silla_dos_manos.error",
+   "silla_una_mano.error"
+  ]
+ },
+ {
+  "es": "Con una sola mano, y después sin manos.",
+  "donde": [
+   "silla_dos_manos.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «sit to stand», nivel A",
+  "donde": [
+   "silla_dos_manos.fuentes"
+  ]
+ },
+ {
+  "es": "Levantarse de la silla con una mano",
+  "donde": [
+   "silla_una_mano.nombre"
+  ]
+ },
+ {
+  "es": "sentarse y levantarse con una mano",
+  "donde": [
+   "silla_una_mano.otrosNombres"
+  ]
+ },
+ {
+  "es": "Sentado en la parte delantera de una silla firme, sin ruedas y apoyada en la pared, con los pies un poco atrás, una mano en el muslo y el otro brazo cruzado sobre el pecho.",
+  "donde": [
+   "silla_una_mano.partida"
+  ]
+ },
+ {
+  "es": "Inclínate hacia delante y levántate empujando con una mano en el muslo.",
+  "donde": [
+   "silla_una_mano.pasos"
+  ]
+ },
+ {
+  "es": "Sin manos, con los brazos cruzados.",
+  "donde": [
+   "silla_una_mano.masDificil"
+  ]
+ },
+ {
+  "es": "Otago Exercise Programme (ACC), equilibrio: «sit to stand», nivel B",
+  "donde": [
+   "silla_una_mano.fuentes"
+  ]
+ },
+ {
+  "es": "Estrujar una toalla",
+  "donde": [
+   "estrujar_toalla.nombre",
+   "modelos/estrujar_toalla.json.nombre",
+   "modelos/b/estrujar_toalla.json.nombre"
+  ]
+ },
+ {
+  "es": "retorcer una toalla",
+  "donde": [
+   "estrujar_toalla.otrosNombres"
+  ]
+ },
+ {
+  "es": "escurrir una toalla",
+  "donde": [
+   "estrujar_toalla.otrosNombres"
+  ]
+ },
+ {
+  "es": "Silla y una toalla pequeña",
+  "donde": [
+   "estrujar_toalla.material"
+  ]
+ },
+ {
+  "es": "Sentado erguido en una silla firme, con una toalla pequeña enrollada en las manos, sobre los muslos, y las palmas hacia abajo.",
+  "donde": [
+   "estrujar_toalla.partida"
+  ]
+ },
+ {
+  "es": "Retuerce la toalla girando las manos en sentido contrario, como para escurrirla.",
+  "donde": [
+   "estrujar_toalla.pasos"
+  ]
+ },
+ {
+  "es": "Aprieta un momento.",
+  "donde": [
+   "estrujar_toalla.pasos"
+  ]
+ },
+ {
+  "es": "Retuércela hacia el otro lado.",
+  "donde": [
+   "estrujar_toalla.pasos"
+  ]
+ },
+ {
+  "es": "En los antebrazos y en las manos.",
+  "donde": [
+   "estrujar_toalla.notar"
+  ]
+ },
+ {
+  "es": "Encoger los hombros. La fuerza, en las manos y en los antebrazos.",
+  "donde": [
+   "estrujar_toalla.error"
+  ]
+ },
+ {
+  "es": "Vivifrail, estrujar una toalla (pasaportes C y D, Ministerio de Sanidad)",
+  "donde": [
+   "estrujar_toalla.fuentes"
+  ]
+ },
+ {
+  "es": "Rodilla",
+  "donde": [
+   "ZONAS.rodilla"
+  ]
+ },
+ {
+  "es": "Cadera",
+  "donde": [
+   "ZONAS.cadera"
+  ]
+ },
+ {
+  "es": "Lumbar",
+  "donde": [
+   "ZONAS.lumbar"
+  ]
+ },
+ {
+  "es": "Cuello",
+  "donde": [
+   "ZONAS.cuello"
+  ]
+ },
+ {
+  "es": "Hombro",
+  "donde": [
+   "ZONAS.hombro"
+  ]
+ },
+ {
+  "es": "Codo",
+  "donde": [
+   "ZONAS.codo"
+  ]
+ },
+ {
+  "es": "Tobillo y pie",
+  "donde": [
+   "ZONAS.tobillo"
+  ]
+ },
+ {
+  "es": "Mano y muñeca",
+  "donde": [
+   "ZONAS.mano"
+  ]
+ },
+ {
+  "es": "Glúteo mayor",
+  "donde": [
+   "MUSCULOS.gluteo_mayor"
+  ]
+ },
+ {
+  "es": "Glúteo medio",
+  "donde": [
+   "MUSCULOS.gluteo_medio"
+  ]
+ },
+ {
+  "es": "Cuádriceps",
+  "donde": [
+   "MUSCULOS.cuadriceps"
+  ]
+ },
+ {
+  "es": "Isquiotibiales",
+  "donde": [
+   "MUSCULOS.isquiotibiales"
+  ]
+ },
+ {
+  "es": "Aductores",
+  "donde": [
+   "MUSCULOS.aductores"
+  ]
+ },
+ {
+  "es": "Gemelos",
+  "donde": [
+   "MUSCULOS.gemelos"
+  ]
+ },
+ {
+  "es": "Tibial anterior",
+  "donde": [
+   "MUSCULOS.tibial_anterior"
+  ]
+ },
+ {
+  "es": "Recto abdominal",
+  "donde": [
+   "MUSCULOS.recto_abdominal"
+  ]
+ },
+ {
+  "es": "Oblicuos",
+  "donde": [
+   "MUSCULOS.oblicuos"
+  ]
+ },
+ {
+  "es": "Erectores de la columna",
+  "donde": [
+   "MUSCULOS.erectores"
+  ]
+ },
+ {
+  "es": "Dorsal ancho",
+  "donde": [
+   "MUSCULOS.dorsal_ancho"
+  ]
+ },
+ {
+  "es": "Trapecio",
+  "donde": [
+   "MUSCULOS.trapecio"
+  ]
+ },
+ {
+  "es": "Pectoral",
+  "donde": [
+   "MUSCULOS.pectoral"
+  ]
+ },
+ {
+  "es": "Deltoides anterior",
+  "donde": [
+   "MUSCULOS.deltoides_anterior"
+  ]
+ },
+ {
+  "es": "Deltoides medio",
+  "donde": [
+   "MUSCULOS.deltoides_medio"
+  ]
+ },
+ {
+  "es": "Deltoides posterior",
+  "donde": [
+   "MUSCULOS.deltoides_posterior"
+  ]
+ },
+ {
+  "es": "Manguito rotador",
+  "donde": [
+   "MUSCULOS.manguito_posterior"
+  ]
+ },
+ {
+  "es": "Bíceps",
+  "donde": [
+   "MUSCULOS.biceps"
+  ]
+ },
+ {
+  "es": "Tríceps",
+  "donde": [
+   "MUSCULOS.triceps"
+  ]
+ },
+ {
+  "es": "Antebrazo",
+  "donde": [
+   "MUSCULOS.antebrazo"
+  ]
+ },
+ {
+  "es": "Lado derecho",
+  "donde": [
+   "LADOS.der"
+  ]
+ },
+ {
+  "es": "Lado izquierdo",
+  "donde": [
+   "LADOS.izq"
+  ]
+ },
+ {
+  "es": "Los dos lados",
+  "donde": [
+   "LADOS.ambos"
+  ]
+ },
+ {
+  "es": "Banda amarilla",
+  "donde": [
+   "BANDAS.amarilla"
+  ]
+ },
+ {
+  "es": "Banda roja",
+  "donde": [
+   "BANDAS.roja"
+  ]
+ },
+ {
+  "es": "Banda verde",
+  "donde": [
+   "BANDAS.verde"
+  ]
+ },
+ {
+  "es": "Banda azul",
+  "donde": [
+   "BANDAS.azul"
+  ]
+ },
+ {
+  "es": "Banda negra",
+  "donde": [
+   "BANDAS.negra"
+  ]
+ },
+ {
+  "es": "Otago, nivel A",
+  "donde": [
+   "programa otago-a.nombre"
+  ]
+ },
+ {
+  "es": "Calentamiento, fuerza con tobillera y equilibrio agarrado",
+  "donde": [
+   "programa otago-a.descripcion"
+  ]
+ },
+ {
+  "es": "La tobillera con la que hagas de 8 a 10 repeticiones bien. Súbela cuando hagas 2 series de 10.",
+  "donde": [
+   "programa otago-a.extension_rodilla_lastre.nota",
+   "programa otago-b.extension_rodilla_lastre.nota",
+   "programa otago-c.extension_rodilla_lastre.nota"
+  ]
+ },
+ {
+  "es": "Los días sin ejercicios: camina hasta 30 minutos, al menos 2 días a la semana. Puedes partirlo en 3 ratos de 10.",
+  "donde": [
+   "programa otago-a.caminar.nota",
+   "programa otago-b.caminar.nota",
+   "programa otago-c.caminar.nota"
+  ]
+ },
+ {
+  "es": "Otago, nivel B",
+  "donde": [
+   "programa otago-b.nombre"
+  ]
+ },
+ {
+  "es": "Calentamiento, fuerza con tobillera y equilibrio, ya sin agarrarse en algunos",
+  "donde": [
+   "programa otago-b.descripcion"
+  ]
+ },
+ {
+  "es": "Otago, nivel C",
+  "donde": [
+   "programa otago-c.nombre"
+  ]
+ },
+ {
+  "es": "Calentamiento, dos series de fuerza y equilibrio andando",
+  "donde": [
+   "programa otago-c.descripcion"
+  ]
+ },
+ {
+  "es": "Otago, nivel D",
+  "donde": [
+   "programa otago-d.nombre"
+  ]
+ },
+ {
+  "es": "Calentamiento, fuerza y el equilibrio más exigente, sin agarrarse",
+  "donde": [
+   "programa otago-d.descripcion"
+  ]
+ },
+ {
+  "es": "Vivifrail A",
+  "donde": [
+   "programa vivifrail-a.nombre"
+  ]
+ },
+ {
+  "es": "Para quien se levanta con mucha ayuda (SPPB de 0 a 3). Cinco días a la semana",
+  "donde": [
+   "programa vivifrail-a.descripcion"
+  ]
+ },
+ {
+  "es": "Con una botella de agua en cada mano, del peso con el que hagas unas 30 repeticiones con esfuerzo.",
+  "donde": [
+   "programa vivifrail-a.curl_sentado.nota",
+   "programa vivifrail-b.curl_sentado.nota",
+   "programa vivifrail-c.curl_sentado.nota"
+  ]
+ },
+ {
+  "es": "Con una tobillera de medio kilo.",
+  "donde": [
+   "programa vivifrail-a.extension_rodilla_lastre.nota"
+  ]
+ },
+ {
+  "es": "Junto a una mesa, agarrado si hace falta.",
+  "donde": [
+   "programa vivifrail-a.andar_tandem.nota"
+  ]
+ },
+ {
+  "es": "Con andador o con alguien al lado. Empieza por unos segundos y sube hasta 1 o 2 minutos seguidos.",
+  "donde": [
+   "programa vivifrail-a.caminar.nota"
+  ]
+ },
+ {
+  "es": "Vivifrail B y B+",
+  "donde": [
+   "programa vivifrail-b.nombre"
+  ]
+ },
+ {
+  "es": "Fragilidad (SPPB de 4 a 6). B, los ejercicios 3 días y caminar 2; B+, los ejercicios 4 días y caminar 1",
+  "donde": [
+   "programa vivifrail-b.descripcion"
+  ]
+ },
+ {
+  "es": "De 2 a 5 minutos cada vez. Desde la semana 7, 3 veces de 8 minutos.",
+  "donde": [
+   "programa vivifrail-b.caminar.nota"
+  ]
+ },
+ {
+  "es": "Como si fueras a sentarte, con una silla detrás.",
+  "donde": [
+   "programa vivifrail-b.sentadilla.nota"
+  ]
+ },
+ {
+  "es": "Vivifrail C y C+",
+  "donde": [
+   "programa vivifrail-c.nombre"
+  ]
+ },
+ {
+  "es": "Prefragilidad (SPPB de 7 a 9). C, los ejercicios 3 días y caminar 2; C+, los ejercicios 4 días y caminar 1",
+  "donde": [
+   "programa vivifrail-c.descripcion"
+  ]
+ },
+ {
+  "es": "Desde la semana 7, 3 veces de 15 minutos.",
+  "donde": [
+   "programa vivifrail-c.caminar.nota"
+  ]
+ },
+ {
+  "es": "Vivifrail D",
+  "donde": [
+   "programa vivifrail-d.nombre"
+  ]
+ },
+ {
+  "es": "Para quien está en buena forma (SPPB de 10 a 12). Los ejercicios 3 días y caminar 2",
+  "donde": [
+   "programa vivifrail-d.descripcion"
+  ]
+ },
+ {
+  "es": "Desde la semana 7, de 30 a 45 minutos seguidos.",
+  "donde": [
+   "programa vivifrail-d.caminar.nota"
+  ]
+ },
+ {
+  "es": "Mete el ombligo y aprieta",
+  "donde": [
+   "modelos/abdominal.json.fase subir",
+   "modelos/b/abdominal.json.fase subir"
+  ]
+ },
+ {
+  "es": "Mantén, respirando",
+  "donde": [
+   "modelos/abdominal.json.fase mantener",
+   "modelos/b/abdominal.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Afloja",
+  "donde": [
+   "modelos/abdominal.json.fase bajar",
+   "modelos/cojin_rodillas.json.fase bajar",
+   "modelos/cuadriceps.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Descansa",
+  "donde": [
+   "modelos/abdominal.json.fase reposo",
+   "modelos/abduccion_lado.json.fase reposo",
+   "modelos/abduccion_pie.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Sube la pierna de arriba",
+  "donde": [
+   "modelos/abduccion_lado.json.fase subir",
+   "modelos/b/abduccion_lado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aguanta",
+  "donde": [
+   "modelos/abduccion_lado.json.fase mantener",
+   "modelos/abduccion_pie.json.fase mantener",
+   "modelos/abduccion_pie_lastre.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Bájala despacio",
+  "donde": [
+   "modelos/abduccion_lado.json.fase bajar",
+   "modelos/arco_corto.json.fase bajar",
+   "modelos/isquios_toalla.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Separa la pierna hacia fuera",
+  "donde": [
+   "modelos/abduccion_pie.json.fase subir",
+   "modelos/abduccion_pie_lastre.json.fase subir",
+   "modelos/b/abduccion_pie.json.fase subir"
+  ]
+ },
+ {
+  "es": "Vuelve despacio",
+  "donde": [
+   "modelos/abduccion_pie.json.fase bajar",
+   "modelos/abduccion_pie_lastre.json.fase bajar",
+   "modelos/baston.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Abducción de cadera sentado, con banda",
+  "donde": [
+   "modelos/abduccion_sentado.json.nombre",
+   "modelos/b/abduccion_sentado.json.nombre"
+  ]
+ },
+ {
+  "es": "Separa las rodillas contra la banda",
+  "donde": [
+   "modelos/abduccion_sentado.json.fase subir",
+   "modelos/b/abduccion_sentado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Júntalas despacio",
+  "donde": [
+   "modelos/abduccion_sentado.json.fase bajar",
+   "modelos/b/abduccion_sentado.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Cierra el puño",
+  "donde": [
+   "modelos/abrir_cerrar.json.fase subir",
+   "modelos/b/abrir_cerrar.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aprieta suave",
+  "donde": [
+   "modelos/abrir_cerrar.json.fase mantener",
+   "modelos/b/abrir_cerrar.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Ábrela del todo",
+  "donde": [
+   "modelos/abrir_cerrar.json.fase bajar",
+   "modelos/b/abrir_cerrar.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Relaja",
+  "donde": [
+   "modelos/abrir_cerrar.json.fase reposo",
+   "modelos/dorsal_banda.json.fase reposo",
+   "modelos/eversion_banda.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Sube la rodilla de arriba",
+  "donde": [
+   "modelos/almeja.json.fase subir",
+   "modelos/b/almeja.json.fase subir"
+  ]
+ },
+ {
+  "es": "Bájala contando hasta cinco",
+  "donde": [
+   "modelos/almeja.json.fase bajar",
+   "modelos/b/almeja.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Un paso",
+  "donde": [
+   "modelos/andar_atras.json.fase subir",
+   "modelos/andar_lado.json.fase subir",
+   "modelos/andar_puntillas.json.fase subir"
+  ]
+ },
+ {
+  "es": "Otro paso",
+  "donde": [
+   "modelos/andar_atras.json.fase bajar",
+   "modelos/andar_lado.json.fase bajar",
+   "modelos/andar_puntillas.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Andar golpeando un globo",
+  "donde": [
+   "modelos/andar_globo.json.nombre",
+   "modelos/b/andar_globo.json.nombre"
+  ]
+ },
+ {
+  "es": "Toca el globo con una mano",
+  "donde": [
+   "modelos/andar_globo.json.fase subir",
+   "modelos/b/andar_globo.json.fase subir"
+  ]
+ },
+ {
+  "es": "Y con la otra",
+  "donde": [
+   "modelos/andar_globo.json.fase bajar",
+   "modelos/b/andar_globo.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Pasar obstáculos",
+  "donde": [
+   "modelos/andar_obstaculos.json.nombre",
+   "modelos/b/andar_obstaculos.json.nombre"
+  ]
+ },
+ {
+  "es": "Pasa por encima",
+  "donde": [
+   "modelos/andar_obstaculos.json.fase subir",
+   "modelos/b/andar_obstaculos.json.fase subir"
+  ]
+ },
+ {
+  "es": "Y con el otro pie",
+  "donde": [
+   "modelos/andar_obstaculos.json.fase bajar",
+   "modelos/b/andar_obstaculos.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Rodea el primer cono",
+  "donde": [
+   "modelos/andar_ocho.json.fase subir",
+   "modelos/b/andar_ocho.json.fase subir"
+  ]
+ },
+ {
+  "es": "Rodea el segundo",
+  "donde": [
+   "modelos/andar_ocho.json.fase bajar",
+   "modelos/b/andar_ocho.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Estira la rodilla",
+  "donde": [
+   "modelos/arco_corto.json.fase subir",
+   "modelos/extension_rodilla.json.fase subir",
+   "modelos/extension_rodilla_lastre.json.fase subir"
+  ]
+ },
+ {
+  "es": "Mantén",
+  "donde": [
+   "modelos/arco_corto.json.fase mantener",
+   "modelos/bicho_muerto.json.fase mantener",
+   "modelos/cuello_giro.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Aplana la zona lumbar contra el suelo",
+  "donde": [
+   "modelos/basculacion.json.fase subir",
+   "modelos/b/basculacion.json.fase subir"
+  ]
+ },
+ {
+  "es": "Suelta",
+  "donde": [
+   "modelos/basculacion.json.fase bajar",
+   "modelos/estrujar_toalla.json.fase reposo",
+   "modelos/iso_cuello.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Empuja el bastón hacia fuera",
+  "donde": [
+   "modelos/baston.json.fase subir",
+   "modelos/b/baston.json.fase subir"
+  ]
+ },
+ {
+  "es": "Estira un brazo y la pierna contraria",
+  "donde": [
+   "modelos/bicho_muerto.json.fase subir",
+   "modelos/bird_dog.json.fase subir",
+   "modelos/b/bicho_muerto.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube los brazos por encima de la cabeza",
+  "donde": [
+   "modelos/brazos_arriba.json.fase subir",
+   "modelos/b/brazos_arriba.json.fase subir"
+  ]
+ },
+ {
+  "es": "Estírate hacia arriba",
+  "donde": [
+   "modelos/brazos_arriba.json.fase mantener",
+   "modelos/b/brazos_arriba.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Bájalos despacio",
+  "donde": [
+   "modelos/brazos_arriba.json.fase bajar",
+   "modelos/curl_sentado.json.fase bajar",
+   "modelos/talones_sentado.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Brazos con silla",
+  "donde": [
+   "modelos/brazos_silla.json.nombre",
+   "modelos/b/brazos_silla.json.nombre"
+  ]
+ },
+ {
+  "es": "Lleva las manos al respaldo",
+  "donde": [
+   "modelos/brazos_silla.json.fase subir",
+   "modelos/b/brazos_silla.json.fase subir"
+  ]
+ },
+ {
+  "es": "Abre el pecho",
+  "donde": [
+   "modelos/brazos_silla.json.fase mantener",
+   "modelos/b/brazos_silla.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Vuelve",
+  "donde": [
+   "modelos/brazos_silla.json.fase bajar",
+   "modelos/tandem_quieto.json.fase bajar",
+   "modelos/tandem_quieto_sin_apoyo.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Camina",
+  "donde": [
+   "modelos/caminar.json.fase subir",
+   "modelos/b/caminar.json.fase subir"
+  ]
+ },
+ {
+  "es": "A tu paso",
+  "donde": [
+   "modelos/caminar.json.fase bajar",
+   "modelos/b/caminar.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Dibuja un círculo con la punta",
+  "donde": [
+   "modelos/circulos_tobillo.json.fase subir",
+   "modelos/b/circulos_tobillo.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sigue el círculo",
+  "donde": [
+   "modelos/circulos_tobillo.json.fase bajar",
+   "modelos/b/circulos_tobillo.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Aprieta el cojín con las rodillas",
+  "donde": [
+   "modelos/cojin_rodillas.json.fase subir",
+   "modelos/b/cojin_rodillas.json.fase subir"
+  ]
+ },
+ {
+  "es": "Cruza el brazo sobre el pecho",
+  "donde": [
+   "modelos/cruzado.json.fase subir",
+   "modelos/b/cruzado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Suelta despacio",
+  "donde": [
+   "modelos/cruzado.json.fase bajar",
+   "modelos/cuadriceps_pie.json.fase bajar",
+   "modelos/escapulas.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Empuja la rodilla hacia abajo",
+  "donde": [
+   "modelos/cuadriceps.json.fase subir",
+   "modelos/b/cuadriceps.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sujeta el pie por detrás",
+  "donde": [
+   "modelos/cuadriceps_pie.json.fase subir",
+   "modelos/b/cuadriceps_pie.json.fase subir"
+  ]
+ },
+ {
+  "es": "Las rodillas juntas, mantén",
+  "donde": [
+   "modelos/cuadriceps_pie.json.fase mantener",
+   "modelos/b/cuadriceps_pie.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Gira la cabeza a un lado",
+  "donde": [
+   "modelos/cuello_giro.json.fase subir",
+   "modelos/b/cuello_giro.json.fase subir"
+  ]
+ },
+ {
+  "es": "Gírala al otro lado",
+  "donde": [
+   "modelos/cuello_giro.json.fase bajar",
+   "modelos/b/cuello_giro.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Vuelve al centro",
+  "donde": [
+   "modelos/cuello_giro.json.fase reposo",
+   "modelos/cuello_lado.json.fase reposo",
+   "modelos/gato_camello.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Lleva la oreja hacia el hombro",
+  "donde": [
+   "modelos/cuello_lado.json.fase subir",
+   "modelos/b/cuello_lado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Inclínala al otro lado",
+  "donde": [
+   "modelos/cuello_lado.json.fase bajar",
+   "modelos/b/cuello_lado.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Lleva el talón hacia el glúteo",
+  "donde": [
+   "modelos/curl_isquios.json.fase subir",
+   "modelos/curl_isquios_lastre.json.fase subir",
+   "modelos/b/curl_isquios.json.fase subir"
+  ]
+ },
+ {
+  "es": "Bájalo despacio",
+  "donde": [
+   "modelos/curl_isquios.json.fase bajar",
+   "modelos/curl_isquios_lastre.json.fase bajar",
+   "modelos/scaption.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Sube los pesos",
+  "donde": [
+   "modelos/curl_sentado.json.fase subir",
+   "modelos/b/curl_sentado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Arriba",
+  "donde": [
+   "modelos/curl_sentado.json.fase mantener",
+   "modelos/marcha_sentado.json.fase mantener",
+   "modelos/b/curl_sentado.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Desliza la mano hacia delante",
+  "donde": [
+   "modelos/deslizar_mesa.json.fase subir",
+   "modelos/b/deslizar_mesa.json.fase subir"
+  ]
+ },
+ {
+  "es": "Tira de la punta hacia ti",
+  "donde": [
+   "modelos/dorsal_banda.json.fase subir",
+   "modelos/b/dorsal_banda.json.fase subir"
+  ]
+ },
+ {
+  "es": "Levanta el otro pie",
+  "donde": [
+   "modelos/equilibrio.json.fase subir",
+   "modelos/equilibrio_sin_apoyo.json.fase subir",
+   "modelos/b/equilibrio.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aguanta el equilibrio",
+  "donde": [
+   "modelos/equilibrio.json.fase mantener",
+   "modelos/equilibrio_sin_apoyo.json.fase mantener",
+   "modelos/tandem_quieto.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Bájalo",
+  "donde": [
+   "modelos/equilibrio.json.fase bajar",
+   "modelos/equilibrio_sin_apoyo.json.fase bajar",
+   "modelos/b/equilibrio.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Sube con la pierna que trabaja",
+  "donde": [
+   "modelos/escalon.json.fase subir",
+   "modelos/b/escalon.json.fase subir"
+  ]
+ },
+ {
+  "es": "Arriba, recto",
+  "donde": [
+   "modelos/escalon.json.fase mantener",
+   "modelos/b/escalon.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Baja primero con la otra",
+  "donde": [
+   "modelos/escalon.json.fase bajar",
+   "modelos/b/escalon.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Respira",
+  "donde": [
+   "modelos/escalon.json.fase reposo",
+   "modelos/flexion_pared.json.fase reposo",
+   "modelos/b/escalon.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Junta las escápulas",
+  "donde": [
+   "modelos/escapulas.json.fase subir",
+   "modelos/b/escapulas.json.fase subir"
+  ]
+ },
+ {
+  "es": "Baja la mano y empuja con la otra",
+  "donde": [
+   "modelos/estira_extensores.json.fase subir",
+   "modelos/b/estira_extensores.json.fase subir"
+  ]
+ },
+ {
+  "es": "Mantén, sin dolor",
+  "donde": [
+   "modelos/estira_extensores.json.fase mantener",
+   "modelos/estira_flexores.json.fase mantener",
+   "modelos/isquios_toalla.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Baja la mano y tira de los dedos",
+  "donde": [
+   "modelos/estira_flexores.json.fase subir",
+   "modelos/b/estira_flexores.json.fase subir"
+  ]
+ },
+ {
+  "es": "Retuerce la toalla",
+  "donde": [
+   "modelos/estrujar_toalla.json.fase subir",
+   "modelos/b/estrujar_toalla.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aprieta",
+  "donde": [
+   "modelos/estrujar_toalla.json.fase mantener",
+   "modelos/b/estrujar_toalla.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Retuércela al otro lado",
+  "donde": [
+   "modelos/estrujar_toalla.json.fase bajar",
+   "modelos/b/estrujar_toalla.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Gira la planta hacia fuera",
+  "donde": [
+   "modelos/eversion_banda.json.fase subir",
+   "modelos/b/eversion_banda.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube el pecho sobre los antebrazos",
+  "donde": [
+   "modelos/extension_antebrazos.json.fase subir",
+   "modelos/b/extension_antebrazos.json.fase subir"
+  ]
+ },
+ {
+  "es": "La pelvis, en el suelo",
+  "donde": [
+   "modelos/extension_antebrazos.json.fase mantener",
+   "modelos/extension_lumbar.json.fase mantener",
+   "modelos/b/extension_antebrazos.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Baja despacio",
+  "donde": [
+   "modelos/extension_antebrazos.json.fase bajar",
+   "modelos/extension_lumbar.json.fase bajar",
+   "modelos/plancha.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Arquea la espalda hacia atrás",
+  "donde": [
+   "modelos/extension_espalda_pie.json.fase subir",
+   "modelos/b/extension_espalda_pie.json.fase subir"
+  ]
+ },
+ {
+  "es": "Un momento",
+  "donde": [
+   "modelos/extension_espalda_pie.json.fase mantener",
+   "modelos/rotacion_tronco_pie.json.fase mantener",
+   "modelos/b/extension_espalda_pie.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Empuja y sube el pecho",
+  "donde": [
+   "modelos/extension_lumbar.json.fase subir",
+   "modelos/b/extension_lumbar.json.fase subir"
+  ]
+ },
+ {
+  "es": "Baja el pie despacio",
+  "donde": [
+   "modelos/extension_rodilla.json.fase bajar",
+   "modelos/extension_rodilla_lastre.json.fase bajar",
+   "modelos/rodilla_pecho.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Acércate doblando los codos",
+  "donde": [
+   "modelos/flexion_pared.json.fase subir",
+   "modelos/b/flexion_pared.json.fase subir"
+  ]
+ },
+ {
+  "es": "Empuja y vuelve",
+  "donde": [
+   "modelos/flexion_pared.json.fase bajar",
+   "modelos/b/flexion_pared.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Redondea la espalda hacia el techo",
+  "donde": [
+   "modelos/gato_camello.json.fase subir",
+   "modelos/b/gato_camello.json.fase subir"
+  ]
+ },
+ {
+  "es": "Húndela despacio y levanta la cabeza",
+  "donde": [
+   "modelos/gato_camello.json.fase bajar",
+   "modelos/b/gato_camello.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Inclínate hacia la pared",
+  "donde": [
+   "modelos/gemelo_pared.json.fase subir",
+   "modelos/b/gemelo_pared.json.fase subir"
+  ]
+ },
+ {
+  "es": "Talón de atrás en el suelo",
+  "donde": [
+   "modelos/gemelo_pared.json.fase mantener",
+   "modelos/b/gemelo_pared.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Aprieta los glúteos",
+  "donde": [
+   "modelos/gluteos.json.fase subir",
+   "modelos/b/gluteos.json.fase subir"
+  ]
+ },
+ {
+  "es": "Rotación externa de hombro con banda",
+  "donde": [
+   "modelos/hombro.json.nombre",
+   "modelos/b/hombro.json.nombre"
+  ]
+ },
+ {
+  "es": "Lleva la mano hacia fuera",
+  "donde": [
+   "modelos/hombro.json.fase subir",
+   "modelos/b/hombro.json.fase subir"
+  ]
+ },
+ {
+  "es": "Gira la planta hacia dentro",
+  "donde": [
+   "modelos/inversion_banda.json.fase subir",
+   "modelos/b/inversion_banda.json.fase subir"
+  ]
+ },
+ {
+  "es": "La mano en la frente",
+  "donde": [
+   "modelos/iso_cuello.json.fase subir",
+   "modelos/b/iso_cuello.json.fase subir"
+  ]
+ },
+ {
+  "es": "Empuja sin mover la cabeza",
+  "donde": [
+   "modelos/iso_cuello.json.fase mantener",
+   "modelos/b/iso_cuello.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Empuja la pared con el codo",
+  "donde": [
+   "modelos/iso_hombro.json.fase subir",
+   "modelos/b/iso_hombro.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aguanta sin mover el brazo",
+  "donde": [
+   "modelos/iso_hombro.json.fase mantener",
+   "modelos/b/iso_hombro.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Estira la pierna con el talón en el suelo",
+  "donde": [
+   "modelos/isquios_sentado.json.fase subir",
+   "modelos/b/isquios_sentado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Inclínate con la espalda recta",
+  "donde": [
+   "modelos/isquios_sentado.json.fase mantener",
+   "modelos/b/isquios_sentado.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Sube la pierna recta con la toalla",
+  "donde": [
+   "modelos/isquios_toalla.json.fase subir",
+   "modelos/b/isquios_toalla.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube una rodilla",
+  "donde": [
+   "modelos/marcha_sentado.json.fase subir",
+   "modelos/b/marcha_sentado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Bájala y sube la otra",
+  "donde": [
+   "modelos/marcha_sentado.json.fase bajar",
+   "modelos/b/marcha_sentado.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Bájala",
+  "donde": [
+   "modelos/marcha_sentado.json.fase reposo",
+   "modelos/b/marcha_sentado.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Sube la mano",
+  "donde": [
+   "modelos/muneca.json.fase subir",
+   "modelos/b/muneca.json.fase subir"
+  ]
+ },
+ {
+  "es": "Aprieta la pelota",
+  "donde": [
+   "modelos/pelota.json.fase subir",
+   "modelos/b/pelota.json.fase subir"
+  ]
+ },
+ {
+  "es": "Balancea el brazo hacia delante",
+  "donde": [
+   "modelos/pendulo.json.fase subir",
+   "modelos/b/pendulo.json.fase subir"
+  ]
+ },
+ {
+  "es": "Y hacia atrás",
+  "donde": [
+   "modelos/pendulo.json.fase bajar",
+   "modelos/b/pendulo.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Sube la pierna estirada",
+  "donde": [
+   "modelos/pierna_recta.json.fase subir",
+   "modelos/b/pierna_recta.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube la cadera",
+  "donde": [
+   "modelos/plancha.json.fase subir",
+   "modelos/plancha_lateral.json.fase subir",
+   "modelos/plancha_lateral_rodilla.json.fase subir"
+  ]
+ },
+ {
+  "es": "El cuerpo recto, respira",
+  "donde": [
+   "modelos/plancha.json.fase mantener",
+   "modelos/b/plancha.json.fase mantener"
+  ]
+ },
+ {
+  "es": "El cuerpo recto",
+  "donde": [
+   "modelos/plancha_lateral.json.fase mantener",
+   "modelos/b/plancha_lateral.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Recto del hombro a la rodilla",
+  "donde": [
+   "modelos/plancha_lateral_rodilla.json.fase mantener",
+   "modelos/b/plancha_lateral_rodilla.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Recto de los hombros a las rodillas, respira",
+  "donde": [
+   "modelos/plancha_rodillas.json.fase mantener",
+   "modelos/b/plancha_rodillas.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Empuja la punta hacia abajo",
+  "donde": [
+   "modelos/plantar_banda.json.fase subir",
+   "modelos/b/plantar_banda.json.fase subir"
+  ]
+ },
+ {
+  "es": "Gira la palma hacia abajo",
+  "donde": [
+   "modelos/prono_supinacion.json.fase subir",
+   "modelos/b/prono_supinacion.json.fase subir"
+  ]
+ },
+ {
+  "es": "Gírala hacia arriba",
+  "donde": [
+   "modelos/prono_supinacion.json.fase bajar",
+   "modelos/b/prono_supinacion.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Aguanta arriba",
+  "donde": [
+   "modelos/puente.json.fase mantener",
+   "modelos/b/puente.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Levanta las puntas",
+  "donde": [
+   "modelos/puntas.json.fase subir",
+   "modelos/puntas_sin_apoyo.json.fase subir",
+   "modelos/b/puntas.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sobre los talones",
+  "donde": [
+   "modelos/puntas.json.fase mantener",
+   "modelos/puntas_sin_apoyo.json.fase mantener",
+   "modelos/b/puntas.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Bájalas despacio",
+  "donde": [
+   "modelos/puntas.json.fase bajar",
+   "modelos/puntas_sin_apoyo.json.fase bajar",
+   "modelos/b/puntas.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Lleva el codo hacia atrás",
+  "donde": [
+   "modelos/remo.json.fase subir",
+   "modelos/b/remo.json.fase subir"
+  ]
+ },
+ {
+  "es": "Lleva la barbilla hacia atrás",
+  "donde": [
+   "modelos/retraccion.json.fase subir",
+   "modelos/b/retraccion.json.fase subir"
+  ]
+ },
+ {
+  "es": "La mirada al frente",
+  "donde": [
+   "modelos/retraccion.json.fase mantener",
+   "modelos/b/retraccion.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Lleva la rodilla al pecho",
+  "donde": [
+   "modelos/rodilla_pecho.json.fase subir",
+   "modelos/b/rodilla_pecho.json.fase subir"
+  ]
+ },
+ {
+  "es": "Deja caer las rodillas a un lado",
+  "donde": [
+   "modelos/rodillas_lado.json.fase subir",
+   "modelos/b/rodillas_lado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Pásalas al otro lado",
+  "donde": [
+   "modelos/rodillas_lado.json.fase bajar",
+   "modelos/b/rodillas_lado.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Lleva la mano hacia el abdomen",
+  "donde": [
+   "modelos/rotacion_interna.json.fase subir",
+   "modelos/b/rotacion_interna.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube la mano hacia el techo",
+  "donde": [
+   "modelos/rotacion_lado.json.fase subir",
+   "modelos/b/rotacion_lado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Gira el tronco",
+  "donde": [
+   "modelos/rotacion_tronco_pie.json.fase subir",
+   "modelos/b/rotacion_tronco_pie.json.fase subir"
+  ]
+ },
+ {
+  "es": "Vuelve al frente",
+  "donde": [
+   "modelos/rotacion_tronco_pie.json.fase bajar",
+   "modelos/b/rotacion_tronco_pie.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Elevación en el plano de la escápula",
+  "donde": [
+   "modelos/scaption.json.nombre",
+   "modelos/b/scaption.json.nombre"
+  ]
+ },
+ {
+  "es": "Sube el brazo con el pulgar hacia arriba",
+  "donde": [
+   "modelos/scaption.json.fase subir",
+   "modelos/b/scaption.json.fase subir"
+  ]
+ },
+ {
+  "es": "Dobla las rodillas",
+  "donde": [
+   "modelos/sentadilla.json.fase subir",
+   "modelos/sentadilla_sin_apoyo.json.fase subir",
+   "modelos/b/sentadilla.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube despacio",
+  "donde": [
+   "modelos/sentadilla.json.fase bajar",
+   "modelos/sentadilla_pared.json.fase bajar",
+   "modelos/sentadilla_sin_apoyo.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Baja deslizando la espalda",
+  "donde": [
+   "modelos/sentadilla_pared.json.fase subir",
+   "modelos/b/sentadilla_pared.json.fase subir"
+  ]
+ },
+ {
+  "es": "Levantarse de una silla y sentarse",
+  "donde": [
+   "modelos/silla.json.nombre",
+   "modelos/b/silla.json.nombre"
+  ]
+ },
+ {
+  "es": "Inclínate y levántate",
+  "donde": [
+   "modelos/silla.json.fase subir",
+   "modelos/silla_dos_manos.json.fase subir",
+   "modelos/silla_una_mano.json.fase subir"
+  ]
+ },
+ {
+  "es": "De pie, erguido",
+  "donde": [
+   "modelos/silla.json.fase mantener",
+   "modelos/silla_dos_manos.json.fase mantener",
+   "modelos/silla_una_mano.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Siéntate despacio",
+  "donde": [
+   "modelos/silla.json.fase bajar",
+   "modelos/silla_dos_manos.json.fase bajar",
+   "modelos/silla_una_mano.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Descansa sentado",
+  "donde": [
+   "modelos/silla.json.fase reposo",
+   "modelos/silla_dos_manos.json.fase reposo",
+   "modelos/silla_una_mano.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Levantarse con las manos en los muslos",
+  "donde": [
+   "modelos/silla_dos_manos.json.nombre",
+   "modelos/b/silla_dos_manos.json.nombre"
+  ]
+ },
+ {
+  "es": "Levantarse con una mano en el muslo",
+  "donde": [
+   "modelos/silla_una_mano.json.nombre",
+   "modelos/b/silla_una_mano.json.nombre"
+  ]
+ },
+ {
+  "es": "Desliza el talón hacia ti",
+  "donde": [
+   "modelos/talon.json.fase subir",
+   "modelos/b/talon.json.fase subir"
+  ]
+ },
+ {
+  "es": "Estira despacio",
+  "donde": [
+   "modelos/talon.json.fase bajar",
+   "modelos/b/talon.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Sube de puntillas",
+  "donde": [
+   "modelos/talones.json.fase subir",
+   "modelos/talones_sin_apoyo.json.fase subir",
+   "modelos/b/talones.json.fase subir"
+  ]
+ },
+ {
+  "es": "Sube los talones",
+  "donde": [
+   "modelos/talones_sentado.json.fase subir",
+   "modelos/b/talones_sentado.json.fase subir"
+  ]
+ },
+ {
+  "es": "Pies en tándem, con apoyo",
+  "donde": [
+   "modelos/tandem_quieto.json.nombre",
+   "modelos/b/tandem_quieto.json.nombre"
+  ]
+ },
+ {
+  "es": "Un pie delante del otro",
+  "donde": [
+   "modelos/tandem_quieto.json.fase subir",
+   "modelos/tandem_quieto_sin_apoyo.json.fase subir",
+   "modelos/b/tandem_quieto.json.fase subir"
+  ]
+ },
+ {
+  "es": "Pies en tándem, sin apoyo",
+  "donde": [
+   "modelos/tandem_quieto_sin_apoyo.json.nombre",
+   "modelos/b/tandem_quieto_sin_apoyo.json.nombre"
+  ]
+ },
+ {
+  "es": "Gancho y mesa",
+  "donde": [
+   "modelos/tendinoso.json.fase subir",
+   "modelos/b/tendinoso.json.fase subir"
+  ]
+ },
+ {
+  "es": "Mantén la mesa",
+  "donde": [
+   "modelos/tendinoso.json.fase mantener",
+   "modelos/b/tendinoso.json.fase mantener"
+  ]
+ },
+ {
+  "es": "Puño plano y puño completo",
+  "donde": [
+   "modelos/tendinoso.json.fase bajar",
+   "modelos/b/tendinoso.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Mano estirada",
+  "donde": [
+   "modelos/tendinoso.json.fase reposo",
+   "modelos/b/tendinoso.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Encoge los dedos y arruga la toalla",
+  "donde": [
+   "modelos/toalla_dedos.json.fase subir",
+   "modelos/b/toalla_dedos.json.fase subir"
+  ]
+ },
+ {
+  "es": "Otra vez",
+  "donde": [
+   "modelos/toalla_dedos.json.fase reposo",
+   "modelos/b/toalla_dedos.json.fase reposo"
+  ]
+ },
+ {
+  "es": "Puntas hacia ti",
+  "donde": [
+   "modelos/tobillos.json.fase subir",
+   "modelos/b/tobillos.json.fase subir"
+  ]
+ },
+ {
+  "es": "Puntas hacia abajo",
+  "donde": [
+   "modelos/tobillos.json.fase bajar",
+   "modelos/b/tobillos.json.fase bajar"
+  ]
+ },
+ {
+  "es": "Inclina la cabeza y ayúdate con la mano",
+  "donde": [
+   "modelos/trapecio.json.fase subir",
+   "modelos/b/trapecio.json.fase subir"
+  ]
+ },
+ {
+  "es": "Suave, sin tirar fuerte",
+  "donde": [
+   "modelos/trapecio.json.fase mantener",
+   "modelos/b/trapecio.json.fase mantener"
+  ]
+ }
+]

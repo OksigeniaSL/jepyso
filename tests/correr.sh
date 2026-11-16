@@ -7,6 +7,8 @@
 #   CHROMIUM_BIN  a Chromium binary; without it, the one Playwright installed
 #   CSP           any value: serve with the device bench's content policy (for the strict-host copy)
 set -euo pipefail
+# The walks check Spanish texts: the browser speaks Spanish unless a test asks for another language (tests/idioma.mjs).
+export LANG=es_ES.UTF-8 LANGUAGE=es
 HERE=$(cd "$(dirname "$0")" && pwd)
 OUT=${1:-$(mktemp -d)}
 APP=${APP:-$HERE/../app}
