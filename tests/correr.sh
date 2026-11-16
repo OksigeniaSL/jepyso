@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Serves app/ on a local port, checks that every prop follows its clip (tests/accesorios.mjs), runs the end-to-end walk
-# (tests/recorrido.mjs) and stops the server.
+# (tests/recorrido.mjs), walks the app in English (tests/idioma.mjs) and stops the server.
 # Usage: tests/correr.sh [screenshot dir]
 #   APP           the folder to serve (default app/; tools/construir.sh makes the strict-host copy)
 #   PORT          local port (default 8772)
@@ -44,4 +44,6 @@ node "$HERE/voz-grabada.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/grupo.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/primera.mjs" "http://127.0.0.1:$PORT" "$OUT"
 node "$HERE/recorrido.mjs" "http://127.0.0.1:$PORT" "$OUT"
+# Last: the app in English, with the whole battery in Spanish already through.
+node "$HERE/idioma.mjs" "http://127.0.0.1:$PORT" "$OUT"
 echo "capturas: $OUT"
