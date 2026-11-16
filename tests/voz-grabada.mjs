@@ -1,5 +1,6 @@
 // The recorded voice (app/voz.js, app/voz/): on a phone with no Spanish voice of its own, the person chooses a woman's
-// or a man's voice and hears its takes: the countdown and the words of each phase; «Sin voz» stops it.
+// or a man's voice and hears its takes: the countdown and the words of each phase; «Sin voz» stops it. On a phone
+// in English, the same voices speak English (voz/mira-en, voz/altair-en), and nothing Spanish is asked for.
 // Usage: node voz-grabada.mjs <base url>      (CHROMIUM_BIN as in correr.sh)
 import { chromium } from 'playwright-core';
 import { createHash } from 'node:crypto';
@@ -55,6 +56,30 @@ try {
   await pagina.waitForSelector('[data-r="todas"]');
   comprobar(pedidas.length === tras, `con «Sin voz» se siguen pidiendo tomas (${pedidas.length - tras})`);
   comprobar(!errores.length, `errores en la página: ${errores.join(' | ')}`);
+
+  // A phone in English with no voice of its own.
+  const ingles = await (await navegador.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', locale: 'en-GB' })).newPage();
+  ingles.setDefaultTimeout(60000);
+  await ingles.addInitScript(() => {
+    Object.defineProperty(window, 'speechSynthesis', { value: { getVoices: () => [], speak() {}, cancel() {}, addEventListener() {} } });
+  });
+  const pedidasEn = [];
+  ingles.on('request', (r) => {
+    const m = r.url().match(/\/voz\/([a-z-]+)\/([0-9a-f]{12})\.mp3$/);
+    if (m) pedidasEn.push(`${m[1]}/${m[2]}`);
+  });
+  await ingles.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
+  await ingles.waitForSelector('.voz-elegir');
+  await ingles.click('.voz-elegir [data-v="mujer"]');
+  await ingles.waitForTimeout(800);
+  comprobar(pedidasEn.includes(`mira-en/${clave('Voice on')}`), `en inglés, «Voz de mujer» no suena con Mira en inglés (${pedidasEn.join(' ')})`);
+  await ingles.click('[data-r="empezar"]');
+  await ingles.click('[data-r="en-posicion"]');
+  await ingles.waitForSelector('[data-r="todas"]');
+  for (const t of ['three', 'two', 'one', 'Done']) {
+    comprobar(pedidasEn.includes(`mira-en/${clave(t)}`), `en inglés no suena «${t}» con la voz grabada (${pedidasEn.length} tomas pedidas)`);
+  }
+  comprobar(pedidasEn.every((p) => p.startsWith('mira-en/')), `en inglés se piden tomas de otra carpeta (${pedidasEn.filter((p) => !p.startsWith('mira-en/')).join(' ')})`);
 } finally {
   await navegador.close();
 }
@@ -62,4 +87,4 @@ if (fallos.length) {
   console.error(`voz grabada, ${fallos.length} fallos:\n  ${fallos.join('\n  ')}`);
   process.exit(1);
 }
-console.log('voz grabada: cada persona elige voz de mujer u hombre, y la cuenta y las fases suenan con ella; sin voz, nada');
+console.log('voz grabada: cada persona elige voz de mujer u hombre, y la cuenta y las fases suenan con ella, también en inglés; sin voz, nada');
