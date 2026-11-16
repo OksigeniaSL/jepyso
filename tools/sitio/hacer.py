@@ -129,7 +129,6 @@ PRECIOS = {
     'en': ('Plans and pricing', 'Free for up to 5 people with a file. Professional, up to 50, for €59; Centre, up to 300, for €149. One payment, for life.', f'''    <section class="legal precios">
       <h1>Plans and pricing</h1>
       <p class="entradilla">One payment, for life, no subscription. For the person who does the routine, Jepyso is always free: nothing to install and no account to create.</p>
-      <p class="nota-lengua">The app is in Spanish for now; more languages are coming.</p>
       <div class="tres">
         <div class="tarjeta plan"><h2>Free</h2><p class="precio">€0</p><ul><li>Routines as a link, as many as you like</li><li>Files and follow-up of up to <strong>5 people</strong></li><li>In your browser, with a backup file</li></ul><a class="boton secundario" href="{APP}">Start for free</a></div>
         <div class="tarjeta plan"><h2>Professional</h2><p class="precio">€59</p><ul><li>Files and follow-up of up to <strong>50 people</strong></li><li>In your Google Drive, on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['profesional']}">Buy Professional</a></div>
