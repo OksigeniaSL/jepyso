@@ -5,7 +5,9 @@ Usage: python3 -B tools/sitio/hacer.py [destination]      (default: dist/sitio)
 The texts live here; the privacy policy and the terms are the ones published on oksigenia.com (agents/jepyso/docs in
 hq). The app is at APP; change it in one place if its address changes."""
 import html
+import json
 import os
+import re
 import shutil
 import sys
 
@@ -33,9 +35,9 @@ RUTAS = {
     'en': {'inicio': '/en/', 'precios': '/en/pricing/', 'privacidad': '/en/privacy/', 'condiciones': '/en/terms/', 'aviso': '/en/legal/'},
 }
 PIE = {
-    'es': {'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
+    'es': {'precios_corto': 'Precios', 'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
            'firma': 'Jepyso · un producto de Oksigenia', 'otra': 'English', 'abrir': 'Abrir la app'},
-    'en': {'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
+    'en': {'precios_corto': 'Pricing', 'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
            'firma': 'Jepyso · an Oksigenia product', 'otra': 'Español', 'abrir': 'Open the app'},
 }
 
@@ -65,12 +67,13 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="preload" href="/fuentes/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/estilos.css">
   <script type="module" src="/vendor/oksigenia-access-panel/oksigenia-access-panel.js?v={PANEL_V}"></script>
-  <script type="module" src="/sitio.js"></script>
+  <script type="module" src="/sitio.js"></script>{PORTADA_HEAD if clave == 'inicio' else ''}
 </head>
-<body>
+<body{' class="inicio"' if clave == 'inicio' else ''}>
   <header class="cabecera">
     <a class="marca" href="{r['inicio']}" aria-label="Jepyso">jepyso<span aria-hidden="true">°</span></a>
     <nav class="cabecera-nav">
+      <a class="enlace-precios" href="{r['precios']}">{p['precios_corto']}</a>
       <a class="enlace-app" href="{APP}">{p['abrir']}</a>
       <a class="otra-lengua" href="{RUTAS[otra][hermana]}" hreflang="{otra}" lang="{otra}">{p['otra']}</a>
     </nav>
@@ -153,87 +156,253 @@ PRECIOS = {
 
 
 # --- Home.
-INICIO = {
+# --- The home, «the room» (Jujol, 16-11-2026; Enrique chose it among three paths, agents/arte/docs/decisiones.md in hq):
+# the app's own figure stays in its plaster room while the story goes down beside it, and each step changes what it does
+# and what lies over it (portada.js). The texts, here; the room's layers are example data (Ana, Carlos).
+PORTADA_HEAD = '''
+  <script src="/vendor/qrcode/qrcode.js" defer></script>
+  <script type="module" src="/portada.js"></script>'''
+
+# The exercises the room plays: the figure, three.js and these clips are copied from app/ (copiar_figura).
+FIGURA_EJERCICIOS = ('puente', 'silla', 'hombro')
+EJEMPLO = 'https://app.jepyso.com/#r=7Kq2mX'
+
+T = {
     'es': {
         'titulo': 'Jepyso · Rutinas de ejercicio que se mandan por un enlace',
         'desc': 'Arma la rutina de ejercicios de cada persona y mándasela por un enlace. La hace en su teléfono siguiendo a una figura en 3D, a tu ritmo, sin instalar nada.',
-        'cuerpo': f'''    <section class="portada">
-      <div class="portada-texto">
-        <p class="antetitulo">Rutinas de ejercicio por enlace</p>
-        <h1>La rutina que mandas, al ritmo que mandas</h1>
-        <p class="entradilla">Arma la rutina de ejercicios de cada persona y mándasela por un enlace. La hace en su teléfono siguiendo a una figura en 3D que va a tu ritmo, del lado y con las series que pusiste. Sin instalar nada, sin cuentas y sin pagar.</p>
-        <div class="botones"><a class="boton" href="{APP}">Abrir la app</a><a class="boton secundario" href="#como">Cómo funciona</a></div>
-      </div>
-      <figure class="portada-figura"><img src="/imagenes/yeso-puente.webp" alt="La figura de Jepyso haciendo el puente de glúteo sobre una esterilla" width="960" height="540"></figure>
-    </section>
-    <section id="como" class="bloque">
-      <h2>Cómo funciona</h2>
-      <ol class="pasos">
-        <li><h3>Arma la rutina</h3><p>Elige entre los ejercicios de la biblioteca, por zona, por músculo o por nombre. Pon las series, las repeticiones, el ritmo de cada una (cuánto sube, cuánto mantiene, cuánto baja), el lado y la molestia que aceptas. La figura te enseña cómo lo hará.</p></li>
-        <li><h3>Mándala por un enlace</h3><p>Por WhatsApp, por Telegram o con un código QR en la consulta. La rutina va dentro del enlace: la persona solo tiene que abrirlo.</p></li>
-        <li><h3>Sigue cómo le va</h3><p>La persona hace cada ejercicio con la figura, con voz y sin conexión una vez abierta. Apunta lo que hizo, la molestia que notó y, si quiere, una nota. Te lo devuelve en un enlace y lo ves en su ficha, semana a semana.</p></li>
-      </ol>
-    </section>
-    <section class="bloque">
-      <h2>Para quién</h2>
-      <p>Para cualquier profesional que manda ejercicio a otras personas, en cualquier país: fisioterapeutas, entrenadores, docentes de Educación Física y centros de mayores. Para quien lo hace, Jepyso es siempre gratis: no instala nada ni se crea una cuenta.</p>
-    </section>
-    <section class="bloque datos">
-      <h2>Tus datos y los de tus pacientes</h2>
-      <p>Jepyso no tiene servidor de datos. La rutina viaja dentro del enlace, lo que apunta la persona se queda en su teléfono hasta que te lo manda, y tus fichas se guardan en tu navegador o, en la versión para tu consulta, en tu propio Google Drive. Oksigenia no recibe nada de eso. <a href="/privacidad/">Así lo contamos en la política de privacidad.</a></p>
-    </section>
-    <section class="bloque versiones">
-      <h2>Gratis, y para tu consulta</h2>
-      <div class="dos">
-        <div class="tarjeta"><h3>Gratis</h3><p>Rutinas por enlace, todas las que quieras, y las fichas y el seguimiento de hasta 5 personas por cuenta de Google, en tu navegador y con copia en un archivo.</p></div>
-        <div class="tarjeta"><h3>Para tu consulta</h3><p>Las fichas de hasta 50 personas (Profesional, 59 €) o de hasta 300 (Centro, 149 €), en tu Google Drive y en todos tus aparatos. Pago único, de por vida, sin cuotas. <a href="/precios/">Ver los planes</a>.</p></div>
-      </div>
-    </section>
-    <section class="bloque cierre">
-      <a class="boton" href="{APP}">Abrir la app</a>
-    </section>''',
+        'h1': 'La rutina que mandas, <span>al ritmo que mandas</span>',
+        'entradilla': 'Arma la rutina de cada persona y mándasela por un enlace. La hace en su teléfono siguiendo a esta figura, que sube, mantiene y baja al ritmo que pones, del lado que toca y serie tras serie. Sin instalar nada y sin crear cuentas.',
+        'empezar': 'Empezar gratis', 'ver_planes': 'Ver los planes',
+        'escena': 'La figura de Jepyso haciendo los ejercicios de una rutina de ejemplo',
+        'pasos': [
+            ('01 · Arma', 'Arma la rutina', 'Para fisioterapia, entrenamiento, Educación Física o un centro de mayores, en cualquier sitio. Elige entre casi cien ejercicios, por zona, por músculo o por nombre, con los programas Otago y Vivifrail dentro. Pon las series, las repeticiones, cuánto sube, cuánto mantiene, cuánto baja, el lado y la molestia que aceptas. La figura te enseña cómo lo hará.'),
+            ('02 · Manda', 'Mándala por un enlace', 'Por WhatsApp, por Telegram, por correo o con un código QR en la consulta. La rutina va dentro del enlace: la persona solo tiene que abrirlo. No instala nada, no se crea una cuenta y no paga.'),
+            ('03 · Hace', 'La hace con la figura', 'La figura cumple la pauta: la fase en grande, la cuenta atrás, un sonido y una vibración en cada repetición, y una voz que guía, la de Mira o la de Altair, a elegir. Sin conexión, una vez abierta.'),
+            ('04 · Vuelve', 'Te devuelve lo que hizo', 'Al acabar apunta lo que hizo y la molestia que notó, y te lo manda en otro enlace. Lo ves en su ficha, día a día y semana a semana. Quien no te ha mandado nada en dos semanas te sale a la vista, con el mensaje listo para escribirle.'),
+        ],
+        'pauta': {'puente': 'Tu pauta · puente de glúteo · 2 × 10', 'silla': 'Tu pauta · levantarse de la silla · 2 × 8',
+                  'hombro': 'Tu pauta · rotación externa con banda · lado derecho'},
+        'fase0': 'Sube la cadera', 'sube': 'Sube', 'mantiene': 'Mantiene', 'baja': 'Baja', 'de': 'de', 'girar': 'Gírala con el dedo',
+        'rutina': 'Rutina de Ana · 3 días a la semana',
+        'filas': [('Levantarse de la silla', '2 × 8 · 2 · 1 · 2 s'), ('Puente de glúteo', '2 × 10 · 2 · 1 · 2 s'), ('Rotación externa con banda', '2 × 12 · lado derecho')],
+        'aceptable_txt': 'Molestia aceptable <b>5</b> de 10',
+        'mensaje': 'Ana, aquí tienes tu rutina. Ábrela cuando vayas a hacerla:', 'qr': 'O con el QR, en la consulta',
+        'serie': 'Rotación externa con banda · lado derecho', 'serie_cifras': '<b>Serie 1</b> de 2 · <b class="serie-cuenta">1</b> de 12',
+        'voz0': '«Lleva la mano hacia fuera»',
+        'resumen': 'Resumen para Carlos', 'resumen_h': 'Ana ha hecho su rutina 3 veces', 'resumen_baja': 'La molestia bajó de 5 a 2',
+        'dias': [('Sábado 14', 2), ('Jueves 12', 4), ('Martes 10', 5)],
+        'metodo_e': 'La molestia, con método', 'metodo_h': 'Cada rutina lleva la molestia que aceptas',
+        'metodo_p': 'Pones hasta dónde puede llegar, de 0 a 10. Si la persona la pasa, se le dice y el día te sale marcado. A la mañana siguiente se le pregunta cómo estaba la zona al levantarse. Es el modelo de control del dolor, el más citado para dosificar el ejercicio cuando hay molestia.',
+        'regla_aria': 'Escala de molestia de 0 a 10, aceptable hasta 5; el martes llegó a 7 y salió marcado',
+        'aceptable': 'Aceptable', 'hoy': 'Hoy', 'marcado': 'Martes · marcado',
+        'datos_e': 'Tus datos, contigo', 'datos_h': 'Jepyso no tiene servidor de datos',
+        'tu_tel': ('Tu teléfono', 'Tus fichas, y con un plan, también en tu Google Drive'),
+        'su_tel': ('Su teléfono', 'Lo que apunta se queda ahí hasta que te lo manda'),
+        'ida': 'La rutina, dentro del enlace', 'vuelta': 'Lo que hizo, en otro enlace',
+        'nada': '<b>Oksigenia no recibe nada de eso.</b> Ni la rutina, ni lo que hace la persona, ni sus molestias. <a href="/privacidad/">Así lo cuenta la política de privacidad.</a>',
+        'planes_e': 'Planes', 'planes_h': 'Gratis para empezar. Un solo pago para tu consulta',
+        'planes': [('Gratis', '0 €', 5, 'Rutinas por enlace, todas las que quieras, y las fichas de hasta <b>5 personas</b>, en tu teléfono.', 'Empezar gratis', APP, ' secundario'),
+                   ('Profesional', '59 €', 50, 'Las fichas de hasta <b>50 personas</b>, en tu Google Drive y en todos tus aparatos.', 'Ver Profesional', '/precios/', ''),
+                   ('Centro', '149 €', 300, 'Las fichas de hasta <b>300 personas</b>, en tu Google Drive y en todos tus aparatos.', 'Ver Centro', '/precios/', '')],
+        'planes_nota': 'Pago único, de por vida, sin cuotas. Para quien hace la rutina, siempre gratis. <a href="/precios/">Todo sobre los planes</a>',
+        'centro': ('En tu centro', 'Dentro de la plataforma del centro', 'Para colegios, universidades y centros de formación: las rutinas, como una actividad más del curso, con su gente y sus grupos.', 'Escríbenos'),
+        'cierre': 'Manda la primera rutina hoy', 'abrir': 'Abrir la app',
     },
     'en': {
         'titulo': 'Jepyso · Exercise routines sent as a link',
         'desc': 'Build each person’s exercise routine and send it as a link. They do it on their phone, following a 3D figure at the pace you set, with nothing to install.',
-        'cuerpo': f'''    <section class="portada">
-      <div class="portada-texto">
-        <p class="antetitulo">Exercise routines sent as a link</p>
-        <h1>The routine you set, at the pace you set</h1>
-        <p class="entradilla">Build each person’s exercise routine and send it as a link. They do it on their phone, following a 3D figure that moves at your pace, on the side and with the sets you chose. Nothing to install, no accounts and nothing to pay.</p>
-        <div class="botones"><a class="boton" href="{APP}">Open the app</a><a class="boton secundario" href="#how">How it works</a></div>
-        <p class="nota-lengua">The app is in Spanish for now; more languages are coming.</p>
-      </div>
-      <figure class="portada-figura"><img src="/imagenes/yeso-puente.webp" alt="Jepyso’s figure doing a glute bridge on a mat" width="960" height="540"></figure>
-    </section>
-    <section id="how" class="bloque">
-      <h2>How it works</h2>
-      <ol class="pasos">
-        <li><h3>Build the routine</h3><p>Pick exercises from the library by body area, muscle or name. Set the sets, the repetitions, the pace of each one (how long up, hold and down), the side and the discomfort you accept. The figure shows you how it will be done.</p></li>
-        <li><h3>Send it as a link</h3><p>Over WhatsApp, Telegram or a QR code in your practice. The routine travels inside the link: the person only has to open it.</p></li>
-        <li><h3>Follow how it goes</h3><p>The person does each exercise with the figure, with voice guidance and offline once opened. They record what they did, the discomfort they felt and, if they like, a note. It comes back to you as a link, and you see it in their file, week by week.</p></li>
-      </ol>
-    </section>
-    <section class="bloque">
-      <h2>Who it is for</h2>
-      <p>For any professional who prescribes exercise, in any country: physiotherapists, trainers, PE teachers and care homes. For the person doing it, Jepyso is always free: nothing to install and no account to create.</p>
-    </section>
-    <section class="bloque datos">
-      <h2>Your data and your patients’</h2>
-      <p>Jepyso has no data server. The routine travels inside the link, what the person records stays on their phone until they send it to you, and your files are kept in your browser or, in the version for your practice, in your own Google Drive. Oksigenia receives none of it. <a href="/en/privacy/">This is how our privacy policy puts it.</a></p>
-    </section>
-    <section class="bloque versiones">
-      <h2>Free, and for your practice</h2>
-      <div class="dos">
-        <div class="tarjeta"><h3>Free</h3><p>Routines as links, as many as you like, and files and follow-up for up to 5 people per Google account, in your browser and with a copy in a file.</p></div>
-        <div class="tarjeta"><h3>For your practice</h3><p>The files of up to 50 people (Professional, €59) or up to 300 (Centre, €149), in your Google Drive and on all your devices. One payment, for life, no subscription. <a href="/en/pricing/">See the plans</a>.</p></div>
-      </div>
-    </section>
-    <section class="bloque cierre">
-      <a class="boton" href="{APP}">Open the app</a>
-    </section>''',
+        'h1': 'The routine you set, <span>at the pace you set</span>',
+        'entradilla': 'Build each person’s routine and send it as a link. They do it on their phone following this figure, which goes up, holds and comes down at the pace you set, on the right side and set after set. Nothing to install and no accounts.',
+        'empezar': 'Start for free', 'ver_planes': 'See the plans',
+        'escena': 'Jepyso’s figure doing the exercises of an example routine',
+        'pasos': [
+            ('01 · Build', 'Build the routine', 'For physiotherapy, training, PE or a care home, anywhere. Choose from nearly a hundred exercises by body area, muscle or name, with the Otago and Vivifrail programmes included. Set the sets, the repetitions, how long it goes up, holds and comes down, the side and the discomfort you accept. The figure shows you how it will be done.'),
+            ('02 · Send', 'Send it as a link', 'Over WhatsApp, Telegram, email or with a QR code in your practice. The routine travels inside the link: the person only has to open it. Nothing to install, no account to create and nothing to pay.'),
+            ('03 · Do', 'They do it with the figure', 'The figure keeps to your prescription: the phase in large type, the countdown, a sound and a vibration on each repetition, and a voice that guides them. Offline, once opened.'),
+            ('04 · Back', 'What they did comes back to you', 'When they finish, they record what they did and the discomfort they felt, and send it back in another link. You see it in their file, day by day and week by week. Anyone who has sent you nothing in two weeks stands out, with the message ready to write to them.'),
+        ],
+        'pauta': {'puente': 'Your prescription · glute bridge · 2 × 10', 'silla': 'Your prescription · sit to stand · 2 × 8',
+                  'hombro': 'Your prescription · external rotation with a band · right side'},
+        'fase0': 'Lift your hips', 'sube': 'Up', 'mantiene': 'Hold', 'baja': 'Down', 'de': 'of', 'girar': 'Turn it with your finger',
+        'rutina': 'Ana’s routine · 3 days a week',
+        'filas': [('Sit to stand', '2 × 8 · 2 · 1 · 2 s'), ('Glute bridge', '2 × 10 · 2 · 1 · 2 s'), ('External rotation with a band', '2 × 12 · right side')],
+        'aceptable_txt': 'Acceptable discomfort <b>5</b> out of 10',
+        'mensaje': 'Ana, here’s your routine. Open it when you’re ready to do it:', 'qr': 'Or with the QR code, in your practice',
+        'serie': 'External rotation with a band · right side', 'serie_cifras': '<b>Set 1</b> of 2 · <b class="serie-cuenta">1</b> of 12',
+        'voz0': '“Take your hand out to the side”',
+        'resumen': 'Summary for Carlos', 'resumen_h': 'Ana has done her routine 3 times', 'resumen_baja': 'Her discomfort went down from 5 to 2',
+        'dias': [('Saturday 14', 2), ('Thursday 12', 4), ('Tuesday 10', 5)],
+        'metodo_e': 'Discomfort, with a method', 'metodo_h': 'Each routine carries the discomfort you accept',
+        'metodo_p': 'You set how far it may go, from 0 to 10. If the person goes past it, they are told and the day is flagged for you. The next morning they are asked how the area felt when they got up. It is the pain-monitoring model, the most cited for dosing exercise when there is discomfort.',
+        'regla_aria': 'Discomfort scale from 0 to 10, acceptable up to 5; on Tuesday it reached 7 and was flagged',
+        'aceptable': 'Acceptable', 'hoy': 'Today', 'marcado': 'Tuesday · flagged',
+        'datos_e': 'Your data stays with you', 'datos_h': 'Jepyso has no data server',
+        'tu_tel': ('Your phone', 'Your files, and with a plan, in your Google Drive too'),
+        'su_tel': ('Their phone', 'What they record stays there until they send it to you'),
+        'ida': 'The routine, inside the link', 'vuelta': 'What they did, in another link',
+        'nada': '<b>Oksigenia receives none of it.</b> Not the routine, not what the person does, not their discomfort. <a href="/en/privacy/">This is how our privacy policy puts it.</a>',
+        'planes_e': 'Plans', 'planes_h': 'Free to start. One payment for your practice',
+        'planes': [('Free', '€0', 5, 'Routines as links, as many as you like, and the files of up to <b>5 people</b>, on your phone.', 'Start for free', APP, ' secundario'),
+                   ('Professional', '€59', 50, 'The files of up to <b>50 people</b>, in your Google Drive and on all your devices.', 'See Professional', '/en/pricing/', ''),
+                   ('Centre', '€149', 300, 'The files of up to <b>300 people</b>, in your Google Drive and on all your devices.', 'See Centre', '/en/pricing/', '')],
+        'planes_nota': 'One payment, for life, no subscription. For the person doing the routine, always free. <a href="/en/pricing/">Everything about the plans</a>',
+        'centro': ('In your organisation', 'Inside your organisation’s platform', 'For schools, universities and training centres: routines as one more activity of the course, with its people and its groups.', 'Write to us'),
+        'cierre': 'Send your first routine today', 'abrir': 'Open the app',
     },
 }
+
+
+def inicio(lengua):
+    t = T[lengua]
+    pasos = ''.join(f'''
+      <div class="paso" data-paso="{n}"{' id="como"' if n == 1 else ''}>
+        <p class="etiqueta">{e(et)}</p>
+        <h2>{e(h)}</h2>
+        <p>{e(p)}</p>
+      </div>''' for n, (et, h, p) in enumerate(t['pasos'], 1))
+    pauta_datos = ' '.join(f'data-{k}="{e(v)}"' for k, v in t['pauta'].items())
+    filas = ''.join(f'<li{" class=\"activa\"" if i == 0 else ""}><b>{e(a)}</b><span>{e(b)}</span></li>' for i, (a, b) in enumerate(t['filas']))
+    dias = ''.join(f'<li><span>{e(d)}</span><i class="m{m}"></i><b>{m}</b></li>' for d, m in t['dias'])
+    marcas = ''.join(f'<li><span>{i}</span></li>' for i in range(11))
+    planes = ''.join(f'''
+        <div class="plan"><h3>{e(nombre)}</h3><p class="precio">{precio}</p><div class="gente gente-{n}" aria-hidden="true">{'<i></i>' * n}</div>
+          <p>{texto}</p><a class="boton{clase}" href="{enlace}">{e(boton)}</a></div>''' for nombre, precio, n, texto, boton, enlace, clase in t['planes'])
+    c = t['centro']
+    return f'''    <section class="sala">
+      <div class="relato">
+        <div class="paso paso-portada" data-paso="0">
+          <h1>{t['h1']}</h1>
+          <p class="entradilla">{e(t['entradilla'])}</p>
+          <div class="botones"><a class="boton" href="{APP}">{e(t['empezar'])}</a><a class="boton secundario" href="{RUTAS[lengua]['precios']}">{e(t['ver_planes'])}</a></div>
+        </div>{pasos}
+      </div>
+      <div class="escenario" data-paso="0" role="img" aria-label="{e(t['escena'])}">
+        <div class="escenario-figura"></div>
+        <div class="registro" aria-hidden="true"><i></i></div>
+        <div class="capa pauta" data-en="0" aria-hidden="true">
+          <p class="etiqueta pauta-nombre" {pauta_datos}>{e(t['pauta']['puente'])}</p>
+          <p class="fase">{e(t['fase0'])}</p>
+          <p class="etiqueta cuenta"><b>1</b> {t['de']} 10</p>
+          <div class="tempo"><span class="t2"><b>{t['sube']}</b> 2 s</span><span class="t1"><b>{t['mantiene']}</b> 1 s</span><span class="t2"><b>{t['baja']}</b> 2 s</span><span class="t1 reposo"></span><i class="tempo-cursor"></i></div>
+          <p class="etiqueta tempo-texto">{t['sube']} 2 s · {t['mantiene'].lower()} 1 s · {t['baja'].lower()} 2 s</p>
+        </div>
+        <p class="capa girar etiqueta" data-en="0" aria-hidden="true">{e(t['girar'])}</p>
+        <div class="capa rutina" data-en="1" aria-hidden="true">
+          <p class="etiqueta">{e(t['rutina'])}</p>
+          <ol>{filas}</ol>
+          <p class="molestia-aceptable">{t['aceptable_txt']}</p>
+        </div>
+        <div class="capa mensaje" data-en="2" aria-hidden="true">
+          <div class="burbuja"><p>{e(t['mensaje'])}</p><span class="burbuja-enlace">{EJEMPLO.replace('https://', '')}</span><small>10:42</small></div>
+          <div class="qr"><canvas class="ejemplo-qr" width="132" height="132" data-enlace="{EJEMPLO}"></canvas><p class="etiqueta">{e(t['qr'])}</p></div>
+        </div>
+        <div class="capa serie" data-en="3" aria-hidden="true"><p class="etiqueta">{e(t['serie'])}</p><p class="serie-cifras">{t['serie_cifras']}</p></div>
+        <div class="capa voz" data-en="3" aria-hidden="true">
+          <p class="voz-quien"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z M15.5 9a4 4 0 0 1 0 6 M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><span class="voz-texto">{e(t['voz0'])}</span></p>
+          <p class="voces"><span class="activa">Mira</span><span>Altair</span></p>
+        </div>
+        <div class="capa resumen" data-en="4" aria-hidden="true">
+          <p class="etiqueta">{e(t['resumen'])}</p>
+          <h3>{e(t['resumen_h'])}</h3>
+          <p class="baja">{e(t['resumen_baja'])}</p>
+          <ul>{dias}</ul>
+        </div>
+      </div>
+    </section>
+    <section class="bloque-sala metodo">
+      <div>
+        <p class="etiqueta">{e(t['metodo_e'])}</p>
+        <h2>{e(t['metodo_h'])}</h2>
+        <p>{e(t['metodo_p'])}</p>
+      </div>
+      <div class="regla" role="img" aria-label="{e(t['regla_aria'])}">
+        <div class="regla-zona"><span class="etiqueta">{e(t['aceptable'])}</span></div>
+        <ol class="regla-marcas" aria-hidden="true">{marcas}</ol>
+        <div class="regla-dia en3" aria-hidden="true"><b>3</b><span>{e(t['hoy'])}</span></div>
+        <div class="regla-dia en7 marcado" aria-hidden="true"><b>7</b><span>{e(t['marcado'])}</span></div>
+      </div>
+    </section>
+    <section class="bloque-sala datos">
+      <p class="etiqueta">{e(t['datos_e'])}</p>
+      <h2>{e(t['datos_h'])}</h2>
+      <div class="viaje">
+        <div class="objeto"><b>{e(t['tu_tel'][0])}</b><span>{e(t['tu_tel'][1])}</span></div>
+        <div class="flecha"><span class="etiqueta">{e(t['ida'])}</span></div>
+        <div class="objeto"><b>{e(t['su_tel'][0])}</b><span>{e(t['su_tel'][1])}</span></div>
+        <div class="flecha vuelta"><span class="etiqueta">{e(t['vuelta'])}</span></div>
+      </div>
+      <p class="nada">{t['nada']}</p>
+    </section>
+    <section class="bloque-sala planes" id="planes">
+      <p class="etiqueta">{e(t['planes_e'])}</p>
+      <h2>{e(t['planes_h'])}</h2>
+      <div class="planes-tres">{planes}
+      </div>
+      <p class="planes-nota">{t['planes_nota']}</p>
+    </section>
+    <section class="bloque-sala donde">
+      <div class="tesela"><p class="etiqueta">{e(c[0])}</p><h3>{e(c[1])}</h3><p>{e(c[2])}</p><a class="boton secundario" href="mailto:contacto@oksigenia.com">{e(c[3])}</a></div>
+    </section>
+    <section class="sala-cierre">
+      <h2>{e(t['cierre'])}</h2>
+      <a class="boton" href="{APP}">{e(t['abrir'])}</a>
+    </section>'''
+
+
+INICIO = {lengua: {'titulo': T[lengua]['titulo'], 'desc': T[lengua]['desc'], 'cuerpo': inicio(lengua)} for lengua in T}
+
+
+def copiar_figura(app, dest):
+    """The home's figure: the app's own player (figura.js), three.js and the clips of FIGURA_EJERCICIOS, copied from app/
+    into figura/. Their bare 'three' imports become relative paths: the site's content policy allows no inline import
+    map. The phase words of those clips in English go to textos-en.json."""
+    d = os.path.join(dest, 'figura')
+    archivos = {
+        'figura.js': 'figura.js',
+        'modelos/musculos.js': 'modelos/musculos.js',
+        'vendor/three/three.module.js': 'three/three.module.js',
+        'vendor/three/addons/loaders/GLTFLoader.js': 'three/addons/loaders/GLTFLoader.js',
+        'vendor/three/addons/controls/OrbitControls.js': 'three/addons/controls/OrbitControls.js',
+        'vendor/three/addons/utils/BufferGeometryUtils.js': 'three/addons/utils/BufferGeometryUtils.js',
+        'vendor/three/LICENSE': 'three/LICENSE',
+    }
+    for origen, destino in archivos.items():
+        o, t = os.path.join(app, origen), os.path.join(d, destino)
+        os.makedirs(os.path.dirname(t), exist_ok=True)
+        if not destino.endswith('.js'):
+            shutil.copy(o, t)
+            continue
+        rel = os.path.relpath(os.path.join(d, 'three'), os.path.dirname(t)).replace(os.sep, '/')
+        rel = rel if rel.startswith('.') else './' + rel
+        with open(o, encoding='utf-8') as f:
+            texto = f.read()
+        texto = re.sub(r"""(['"])three\1""", lambda m: f'{m.group(1)}{rel}/three.module.js{m.group(1)}', texto)
+        texto = re.sub(r"""(['"])three/addons/""", lambda m: f'{m.group(1)}{rel}/addons/', texto)
+        with open(t, 'w', encoding='utf-8') as f:
+            f.write(texto)
+    with open(os.path.join(app, 'modelos', 'ejercicios.json'), encoding='utf-8') as f:
+        m = json.load(f)
+    reducido = {k: v for k, v in m.items() if k != 'ejercicios'}
+    reducido['ejercicios'] = {k: m['ejercicios'][k] for k in FIGURA_EJERCICIOS}
+    rutas = [m['cuerpo']] + [r for k in FIGURA_EJERCICIOS for r in (m['ejercicios'][k].get('glb'), m['ejercicios'][k].get('ficha')) if r]
+    for r in rutas:
+        os.makedirs(os.path.dirname(os.path.join(d, r)), exist_ok=True)
+        shutil.copy(os.path.join(app, r), os.path.join(d, r))
+    with open(os.path.join(d, 'modelos', 'ejercicios.json'), 'w', encoding='utf-8') as f:
+        json.dump(reducido, f, ensure_ascii=False)
+    with open(os.path.join(app, 'idiomas', 'en-ejercicios.js'), encoding='utf-8') as f:
+        pares = dict(re.findall(r"^\s*'((?:[^'\\]|\\.)*)':\s*'((?:[^'\\]|\\.)*)',?\s*$", f.read(), re.M))
+    textos = {}
+    for k in FIGURA_EJERCICIOS:
+        ficha = m['ejercicios'][k].get('ficha')
+        with open(os.path.join(app, ficha), encoding='utf-8') as f:
+            fases = json.load(f).get('fases', [])
+        for p in fases if isinstance(fases, list) else []:
+            if p.get('texto') in pares:
+                textos[p['texto']] = pares[p['texto']]
+    with open(os.path.join(d, 'textos-en.json'), 'w', encoding='utf-8') as f:
+        json.dump(textos, f, ensure_ascii=False)
 
 
 def texto_legal(titulo, actualizado, bloques):
@@ -353,7 +522,7 @@ def main():
     os.makedirs(DEST)
     aqui = os.path.dirname(os.path.abspath(__file__))
     app = os.path.join(RAIZ, 'app')
-    for f in ('estilos.css', 'sitio.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
+    for f in ('estilos.css', 'sitio.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
         shutil.copy(os.path.join(aqui, f), DEST)
     shutil.copytree(os.path.join(app, 'fuentes'), os.path.join(DEST, 'fuentes'))
     os.makedirs(os.path.join(DEST, 'imagenes'))
@@ -361,6 +530,8 @@ def main():
     shutil.copy(os.path.join(app, 'iconos', 'icono.svg'), DEST)
     shutil.copy(os.path.join(app, 'iconos', 'apple-touch-icon.png'), DEST)
     shutil.copytree(os.path.join(app, 'vendor', 'oksigenia-access-panel'), os.path.join(DEST, 'vendor', 'oksigenia-access-panel'))
+    shutil.copytree(os.path.join(app, 'vendor', 'qrcode'), os.path.join(DEST, 'vendor', 'qrcode'))
+    copiar_figura(app, DEST)
     for lengua in ('es', 'en'):
         r = RUTAS[lengua]
         i = INICIO[lengua]
