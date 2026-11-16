@@ -2688,7 +2688,7 @@ function pintarDia(dia, tope) {
           ${typeof x.m === 'number' ? `<span class="chip ${pasaDelTope(x.m, tope) ? 'alta' : ''}">${t('Molestia {v}/10', { v: x.m })}</span>` : '<span></span>'}
           <div class="barra-series">${x.p.map((v) => `<span class="${v < x.r ? 'corta' : ''}" title="${t('{n} de {total}', { n: esc(v), total: esc(x.r) })}"></span>`).join('')}</div>
           ${x.c === 'cuesta' ? `<span class="chip">${t('Costó')}</span>` : x.c === 'no' ? `<span class="chip alta">${t('No se pudo hacer')}</span>` : ''}
-          ${x.n ? `<p class="nota-dia">«${esc(x.n)}»</p>` : ''}
+          ${x.n ? `<p class="nota-dia">${t('«{nota}»', { nota: esc(x.n) })}</p>` : ''}
           <span class="detalle num">${
             bien
               ? tn(x.p.length, '{n} serie de {r}, completa', '{n} series de {r}, completas', { r: x.r })
