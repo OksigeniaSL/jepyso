@@ -31,18 +31,18 @@
  ],
  "angulos": {
   "partida": {
-   "codo_izquierda_flexion": 10.7,
-   "hombro_izquierda_flexion": -13.8,
+   "codo_izquierda_flexion": 9.9,
+   "hombro_izquierda_flexion": -14.2,
    "hombro_izquierda_abduccion": 16.2,
-   "hombro_izquierda_rotacion_externa": 99.4,
+   "hombro_izquierda_rotacion_externa": 103.5,
    "cadera_derecha_flexion": -2.8,
    "cadera_derecha_abduccion": -0.0,
    "rodilla_derecha_flexion": 0.0,
    "tobillo_derecha_flexion": 0.0,
-   "codo_derecha_flexion": 10.7,
-   "hombro_derecha_flexion": -13.8,
+   "codo_derecha_flexion": 9.9,
+   "hombro_derecha_flexion": -14.2,
    "hombro_derecha_abduccion": 16.2,
-   "hombro_derecha_rotacion_externa": 99.4
+   "hombro_derecha_rotacion_externa": 103.5
   },
   "llegada": {
    "codo_izquierda_flexion": 3.6,
@@ -73,16 +73,16 @@
  ],
  "camara": {
   "pos": [
-   -4.077,
-   0.818,
+   -4.07,
+   0.817,
    -0.204
   ],
   "mira": [
-   0.0,
+   -0.0,
    0.329,
    -0.0
   ]
  },
  "archivo": "rodilla_pecho.glb",
- "bytes": 62272
+ "bytes": 65288
 }

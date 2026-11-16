@@ -32,7 +32,6 @@
  "angulos": {
   "partida": {
    "rodilla_izquierda_flexion": 4.0,
-   "tobillo_izquierda_flexion": 4.6,
    "hombro_izquierda_abduccion": 8.7,
    "hombro_izquierda_rotacion_externa": -7.5,
    "cadera_derecha_abduccion": -0.0,
@@ -42,7 +41,6 @@
   },
   "llegada": {
    "rodilla_izquierda_flexion": 40.0,
-   "tobillo_izquierda_flexion": -0.0,
    "hombro_izquierda_abduccion": 18.9,
    "hombro_izquierda_rotacion_externa": 8.7,
    "cadera_derecha_abduccion": -6.8,
@@ -64,16 +62,16 @@
  ],
  "camara": {
   "pos": [
-   -3.616,
-   1.929,
-   0.908
+   -3.58,
+   1.93,
+   0.902
   ],
   "mira": [
    -0.033,
-   0.783,
-   0.263
+   0.795,
+   0.264
   ]
  },
  "archivo": "equilibrio.glb",
- "bytes": 68632
+ "bytes": 69320
 }
