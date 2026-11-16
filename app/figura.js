@@ -83,6 +83,11 @@ export class Figura {
     this.escena.add(this.grupo);
     this.mixer = new THREE.AnimationMixer(this.grupo);
 
+    // The mouse wheel scrolls the page, as everywhere else: over the figure it would zoom instead, and a long page
+    // could not be scrolled past it. A trackpad pinch (the wheel with Ctrl) and two fingers on a phone still zoom.
+    contenedor.addEventListener('wheel', (ev) => {
+      if (!ev.ctrlKey) ev.stopPropagation();
+    }, { capture: true });
     this.controles = new OrbitControls(this.camara, r.domElement);
     this.controles.enableDamping = true;
     this.controles.enablePan = false;

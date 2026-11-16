@@ -15,6 +15,9 @@ APP=${APP:-$HERE/../app}
 PORT=${PORT:-8772}
 mkdir -p "$OUT"
 node "$HERE/archivos-sw.mjs" "$APP"
+# Every text of the screens and of the exercises has its English.
+node "$HERE/../tools/idiomas/pantallas.mjs"
+node "$HERE/../tools/idiomas/extraer.mjs" --comprobar "$HERE/../app/idiomas/en-ejercicios.js" | tail -1
 node "$HERE/csp.mjs"
 node "$HERE/entrada.mjs" "$APP"
 node "$HERE/inflar.mjs" "$APP"
@@ -31,6 +34,7 @@ trap 'kill "$SERVER" 2>/dev/null || true' EXIT
 curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127.0.0.1:$PORT/index.html"
 node "$HERE/accesorios.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/seguir.mjs" "http://127.0.0.1:$PORT"
+node "$HERE/rueda.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/andar.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/programas.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/noticias.mjs" "http://127.0.0.1:$PORT"
