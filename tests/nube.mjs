@@ -44,6 +44,8 @@ const s256 = (v) => createHash('sha256').update(v).digest('base64url');
 // The account each service signs in with next (the window's choice), and what each one keeps: its jepyso.json.
 const cuentaDe = { google: CUENTA, dropbox: CUENTA, onedrive: CUENTA };
 const archivo = { google: null, dropbox: null, onedrive: null };
+// Whether the OneDrive app folder exists yet (it is made the first time it is asked for).
+const carpetas = { onedrive: false };
 // What the permission windows were asked, and the codes they gave: code → { servicio, reto, cuenta, vuelta }.
 const autorizaciones = [];
 const codigos = new Map();
@@ -206,6 +208,13 @@ async function rutasDeServicios(c) {
     if (!t) return json(route, { error: { code: 'InvalidAuthenticationToken' } }, 401);
     const u = new URL(req.url());
     if (u.pathname === '/v1.0/me') return json(route, { mail: null, userPrincipalName: t.cuenta });
+    // The app folder itself, which the app asks for first: on a personal account a path inside it answers 400 until
+    // it exists (measured with a real account, 16-11-2026), and asking for it makes it.
+    if (u.pathname === '/v1.0/me/drive/special/approot' && req.method() === 'GET') {
+      carpetas.onedrive = true;
+      return json(route, { id: 'approot' });
+    }
+    if (u.pathname.startsWith('/v1.0/me/drive/special/approot:') && !carpetas.onedrive) return json(route, { error: { code: 'invalidRequest' } }, 400);
     if (u.pathname === '/v1.0/me/drive/special/approot:/jepyso.json' && req.method() === 'GET') {
       if (archivo.onedrive === null) return json(route, { error: { code: 'itemNotFound' } }, 404);
       // Personal storage on either of its hosts, in turns.

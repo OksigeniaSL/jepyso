@@ -50,6 +50,16 @@ export async function conectar() {
 
 const caducada = () => new Error(t('La conexión con tu {nube} ha caducado: vuelve a sincronizar.', { nube: NUBE }));
 const malaRespuesta = (estado) => new Error(t('Tu {nube} no ha respondido bien ({estado}).', { nube: NUBE, estado }));
+// The same, with Graph's own error code when it gives one (invalidRequest, accessDenied…): it says what went wrong.
+async function malaRespuestaDe(r) {
+  let codigo = '';
+  try {
+    codigo = (await r.json())?.error?.code || '';
+  } catch {
+    // Not JSON: the status alone.
+  }
+  return malaRespuesta(codigo ? `${r.status}, ${String(codigo).slice(0, 60)}` : r.status);
+}
 const sinRed = () => new Error(t('No se ha podido hablar con {empresa}. Mira si hay red.', { empresa: EMPRESA }));
 
 // Every call to Microsoft Graph carries the token; an expired one is forgotten and said.
@@ -81,10 +91,21 @@ export async function cuenta() {
 // own address (/content) answers with a redirect to Microsoft's storage, which a browser cannot follow with the token
 // on (Microsoft's guide for JavaScript apps); so the file's details are read first, and its download address, signed
 // for a few minutes, is fetched without the token.
+// The app folder is made the first time it is asked for by itself; a path inside it before that answers 400 on personal
+// accounts. So it is asked for once per connection first.
+let carpetaLista = false;
+async function carpeta() {
+  if (carpetaLista) return;
+  const r = await pedir(`${GRAPH}/me/drive/special/approot?$select=id`);
+  if (!r.ok) throw await malaRespuestaDe(r);
+  carpetaLista = true;
+}
+
 export async function leer() {
+  await carpeta();
   const r = await pedir(ARCHIVO);
   if (r.status === 404) return null;
-  if (!r.ok) throw malaRespuesta(r.status);
+  if (!r.ok) throw await malaRespuestaDe(r);
   const item = await r.json();
   const enlace = item['@microsoft.graph.downloadUrl'];
   if (!item.file || !enlace) throw new Error(t('El archivo jepyso.json de tu {nube} no es de Jepyso: no se ha tocado nada.', { nube: NUBE }));
@@ -102,5 +123,5 @@ export async function leer() {
 export async function escribir(texto) {
   const r = await pedir(`${ARCHIVO}:/content`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: texto });
   if (r.status === 507) throw new Error(t('Tu {nube} está lleno: haz sitio y vuelve a sincronizar.', { nube: NUBE }));
-  if (!r.ok) throw malaRespuesta(r.status);
+  if (!r.ok) throw await malaRespuestaDe(r);
 }
