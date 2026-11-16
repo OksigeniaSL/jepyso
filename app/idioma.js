@@ -1,7 +1,7 @@
 // The language of the screens: Spanish, in which Jepyso is written, or English. Each phone follows its own language
-// unless someone chose one with the switch beside «Accesibilidad»: a routine sent from a phone in Spanish opens in
-// English on a phone set in English, and the other way round. What people write themselves (names, notes) stays as
-// they wrote it.
+// (in a Moodle course, the user's language there) unless someone chose one with the switch beside «Accesibilidad»: a
+// routine sent from a phone in Spanish opens in English on a phone set in English, and the other way round. What
+// people write themselves (names, notes) stays as they wrote it.
 //
 // Texts are looked up by their Spanish wording, as gettext does: t('Nueva rutina'), t('Hola, {nombre}', { nombre }),
 // tn(n, '{n} serie', '{n} series'). The English ones are in idiomas/en.js (the screens) and idiomas/en-ejercicios.js
@@ -12,22 +12,28 @@ import { almacen } from './datos.js';
 
 export const IDIOMAS = { es: 'Español', en: 'English' };
 
-// The languages of Spain and of Paraguay read Spanish better than English; any other one gets English.
-const HISPANAS = /^(es|ca|gl|eu|ast|an|gn)\b/i;
-function delTelefono() {
-  const lista = navigator.languages?.length ? navigator.languages : [navigator.language || 'es'];
+// The languages of Spain and of Paraguay read Spanish better than English; any other one gets English. Moodle names
+// them with an underscore (es_mx, en_us), phones with a dash.
+const HISPANAS = /^(es|ca|gl|eu|ast|an|gn)(\b|_)/i;
+function deLista(lista) {
   for (const l of lista) {
     if (HISPANAS.test(l)) return 'es';
-    if (/^en\b/i.test(l)) return 'en';
+    if (/^en(\b|_)/i.test(l)) return 'en';
   }
   return 'en';
 }
+const delTelefono = () => deLista(navigator.languages?.length ? navigator.languages : [navigator.language || 'es']);
+// The Moodle activity opens the player with the language of that user in Moodle (?idioma=es_mx).
+const deLaPlataforma = () => {
+  const l = new URLSearchParams(location.search).get('idioma');
+  return l && /^[a-z]{2,3}(_[a-z0-9_]+)?$/i.test(l) ? deLista([l]) : '';
+};
 
 let actual = '';
 export function idioma() {
   if (!actual) {
     const elegido = almacen.leer('idioma', '');
-    actual = Object.hasOwn(IDIOMAS, elegido) ? elegido : delTelefono();
+    actual = Object.hasOwn(IDIOMAS, elegido) ? elegido : deLaPlataforma() || delTelefono();
   }
   return actual;
 }

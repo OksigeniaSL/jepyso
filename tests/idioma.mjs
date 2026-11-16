@@ -832,6 +832,14 @@ try {
     comprobar((await es.getAttribute('html', 'lang')) === 'es', 'un teléfono en español no abre en español');
     const enEs = es.locator('.firma-pro [data-idioma]');
     comprobar((await enEs.count()) === 1 && normal(await enEs.innerText()) === 'English', 'en un teléfono en español, el cambio no dice «English»');
+    // Inside a Moodle course the player follows the user's language there (?idioma=, as player.php writes it).
+    await es.goto(app('&idioma=en_us'));
+    await es.waitForSelector('.armar');
+    comprobar((await es.getAttribute('html', 'lang')) === 'en', 'con ?idioma=en_us de Moodle, un teléfono en español no abre en inglés');
+    await c.evaluate(() => localStorage.removeItem('idioma'));
+    await c.goto(app('&idioma=es_mx'));
+    await c.waitForSelector('.armar');
+    comprobar((await c.getAttribute('html', 'lang')) === 'es', 'con ?idioma=es_mx de Moodle, un teléfono en inglés no abre en español');
   });
 } finally {
   for (const c of contextos) await c.close().catch(() => {});
