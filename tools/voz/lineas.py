@@ -5,11 +5,14 @@ of their own (the in-app browser of the Moodle app, Brave): the player plays the
 
 The key of each sentence is the start of the SHA-1 of its text, the same name the player looks for (app/voz.js).
 Usage: python3 -B tools/voz/lineas.py <voice> > lineas.tsv      (voice: a brand voice of voces.json, e.g. Mira)
+       python3 -B tools/voz/lineas.py --en "Mira EN" > lineas-en.tsv   (the same sentences in English, from the
+       dictionaries of app/idiomas/; a sentence without its English is left out and named on stderr)
 """
 import glob
 import hashlib
 import json
 import os
+import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -66,7 +69,54 @@ def frases():
     return unicos
 
 
+EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+      'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+EN_DECENAS = {2: 'twenty', 3: 'thirty', 4: 'forty', 5: 'fifty', 6: 'sixty'}
+
+
+def numero_en(n):
+    """The count in English words, the same as numeroEn() of app/voz.js."""
+    if n < 20:
+        return EN[n]
+    d, u = divmod(n, 10)
+    return EN_DECENAS[d] if u == 0 else f"{EN_DECENAS[d]}-{EN[u]}"
+
+
+def diccionario_en():
+    """The English of app/idiomas/ (screens and exercises), read by node, as the app reads it."""
+    codigo = ("const a=(await import('./app/idiomas/en-ejercicios.js')).default;"
+              "const b=(await import('./app/idiomas/en.js')).default;"
+              "console.log(JSON.stringify({...a,...b}))")
+    salida = subprocess.run(['node', '--input-type=module', '-e', codigo], cwd=ROOT, capture_output=True, text=True,
+                            check=True, timeout=60).stdout
+    return json.loads(salida)
+
+
+def frases_en():
+    dic = diccionario_en()
+    numeros = {numero(n, m) for n in range(0, 61) for m in (False, True)}
+    out = [numero_en(n) for n in range(0, 61)]
+    for es in frases():
+        if es in numeros:
+            continue
+        # A sentence said in parts («Descansa. Ahora, el otro lado»): each part, as the player splits it.
+        partes = [es] if es in dic else [p.strip() for p in es.split('. ') if p.strip()]
+        for p in partes:
+            if dic.get(p):
+                out.append(dic[p].strip())
+            else:
+                print(f'sin inglés: {p}', file=sys.stderr)
+    vistos, unicos = set(), []
+    for t in out:
+        if t and t not in vistos:
+            vistos.add(t)
+            unicos.append(t)
+    return unicos
+
+
 if __name__ == '__main__':
-    voz = sys.argv[1] if len(sys.argv) > 1 else 'Mira'
-    for t in frases():
+    ingles = '--en' in sys.argv
+    args = [a for a in sys.argv[1:] if a != '--en']
+    voz = args[0] if args else ('Mira EN' if ingles else 'Mira')
+    for t in (frases_en() if ingles else frases()):
         print(f'{clave(t)}\t{voz}\t{t}')

@@ -4,8 +4,10 @@
 // first time each phone gets one of the two at random, so neither is the default (Enrique, 15-11-2026). A sentence with
 // no take at hand (no connection the first time) is said by a Spanish voice of the phone itself (localService:
 // nothing the person hears is sent anywhere). Without either the routine goes on with its tones. On by default; the
-// person can turn it off, and the choice stays on that phone.
+// person can turn it off, and the choice stays on that phone. In English, the same two brand voices speak English
+// (voz/mira-en, voz/altair-en), and the phone's own voice is an English one.
 import { almacen } from './datos.js';
+import { idioma, t } from './idioma.js';
 
 let voz = null;
 let buscada = false;
@@ -21,15 +23,17 @@ export function modoVoz({ grupo = false } = {}) {
 
 function elegirVoz() {
   if (!('speechSynthesis' in window)) return null;
-  const locales = speechSynthesis.getVoices().filter((v) => v.localService && /^es\b/i.test(v.lang));
-  // Spanish from Spain first, then any other; within each, the phone's default.
-  const orden = (v) => (/^es[-_]ES/i.test(v.lang) ? 0 : 1) * 2 + (v.default ? 0 : 1);
+  const en = idioma() === 'en';
+  const locales = speechSynthesis.getVoices().filter((v) => v.localService && (en ? /^en\b/i : /^es\b/i).test(v.lang));
+  // Spanish from Spain (British English) first, then any other; within each, the phone's default.
+  const orden = (v) => ((en ? /^en[-_]GB/i : /^es[-_]ES/i).test(v.lang) ? 0 : 1) * 2 + (v.default ? 0 : 1);
   return locales.sort((a, b) => orden(a) - orden(b))[0] || null;
 }
 
 // Who speaks: each recorded voice in its folder, with voz/<folder>/indice.json saying the file of each sentence
 // ({ "Descansa": "a1b2c3d4e5f6", … }).
-const CARPETAS = { mujer: 'mira', hombre: 'altair' };
+const CARPETAS_DE = { es: { mujer: 'mira', hombre: 'altair' }, en: { mujer: 'mira-en', hombre: 'altair-en' } };
+const CARPETAS = CARPETAS_DE[idioma()] || CARPETAS_DE.es;
 export const quienHabla = () => {
   let q = almacen.leer('voz-quien', '');
   if (!Object.hasOwn(CARPETAS, q)) {
@@ -163,9 +167,11 @@ function decirConElTelefono(texto, interrumpir = true) {
   speechSynthesis.speak(u);
 }
 
-export function decir(texto, { interrumpir = true } = {}) {
+export function decir(dicho, { interrumpir = true } = {}) {
   prepararVoz();
-  if (!vozActiva() || !texto) return;
+  if (!vozActiva() || !dicho) return;
+  // In the language in use, whether the caller translated it or not (an English text is its own translation).
+  const texto = t(dicho);
   // The list of takes of the voice just chosen is still on its way: said when it arrives.
   if (!indice && pidiendoIndice && !indiceListo) {
     pidiendoIndice.then(() => decir(texto, { interrumpir }));
@@ -192,7 +198,7 @@ export async function rutasDeVoz(textos) {
   await cargarIndice();
   if (!indice) return [];
   const carpeta = `voz/${CARPETAS[indiceDe]}`;
-  const claves = new Set(textos.flatMap((t) => partes(t)).map((t) => indice[t]).filter(esClave));
+  const claves = new Set(textos.flatMap((x) => partes(t(x))).map((x) => indice[x]).filter(esClave));
   return [`${carpeta}/indice.json`, ...[...claves].map((k) => `${carpeta}/${k}.mp3`)];
 }
 // What the player may say in any routine: the count, its own sentences and the default words of the phases.
@@ -203,9 +209,21 @@ const NUMEROS = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete
 const VEINTI = ['veinte', '', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis', 'veintisiete',
   'veintiocho', 'veintinueve'];
 const DECENAS = { 3: 'treinta', 4: 'cuarenta', 5: 'cincuenta', 6: 'sesenta' };
+const EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+  'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const EN_DECENAS = { 2: 'twenty', 3: 'thirty', 4: 'forty', 5: 'fifty', 6: 'sixty' };
+function numeroEn(n) {
+  if (n < 20) return EN[n] ?? String(n);
+  const d = Math.floor(n / 10);
+  const u = n % 10;
+  if (!EN_DECENAS[d] || n > 60) return String(n);
+  return u === 0 ? EN_DECENAS[d] : `${EN_DECENAS[d]}-${EN[u]}`;
+}
+
 // The count in words up to sixty, as said aloud: figures would be read in another language by some voices. Steps and
-// laps are counted «uno» (veintiuno, treinta y uno), repetitions «una» (veintiuna, treinta y una).
+// laps are counted «uno» (veintiuno, treinta y uno), repetitions «una» (veintiuna, treinta y una). English has one.
 export function numero(n, masculino = false) {
+  if (idioma() === 'en') return numeroEn(n);
   const uno = masculino ? 'uno' : 'una';
   if (n === 1) return uno;
   if (n <= 20) return NUMEROS[n] ?? String(n);
