@@ -7,6 +7,8 @@ export default {
   'Rutina': 'Routine',
   'Jepyso · un producto de <a href="https://oksigenia.com">Oksigenia</a>': 'Jepyso · an <a href="https://oksigenia.com/en">Oksigenia</a> product',
   'Accesibilidad': 'Accessibility',
+  'Modo claro': 'Light mode',
+  'Modo oscuro': 'Dark mode',
   'Ayuda': 'Help',
   '¿Cómo le mando una rutina a alguien?': 'How do I send someone a routine?',
   'Ármala en «Nueva rutina» y pulsa «Crear enlace»: se lo mandas por WhatsApp, Telegram u otra app. Lo abre en su teléfono, sin instalar nada.': 'Build it in “New routine” and tap “Create link”: you send it over WhatsApp, Telegram or another app. They open it on their phone, with nothing to install.',

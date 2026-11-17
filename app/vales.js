@@ -209,7 +209,7 @@ export async function botonGoogle(hueco) {
     const google = await prepararGoogle();
     if (!hueco.isConnected) return;
     hueco.textContent = '';
-    const oscuro = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    const oscuro = document.documentElement.dataset.modo === 'oscuro';
     google.accounts.id.renderButton(hueco, {
       type: 'standard',
       theme: oscuro ? 'filled_black' : 'outline',

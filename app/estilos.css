@@ -1392,3 +1392,20 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 /* Reference programmes (programas.js), under the professional's own templates. */
 .programas { display: grid; gap: 10px; margin-top: 24px; }
 .programas h2 { margin: 0; font-size: 15px; color: var(--tinta-suave); font-weight: 600; }
+
+/* Light or dark, with a goniometer: the arm sweeps the protractor and the range it covers fills with graphite, as on
+   the builder's goniometer. Light, a short range (45°); dark, most of the arc (135°). A touch swings it from one to the
+   other; data-modo comes from tema.js before the page paints. */
+.tema-gonio { width: 32px; height: 24px; flex: none; overflow: visible; }
+.tema-gonio path, .tema-gonio circle { fill: none; stroke: currentColor; stroke-linecap: round; }
+.tema-gonio .tg-arco, .tema-gonio .tg-base { stroke-width: 1.4; }
+.tema-gonio .tg-marcas { stroke-width: 1.1; }
+.tema-gonio .tg-sector { stroke-width: 12; stroke-linecap: butt; stroke-dasharray: 4.712 40; opacity: 0.85;
+  transform-box: view-box; transform-origin: 16px 20px; transform: scaleY(-1); }
+.tema-gonio .tg-brazo { stroke-width: 2.2; transform-box: view-box; transform-origin: 16px 20px; transform: rotate(-45deg); }
+.tema-gonio .tg-eje { fill: var(--fondo); stroke-width: 1.5; }
+.tema-gonio .tg-sector, .tema-gonio .tg-brazo { transition: transform .6s cubic-bezier(.3, .7, .25, 1), stroke-dasharray .6s cubic-bezier(.3, .7, .25, 1); }
+:root[data-modo="oscuro"] .tema-gonio .tg-sector { stroke-dasharray: 14.137 40; }
+:root[data-modo="oscuro"] .tema-gonio .tg-brazo { transform: rotate(-135deg); }
+@media (prefers-reduced-motion: reduce) { .tema-gonio .tg-sector, .tema-gonio .tg-brazo { transition: none; } }
+.firma-acceso svg.tema-gonio { width: 30px; height: 22px; }

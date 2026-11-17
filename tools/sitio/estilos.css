@@ -21,7 +21,7 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --fondo: #121517;
     --superficie: #191d20;
     --tinta: #e3e6e4;
@@ -37,6 +37,21 @@
     color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+    --fondo: #121517;
+    --superficie: #191d20;
+    --tinta: #e3e6e4;
+    --tinta-suave: #a2aaae;
+    --linea: #353b3f;
+    --grafito-fino: rgb(227 230 228 / 0.34);
+    --vivo-texto: #ef8a70;
+    --vivo: #e06a4c;
+    --barrote: #3b4246;
+    --barrote-luz: #555e63;
+    --barrote-sombra: #22272a;
+    --figura-fondo: radial-gradient(120% 95% at 18% 0%, #2c3236 0%, #1a1e21 60%, #131618 100%);
+    color-scheme: dark;
+  }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--tinta-suave) var(--fondo); }
 body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: var(--letra); font-size: 18px; line-height: 1.55; }
@@ -141,8 +156,9 @@ img { max-width: 100%; height: auto; display: block; }
   --lado: clamp(16px, 4vw, 56px); --cab: 72px;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --superficie-2: #22272a; --linea-fuerte: #6b7478; --vivo: #e06a4c; --sombra: 0 30px 60px -30px rgb(0 0 0 / 0.8); }
+  :root:not([data-theme="light"]) { --superficie-2: #22272a; --linea-fuerte: #6b7478; --vivo: #e06a4c; --sombra: 0 30px 60px -30px rgb(0 0 0 / 0.8); }
 }
+:root[data-theme="dark"] { --superficie-2: #22272a; --linea-fuerte: #6b7478; --vivo: #e06a4c; --sombra: 0 30px 60px -30px rgb(0 0 0 / 0.8); }
 .enlace-precios { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
 @media (max-width: 560px) { .enlace-precios { display: none; } }
 
@@ -413,3 +429,25 @@ html.con-espaldera body { margin-right: 30px; }
 .espaldera-banda:hover, .espaldera.arrastrando .espaldera-banda { filter: brightness(1.08); }
 .espaldera.arrastrando, .espaldera.arrastrando .espaldera-banda { cursor: grabbing; }
 @media print { .espaldera { display: none; } html.con-espaldera body { margin-right: 0; } }
+
+/* Light or dark, with a goniometer: the arm sweeps the protractor and the range it covers fills with graphite, as on
+   the builder's goniometer. Light, a short range (45°); dark, most of the arc (135°). A touch swings it from one to the
+   other; data-modo comes from tema.js before the page paints. */
+.tema-gonio { width: 32px; height: 24px; flex: none; overflow: visible; }
+.tema-gonio path, .tema-gonio circle { fill: none; stroke: currentColor; stroke-linecap: round; }
+.tema-gonio .tg-arco, .tema-gonio .tg-base { stroke-width: 1.4; }
+.tema-gonio .tg-marcas { stroke-width: 1.1; }
+.tema-gonio .tg-sector { stroke-width: 12; stroke-linecap: butt; stroke-dasharray: 4.712 40; opacity: 0.85;
+  transform-box: view-box; transform-origin: 16px 20px; transform: scaleY(-1); }
+.tema-gonio .tg-brazo { stroke-width: 2.2; transform-box: view-box; transform-origin: 16px 20px; transform: rotate(-45deg); }
+.tema-gonio .tg-eje { fill: var(--fondo); stroke-width: 1.5; }
+.tema-gonio .tg-sector, .tema-gonio .tg-brazo { transition: transform .6s cubic-bezier(.3, .7, .25, 1), stroke-dasharray .6s cubic-bezier(.3, .7, .25, 1); }
+:root[data-modo="oscuro"] .tema-gonio .tg-sector { stroke-dasharray: 14.137 40; }
+:root[data-modo="oscuro"] .tema-gonio .tg-brazo { transform: rotate(-135deg); }
+@media (prefers-reduced-motion: reduce) { .tema-gonio .tg-sector, .tema-gonio .tg-brazo { transition: none; } }
+.tema { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; margin-right: -10px;
+  border: 0; background: none; color: var(--tinta); cursor: pointer; }
+.tema:focus-visible { outline: 2px solid var(--tinta); outline-offset: -2px; }
+.enlace-app { white-space: nowrap; }
+@media (max-width: 400px) { .cabecera-nav { gap: 10px; } .enlace-app { padding: 9px 10px; } }
+@media (max-width: 350px) { .marca { font-size: 24px; } .cabecera-nav { font-size: 15px; gap: 8px; } .enlace-app { padding: 9px 8px; } .tema { width: 40px; } }

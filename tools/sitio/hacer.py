@@ -39,18 +39,21 @@ RUTAS = {
 }
 PIE = {
     'es': {'precios_corto': 'Precios', 'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
-           'firma': 'Jepyso · un producto de Oksigenia', 'sello': 'Comprueba la seguridad de esta web', 'otra': 'English', 'abrir': 'Abrir la app',
+           'firma': 'Jepyso · un producto de Oksigenia', 'sello': 'Comprueba la seguridad de esta web', 'oscuro': 'Modo oscuro', 'otra': 'English', 'abrir': 'Abrir la app',
            'redes': 'Oksigenia en las redes', 'en_red': 'Oksigenia en {red}'},
     'en': {'precios_corto': 'Pricing', 'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
-           'firma': 'Jepyso · an Oksigenia product', 'sello': 'Check this website’s security', 'otra': 'Español', 'abrir': 'Open the app',
+           'firma': 'Jepyso · an Oksigenia product', 'sello': 'Check this website’s security', 'oscuro': 'Dark mode', 'otra': 'Español', 'abrir': 'Open the app',
            'redes': 'Oksigenia on social media', 'en_red': 'Oksigenia on {red}'},
 }
 
 e = html.escape
 
+# The goniometer that switches light and dark (estilos.css, «.tema-gonio»; the same drawing as in the app).
+GONIO = '<svg class="tema-gonio" viewBox="0 0 32 24" aria-hidden="true" focusable="false"><path class="tg-arco" d="M4 20a12 12 0 0 1 24 0"/><circle class="tg-sector" cx="16" cy="20" r="6"/><path class="tg-marcas" d="M27.52 13.35L28.9 12.55M22.65 8.48L23.45 7.1M16 6.7V5.1M9.35 8.48L8.55 7.1M4.48 13.35L3.1 12.55"/><path class="tg-base" d="M1 20h30"/><path class="tg-brazo" d="M16 20h14.5"/><circle class="tg-eje" cx="16" cy="20" r="1.8"/></svg>'
+
 # The site's own sheet and scripts go with ?v=<their hash>: browsers keep them four hours (the proxy's max-age), and a
 # new publication must reach whoever came earlier that day. sitio.js imports espaldera.js with the same mark.
-_ASSETS = ('estilos.css', 'sitio.js', 'espaldera.js', 'portada.js')
+_ASSETS = ('estilos.css', 'tema.js', 'sitio.js', 'espaldera.js', 'portada.js')
 VERSION = hashlib.sha256(b''.join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), 'rb').read()
                                   for f in _ASSETS)).hexdigest()[:10]
 
@@ -136,6 +139,7 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="icon" href="/icono-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/fuentes/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="/tema.js?v={VERSION}"></script>
   <link rel="stylesheet" href="/estilos.css?v={VERSION}">
   <script type="module" src="/vendor/oksigenia-access-panel/oksigenia-access-panel.js?v={PANEL_V}"></script>
   <script type="module" src="/sitio.js?v={VERSION}"></script>{PORTADA_HEAD if clave == 'inicio' else ''}{datos_estructurados(lengua, clave)}
@@ -147,6 +151,7 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
       <a class="enlace-precios" href="{r['precios']}">{p['precios_corto']}</a>
       <a class="enlace-app" href="{APP}">{p['abrir']}</a>
       <a class="otra-lengua" href="{RUTAS[otra][hermana]}" hreflang="{otra}" lang="{otra}">{p['otra']}</a>
+      <button type="button" class="tema" data-tema aria-label="{p['oscuro']}" title="{p['oscuro']}">{GONIO}</button>
     </nav>
   </header>
   <main id="contenido">
@@ -878,7 +883,7 @@ def main():
     os.makedirs(DEST)
     aqui = os.path.dirname(os.path.abspath(__file__))
     app = os.path.join(RAIZ, 'app')
-    for f in ('estilos.css', 'espaldera.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
+    for f in ('estilos.css', 'tema.js', 'espaldera.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
         shutil.copy(os.path.join(aqui, f), DEST)
     with open(os.path.join(aqui, 'sitio.js'), encoding='utf-8') as f:
         sitio = f.read()
