@@ -76,6 +76,10 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+/* The scrollbars, thin and in graphite on the paper, in the page and in every panel that scrolls (jepyso.com draws its
+   own, the wall-bar ladder; the app is a tool and keeps the browser's, in its colours). */
+html { scrollbar-color: var(--linea-control) transparent; }
+* { scrollbar-width: thin; }
 body {
   background: var(--fondo);
   color: var(--tinta);

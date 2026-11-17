@@ -38,10 +38,10 @@ RUTAS = {
 }
 PIE = {
     'es': {'precios_corto': 'Precios', 'precios': 'Planes y precios', 'privacidad': 'Privacidad', 'condiciones': 'Condiciones de uso', 'aviso': 'Aviso legal', 'acceso': 'Accesibilidad',
-           'firma': 'Jepyso · un producto de Oksigenia', 'otra': 'English', 'abrir': 'Abrir la app',
+           'firma': 'Jepyso · un producto de Oksigenia', 'sello': 'Comprueba la seguridad de esta web', 'otra': 'English', 'abrir': 'Abrir la app',
            'redes': 'Oksigenia en las redes', 'en_red': 'Oksigenia en {red}'},
     'en': {'precios_corto': 'Pricing', 'precios': 'Plans and pricing', 'privacidad': 'Privacy', 'condiciones': 'Terms of use', 'aviso': 'Legal notice', 'acceso': 'Accessibility',
-           'firma': 'Jepyso · an Oksigenia product', 'otra': 'Español', 'abrir': 'Open the app',
+           'firma': 'Jepyso · an Oksigenia product', 'sello': 'Check this website’s security', 'otra': 'Español', 'abrir': 'Open the app',
            'redes': 'Oksigenia on social media', 'en_red': 'Oksigenia on {red}'},
 }
 
@@ -156,7 +156,7 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
     <div class="pie-oksigenia">
       <div class="oksigenia">
         <a class="oksigenia-marca" href="https://oksigenia.com{'/en' if lengua == 'en' else ''}" aria-label="Oksigenia">{LOGO_OKSIGENIA}<span aria-hidden="true">OKSIGENIA</span></a>
-        <p class="firma"><a href="https://oksigenia.com{'/en' if lengua == 'en' else ''}">{p['firma']}</a><span class="separa" aria-hidden="true">·</span><a href="mailto:{CORREO_OKSIGENIA}">{CORREO_OKSIGENIA}</a></p>
+        <p class="firma"><a href="https://oksigenia.com{'/en' if lengua == 'en' else ''}">{p['firma']}</a><span class="separa" aria-hidden="true">·</span><a href="mailto:{CORREO_OKSIGENIA}">{CORREO_OKSIGENIA}</a><span class="separa" aria-hidden="true">·</span><a href="https://checker.oksigenia.com/sello/jepyso.com/">{p['sello']}</a></p>
       </div>
       {redes(lengua)}
     </div>
@@ -871,7 +871,7 @@ def main():
     os.makedirs(DEST)
     aqui = os.path.dirname(os.path.abspath(__file__))
     app = os.path.join(RAIZ, 'app')
-    for f in ('estilos.css', 'sitio.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
+    for f in ('estilos.css', 'sitio.js', 'espaldera.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
         shutil.copy(os.path.join(aqui, f), DEST)
     shutil.copytree(os.path.join(app, 'fuentes'), os.path.join(DEST, 'fuentes'))
     os.makedirs(os.path.join(DEST, 'imagenes'))

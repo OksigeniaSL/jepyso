@@ -13,6 +13,10 @@
   --linea: #bcc2c2;
   --grafito-fino: rgb(29 34 37 / 0.38);
   --vivo-texto: #a5432b;
+  --vivo: #c9553a;
+  --barrote: #c6cbc9;
+  --barrote-luz: #f7f8f6;
+  --barrote-sombra: #a3aaa9;
   --figura-fondo: radial-gradient(120% 95% at 18% 0%, #f7f8f6 0%, #dfe2df 55%, #cfd3d0 100%);
   color-scheme: light;
 }
@@ -25,12 +29,16 @@
     --linea: #353b3f;
     --grafito-fino: rgb(227 230 228 / 0.34);
     --vivo-texto: #ef8a70;
+    --vivo: #e06a4c;
+    --barrote: #3b4246;
+    --barrote-luz: #555e63;
+    --barrote-sombra: #22272a;
     --figura-fondo: radial-gradient(120% 95% at 18% 0%, #2c3236 0%, #1a1e21 60%, #131618 100%);
     color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--tinta-suave) var(--fondo); }
 body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: var(--letra); font-size: 18px; line-height: 1.55; }
 a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; }
@@ -378,3 +386,30 @@ img { max-width: 100%; height: auto; display: block; }
   .planes-tres .plan + .plan { border-left: 0; border-top: 1px solid var(--linea-fuerte); }
   .bloque-sala p:not(.etiqueta):not(.precio) { font-size: 17px; }
 }
+
+/* The scrollbar is a wall-bar ladder, drawn like the rest of the site, graphite on plaster: the band wrapped round its
+   rungs is where you are, and the darker rungs are the sections. With a mouse on wide screens only (espaldera.js);
+   elsewhere the browser's own bar stays, in the site's colours (html, above). Rung pitch and offset, as in the script. */
+html.con-espaldera { scrollbar-width: none; }
+html.con-espaldera::-webkit-scrollbar { display: none; }
+html.con-espaldera body { margin-right: 30px; }
+.espaldera { position: fixed; top: 0; right: 0; bottom: 0; width: 30px; z-index: 40; background: var(--fondo);
+  border-left: 1px solid var(--linea); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.espaldera::before { content: ''; position: absolute; inset: 0 5px 0 6px;
+  background:
+    linear-gradient(to right, var(--grafito-fino) 0 2px, transparent 2px calc(100% - 2px), var(--grafito-fino) calc(100% - 2px)),
+    repeating-linear-gradient(to bottom, transparent 0 19px, var(--barrote-luz) 19px 20px, var(--barrote) 20px 22px,
+      var(--barrote-sombra) 22px 23px, transparent 23px 24px); }
+.espaldera-marca { position: absolute; left: 2px; right: 1px; height: 14px; margin-top: -7px; }
+.espaldera-marca::before { content: ''; position: absolute; left: 0; right: 0; top: 5px; height: 4px; background: var(--tinta-suave); }
+.espaldera-marca span, .espaldera-banda span { position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); padding: 3px 9px;
+  background: var(--superficie); border: 1px solid var(--linea); color: var(--tinta); font-size: 14px; line-height: 1.3;
+  white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; }
+.espaldera-marca:hover span, .espaldera.sobre-banda .espaldera-banda span { opacity: 1; }
+.espaldera-marca:hover::before { background: var(--tinta); }
+.espaldera-banda { position: absolute; top: 0; left: 1px; right: 0; cursor: grab;
+  background: repeating-linear-gradient(to bottom, transparent 0 19px, rgb(0 0 0 / 0.2) 19px 23px, transparent 23px 24px) fixed, var(--vivo);
+  box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.28), inset 0 -2px 0 rgb(0 0 0 / 0.22); will-change: transform; }
+.espaldera-banda:hover, .espaldera.arrastrando .espaldera-banda { filter: brightness(1.08); }
+.espaldera.arrastrando, .espaldera.arrastrando .espaldera-banda { cursor: grabbing; }
+@media print { .espaldera { display: none; } html.con-espaldera body { margin-right: 0; } }
