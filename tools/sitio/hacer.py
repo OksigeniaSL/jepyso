@@ -9,7 +9,9 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
+from datetime import date
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEST = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'dist', 'sitio')
@@ -60,6 +62,38 @@ def redes(lengua):
     return f'<ul class="redes" aria-label="{e(p["redes"])}">{enlaces}</ul>'
 
 
+# --- How the page shows when shared (WhatsApp, Telegram, X…): the card of each language, drawn by tarjeta.mjs.
+TARJETA_ALT = {
+    'es': 'La figura de Jepyso hace un puente de glúteo en un estudio de escayola, junto al titular «La rutina que mandas, al ritmo que mandas»',
+    'en': 'Jepyso’s figure doing a glute bridge in a plaster studio, beside the headline “The routine you set, at the pace you set”',
+}
+LOCALE = {'es': 'es_ES', 'en': 'en_GB'}
+
+
+def datos_estructurados(lengua, clave):
+    """schema.org for the search engines and the assistants, on the home and the pricing page: Oksigenia (the same
+    @id as oksigenia.com), the site and the app with its three plans."""
+    if clave not in ('inicio', 'precios'):
+        return ''
+    r = RUTAS[lengua]
+    org = 'https://oksigenia.com/#organization'
+    planes = [{'@type': 'Offer', 'name': nombre, 'price': re.sub(r'[^0-9]', '', precio), 'priceCurrency': 'EUR',
+               'description': re.sub(r'<[^>]+>', '', texto), 'url': f'{SITIO}{r["precios"]}'}
+              for nombre, precio, _, texto, *_ in T[lengua]['planes']]
+    grafo = {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'Organization', '@id': org, 'name': 'Oksigenia', 'legalName': EMPRESA['nombre'], 'url': 'https://oksigenia.com/',
+         'logo': 'https://oksigenia.com/logo-512.png', 'email': CORREO_OKSIGENIA, 'sameAs': [x['url'] for x in REDES]},
+        {'@type': 'WebSite', '@id': f'{SITIO}/#website', 'url': f'{SITIO}/', 'name': 'Jepyso', 'inLanguage': lengua,
+         'publisher': {'@id': org}},
+        {'@type': 'WebApplication', '@id': f'{SITIO}/#app', 'name': 'Jepyso', 'url': APP, 'description': T[lengua]['desc'],
+         'applicationCategory': 'HealthApplication', 'operatingSystem': 'Web', 'browserRequirements': 'HTML5, WebGL',
+         'inLanguage': ['es', 'en'], 'isAccessibleForFree': True, 'license': 'https://www.gnu.org/licenses/gpl-3.0.html',
+         'image': f'{SITIO}/imagenes/tarjeta-{lengua}.jpg', 'publisher': {'@id': org}, 'offers': planes},
+    ]}
+    texto = json.dumps(grafo, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+    return f'\n  <script type="application/ld+json">{texto}</script>'
+
+
 def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
     r = RUTAS[lengua]
     p = PIE[lengua]
@@ -76,6 +110,20 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="canonical" href="{SITIO}{r[clave]}">
   <link rel="alternate" hreflang="{lengua}" href="{SITIO}{r[clave]}">
   <link rel="alternate" hreflang="{otra}" href="{SITIO}{RUTAS[otra][hermana]}">
+  <link rel="alternate" hreflang="x-default" href="{SITIO}{RUTAS['en'][hermana]}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jepyso">
+  <meta property="og:title" content="{e(titulo)}">
+  <meta property="og:description" content="{e(descripcion)}">
+  <meta property="og:url" content="{SITIO}{r[clave]}">
+  <meta property="og:image" content="{SITIO}/imagenes/tarjeta-{lengua}.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{e(TARJETA_ALT[lengua])}">
+  <meta property="og:locale" content="{LOCALE[lengua]}">
+  <meta property="og:locale:alternate" content="{LOCALE[otra]}">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/icono.svg" type="image/svg+xml">
   <link rel="icon" href="/icono-96.png" sizes="96x96" type="image/png">
@@ -83,7 +131,7 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="preload" href="/fuentes/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/estilos.css">
   <script type="module" src="/vendor/oksigenia-access-panel/oksigenia-access-panel.js?v={PANEL_V}"></script>
-  <script type="module" src="/sitio.js"></script>{PORTADA_HEAD if clave == 'inicio' else ''}
+  <script type="module" src="/sitio.js"></script>{PORTADA_HEAD if clave == 'inicio' else ''}{datos_estructurados(lengua, clave)}
 </head>
 <body{' class="inicio"' if clave == 'inicio' else ''}>
   <header class="cabecera">
@@ -601,6 +649,155 @@ AVISO = {
 }
 
 
+# --- What the search engines show under the legal pages.
+DESC_LEGAL = {
+    'es': {
+        'privacidad': 'Qué datos maneja Jepyso y dónde se quedan: la rutina va dentro del enlace, lo que apunta la persona se queda en su teléfono y las fichas, en tus aparatos o en tu nube. Oksigenia no guarda tus datos.',
+        'condiciones': 'Las condiciones para usar Jepyso, la app de rutinas de ejercicio por enlace de Oksigenia SL, y sus planes de pago único.',
+        'aviso': 'Quién está detrás de Jepyso: Oksigenia SL, con sus datos de registro y de contacto.',
+    },
+    'en': {
+        'privacidad': 'What data Jepyso handles and where it stays: the routine travels inside the link, what the person records stays on their phone, and your files stay on your devices or in your own cloud. Oksigenia keeps none of your data.',
+        'condiciones': 'The terms for using Jepyso, Oksigenia SL’s app for exercise routines sent as a link, and its one-payment plans.',
+        'aviso': 'Who is behind Jepyso: Oksigenia SL, with its registration and contact details.',
+    },
+}
+
+
+# --- llms.txt (llmstxt.org), for the assistants that answer about Jepyso: in Spanish at the root and in English under
+# /en/, from the same data as the pages (plans, catalogue), so it cannot say something the site no longer says.
+def llms(lengua):
+    t = T[lengua]
+    r = RUTAS[lengua]
+    traducir = (lambda x: INGLES_EJ.get(x, x)) if lengua == 'en' else (lambda x: x)
+    zonas = ', '.join(f'{traducir(etiqueta).lower()} ({n})' for etiqueta, n, _ in CATALOGO)
+    precio = {nombre: p for nombre, p, *_ in t['planes']}
+    u = lambda clave: f'{SITIO}{r[clave]}'
+    if lengua == 'es':
+        return f'''# Jepyso
+
+> Rutinas de ejercicio que se mandan por un enlace. El profesional arma la rutina de cada persona y se la manda por WhatsApp, Telegram, correo o un código QR; la persona la hace en su teléfono siguiendo a una figura en 3D que sube, mantiene y baja al ritmo que le han puesto, sin instalar nada ni crear una cuenta.
+
+English version: {SITIO}/en/llms.txt
+
+Jepyso es una aplicación web de {EMPRESA['nombre']} (España, NIF {EMPRESA['cif']}), con el código libre (GPL v3). Es para cualquier profesional del ejercicio y en cualquier país: fisioterapia, entrenamiento, Educación Física o un centro de mayores. La app está en español y en inglés: {APP}
+
+## Qué hace
+
+- **Armar la rutina.** {TOTAL_EJ} ejercicios, por zona, por músculo o por nombre. Cada uno tiene su figura en 3D, sus pasos, el error más común y una forma más fácil cuando la hay. Por zonas: {zonas}; un ejercicio puede servir para varias. El profesional pone las series, las repeticiones, los segundos de subida, mantenimiento y bajada, el lado, los días a la semana y la molestia que acepta. Puede guardar sus plantillas, y tiene dentro los programas Otago y Vivifrail, de cuatro niveles cada uno.
+- **Mandarla por un enlace.** La rutina va dentro del enlace: por WhatsApp, por Telegram, por correo, con la hoja de compartir del teléfono o con un código QR en la consulta.
+- **Hacerla con la figura.** La fase en grande, la cuenta atrás, un sonido y una vibración en cada repetición, el otro lado en espejo y una voz grabada que guía (Mira o Altair, a elegir, o ninguna). Una vez abierta, funciona sin conexión. Un recordatorio la pone en el calendario del teléfono.
+- **Devolver lo hecho.** La persona apunta lo que hizo, la molestia de 0 a 10 y, si quiere, una nota, y se lo manda al profesional en otro enlace. Él lo ve en la ficha de cada persona, día a día y semana a semana. Quien no le ha mandado nada en dos semanas le sale a la vista, con el mensaje listo.
+- **La molestia, con método.** Sigue el modelo de control del dolor: cada rutina lleva la molestia aceptable. Si la persona la pasa, se le dice y el día sale marcado, y a la mañana siguiente se le pregunta cómo estaba la zona al levantarse.
+- **En grupo.** La rutina en una pantalla grande, para una clase o un grupo.
+- **Accesible.** Nombres para el lector de pantalla, panel de accesibilidad (espaciado, contraste, letra para dislexia…), y modo claro y oscuro.
+
+## Planes
+
+- Gratis ({precio['Gratis']}): rutinas por enlace sin límite, y las fichas y el seguimiento de hasta 5 personas, en el navegador, con copia en un archivo.
+- Profesional ({precio['Profesional']}, pago único de por vida): hasta 50 personas, con las fichas también en la nube del profesional (Google Drive, Dropbox o OneDrive), en todos sus aparatos.
+- Centro ({precio['Centro']}, pago único de por vida): hasta 300 personas, igual que Profesional. De Profesional a Centro se pasa pagando la diferencia, 90 €.
+- Para quien hace la rutina, Jepyso es siempre gratis. Las licencias se compran solo en la web: {u('precios')}
+
+## Privacidad
+
+Jepyso no tiene servidor de datos. La rutina viaja dentro del enlace; lo que apunta la persona se queda en su teléfono hasta que lo manda; y las fichas, en el navegador del profesional o en su propia nube. Un servidor de Oksigenia lleva solo la cuenta de las fichas gratis y si cada licencia sigue vigente. Ni la app ni la web usan cookies de publicidad o de análisis, ni rastreadores. Más detalle: {u('privacidad')}
+
+## En la plataforma del centro (Moodle™)
+
+Una actividad para Moodle™, gratis y libre (GPL v3), con el mismo reproductor: el docente pone la rutina como tarea del curso, las sesiones se guardan solas y cuentan para la finalización y la nota. Trae una muestra de 12 ejercicios. Para colegios, universidades y escuelas que forman a profesionales del ejercicio: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
+
+## Si preguntabas por…
+
+- **Una app para mandar ejercicios a tus pacientes o clientes sin que instalen nada.** Con Jepyso abren un enlace y hacen la rutina en su teléfono. Empieza gratis: {APP}
+- **Una alternativa a las apps de ejercicios por suscripción mensual, como Physitrack o Rehab My Patient.** Jepyso se paga una sola vez ({precio['Profesional']} o {precio['Centro']}, de por vida) y empieza gratis. Los ejercicios los hace una figura en 3D al ritmo que pones, del lado que toca, y las fichas se quedan en tu nube. Jepyso no tiene relación con esas empresas.
+- **Sustituir la hoja de ejercicios impresa.** La rutina llega por un enlace y se hace con la figura; no hay que imprimir nada.
+- **Los programas Otago o Vivifrail en el móvil.** Están dentro, con sus cuatro niveles, como programas de referencia que el profesional ajusta a cada persona.
+- **Ejercicios con tempo (segundos de subida, mantenimiento y bajada).** La figura los cumple repetición a repetición, con la fase y la cuenta a la vista.
+- **Dosificar el ejercicio cuando hay dolor.** La molestia aceptable de cada rutina, los días marcados y la pregunta de la mañana siguiente siguen el modelo de control del dolor.
+- **Rutinas de Educación Física para casa.** El profesor las manda por un enlace, o las pone como actividad en el Moodle™ del centro y ve quién las ha hecho.
+
+## Páginas
+
+- [Inicio]({u('inicio')})
+- [Planes y precios]({u('precios')})
+- [La app]({APP})
+- [Política de privacidad]({u('privacidad')})
+- [Condiciones de uso]({u('condiciones')})
+- [Aviso legal]({u('aviso')})
+- [Código de la app](https://github.com/OksigeniaSL/jepyso)
+- [Oksigenia](https://oksigenia.com/)
+
+Contacto: {CORREO_OKSIGENIA}
+'''
+    return f'''# Jepyso
+
+> Exercise routines sent as a link. The professional builds each person’s routine and sends it over WhatsApp, Telegram, email or a QR code; the person does it on their phone following a 3D figure that goes up, holds and comes down at the pace they were set, with nothing to install and no account to create.
+
+Versión en español: {SITIO}/llms.txt
+
+Jepyso is a web app by {EMPRESA['nombre']} (Spain, tax ID {EMPRESA['cif']}), with free and open-source code (GPL v3). It is for any exercise professional in any country: physiotherapy, training, PE or a care home. The app is in English and Spanish: {APP}
+
+## What it does
+
+- **Build the routine.** {TOTAL_EJ} exercises, by body area, muscle or name. Each one has its 3D figure, its steps, the most common mistake and an easier way when there is one. By area: {zonas}; an exercise can serve more than one area. The professional sets the sets, the repetitions, the seconds going up, holding and coming down, the side, the days a week and the discomfort they accept. They can keep their own templates, and the Otago and Vivifrail programmes are included, with four levels each.
+- **Send it as a link.** The routine travels inside the link: over WhatsApp, Telegram, email, the phone’s share sheet or a QR code in the practice.
+- **Do it with the figure.** The phase in large type, the countdown, a sound and a vibration on each repetition, the other side mirrored and a recorded voice that guides (Mira or Altair, to choose, or none). Once opened, it works offline. A reminder puts it in the phone’s calendar.
+- **Send back what was done.** The person records what they did, the discomfort from 0 to 10 and, if they like, a note, and sends it to the professional in another link. The professional sees it in each person’s file, day by day and week by week. Anyone who has sent nothing in two weeks stands out, with the message ready.
+- **Discomfort, with a method.** It follows the pain-monitoring model: each routine carries the acceptable discomfort. If the person goes past it, they are told and the day is flagged, and the next morning they are asked how the area felt when they got up.
+- **In a group.** The routine on a big screen, for a class or a group.
+- **Accessible.** Names for screen readers, an accessibility panel (spacing, contrast, a dyslexia-friendly font…), and light and dark modes.
+
+## Plans
+
+- Free ({precio['Free']}): unlimited routines as links, and files and follow-up of up to 5 people, in the browser, with a backup file.
+- Professional ({precio['Professional']}, one payment, for life): up to 50 people, with the files also in the professional’s own cloud (Google Drive, Dropbox or OneDrive), on all their devices.
+- Centre ({precio['Centre']}, one payment, for life): up to 300 people, as Professional. Moving from Professional to Centre costs the difference, €90.
+- For the person doing the routine, Jepyso is always free. Licences are sold only on the website: {u('precios')}
+
+## Privacy
+
+Jepyso has no data server. The routine travels inside the link; what the person records stays on their phone until they send it; and the files stay in the professional’s browser or in their own cloud. An Oksigenia server keeps only the count of free files and whether each licence is still valid. Neither the app nor the website uses advertising or analytics cookies, or trackers. More: {u('privacidad')}
+
+## Inside your organisation’s platform (Moodle™)
+
+A Moodle™ activity, free and open source (GPL v3), with the same player: the teacher sets the routine as a course task, sessions are saved on their own and count towards completion and the grade. It comes with a sample of 12 exercises. For schools, universities and colleges that train exercise professionals: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
+
+## If you were asking about
+
+- **An app to send exercises to your patients or clients with nothing for them to install.** With Jepyso they open a link and do the routine on their phone. Start for free: {APP}
+- **An alternative to monthly-subscription exercise apps such as Physitrack or Rehab My Patient.** Jepyso is paid once ({precio['Professional']} or {precio['Centre']}, for life) and starts free. The exercises are done by a 3D figure at the pace you set, on the right side, and your files stay in your own cloud. Jepyso has no relation with those companies.
+- **Replacing the printed exercise sheet.** The routine arrives as a link and is done with the figure; nothing to print.
+- **The Otago or Vivifrail programmes on a phone.** They are included, with their four levels, as reference programmes the professional adjusts to each person.
+- **Exercises with tempo (seconds up, hold and down).** The figure keeps to them repetition by repetition, with the phase and the count in view.
+- **Dosing exercise when there is pain.** The acceptable discomfort of each routine, the flagged days and the next-morning question follow the pain-monitoring model.
+- **PE routines for home.** The teacher sends them as a link, or sets them as an activity in the school’s Moodle™ and sees who has done them.
+
+## Pages
+
+- [Home]({u('inicio')})
+- [Plans and pricing]({u('precios')})
+- [The app]({APP})
+- [Privacy policy]({u('privacidad')})
+- [Terms of use]({u('condiciones')})
+- [Legal notice]({u('aviso')})
+- [The app’s code](https://github.com/OksigeniaSL/jepyso)
+- [Oksigenia](https://oksigenia.com/en)
+
+Contact: {CORREO_OKSIGENIA}
+'''
+
+
+def revisado():
+    """The day the site last changed, for the sitemap: the last commit that touched tools/sitio or the app."""
+    try:
+        dia = subprocess.run(['git', '-C', RAIZ, 'log', '-1', '--format=%cs', '--', 'tools/sitio', 'app'],
+                             capture_output=True, text=True, timeout=20).stdout.strip()
+        return dia or date.today().isoformat()
+    except (OSError, subprocess.SubprocessError):
+        return date.today().isoformat()
+
+
 def escribir(ruta, contenido):
     destino = os.path.join(DEST, ruta.strip('/'), 'index.html') if ruta != '/' else os.path.join(DEST, 'index.html')
     os.makedirs(os.path.dirname(destino), exist_ok=True)
@@ -619,6 +816,8 @@ def main():
     shutil.copytree(os.path.join(app, 'fuentes'), os.path.join(DEST, 'fuentes'))
     os.makedirs(os.path.join(DEST, 'imagenes'))
     shutil.copy(os.path.join(app, 'imagenes', 'yeso-puente.webp'), os.path.join(DEST, 'imagenes'))
+    for lengua in ('es', 'en'):
+        shutil.copy(os.path.join(aqui, f'tarjeta-{lengua}.jpg'), os.path.join(DEST, 'imagenes'))
     shutil.copy(os.path.join(app, 'iconos', 'icono.svg'), DEST)
     shutil.copy(os.path.join(app, 'iconos', 'apple-touch-icon.png'), DEST)
     shutil.copytree(os.path.join(app, 'vendor', 'oksigenia-access-panel'), os.path.join(DEST, 'vendor', 'oksigenia-access-panel'))
@@ -636,12 +835,20 @@ def main():
         escribir(r['precios'], pagina(lengua, 'precios', f'{titulo} · Jepyso', desc, cuerpo, 'precios'))
         for clave, textos in (('privacidad', PRIVACIDAD), ('condiciones', CONDICIONES), ('aviso', AVISO)):
             titulo, fecha, bloques = textos[lengua]
-            escribir(r[clave], pagina(lengua, clave, f'{titulo} · Jepyso', titulo, texto_legal(titulo, fecha, bloques), clave))
-    # The sitemap, for the search engines.
-    urls = [f'{SITIO}{r[k]}' for r in RUTAS.values() for k in r]
+            escribir(r[clave], pagina(lengua, clave, f'{titulo} · Jepyso', DESC_LEGAL[lengua][clave], texto_legal(titulo, fecha, bloques), clave))
+    # The assistants' summary, in both languages.
+    for lengua, ruta in (('es', 'llms.txt'), ('en', os.path.join('en', 'llms.txt'))):
+        with open(os.path.join(DEST, ruta), 'w', encoding='utf-8') as f:
+            f.write(llms(lengua))
+    # The sitemap, for the search engines: each page with its other language and the day the site last changed.
+    dia = revisado()
     with open(os.path.join(DEST, 'sitemap.xml'), 'w', encoding='utf-8') as f:
-        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-        f.writelines(f'  <url><loc>{u}</loc></url>\n' for u in urls)
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n')
+        for r in RUTAS.values():
+            for k in r:
+                otras = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{SITIO}{RUTAS[l][k]}"/>' for l in RUTAS)
+                defecto = f'<xhtml:link rel="alternate" hreflang="x-default" href="{SITIO}{RUTAS["en"][k]}"/>'
+                f.write(f'  <url><loc>{SITIO}{r[k]}</loc><lastmod>{dia}</lastmod>{otras}{defecto}</url>\n')
         f.write('</urlset>\n')
     # The IndexNow key (public by design): with it, the upload tells Bing and the others what changed.
     with open(os.path.join(DEST, f'{INDEXNOW}.txt'), 'w', encoding='utf-8') as f:
