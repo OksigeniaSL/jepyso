@@ -4,6 +4,7 @@ and English, with the app's look (the plaster studio), Oksigenia's signature and
 Usage: python3 -B tools/sitio/hacer.py [destination]      (default: dist/sitio)
 The texts live here; the privacy policy and the terms are the ones published on oksigenia.com (agents/jepyso/docs in
 hq). The app is at APP; change it in one place if its address changes."""
+import hashlib
 import html
 import json
 import os
@@ -46,6 +47,12 @@ PIE = {
 }
 
 e = html.escape
+
+# The site's own sheet and scripts go with ?v=<their hash>: browsers keep them four hours (the proxy's max-age), and a
+# new publication must reach whoever came earlier that day. sitio.js imports espaldera.js with the same mark.
+_ASSETS = ('estilos.css', 'sitio.js', 'espaldera.js', 'portada.js')
+VERSION = hashlib.sha256(b''.join(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f), 'rb').read()
+                                  for f in _ASSETS)).hexdigest()[:10]
 
 # Oksigenia's space in the footer: its accounts, as on oksigenia.com and ayvurenda.com (same order and icons, from
 # redes.json). Enrique, 16-11-2026: «para que Oksigenia tenga su espacio».
@@ -129,9 +136,9 @@ def pagina(lengua, clave, titulo, descripcion, cuerpo, hermana):
   <link rel="icon" href="/icono-96.png" sizes="96x96" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/fuentes/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/estilos.css">
+  <link rel="stylesheet" href="/estilos.css?v={VERSION}">
   <script type="module" src="/vendor/oksigenia-access-panel/oksigenia-access-panel.js?v={PANEL_V}"></script>
-  <script type="module" src="/sitio.js"></script>{PORTADA_HEAD if clave == 'inicio' else ''}{datos_estructurados(lengua, clave)}
+  <script type="module" src="/sitio.js?v={VERSION}"></script>{PORTADA_HEAD if clave == 'inicio' else ''}{datos_estructurados(lengua, clave)}
 </head>
 <body{' class="inicio"' if clave == 'inicio' else ''}>
   <header class="cabecera">
@@ -230,9 +237,9 @@ PRECIOS = {
 # --- The home, «the room» (Jujol, 16-11-2026; Enrique chose it among three paths, agents/arte/docs/decisiones.md in hq):
 # the app's own figure stays in its plaster room while the story goes down beside it, and each step changes what it does
 # and what lies over it (portada.js). The texts, here; the room's layers are example data (Ana, Carlos).
-PORTADA_HEAD = '''
+PORTADA_HEAD = f'''
   <script src="/vendor/qrcode/qrcode.js" defer></script>
-  <script type="module" src="/portada.js"></script>'''
+  <script type="module" src="/portada.js?v={VERSION}"></script>'''
 
 # The exercises the room plays: the figure, three.js and these clips are copied from app/ (copiar_figura).
 FIGURA_EJERCICIOS = ('puente', 'silla', 'remo', 'hombro')
@@ -871,8 +878,13 @@ def main():
     os.makedirs(DEST)
     aqui = os.path.dirname(os.path.abspath(__file__))
     app = os.path.join(RAIZ, 'app')
-    for f in ('estilos.css', 'sitio.js', 'espaldera.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
+    for f in ('estilos.css', 'espaldera.js', 'portada.js', 'robots.txt', 'favicon.ico', 'icono-96.png'):
         shutil.copy(os.path.join(aqui, f), DEST)
+    with open(os.path.join(aqui, 'sitio.js'), encoding='utf-8') as f:
+        sitio = f.read()
+    assert "'/espaldera.js'" in sitio
+    with open(os.path.join(DEST, 'sitio.js'), 'w', encoding='utf-8') as f:
+        f.write(sitio.replace("'/espaldera.js'", f"'/espaldera.js?v={VERSION}'"))
     shutil.copytree(os.path.join(app, 'fuentes'), os.path.join(DEST, 'fuentes'))
     os.makedirs(os.path.join(DEST, 'imagenes'))
     shutil.copy(os.path.join(app, 'imagenes', 'yeso-puente.webp'), os.path.join(DEST, 'imagenes'))

@@ -129,8 +129,9 @@ function colocar() {
   const parte = medida.recorrido ? Math.min(Math.max(scrollY / medida.recorrido, 0), 1) : 0;
   const arriba = parte * hueco();
   banda.style.transform = `translateY(${arriba.toFixed(1)}px)`;
-  // The section you are in, by the band while it is held: the last heading in the top third of the screen.
-  const linea = scrollY + innerHeight / 3;
+  // The section you are in, by the band while it is held: the last heading above the middle of the screen, where the
+  // home's room also takes its step.
+  const linea = scrollY + innerHeight / 2;
   let actual = '';
   for (const m of marcas) if (m.arriba <= linea || m.destino <= scrollY + 2) actual = m.nombre;
   if (rotulo.textContent !== actual) rotulo.textContent = actual;
