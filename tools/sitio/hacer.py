@@ -186,7 +186,6 @@ PRECIOS = {
         <div class="tarjeta plan"><h2>Centro</h2><p class="precio">149 €</p><ul><li>Fichas y seguimiento de hasta <strong>300 personas</strong></li><li>En tu nube (Google Drive, Dropbox o OneDrive), en todos tus aparatos</li><li>Pago único, de por vida</li></ul><a class="boton" href="{PAGO['centro']}">Comprar Centro</a></div>
       </div>
       <p>¿Ya tienes Profesional? <a href="{PAGO['ampliar']}">Pasa a Centro pagando la diferencia: 90 €</a>.</p>
-      <p><strong>¿Más de 300 personas, varias sedes o una institución?</strong> <a href="mailto:{CORREO_OKSIGENIA}?subject=Jepyso%20para%20instituciones">Escríbenos</a> y lo vemos contigo.</p>
       <h2>Antes de pagar</h2>
       <p><strong>Escribe en el pago el correo de la cuenta de tu nube:</strong> la de Google Drive, Dropbox o OneDrive donde vas a guardar las fichas. La licencia va ligada a esa cuenta: con otra no se activa.</p>
       <h2>Después de pagar</h2>
@@ -210,7 +209,6 @@ PRECIOS = {
         <div class="tarjeta plan"><h2>Centre</h2><p class="precio">€149</p><ul><li>Files and follow-up of up to <strong>300 people</strong></li><li>In your cloud (Google Drive, Dropbox or OneDrive), on all your devices</li><li>One payment, for life</li></ul><a class="boton" href="{PAGO['centro']}">Buy Centre</a></div>
       </div>
       <p>Already on Professional? <a href="{PAGO['ampliar']}">Move to Centre by paying the difference: €90</a>.</p>
-      <p><strong>More than 300 people, several sites or an institution?</strong> <a href="mailto:{CORREO_OKSIGENIA}?subject=Jepyso%20for%20institutions">Write to us</a> and we will work it out with you.</p>
       <h2>Before you pay</h2>
       <p><strong>Write in the payment the email of your cloud account:</strong> the Google Drive, Dropbox or OneDrive account where you will keep your files. The licence is tied to that account: it does not work with another one.</p>
       <h2>After you pay</h2>
@@ -723,7 +721,6 @@ Y además:
 - Gratis ({precio['Gratis']}): rutinas por enlace sin límite, y las fichas y el seguimiento de hasta 5 personas, en el navegador, con copia en un archivo.
 - Profesional ({precio['Profesional']}, pago único de por vida, con las versiones nuevas incluidas): hasta 50 personas, con las fichas también en la nube del profesional (Google Drive, Dropbox o OneDrive), en todos sus aparatos.
 - Centro ({precio['Centro']}, pago único de por vida): hasta 300 personas, igual que Profesional. De Profesional a Centro se pasa pagando la diferencia, 90 €.
-- Instituciones de más de 300 personas o con varias sedes: a medida, escribiendo a {CORREO_OKSIGENIA}.
 - Para quien hace la rutina, Jepyso es siempre gratis. Las licencias se compran solo en la web: {u('precios')}
 
 ## Privacidad
@@ -809,7 +806,6 @@ And also:
 - Free ({precio['Free']}): unlimited routines as links, and files and follow-up of up to 5 people, in the browser, with a backup file.
 - Professional ({precio['Professional']}, one payment, for life, new versions included): up to 50 people, with the files also in the professional’s own cloud (Google Drive, Dropbox or OneDrive), on all their devices.
 - Centre ({precio['Centre']}, one payment, for life): up to 300 people, as Professional. Moving from Professional to Centre costs the difference, €90.
-- Institutions with more than 300 people or several sites: tailored, by writing to {CORREO_OKSIGENIA}.
 - For the person doing the routine, Jepyso is always free. Licences are sold only on the website: {u('precios')}
 
 ## Privacy
