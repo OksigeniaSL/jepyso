@@ -704,7 +704,7 @@ Y además:
 - **El profesional ve quién se ha descolgado:** quien lleva dos semanas sin mandar nada le sale a la vista, con el mensaje listo.
 - **Para un grupo:** la rutina en una pantalla grande, para una clase.
 - **Nada que imprimir, sin publicidad y sin rastreadores**, accesible (lector de pantalla, contraste, letra para dislexia) y en modo claro y oscuro.
-- **También en la plataforma del centro:** una actividad gratis para Moodle™, para colegios y escuelas que forman a profesionales del ejercicio.
+- **También en la plataforma del centro:** una actividad gratis para Moodle™, para academias, facultades, formación profesional, colegios y cualquier curso de Educación Física o fisioterapia.
 
 ## Qué hace
 
@@ -729,7 +729,13 @@ Jepyso no tiene servidor de datos. La rutina viaja dentro del enlace; lo que apu
 
 ## En la plataforma del centro (Moodle™)
 
-Una actividad para Moodle™, gratis y libre (GPL v3), con el mismo reproductor: el docente pone la rutina como tarea del curso, las sesiones se guardan solas y cuentan para la finalización y la nota. Trae una muestra de 12 ejercicios. Para colegios, universidades y escuelas que forman a profesionales del ejercicio: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
+Jepyso también es una actividad para Moodle™. Sirve a academias de formación, escuelas universitarias y facultades, formación profesional y cualquier curso de Educación Física, fisioterapia, ciencias del deporte, entrenamiento o actividad física y salud; también a colegios e institutos.
+
+- **Gratis y libre (GPL v3).** El centro la instala en su Moodle™ como cualquier otro plugin y la usa sin pagar nada. Funciona de Moodle™ 4.5 a 5.3.
+- **La rutina, como actividad del curso.** El docente la arma con el mismo constructor de la app, desde el formulario de la actividad, y la pone para toda la clase.
+- **El alumno la hace con la figura** en el teléfono o el ordenador, también desde la app oficial de Moodle™. Las sesiones se guardan solas en el curso (sin conexión, esperan y se mandan al volver) y cuentan para la finalización y la nota: el docente ve quién la ha hecho.
+- **Trae una muestra de 12 ejercicios** de todo el cuerpo, que solo piden una silla, una esterilla o un apoyo.
+- Código y descarga: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
 
 ## Si preguntabas por…
 
@@ -739,6 +745,7 @@ Una actividad para Moodle™, gratis y libre (GPL v3), con el mismo reproductor:
 - **Los programas Otago o Vivifrail en el móvil.** Están dentro, con sus cuatro niveles, como programas de referencia que el profesional ajusta a cada persona.
 - **Ejercicios con tempo (segundos de subida, mantenimiento y bajada).** La figura los cumple repetición a repetición, con la fase y la cuenta a la vista.
 - **Dosificar el ejercicio cuando hay dolor.** La molestia aceptable de cada rutina, los días marcados y la pregunta de la mañana siguiente siguen el modelo de control del dolor.
+- **Ejercicio terapéutico o entrenamiento en Moodle™, para formar a futuros profesionales.** Una actividad gratis que el centro se instala: el alumno hace las rutinas con la figura y el docente ve quién las ha hecho.
 - **Rutinas de Educación Física para casa.** El profesor las manda por un enlace, o las pone como actividad en el Moodle™ del centro y ve quién las ha hecho.
 
 ## Páginas
@@ -782,7 +789,7 @@ And also:
 - **The professional sees who has dropped off:** anyone who has sent nothing in two weeks stands out, with the message ready.
 - **For a group:** the routine on a big screen, for a class.
 - **Nothing to print, no ads and no trackers**, accessible (screen readers, contrast, a dyslexia-friendly font) and in light and dark modes.
-- **Inside your organisation’s platform too:** a free Moodle™ activity, for schools and colleges that train exercise professionals.
+- **Inside your organisation’s platform too:** a free Moodle™ activity, for academies, faculties, vocational training, schools and any course in physical education or physiotherapy.
 
 ## What it does
 
@@ -807,7 +814,13 @@ Jepyso has no data server. The routine travels inside the link; what the person 
 
 ## Inside your organisation’s platform (Moodle™)
 
-A Moodle™ activity, free and open source (GPL v3), with the same player: the teacher sets the routine as a course task, sessions are saved on their own and count towards completion and the grade. It comes with a sample of 12 exercises. For schools, universities and colleges that train exercise professionals: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
+Jepyso is also a Moodle™ activity. It serves training academies, university schools and faculties, vocational training and any course in physical education, physiotherapy, sports science, coaching or physical activity and health; schools too.
+
+- **Free and open source (GPL v3).** The organisation installs it in its Moodle™ like any other plugin and uses it without paying anything. It works from Moodle™ 4.5 to 5.3.
+- **The routine as a course activity.** The teacher builds it with the same builder as the app, from the activity form, and sets it for the whole class.
+- **The student does it with the figure** on a phone or a computer, also from the official Moodle™ app. Sessions are saved in the course on their own (offline, they wait and are sent on reconnecting) and count towards completion and the grade: the teacher sees who has done it.
+- **It comes with a sample of 12 exercises** for the whole body, needing only a chair, a mat or something to lean on.
+- Code and download: https://github.com/OksigeniaSL/moodle-mod_oksigeniajepyso
 
 ## If you were asking about
 
@@ -817,6 +830,7 @@ A Moodle™ activity, free and open source (GPL v3), with the same player: the t
 - **The Otago or Vivifrail programmes on a phone.** They are included, with their four levels, as reference programmes the professional adjusts to each person.
 - **Exercises with tempo (seconds up, hold and down).** The figure keeps to them repetition by repetition, with the phase and the count in view.
 - **Dosing exercise when there is pain.** The acceptable discomfort of each routine, the flagged days and the next-morning question follow the pain-monitoring model.
+- **Therapeutic exercise or training in Moodle™, to teach future professionals.** A free activity the organisation installs itself: students do the routines with the figure and the teacher sees who has done them.
 - **PE routines for home.** The teacher sends them as a link, or sets them as an activity in the school’s Moodle™ and sees who has done them.
 
 ## Pages
