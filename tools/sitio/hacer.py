@@ -18,6 +18,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 DEST = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'dist', 'sitio')
 APP = 'https://app.jepyso.com/'
 SITIO = 'https://jepyso.com'
+PLAY = 'https://play.google.com/store/apps/details?id=com.oksigenia.jepyso'  # the Android app (a TWA of APP)
 INDEXNOW = 'a82c52154787ee1d911b4ccb67a68f07'
 ACTUALIZADO = {'es': '16 de noviembre de 2026', 'en': '16 November 2026'}
 PANEL_V = '0.12.0'
@@ -96,7 +97,8 @@ def datos_estructurados(lengua, clave):
         {'@type': 'WebSite', '@id': f'{SITIO}/#website', 'url': f'{SITIO}/', 'name': 'Jepyso', 'inLanguage': lengua,
          'publisher': {'@id': org}},
         {'@type': 'WebApplication', '@id': f'{SITIO}/#app', 'name': 'Jepyso', 'url': APP, 'description': T[lengua]['desc'],
-         'applicationCategory': 'HealthApplication', 'operatingSystem': 'Web', 'browserRequirements': 'HTML5, WebGL',
+         'applicationCategory': 'HealthApplication', 'operatingSystem': 'Web, Android', 'browserRequirements': 'HTML5, WebGL',
+         'installUrl': PLAY,
          'inLanguage': ['es', 'en'], 'isAccessibleForFree': True, 'license': 'https://www.gnu.org/licenses/gpl-3.0.html',
          'image': f'{SITIO}/imagenes/tarjeta-{lengua}.jpg', 'publisher': {'@id': org}, 'offers': planes},
     ]}
@@ -333,7 +335,7 @@ T = {
                    ('Centro', '149 €', 300, 'Las fichas de hasta <b>300 personas</b>, en tu nube y en todos tus aparatos.', 'Ver Centro', '/precios/', '')],
         'planes_nota': 'Pago único, de por vida, sin cuotas y con las mejoras incluidas. Para quien hace la rutina, siempre gratis. <a href="/precios/">Todo sobre los planes</a>',
         'centro': ('En tu centro', 'Dentro de la plataforma del centro', 'Para colegios, universidades y centros de formación: las rutinas, como una actividad más del curso, con su gente y sus grupos.', 'Escríbenos'),
-        'cierre': 'Manda la primera rutina hoy', 'abrir': 'Abrir la app',
+        'cierre': 'Manda la primera rutina hoy', 'abrir': 'Abrir la app', 'play': 'Descárgala en Google Play',
     },
     'en': {
         'titulo': 'Jepyso · Exercise routines sent as a link',
@@ -381,7 +383,7 @@ T = {
                    ('Centre', '€149', 300, 'The files of up to <b>300 people</b>, in your own cloud and on all your devices.', 'See Centre', '/en/pricing/', '')],
         'planes_nota': 'One payment, for life, no subscription, updates included. For the person doing the routine, always free. <a href="/en/pricing/">Everything about the plans</a>',
         'centro': ('In your organisation', 'Inside your organisation’s platform', 'For schools, universities and training centres: routines as one more activity of the course, with its people and its groups.', 'Write to us'),
-        'cierre': 'Send your first routine today', 'abrir': 'Open the app',
+        'cierre': 'Send your first routine today', 'abrir': 'Open the app', 'play': 'Get it on Google Play',
     },
 }
 
@@ -498,7 +500,7 @@ def inicio(lengua):
     </section>
     <section class="sala-cierre">
       <h2>{e(t['cierre'])}</h2>
-      <a class="boton" href="{APP}">{e(t['abrir'])}</a>
+      <div class="botones"><a class="boton" href="{APP}">{e(t['abrir'])}</a><a class="boton secundario" href="{PLAY}">{e(t['play'])}</a></div>
     </section>'''
 
 
@@ -645,7 +647,7 @@ AVISO = {
         '<h2>Datos identificativos</h2>',
         f'<dl class="datos-empresa"><dt>Denominación social</dt><dd>{EMPRESA["nombre"]}</dd><dt>CIF</dt><dd>{EMPRESA["cif"]}</dd><dt>D-U-N-S®</dt><dd>{EMPRESA["duns"]}</dd><dt>Dirección de contacto</dt><dd>{e(EMPRESA["direccion"])}</dd><dt>Datos registrales</dt><dd>{EMPRESA["registro"]}</dd><dt>Correo</dt><dd><a href="mailto:{EMPRESA["correo"]}">{EMPRESA["correo"]}</a></dd><dt>Dominios</dt><dd>jepyso.com y app.jepyso.com</dd></dl>',
         '<p>La dirección postal corresponde a Lafuente Asesores, asesoría externa con sede en La Laguna (Tenerife) autorizada por Oksigenia SL para recibir comunicaciones y notificaciones. Lafuente Asesores no forma parte de Oksigenia SL; actúa solo como destinatario de correspondencia administrativa.</p>',
-        '<h2>Propiedad intelectual e industrial</h2><p>El diseño de esta web y de la aplicación, sus textos, las figuras en 3D y sus movimientos pertenecen a Oksigenia SL. El código de la aplicación es software libre (GNU GPL v3 o posterior). OKSIGENIA® es una marca registrada.</p>',
+        '<h2>Propiedad intelectual e industrial</h2><p>El diseño de esta web y de la aplicación, sus textos, las figuras en 3D y sus movimientos pertenecen a Oksigenia SL. El código de la aplicación es software libre (GNU GPL v3 o posterior). OKSIGENIA® es una marca registrada. Google Play es una marca de Google LLC.</p>',
         '<h2>Contenidos</h2><p>Oksigenia SL no responde de la legalidad de otros sitios web a los que se pueda llegar desde esta web. Puede cambiar esta web y la aplicación sin previo aviso para mantenerlas al día.</p>',
         '<h2>Uso</h2><p>Quien usa esta web y la aplicación se compromete a hacerlo de forma adecuada, sin actividades ilícitas ni contrarias a la buena fe. El uso de la aplicación se rige además por sus <a href="/condiciones/">condiciones de uso</a>, y los datos, por su <a href="/privacidad/">política de privacidad</a>.</p>',
         '<h2>Ley aplicable y jurisdicción</h2><p>La ley aplicable es la española. Para resolver cualquier conflicto, Oksigenia SL y el usuario se someten a los juzgados y tribunales del domicilio del usuario cuando tenga la condición de consumidor y, si no, a los de Santa Cruz de Tenerife.</p>',
@@ -655,7 +657,7 @@ AVISO = {
         '<h2>Company details</h2>',
         f'<dl class="datos-empresa"><dt>Company name</dt><dd>{EMPRESA["nombre"]}</dd><dt>Tax ID (CIF)</dt><dd>{EMPRESA["cif"]}</dd><dt>D-U-N-S®</dt><dd>{EMPRESA["duns"]}</dd><dt>Contact address</dt><dd>{e(EMPRESA["direccion"])}</dd><dt>Registration</dt><dd>{EMPRESA["registro_en"]}</dd><dt>Email</dt><dd><a href="mailto:{EMPRESA["correo"]}">{EMPRESA["correo"]}</a></dd><dt>Domains</dt><dd>jepyso.com and app.jepyso.com</dd></dl>',
         '<p>The postal address is that of Lafuente Asesores, an external advisory firm in La Laguna (Tenerife) authorised by Oksigenia SL to receive communications and notifications. Lafuente Asesores is not part of Oksigenia SL; it only receives administrative mail.</p>',
-        '<h2>Intellectual and industrial property</h2><p>The design of this site and of the app, their texts, the 3D figures and their movements belong to Oksigenia SL. The app’s code is free software (GNU GPL v3 or later). OKSIGENIA® is a registered trademark.</p>',
+        '<h2>Intellectual and industrial property</h2><p>The design of this site and of the app, their texts, the 3D figures and their movements belong to Oksigenia SL. The app’s code is free software (GNU GPL v3 or later). OKSIGENIA® is a registered trademark. Google Play is a trademark of Google LLC.</p>',
         '<h2>Content</h2><p>Oksigenia SL is not responsible for the lawfulness of other websites reachable from this one. It may change this site and the app without notice to keep them up to date.</p>',
         '<h2>Use</h2><p>Whoever uses this site and the app agrees to do so properly, with no unlawful activity or activity contrary to good faith. The use of the app is also governed by its <a href="/en/terms/">terms of use</a>, and data by its <a href="/en/privacy/">privacy policy</a>.</p>',
         '<h2>Applicable law and jurisdiction</h2><p>Spanish law applies. To settle any dispute, Oksigenia SL and the user submit to the courts of the user’s place of residence when they are a consumer and, otherwise, to those of Santa Cruz de Tenerife.</p>',
@@ -727,6 +729,7 @@ Y además:
 - **La molestia, con método.** Sigue el modelo de control del dolor: cada rutina lleva la molestia aceptable. Si la persona la pasa, se le dice y el día sale marcado, y a la mañana siguiente se le pregunta cómo estaba la zona al levantarse.
 - **En grupo.** La rutina en una pantalla grande, para una clase o un grupo.
 - **Accesible.** Nombres para el lector de pantalla, panel de accesibilidad (espaciado, contraste, letra para dislexia…), y modo claro y oscuro.
+- **También en Android.** La misma app, en Google Play, para quien la quiera con su icono en el teléfono: {PLAY}. No hace falta para empezar: en el navegador funciona igual.
 
 ## Planes
 
@@ -752,6 +755,7 @@ Jepyso también es una actividad para Moodle™. Sirve a academias de formación
 ## Si preguntabas por…
 
 - **Una app para mandar ejercicios a tus pacientes o clientes sin que instalen nada.** Con Jepyso abren un enlace y hacen la rutina en su teléfono. Empieza gratis: {APP}
+- **Una app de ejercicios para Android.** Jepyso está en Google Play: {PLAY}. Y en cualquier navegador, sin instalar nada: {APP}
 - **Una alternativa a las apps de ejercicios por suscripción mensual, como Physitrack o Rehab My Patient.** Jepyso se paga una sola vez ({precio['Profesional']} o {precio['Centro']}, de por vida, sin cuotas y con las versiones nuevas incluidas) y empieza gratis. Los ejercicios los hace una figura en 3D al ritmo que pones, del lado que toca, y las fichas se quedan en tu nube. Jepyso no tiene relación con esas empresas.
 - **Sustituir la hoja de ejercicios impresa.** La rutina llega por un enlace y se hace con la figura; no hay que imprimir nada.
 - **Los programas Otago o Vivifrail en el móvil.** Están dentro, con sus cuatro niveles, como programas de referencia que el profesional ajusta a cada persona.
@@ -812,6 +816,7 @@ And also:
 - **Discomfort, with a method.** It follows the pain-monitoring model: each routine carries the acceptable discomfort. If the person goes past it, they are told and the day is flagged, and the next morning they are asked how the area felt when they got up.
 - **In a group.** The routine on a big screen, for a class or a group.
 - **Accessible.** Names for screen readers, an accessibility panel (spacing, contrast, a dyslexia-friendly font…), and light and dark modes.
+- **Also on Android.** The same app, on Google Play, for anyone who wants it with its own icon on the phone: {PLAY}. It is not needed to start: it works just the same in the browser.
 
 ## Plans
 
@@ -837,6 +842,7 @@ Jepyso is also a Moodle™ activity. It serves training academies, university sc
 ## If you were asking about
 
 - **An app to send exercises to your patients or clients with nothing for them to install.** With Jepyso they open a link and do the routine on their phone. Start for free: {APP}
+- **An exercise app for Android.** Jepyso is on Google Play: {PLAY}. And in any browser, with nothing to install: {APP}
 - **An alternative to monthly-subscription exercise apps such as Physitrack or Rehab My Patient.** Jepyso is paid once ({precio['Professional']} or {precio['Centre']}, for life, no subscription and new versions included) and starts free. The exercises are done by a 3D figure at the pace you set, on the right side, and your files stay in your own cloud. Jepyso has no relation with those companies.
 - **Replacing the printed exercise sheet.** The routine arrives as a link and is done with the figure; nothing to print.
 - **The Otago or Vivifrail programmes on a phone.** They are included, with their four levels, as reference programmes the professional adjusts to each person.

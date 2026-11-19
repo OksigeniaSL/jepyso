@@ -347,6 +347,8 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--tinta); color: var(--fondo); }
 .sala-cierre h2 { font-size: clamp(36px, 5vw, 72px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; }
 .sala-cierre .boton { background: var(--fondo); color: var(--tinta); border-color: var(--fondo); }
+.sala-cierre .botones { margin-top: 0; }
+.sala-cierre .boton.secundario { background: transparent; color: var(--fondo); }
 
 @media (prefers-reduced-motion: reduce) { .capa, .escenario-figura canvas { transition: none; } }
 
