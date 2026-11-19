@@ -41,7 +41,9 @@ export const olvidar = () => {
 // A token for Drive: the one in memory while it lasts, or a new one through Google's window. Call it from a tap.
 export async function conectar() {
   if (conectado()) return;
-  const google = await cargarGoogle();
+  // Safari opens Google's window only inside the tap, not after a download: with the script already there (People
+  // loads it), the window is asked for with no wait in between.
+  const google = window.google?.accounts?.oauth2 ? window.google : await cargarGoogle();
   await new Promise((ok, mal) => {
     const cliente = google.accounts.oauth2.initTokenClient({
       client_id: CLIENTE,

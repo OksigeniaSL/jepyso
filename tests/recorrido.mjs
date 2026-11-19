@@ -584,9 +584,12 @@ try {
     await sinRed.close();
 
     // The paid version (switched on with ?pago=1 until the licence is settled): Personas offers the Google Drive and the
-    // files have no limit. Nothing reaches Google until the professional taps; that is tests/drive.mjs.
+    // files have no limit. No permission is asked of Google until the professional taps; that is tests/drive.mjs.
     const pago = await abrir({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme: tema === 'oscuro' ? 'dark' : 'light' });
     vigilar(pago, `pago-${tema}`);
+    // People loads Google's script ahead for the Drive (app/app.js, precargarDrive): an empty one keeps the walk off the
+    // network and out of Google's own console messages.
+    await pago.route('https://accounts.google.com/gsi/client', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }));
     await pago.goto(url(tema, '&pago=1#personas'));
     await pago.waitForSelector('.lista-personas');
     comprobar(await pago.locator('.nube [data-accion="sincronizar-nube"]').isVisible(), `${tema}: la versión de pago no ofrece el Drive en Personas`);

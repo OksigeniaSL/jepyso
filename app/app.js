@@ -13,6 +13,7 @@ import {
   esDePago, esEntornoDePruebas, leerBorradas, apuntarBorrada, LIMITE_GRATIS, sinNoticias,
 } from './personas.js';
 import { NUBES, nubeElegida, elegirNube, ultimaVez, apuntarVez, nubeAnterior, sincronizar } from './nube.js';
+import { cargarGoogle } from './drive.js';
 import { comprobarLicencia, licencia, licenciaPendiente, licenciaAnulada, comprobarVigencia, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
 import { ampliarPlan } from './tienda.js';
 import {
@@ -2982,6 +2983,12 @@ const MOTIVOS_LICENCIA = {
   navegador: 'Este navegador no puede comprobar licencias. Actualízalo, o usa Chrome, Edge, Safari o Firefox al día.',
 };
 
+// With Google Drive chosen, its script loads as People opens, so the tap on «Sincronizar» opens Google's window at once:
+// Safari blocks a window asked for after a download.
+function precargarDrive() {
+  if (app.querySelector('.nube') && nubeElegida() === 'google') cargarGoogle().catch(() => {});
+}
+
 // Syncs with the chosen cloud. The licence counts against the connected account's e-mail, whichever the service: one
 // licence, one account. While it runs, the service cannot be changed.
 async function sincronizarNube(seccion) {
@@ -3063,6 +3070,7 @@ function vistaPersonas() {
   pintarLista();
   const huecoGoogle = app.querySelector('.hueco-google');
   if (huecoGoogle) botonGoogle(huecoGoogle);
+  precargarDrive();
   app.oninput = (ev) => {
     if (ev.target.dataset.accion !== 'buscar-persona') return;
     texto = ev.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
@@ -3088,6 +3096,7 @@ function vistaPersonas() {
       const seccion = otra.closest('.nube');
       seccion.outerHTML = seccionNube();
       app.querySelector(`.nube [data-valor="${otra.dataset.valor}"]`)?.focus();
+      precargarDrive();
       return;
     }
     if (ev.target.closest('[data-accion="sincronizar-nube"]')) {
