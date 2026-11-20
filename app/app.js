@@ -3371,6 +3371,10 @@ function vistaPersona(id) {
 // ---------- Without a connection ----------
 // sw.js keeps the app. Each routine opened on the phone also keeps its body, clips and the three.js files, so the
 // person can do it later with no signal. The answer says how many of the files are kept.
+// Next to each body's cuerpo.glb: its clothes (ropa.png, outside the GLB so it loads from the site and not as a blob:,
+// which the content policy blocks) and its drawn muscles: TEXTURAS in modelos/musculos.js (not imported here, so
+// three.js does not load with the app's first screen).
+const TEXTURAS_MUSCULOS = ['musculos-0.png', 'musculos-1.png', 'musculos-2.png', 'musculos-3.png', 'musculos-4.png', 'fibras.png'];
 const MOTOR = [
   'vendor/three/three.module.js',
   'vendor/three/addons/loaders/GLTFLoader.js',
@@ -3441,7 +3445,8 @@ async function guardarParaSinConexion(c, ejercicios) {
     ...fichas.flatMap((f) => (Array.isArray(f?.fases) ? f.fases.map((x) => x.texto).filter(Boolean) : [])),
     ...ejercicios.map(({ i }) => EJERCICIOS[i]?.nombre).filter(Boolean)];
   const voz = vozActiva() ? await rutasDeVoz(textosVoz).catch(() => []) : [];
-  const rutas = [...new Set([...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo,
+  const rutas = [...new Set([...MOTOR, RUTAS[c] || RUTAS.a, m.cuerpo, m.cuerpo.replace(/cuerpo\.glb$/, 'ropa.png'),
+    ...TEXTURAS_MUSCULOS.map((f) => m.cuerpo.replace(/cuerpo\.glb$/, 'musculos/') + f),
     ...ejercicios.flatMap(({ i, b }) => (m.ejercicios[i] ? [m.ejercicios[i].glb, m.ejercicios[i].ficha, poster(i, c, bandaDe(EJERCICIOS[i], b)?.clave)] : [])),
     ...voz])];
   const listo = await navigator.serviceWorker.ready;

@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { prepararMusculos } from './modelos/musculos.js';
+import { prepararMusculos, carpetaTexturas } from './modelos/musculos.js';
 
 const FASES = ['subir', 'mantener', 'bajar', 'reposo'];
 const REPOSO_S = 1;
@@ -171,7 +171,8 @@ export class Figura {
       }
     });
     this.grupo.add(this.cuerpo);
-    this.musculos = prepararMusculos(this.cuerpo);
+    // The muscles are drawn from the textures next to the body (Gaudí, 20-11-2026: an anatomy plate over the clothes).
+    this.musculos = prepararMusculos(this.cuerpo, { texturas: this.base + carpetaTexturas(this.manifiesto.cuerpo) });
   }
 
   // Switch to another body (each body has its own clips, measured on it).

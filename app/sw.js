@@ -7,7 +7,7 @@
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1'; // the set of the first versions; later sets are named when they are fetched
 const PUNTERO = 'jepyso-activa'; // which set of the app is the current one
-const FIJOS = 'jepyso-fijos-16';
+const FIJOS = 'jepyso-fijos-17';
 const ARCHIVOS = [
   'index.html',
   'conectar.html',
@@ -62,7 +62,7 @@ const ARCHIVOS = [
 const base = new URL('./', self.location).href;
 const relativa = (url) => (url.startsWith(base) ? url.slice(base.length).split(/[?#]/)[0] : null);
 // Files that never change under the same name: three.js (pinned version), the bodies, the clips and their sheets.
-const esFijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json|webp)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
+const esFijo = (ruta) => ruta.startsWith('vendor/three/') || (/^modelos\/.+\.(glb|json|webp|png)$/.test(ruta) && !ruta.endsWith('ejercicios.json'));
 
 // The current set of the app files: its cache name, kept in a cache of its own so it survives the worker stopping.
 let activa = null;

@@ -2,8 +2,8 @@
 
 Copyright © 2026 Oksigenia SL. All rights reserved.
 
-The 3D figures in `app/modelos/` (the `.glb` files: bodies, exercise movements and props, and their stills in
-`posters/`), the exercise sheets and
+The 3D figures in `app/modelos/` (the `.glb` files: bodies, exercise movements and props, the bodies' clothes
+`ropa.png` and drawn muscles `musculos/`, and their stills in `posters/`), the exercise sheets and
 index that go with them (the `.json` files) and the sheets the movements are built from (`figuras/fichas/`) are
 content, not code: the GPL of this repository does not cover them.
 So are the body map traced from the body, `app/mapa.js`, the plaster headers in `app/imagenes/` and the icons in `app/iconos/`. `app/modelos/musculos.js` is code and is under the GPL like

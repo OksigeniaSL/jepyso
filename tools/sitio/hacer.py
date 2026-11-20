@@ -539,7 +539,10 @@ def copiar_figura(app, dest):
         m = json.load(f)
     reducido = {k: v for k, v in m.items() if k != 'ejercicios'}
     reducido['ejercicios'] = {k: m['ejercicios'][k] for k in FIGURA_EJERCICIOS}
-    rutas = [m['cuerpo']] + [r for k in FIGURA_EJERCICIOS for r in (m['ejercicios'][k].get('glb'), m['ejercicios'][k].get('ficha')) if r]
+    # The body with its clothes and its drawn muscles (the textures next to cuerpo.glb, as modelos/musculos.js reads them).
+    texturas = re.sub(r'cuerpo\.glb$', 'musculos/', m['cuerpo'])
+    rutas = [m['cuerpo'], re.sub(r'cuerpo\.glb$', 'ropa.png', m['cuerpo'])] + [texturas + f for f in ('musculos-0.png', 'musculos-1.png', 'musculos-2.png', 'musculos-3.png', 'musculos-4.png', 'fibras.png')]
+    rutas += [r for k in FIGURA_EJERCICIOS for r in (m['ejercicios'][k].get('glb'), m['ejercicios'][k].get('ficha')) if r]
     for r in rutas:
         os.makedirs(os.path.dirname(os.path.join(d, r)), exist_ok=True)
         shutil.copy(os.path.join(app, r), os.path.join(d, r))
