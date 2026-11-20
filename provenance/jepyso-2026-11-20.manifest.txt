@@ -1,0 +1,20 @@
+Provenance seal (OpenTimestamps)
+================================
+
+Repository:   OksigeniaSL/jepyso
+Holder:       Oksigenia SL
+Commit:       390a2836bea3767717d55309f4f43818e6b35e2d
+Tree:         2f2ab10f5b2faa37c6aa5d69409d6b0ba5c61870
+Commit date:  2026-11-20T19:54:17+00:00
+Sealed (UTC): 2026-11-20T20:22:27Z
+Signed tag:   provenance-2026-11-20
+
+This file pins the state of the repository. Its .ots proof anchors it in the
+Bitcoin blockchain through OpenTimestamps: the content existed no later than
+the time of that block. The tree hash identifies the content alone, so a later
+copy with the same files has the same tree. The signed tag adds who sealed it.
+
+Verify:
+  git rev-parse 390a2836bea3767717d55309f4f43818e6b35e2d^{tree}
+  ots verify jepyso-2026-11-20.manifest.txt.ots
+  git -c gpg.ssh.allowedSignersFile=provenance/allowed_signers verify-tag provenance-2026-11-20
