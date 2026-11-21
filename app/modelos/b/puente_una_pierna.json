@@ -1,0 +1,73 @@
+{
+ "id": "puente_una_pierna",
+ "nombre": "Puente de glúteo a una pierna",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Sube la cadera empujando con el pie apoyado"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta, la cadera recta"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Baja despacio"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Descansa"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": 42.7,
+   "rodilla_izquierda_flexion": 0.0,
+   "cadera_derecha_flexion": 42.7,
+   "rodilla_derecha_flexion": 89.8
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": 0.0,
+   "rodilla_izquierda_flexion": 0.0,
+   "cadera_derecha_flexion": 0.0,
+   "rodilla_derecha_flexion": 77.9
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "erectores"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "camara": {
+  "pos": [
+   -3.753,
+   1.594,
+   0.647
+  ],
+  "mira": [
+   0.0,
+   0.393,
+   -0.029
+  ]
+ },
+ "archivo": "puente_una_pierna.glb",
+ "bytes": 45348
+}

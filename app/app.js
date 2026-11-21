@@ -2,11 +2,11 @@
 // back a summary link. No server: everything travels inside the links.
 import {
   EJERCICIOS, ORDEN, ZONAS, MUSCULOS, buscarEjercicios, LADOS, TOPE_MOLESTIA, pasaDelTope, diaLocal, diaAnterior,
-  codificar, decodificar, duracionEjercicio, minutos, almacen, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
+  codificar, decodificar, duracionRutina, minutos, almacen, VUELTAS, DESCANSOS_CIRCUITO, ENTRE_VUELTAS, BANDAS, conBanda, bandaDe, SIN_SITIO, unidad, porPasos, porMinutos, topeReps,
   tituloUnidad, palabraUnidad, cuentaUnidad, deTotalUnidad, fraseUnidad,
 } from './datos.js';
 import { t, tn, idioma, otroIdioma, ponerIdioma, IDIOMAS, locale, cargarIdioma } from './idioma.js';
-import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas } from './entrada.js';
+import { limpiarRutina, limpiarResumen, limpiarPlantilla, limpiarPlantillas, direccionVuelta } from './entrada.js';
 import { hayVoz, vozActiva, ponerVoz, decir, callar, numero, modoVoz, quienHabla, ponerQuien, rutasDeVoz, FRASES_GENERALES } from './voz.js';
 import {
   leerPersonas, guardarPersonas, buscarPorNombre, crearPersona, apuntarRutina, apuntarResumen, semanas, copia, cargarCopia, caben, limite,
@@ -476,7 +476,7 @@ function avisoLleno(b) {
 // The steps of the builder, on top: for whom, the exercises, the settings and the link. One tap goes to each.
 function etapasApp(b) {
   const pasos = [
-    ['para', t('Para quién'), b.para.trim() ? b.para.trim() : ''],
+    ['para', t('Para quién'), b.publicar && !armandoParaMoodle ? t('Para publicar') : b.para.trim() ? b.para.trim() : ''],
     ['ejercicios', t('Ejercicios'), b.orden.length ? String(b.orden.length) : ''],
     ['ajustes', t('Ajustes'), ''],
     ['enlace', t('Enlace'), ''],
@@ -499,6 +499,7 @@ function ajustesIniciales(id) {
 function borradorInicial() {
   return {
     para: '', de: '', descanso: 45, veces: 1, semana: 0, tope: TOPE_MOLESTIA, cuerpo: 'a',
+    vueltas: 0, entreEjercicios: 30, entreVueltas: 120, publicar: false, volver: '',
     activo: ORDEN[0], orden: [], ejercicios: {}, filtro: { zona: '', musculo: '', texto: '' }, mirado: false,
   };
 }
@@ -524,8 +525,26 @@ function ponerAlDia(b) {
   Object.assign(b, { descanso: limpia.d, veces: limpia.x, semana: limpia.w || 0, tope: limpia.m, cuerpo: limpia.c, ejercicios: limpia.ejercicios });
   b.para = typeof b.para === 'string' ? b.para : '';
   b.de = typeof b.de === 'string' ? b.de : '';
+  // A circuit (vueltas, 0 for a routine by sets) keeps its own rests, so going from one way to the other loses neither.
+  // Not yet in the Moodle activity: its PHP reads the routine too and does not know circuits (docs/06-moodle.md).
+  b.vueltas = !armandoParaMoodle && VUELTAS.includes(b.vueltas) ? b.vueltas : 0;
+  b.entreEjercicios = DESCANSOS_CIRCUITO.includes(b.entreEjercicios) ? b.entreEjercicios : 30;
+  b.entreVueltas = ENTRE_VUELTAS.includes(b.entreVueltas) ? b.entreVueltas : 120;
+  b.publicar = b.publicar === true;
+  b.volver = typeof b.volver === 'string' ? b.volver.slice(0, 300) : '';
   return b;
 }
+
+// The routine's settings as a link or a template carries them: d is the rest between sets or, in a circuit, between
+// exercises; k and kd, the rounds and the rest between them.
+const ajustesDeRutina = (b) => (b.vueltas ? { d: b.entreEjercicios, k: b.vueltas, kd: b.entreVueltas } : { d: b.descanso });
+// And back, from a link or a template to the draft.
+const rutinaEnBorrador = (x) => (x.k && !armandoParaMoodle ? { vueltas: x.k, entreEjercicios: x.d, entreVueltas: x.kd || 120 } : { vueltas: 0, descanso: x.d });
+// Seconds of the draft's routine.
+const duracionBorrador = (b) =>
+  duracionRutina(b.orden.map((id) => ({ e: b.vueltas ? { ...b.ejercicios[id], series: b.vueltas } : b.ejercicios[id], def: EJERCICIOS[id] })), {
+    descanso: b.vueltas ? b.entreEjercicios : b.descanso, vueltas: b.vueltas, entreVueltas: b.entreVueltas,
+  });
 
 function paso(accion, valor, etiqueta, min, max) {
   return `<div class="paso" role="group" aria-label="${esc(etiqueta)}">
@@ -534,6 +553,9 @@ function paso(accion, valor, etiqueta, min, max) {
     <button type="button" data-accion="${accion}" data-delta="1" aria-label="${t('Más')}" ${valor >= max ? 'disabled' : ''}>+</button>
   </div>`;
 }
+
+// A rest in words, as the builder offers it: 2 min, 1 min 30, 45 s.
+const segundosEnTexto = (s) => ({ 60: '1 min', 90: t('1 min 30'), 120: '2 min', 180: '3 min' })[s] || `${s} s`;
 
 function segmentos(accion, opciones, actual, etiqueta) {
   return `<div class="segmentos" role="group" aria-label="${esc(etiqueta)}">${opciones
@@ -576,17 +598,18 @@ const chipsEjercicio = (def) =>
     .join('')}`;
 
 // What a folded card says: sets and repetitions, the tempo line, the side and the band.
-function dosis(def, e) {
+function dosis(def, e, vueltas = 0) {
   const banda = bandaDe(def, e.banda);
   const tempo = def.unidad ? `<span>${palabraUnidad(def)}</span>` : `${svgTempo(e.tempo, { ancho: 52, alto: 22 })}<span class="sr">${textoTempo(e.tempo)}</span>`;
-  return `<span class="num">${e.series} × ${e.reps}</span>${tempo}${
+  return `<span class="num">${vueltas ? e.reps : `${e.series} × ${e.reps}`}</span>${tempo}${
     def.unLado && LADOS[e.lado] ? `<span>${esc(t(LADOS[e.lado]))}</span>` : ''
   }${banda ? `<span class="con-banda">${muestraBanda(banda)}${esc(t(banda.nombre))}</span>` : ''}`;
 }
 
 // An exercise of the routine, with its number in the routine and everything the professional sets for it. Only the
 // one being looked at is open; the others fold to one line with their dose, so a long routine still fits.
-function tarjetaEjercicio(id, e, activo, pos, total) {
+// In a circuit (vueltas) there are no sets to set: every exercise does one in each round.
+function tarjetaEjercicio(id, e, activo, pos, total, vueltas = 0) {
   const def = EJERCICIOS[id];
   const [s, m, b] = e.tempo;
   return `<article class="ejercicio incluido ${activo ? 'activo' : ''}" data-id="${id}">
@@ -595,14 +618,14 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
       <span class="titulo">
         <h3>${esc(t(def.nombre))}</h3>
         <span class="linea-chips">${chipsEjercicio(def)}</span>
-        <span class="dosis">${dosis(def, e)}</span>
+        <span class="dosis">${dosis(def, e, vueltas)}</span>
       </span>
       <span class="plegar" aria-hidden="true">${ICONO.abrir}</span>
     </button>
     <div class="ejercicio-ajustes">
       <div class="mini-figura"></div>
       <div class="fila">
-        <div class="ajuste"><span>${t('Series')}</span>${paso('series', e.series, t('Series'), 1, 6)}</div>
+        ${vueltas ? '' : `<div class="ajuste"><span>${t('Series')}</span>${paso('series', e.series, t('Series'), 1, 6)}</div>`}
         <div class="ajuste"><span>${tituloUnidad(def)}</span>${paso('reps', e.reps, tituloUnidad(def), 1, topeReps(def))}</div>
         ${def.unLado ? `<div class="ajuste"><span>${t('Lado')}</span>${segmentos('lado', [['der', t('Derecho')], ['izq', t('Izquierdo')], ['ambos', t('Los dos')]], e.lado, t('Lado'))}</div>` : ''}
       </div>
@@ -635,14 +658,45 @@ function tarjetaEjercicio(id, e, activo, pos, total) {
   </article>`;
 }
 
+// Step 1, «Para quién»: one person (their name, and their file), or published (a blog, a website, social media), for
+// whoever opens it: no name, no file and nothing sent back, with the page to go back to when it ends.
+function camposPara(b) {
+  if (b.publicar) {
+    return `<div class="campos">
+        <div class="campo"><label for="de">${t('Tu nombre o el de tu consulta')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
+        <div class="campo"><label for="volver">${t('Tu página (si quieres)')}</label><input id="volver" data-accion="volver" type="url" inputmode="url" autocomplete="url" placeholder="https://" value="${esc(b.volver)}"></div>
+      </div>
+      <p class="ayuda">${t('Para ponerla en tu web, tu blog o tus redes. Quien la abra la hace en su teléfono y no te manda nada. Con tu página, al terminar le sale un enlace para volver a ella.')}</p>
+      <p class="ayuda aviso-volver" aria-live="polite">${b.volver.trim() && !direccionVuelta(b.volver.trim()) ? t('La página tiene que empezar por https://') : ''}</p>`;
+  }
+  return `<div class="campos">
+      <div class="campo"><label for="para">${t('Nombre de la persona')}</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
+      <div class="campo"><label for="de">${t('Tu nombre')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
+    </div>
+    <div class="hueco-recientes">${personasRecientes(b)}</div>
+    <div class="hueco-lleno">${avisoLleno(b)}</div>`;
+}
+
+// Step 3: how the routine goes. By sets, exercise after exercise; or as a circuit, every exercise once in each round,
+// one after the other, with a short rest between exercises and a longer one between rounds.
+function ajustesForma(b) {
+  const forma = armandoParaMoodle ? '' : `<div class="ajuste"><span>${t('Cómo se hace')}</span>${segmentos('forma', [['series', t('Por series')], ['circuito', t('En circuito')]], b.vueltas ? 'circuito' : 'series', t('Cómo se hace'))}</div>`;
+  if (!b.vueltas) return `${forma}<div class="ajuste"><span>${t('Descanso entre series')}</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, t('1 min 30')]], b.descanso, t('Descanso entre series'))}</div>`;
+  return `${forma}
+    <div class="ajuste"><span>${t('Vueltas del circuito')}</span>${segmentos('vueltas', VUELTAS.map((v) => [v, String(v)]), b.vueltas, t('Vueltas del circuito'))}</div>
+    <div class="ajuste"><span>${t('Descanso entre ejercicios')}</span>${segmentos('entreEjercicios', [[15, '15 s'], [30, '30 s'], [45, '45 s'], [60, '1 min']], b.entreEjercicios, t('Descanso entre ejercicios'))}</div>
+    <div class="ajuste"><span>${t('Descanso entre vueltas')}</span>${segmentos('entreVueltas', [[60, '1 min'], [90, t('1 min 30')], [120, '2 min'], [180, '3 min']], b.entreVueltas, t('Descanso entre vueltas'))}</div>`;
+}
+
 function seccionRutina(b, vaciada = null) {
   return `<section class="rutina-armada" aria-labelledby="rutina-titulo">
     <h2 id="rutina-titulo">${t('La rutina')}</h2>
     ${b.orden.length ? `<button type="button" class="boton fantasma vaciar" data-accion="vaciar">${t('Vaciar')}</button>` : ''}
     ${vaciada ? `<p class="vaciada" role="status">${t('Rutina vaciada.')} <button type="button" class="enlace" data-accion="deshacer-vaciar">${t('Deshacer')}</button></p>` : ''}
+    ${b.vueltas && b.orden.length ? `<p class="ayuda circuito-nota">${tn(b.vueltas, 'En circuito: {n} vuelta, con una serie de cada ejercicio.', 'En circuito: {n} vueltas, con una serie de cada ejercicio en cada una.')}</p>` : ''}
     ${
       b.orden.length
-        ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length)).join('')
+        ? b.orden.map((id, i) => tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, i, b.orden.length, b.vueltas)).join('')
         : `<div class="rutina-vacia"><p>${t('Todavía no tiene ejercicios.')}</p></div>`
     }
   </section>`;
@@ -840,7 +894,10 @@ function personasRecientes(b) {
 // A routine back in the builder, to change it: its exercises with their settings, and the routine's own settings.
 function rutinaAlBorrador(r, extra = {}) {
   const b = ponerAlDia(almacen.leer('borrador', null) || borradorInicial());
-  Object.assign(b, { descanso: r.d, veces: r.x, semana: r.w || 0, tope: Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA, cuerpo: r.c || 'a', ...extra });
+  Object.assign(b, {
+    ...rutinaEnBorrador(r), veces: r.x, semana: r.w || 0, tope: Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA, cuerpo: r.c || 'a',
+    publicar: r.o === 1, volver: r.u || '', ...extra,
+  });
   b.orden = r.e.map((e) => e.i).filter((i) => ORDEN.includes(i));
   for (const e of r.e) if (ORDEN.includes(e.i)) b.ejercicios[e.i] = { series: e.s, reps: e.r, tempo: [...e.t], lado: e.l ?? null, banda: e.b || '', nota: e.n || '' };
   b.activo = b.orden[0] || b.activo;
@@ -871,8 +928,8 @@ function vistaArmar() {
 
   const resumenCorto = () => {
     if (!b.orden.length) return t('Elige al menos un ejercicio');
-    const seg = b.orden.reduce((suma, id) => suma + duracionEjercicio(b.ejercicios[id], b.descanso, EJERCICIOS[id]), 0);
-    return `${tn(b.orden.length, '{n} ejercicio', '{n} ejercicios')} · ${minutos(seg)}`;
+    const vueltas = b.vueltas ? ` · ${tn(b.vueltas, 'circuito de {n} vuelta', 'circuito de {n} vueltas')}` : '';
+    return `${tn(b.orden.length, '{n} ejercicio', '{n} ejercicios')}${vueltas} · ${minutos(duracionBorrador(b))}`;
   };
 
   function pintar() {
@@ -889,12 +946,8 @@ function vistaArmar() {
               <div class="campo"><label for="de">${t('Tu nombre')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
             </div>
             <p class="ayuda">${t('Es para toda la clase: cada uno la verá con su nombre, como «Tu rutina de» y el tuyo.')}</p>` : `<p class="etapa-titulo" id="etapa-para-t"><b>1</b>${t('Para quién')}</p>
-            <div class="campos">
-              <div class="campo"><label for="para">${t('Nombre de la persona')}</label><input id="para" data-accion="para" autocomplete="off" value="${esc(b.para)}"></div>
-              <div class="campo"><label for="de">${t('Tu nombre')}</label><input id="de" data-accion="de" autocomplete="off" value="${esc(b.de)}"></div>
-            </div>
-            <div class="hueco-recientes">${personasRecientes(b)}</div>
-            <div class="hueco-lleno">${avisoLleno(b)}</div>`}
+            <div class="destino">${segmentos('destino', [['persona', t('Para una persona')], ['publicar', t('Para publicar')]], b.publicar ? 'publicar' : 'persona', t('Para quién'))}</div>
+            <div class="hueco-para">${camposPara(b)}</div>`}
           </section>
           <section class="etapa" id="etapa-ejercicios" aria-labelledby="etapa-ejercicios-t">
             <p class="etapa-titulo" id="etapa-ejercicios-t"><b>2</b>${t('Ejercicios')}</p>
@@ -906,8 +959,8 @@ function vistaArmar() {
             <p class="etapa-titulo" id="etapa-ajustes-t"><b>3</b>${t('Ajustes')}</p>
             <section class="general">
               <h2>${t('Para toda la rutina')}</h2>
+              <div class="fila hueco-forma">${ajustesForma(b)}</div>
               <div class="fila">
-                <div class="ajuste"><span>${t('Descanso entre series')}</span>${segmentos('descanso', [[30, '30 s'], [45, '45 s'], [60, '1 min'], [90, t('1 min 30')]], b.descanso, t('Descanso entre series'))}</div>
                 <div class="ajuste"><span>${t('Veces al día')}</span>${segmentos('veces', [[1, '1'], [2, '2'], [3, '3']], b.veces, t('Veces al día'))}</div>
                 <div class="ajuste"><span>${t('Días a la semana')}</span>${segmentos('semana', [[0, t('Libre')], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [7, '7']], b.semana, t('Días a la semana'))}</div>
                 <div class="ajuste"><span>${t('Figura')}</span>${eleccionFigura(b.cuerpo)}</div>
@@ -1031,7 +1084,7 @@ function vistaArmar() {
     const conservar = lienzo && vieja.contains(lienzo);
     const nueva = document.createElement('div');
     const pos = b.orden.indexOf(id);
-    nueva.innerHTML = tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, pos, b.orden.length);
+    nueva.innerHTML = tarjetaEjercicio(id, b.ejercicios[id], id === b.activo, pos, b.orden.length, b.vueltas);
     const art = nueva.firstElementChild;
     if (conservar) art.querySelector('.mini-figura').appendChild(lienzo);
     vieja.replaceWith(art);
@@ -1156,7 +1209,7 @@ function vistaArmar() {
   function guardarPlantilla(nombre) {
     const lista = leerPlantillas().filter((p) => p.nombre !== nombre);
     lista.unshift({
-      nombre, cambiada: new Date().toISOString(), d: b.descanso, x: b.veces, w: b.semana || undefined, m: b.tope, c: b.cuerpo, orden: [...b.orden],
+      nombre, cambiada: new Date().toISOString(), ...ajustesDeRutina(b), x: b.veces, w: b.semana || undefined, m: b.tope, c: b.cuerpo, orden: [...b.orden],
       ejercicios: Object.fromEntries(b.orden.map((id) => [id, JSON.parse(JSON.stringify(b.ejercicios[id]))])),
     });
     almacen.guardar('plantillas', lista.slice(0, 60));
@@ -1176,7 +1229,7 @@ function vistaArmar() {
   }
 
   function usarPlantilla(p) {
-    Object.assign(b, { descanso: p.d, veces: p.x, semana: p.w || 0, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
+    Object.assign(b, { ...rutinaEnBorrador(p), veces: p.x, semana: p.w || 0, tope: p.m ?? TOPE_MOLESTIA, cuerpo: p.c || 'a' });
     b.orden = p.orden.filter((id) => ORDEN.includes(id));
     for (const id of b.orden) b.ejercicios[id] = { ...ajustesIniciales(id), ...JSON.parse(JSON.stringify(p.ejercicios[id] || {})) };
     b.activo = b.orden[0] || b.activo;
@@ -1298,9 +1351,21 @@ function vistaArmar() {
     } else if (a === 'tope') {
       b.tope = Math.min(9, Math.max(0, b.tope + delta));
       el.closest('.paso').outerHTML = paso('tope', b.tope, t('Molestia aceptable'), 0, 9);
-    } else if (a === 'descanso' || a === 'veces' || a === 'semana') {
+    } else if (a === 'descanso' || a === 'veces' || a === 'semana' || a === 'entreEjercicios' || a === 'entreVueltas') {
       b[a] = Number(el.dataset.valor);
       el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
+      actualizarBarra();
+    } else if (a === 'forma' || a === 'vueltas') {
+      // By sets or as a circuit, and its rounds: the cards lose or get back their sets.
+      b.vueltas = a === 'vueltas' ? Number(el.dataset.valor) : el.dataset.valor === 'circuito' ? b.vueltas || 3 : 0;
+      app.querySelector('.hueco-forma').innerHTML = ajustesForma(b);
+      refrescarRutina();
+      colocarFigura();
+      app.querySelector(`.hueco-forma [data-accion="${a}"][data-valor="${el.dataset.valor}"]`)?.focus({ preventScroll: true });
+    } else if (a === 'destino') {
+      b.publicar = el.dataset.valor === 'publicar';
+      el.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === el)));
+      app.querySelector('.hueco-para').innerHTML = camposPara(b);
       actualizarBarra();
     } else if (a === 'nueva-plantilla') {
       const form = app.querySelector('.plantilla-nueva');
@@ -1374,7 +1439,11 @@ function vistaArmar() {
 
   app.oninput = (ev) => {
     const a = ev.target.dataset.accion;
-    if (a === 'para' || a === 'de') b[a] = ev.target.value;
+    if (a === 'para' || a === 'de' || a === 'volver') b[a] = ev.target.value;
+    if (a === 'volver') {
+      const aviso = app.querySelector('.aviso-volver');
+      if (aviso) aviso.textContent = b.volver.trim() && !direccionVuelta(b.volver.trim()) ? t('La página tiene que empezar por https://') : '';
+    }
     if (a === 'para') {
       const etapas = app.querySelector('.etapas-app');
       if (etapas) etapas.innerHTML = etapasApp(b);
@@ -1457,9 +1526,10 @@ async function crearEnlace(b, empezarOtra = null) {
   almacen.guardar('estrenada', true);
   const rutina = {
     v: 1,
-    para: b.para.trim(),
+    para: b.publicar && !armandoParaMoodle ? '' : b.para.trim(),
     de: b.de.trim(),
-    d: b.descanso,
+    ...ajustesDeRutina(b),
+    ...(b.publicar && !armandoParaMoodle ? { o: 1, u: direccionVuelta(b.volver.trim()) } : {}),
     x: b.veces,
     w: b.semana || undefined,
     m: b.tope,
@@ -1467,7 +1537,7 @@ async function crearEnlace(b, empezarOtra = null) {
     f: diaLocal(),
     e: b.orden.map((id) => {
       const e = b.ejercicios[id];
-      return { i: id, s: e.series, r: e.reps, t: e.tempo, l: e.lado, b: bandaDe(EJERCICIOS[id], e.banda)?.clave, n: e.nota.trim() || undefined };
+      return { i: id, s: b.vueltas || e.series, r: e.reps, t: e.tempo, l: e.lado, b: bandaDe(EJERCICIOS[id], e.banda)?.clave, n: e.nota.trim() || undefined };
     }),
   };
   // For a Moodle activity: the routine goes back to the activity form, for the whole class and with no file. Opened by
@@ -1502,9 +1572,11 @@ async function crearEnlace(b, empezarOtra = null) {
   const sinVale = persona && !fichaAbierta(persona);
   const url = `${location.origin}${location.pathname}#r=${codigo}`;
   // The message is the professional's, in their language; the link inside it reads the same in any.
-  const mensaje = rutina.para
-    ? t('Hola, {nombre}. Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:', { nombre: rutina.para })
-    : t('Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:');
+  const mensaje = rutina.o
+    ? t('Una rutina de ejercicios para hacer en tu teléfono, siguiendo a la figura:')
+    : rutina.para
+      ? t('Hola, {nombre}. Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:', { nombre: rutina.para })
+      : t('Aquí tienes tu rutina de ejercicios. Ábrela en tu teléfono y sigue a la figura:');
 
   let qr = '';
   try {
@@ -1544,7 +1616,9 @@ async function crearEnlace(b, empezarOtra = null) {
       <div class="qr">${qr}</div>
       <div class="enlace-texto">${esc(url)}</div>
     </details>
-    <p class="hoja-pie">${t('Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.')}</p>
+    <p class="hoja-pie">${rutina.o
+      ? t('Pon el enlace en tu web, tu blog o tus redes. Quien la abra la hace en su teléfono, y lo que apunte se queda en su teléfono. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.')
+      : t('Cuando la haga, te mandará su resumen: ábrelo en este aparato y se guarda en su ficha. Todo va dentro del enlace: no pasa por ningún servidor de Oksigenia.')}</p>
     ${empezarOtra ? `<button type="button" class="boton secundario hoja-otra" data-h="otra">${t('Hecho: empezar otra rutina')}</button>` : ''}`;
   document.body.appendChild(dialogo);
   const volverA = document.activeElement;
@@ -1660,7 +1734,13 @@ async function vistaRutina(codigo) {
   }
   // Where what is done goes: to the course, or in a summary the person sends.
   const destinoMarca = (q) => (enMoodle ? t('saldrá marcado en lo que ve {quien} en el curso', { quien: q }) : t('saldrá marcado en el resumen que le mandes a {quien}', { quien: q }));
-  const totalSeg = ejercicios.reduce((t, e) => t + duracionEjercicio({ series: e.s, reps: e.r, tempo: e.t, lado: e.l }, r.d, EJERCICIOS[e.i]), 0);
+  // Above the acceptable discomfort: where it will show. A published routine sends nothing, so it only says so.
+  const masDelTope = (q) => (r.o ? t('Es más de {tope}.', { tope }) : t('Es más de {tope}: {destino}.', { tope, destino: destinoMarca(q) }));
+  // A circuit: every exercise once in each round (its sets are the rounds), the rest between rounds in r.kd.
+  const circuito = r.k > 0;
+  const totalSeg = duracionRutina(ejercicios.map((e) => ({ e: { series: e.s, reps: e.r, tempo: e.t, lado: e.l }, def: EJERCICIOS[e.i] })), { descanso: r.d, vueltas: r.k, entreVueltas: r.kd });
+  // The page a published routine came from, by its name: abakinesis.com.
+  const sitioVuelta = r.u ? new URL(r.u).hostname.replace(/^www\./, '') : '';
   const tope = Number.isInteger(r.m) ? r.m : TOPE_MOLESTIA;
   const quien = r.de ? esc(r.de) : t('quien te dio la rutina');
   let mananaOmitida = false;
@@ -1696,7 +1776,7 @@ async function vistaRutina(codigo) {
     subirHistorial(clave);
     const tarjeta = app.querySelector('.manana');
     tarjeta.innerHTML = `<p class="apuntado">${t('Apuntado: {v} de 10 al levantarte.', { v: valor })}${
-      pasaDelTope(valor, tope) ? ` ${t('Es más de {tope}: {destino}.', { tope, destino: destinoMarca(quien) })}` : ''
+      pasaDelTope(valor, tope) ? ` ${masDelTope(quien)}` : ''
     }</p>`;
     pintarPie(hist);
   }
@@ -1713,7 +1793,7 @@ async function vistaRutina(codigo) {
     const salida = volverAlCurso() ? `<a class="boton secundario" href="${esc(volverAlCurso())}">${ICONO.volver}${t('Volver al curso')}</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${t(TEXTO_CERRAR)}</p>` : '';
     const enviar = enMoodle
       ? `<p class="moodle-estado" aria-live="polite"></p>${salida}`
-      : `<p>${t('Mándaselo a {quien}: así ve cómo te va y te ajusta la rutina.', { quien })}</p>
+      : r.o ? '' : `<p>${t('Mándaselo a {quien}: así ve cómo te va y te ajusta la rutina.', { quien })}</p>
         <div class="dos-botones"><button type="button" class="boton secundario" data-r="mandar" data-canal="wa">${ICONO.whatsapp}WhatsApp</button>
         <button type="button" class="boton secundario" data-r="mandar" data-canal="tg">${ICONO.telegram}Telegram</button></div>`;
     sitio.innerHTML = `<section class="tarjeta mandar-hecho" aria-labelledby="mandar-titulo">
@@ -1743,9 +1823,10 @@ async function vistaRutina(codigo) {
     app.innerHTML = `<div class="rutina rutina-intro">
       <header class="saludo">
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
-        ${r.de ? `<div class="de">${t('Tu rutina de {de}', { de: esc(r.de) })}</div>` : ''}
+        ${r.de ? `<div class="de">${r.o ? t('Rutina de {de}', { de: esc(r.de) }) : t('Tu rutina de {de}', { de: esc(r.de) })}</div>` : ''}
         <h1>${r.para ? t('Hola, {nombre}', { nombre: esc(r.para) }) : t('Tu rutina')}</h1>
         ${r.w ? `<p class="semana-rutina">${r.w === 7 ? t('Todos los días') : r.w <= 3 ? tn(r.w, '{n} día a la semana, mejor no seguidos', '{n} días a la semana, mejor no seguidos') : tn(r.w, '{n} día a la semana', '{n} días a la semana')}</p>` : ''}
+        ${circuito ? `<p class="semana-rutina">${tn(r.k, 'En circuito: {n} vuelta, con los ejercicios uno detrás de otro.', 'En circuito: {n} vueltas, con los ejercicios uno detrás de otro y {descanso} de descanso entre vueltas.', { descanso: segundosEnTexto(r.kd) })}</p>` : ''}
         ${vistaPrevia() ? `<p class="moodle-aviso">${t(TEXTO_ESTADO['vista-previa'])}</p>` : ''}
         ${r.x > 1 ? `<p class="veces-hoy"><span class="casillas" aria-hidden="true">${Array.from({ length: r.x }, (_, n) => `<i${n < vecesHoy ? ' class="hecha"' : ''}></i>`).join('')}</span>${t('Hoy: {n} de {x} veces', { n: Math.min(vecesHoy, r.x), x: r.x })}</p>` : ''}
       </header>
@@ -1765,7 +1846,7 @@ async function vistaRutina(codigo) {
                 <span class="tarjeta-poster"><img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${e.l === 'izq' ? ' class="espejo"' : ''}></span>
                 <div>
                   <h3>${esc(t(def.nombre))}</h3>
-                  <p class="tarjeta-dosis num">${tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}</p>
+                  <p class="tarjeta-dosis num">${circuito ? cuentaUnidad(def, e.r) : `${tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}`}</p>
                 </div>
               </div>
               <p class="tarjeta-pauta">${esc(textoTempo(e.t))}</p>
@@ -1789,7 +1870,7 @@ async function vistaRutina(codigo) {
       </section>
       <footer class="pie pie-fijo">
         ${ejercicios[0] ? `<span class="pie-poster" aria-hidden="true"><img src="${poster(ejercicios[0].i, r.c, bandaDe(EJERCICIOS[ejercicios[0].i], ejercicios[0].b)?.clave)}" alt="" width="112" height="84" decoding="async"${ejercicios[0].l === 'izq' ? ' class="espejo"' : ''}></span>` : ''}
-        <p class="pie-resumen num">${tn(ejercicios.length, '{n} ejercicio', '{n} ejercicios')} · ${minutos(totalSeg)}</p>
+        <p class="pie-resumen num">${tn(ejercicios.length, '{n} ejercicio', '{n} ejercicios')}${circuito ? ` · ${tn(r.k, 'circuito de {n} vuelta', 'circuito de {n} vueltas')}` : ''} · ${minutos(totalSeg)}</p>
         ${(() => {
           const c = enCurso();
           return c
@@ -1945,10 +2026,15 @@ async function vistaRutina(codigo) {
   }
 
   const actual = () => cola[sesion.item];
+  // «Ejercicio 2 de 7», and in a circuit, the round first.
+  const enQueVamos = (e) => {
+    const ejercicio = t('Ejercicio {n} de {total}', { n: ejercicios.indexOf(e) + 1, total: ejercicios.length });
+    return circuito ? `${t('Vuelta {n} de {total}', { n: sesion.serie + 1, total: r.k })} · ${ejercicio}` : ejercicio;
+  };
   // Under the name: the set, and the band to use when the professional said its colour.
   const subtitulo = (e, serie) => {
     const banda = bandaDe(EJERCICIOS[e.i], e.b);
-    return `${t('Serie {n} de {total}', { n: serie, total: e.s })}${banda ? ` · ${t(banda.nombre).toLowerCase()}` : ''}`;
+    return `${circuito ? t('Vuelta {n} de {total}', { n: serie, total: r.k }) : t('Serie {n} de {total}', { n: serie, total: e.s })}${banda ? ` · ${t(banda.nombre).toLowerCase()}` : ''}`;
   };
 
   async function prepararSerie() {
@@ -1986,9 +2072,14 @@ async function vistaRutina(codigo) {
     if (sesion.item !== item) return;
     // A new exercise waits for the person: from the band on the door to the chair takes longer than any countdown.
     // Between sets of the same exercise, and when only the side changes, the rest leads into the countdown.
+    // In a circuit, from the second round on, the next exercise comes after a short rest (a longer one between rounds),
+    // with the figure already in its starting position.
     const nuevo = sesion.retomada || (sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e));
+    const transicion = sesion.transicion;
     sesion.retomada = false;
+    sesion.transicion = null;
     if (nuevo) preparacion();
+    else if (transicion) descanso(transicion.segundos, { siguiente: true, vuelta: transicion.vuelta });
     else cuentaAtras(5);
   }
 
@@ -1999,7 +2090,7 @@ async function vistaRutina(codigo) {
     const { e } = actual();
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
-    app.querySelector('.j-sub').textContent = t('Ejercicio {n} de {total}', { n: ejercicios.indexOf(e) + 1, total: ejercicios.length });
+    app.querySelector('.j-sub').textContent = enQueVamos(e);
     const queHace = def.material && def.material !== 'Sin material' ? t(def.material) : '';
     const material = banda
       ? `${muestraBanda(banda)}${esc(t(banda.nombre).toLowerCase())}`
@@ -2105,6 +2196,7 @@ async function vistaRutina(codigo) {
   // other side, or the rating (serie past the last one).
   function siguiente() {
     const { e } = actual();
+    if (circuito) return siguienteEnCircuito(e);
     if (sesion.serie + 1 < e.s) {
       sesion.serie++;
       guardarCurso();
@@ -2117,7 +2209,7 @@ async function vistaRutina(codigo) {
       sesion.item++;
       sesion.serie = 0;
       guardarCurso();
-      descanso(r.d, true);
+      descanso(r.d, { cambiaLado: true });
       return;
     }
     if (grupo) {
@@ -2130,6 +2222,36 @@ async function vistaRutina(codigo) {
     guardarCurso();
     sesion.serie = e.s - 1;
     valorar();
+  }
+
+  // A circuit: the other side at once, as by sets; after the last round of an exercise, its rating (in the last round,
+  // so each one is rated once, as by sets); otherwise on to the next exercise or the next round.
+  function siguienteEnCircuito(e) {
+    const sigue = cola[sesion.item + 1];
+    if (sigue && sigue.e === e) {
+      sesion.item++;
+      guardarCurso();
+      return descanso(r.d, { cambiaLado: true });
+    }
+    if (sesion.serie + 1 >= r.k && !grupo) {
+      sesion.serie = e.s;
+      guardarCurso();
+      sesion.serie = e.s - 1;
+      return valorar();
+    }
+    return pasarEnCircuito();
+  }
+  function pasarEnCircuito() {
+    if (sesion.item + 1 < cola.length) {
+      sesion.item++;
+      sesion.transicion = { segundos: r.d };
+    } else if (sesion.serie + 1 < r.k) {
+      sesion.item = 0;
+      sesion.serie++;
+      sesion.transicion = { segundos: r.kd, vuelta: true };
+    } else return grupo ? finDeGrupo() : terminar();
+    guardarCurso();
+    return prepararSerie();
   }
 
   // A group: in, wide and with full screen where the screen allows it; out, as the person's routine left it.
@@ -2197,20 +2319,29 @@ async function vistaRutina(codigo) {
   };
   document.addEventListener('fullscreenchange', alCambiarCompleta);
 
-  function descanso(segundos, cambiaLado = false) {
-    decir(cambiaLado ? t('Descansa. Ahora, el otro lado') : t('Descansa'));
+  // siguiente: in a circuit, the rest before the next exercise (vuelta: before the next round), with its figure in place.
+  function descanso(segundos, { cambiaLado = false, siguiente = false, vuelta = false } = {}) {
+    const { e, lado } = actual();
+    const nombre = t(EJERCICIOS[e.i].nombre);
+    decir(cambiaLado ? t('Descansa. Ahora, el otro lado') : siguiente ? `${t('Descansa')}. ${nombre}` : t('Descansa'));
     sesion.estado = 'descanso';
     const mando = app.querySelector('.j-mando');
-    const { e, lado } = actual();
     const total = segundos;
     let quedan = segundos;
     const radio = 56;
     const largo = 2 * Math.PI * radio;
-    mando.innerHTML = `<div class="centro"><h3>${t('Descansa')}</h3><p>${cambiaLado ? t('Ahora, {lado}', { lado: t(LADOS[lado]).toLowerCase() }) : t('Siguiente: serie {n} de {total}', { n: sesion.serie + 1, total: e.s })}</p></div>
+    const queSigue = cambiaLado
+      ? t('Ahora, {lado}', { lado: t(LADOS[lado]).toLowerCase() })
+      : vuelta
+        ? t('Ahora, la vuelta {n} de {total}, empezando por {ejercicio}', { n: sesion.serie + 1, total: r.k, ejercicio: esc(nombre.toLowerCase()) })
+        : siguiente
+          ? t('Siguiente: {ejercicio}', { ejercicio: esc(nombre.toLowerCase()) })
+          : t('Siguiente: serie {n} de {total}', { n: sesion.serie + 1, total: e.s });
+    mando.innerHTML = `<div class="centro"><h3>${t('Descansa')}</h3><p>${queSigue}</p></div>
       <svg class="anillo" viewBox="0 0 132 132"><circle class="fondo-anillo" cx="66" cy="66" r="${radio}"/><circle class="avance" cx="66" cy="66" r="${radio}" stroke-dasharray="${largo}" stroke-dashoffset="0" transform="rotate(-90 66 66)"/><text x="66" y="66" class="num">${quedan}</text></svg>
       <div class="mando-botones"><button type="button" class="boton fantasma" data-r="mas">+15 s</button><span></span><button type="button" class="boton fantasma" data-r="ya">${t('Seguir ya')}</button></div>`;
     if (cambiaLado) {
-      app.querySelector('.j-sub').textContent = subtitulo(e, 1);
+      app.querySelector('.j-sub').textContent = subtitulo(e, circuito ? sesion.serie + 1 : 1);
       app.querySelector('.j-lado').textContent = t(LADOS[lado]);
       figura.lado(lado);
     } else {
@@ -2245,6 +2376,7 @@ async function vistaRutina(codigo) {
   // What the person may add about an exercise, for the professional: it cost them, or they could not do it, and a short
   // note in their own words («me molestó la rodilla al bajar»). Optional; it travels in the summary.
   function extraValorar(e) {
+    if (r.o) return '';
     const x = (sesion.extra ||= {})[e.i] || {};
     const boton = (v, texto) => `<button type="button" class="chip-elegir" data-r="dificultad" data-v="${v}" aria-pressed="${x.c === v}">${texto}</button>`;
     return `<section class="valorar-extra" aria-labelledby="v-extra">
@@ -2261,7 +2393,7 @@ async function vistaRutina(codigo) {
     figura?.parar();
     app.querySelector('.jugador')?.classList.add('valorando');
     const { e } = actual();
-    app.querySelector('.j-sub').textContent = t('Ejercicio {n} de {total}', { n: ejercicios.indexOf(e) + 1, total: ejercicios.length });
+    app.querySelector('.j-sub').textContent = enQueVamos(e);
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
     const items = cola.map((c, i) => ({ c, i })).filter(({ c }) => c.e === e);
@@ -2270,7 +2402,9 @@ async function vistaRutina(codigo) {
     const seguir = ultimo ? t('Terminar') : t('Siguiente ejercicio');
     const lado = (c) => `<img src="${poster(e.i, r.c, banda?.clave)}" alt="" width="112" height="84" decoding="async"${c.lado === 'izq' ? ' class="espejo"' : ''}>`;
     const cabeza = `<div class="valorar-cabeza"><span class="tarjeta-poster">${lado(items[0].c)}</span>
-      <div><h3>${t('Hecho')}</h3><p class="num">${dosLados ? tn(e.s, '{n} serie de cada lado', '{n} series de cada lado') : tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}</p></div></div>`;
+      <div><h3>${t('Hecho')}</h3><p class="num">${circuito
+        ? dosLados ? tn(e.s, '{n} vuelta de cada lado', '{n} vueltas de cada lado') : tn(e.s, '{n} vuelta', '{n} vueltas')
+        : dosLados ? tn(e.s, '{n} serie de cada lado', '{n} series de cada lado') : tn(e.s, '{n} serie', '{n} series')} · ${cuentaUnidad(def, e.r)}</p></div></div>`;
     let cuerpo = '';
     let pie = '';
     if (sesion.paso === 'reps') {
@@ -2279,7 +2413,11 @@ async function vistaRutina(codigo) {
     } else if (sesion.paso === 'menos') {
       cuerpo = `<section class="valorar-paso" aria-labelledby="v-menos"><h4 class="pregunta" id="v-menos" tabindex="-1">${fraseUnidad(def, 'cuantas')}</h4>
         ${items.map(({ c, i }) => `<div class="series-lado">${dosLados ? `<h5>${t(LADOS[c.lado])}</h5>` : ''}${sesion.hechas[i]
-          .map((v, n) => `<div class="serie-fila"><span>${t('Serie {n}', { n: n + 1 })}</span>${paso(`h-${i}-${n}`, v, dosLados ? t('{lado}, serie {n}', { lado: t(LADOS[c.lado]), n: n + 1 }) : t('Serie {n}', { n: n + 1 }), 0, 50)}</div>`)
+          .map((v, n) => {
+            const cual = circuito ? t('Vuelta {n}', { n: n + 1 }) : t('Serie {n}', { n: n + 1 });
+            const etiqueta = dosLados ? (circuito ? t('{lado}, vuelta {n}', { lado: t(LADOS[c.lado]), n: n + 1 }) : t('{lado}, serie {n}', { lado: t(LADOS[c.lado]), n: n + 1 })) : cual;
+            return `<div class="serie-fila"><span>${cual}</span>${paso(`h-${i}-${n}`, v, etiqueta, 0, 50)}</div>`;
+          })
           .join('')}</div>`).join('')}</section>`;
       pie = `<button type="button" class="boton" data-r="reps-listo">${t('Listo')}</button>`;
     } else {
@@ -2329,7 +2467,11 @@ async function vistaRutina(codigo) {
       ? `<p class="moodle-estado" aria-live="polite"></p>
         ${volverAlCurso() ? `<a class="boton" href="${esc(volverAlCurso())}">${ICONO.volver}${t('Volver al curso')}</a>` : enAppDeMoodle ? `<p class="moodle-cerrar">${t(TEXTO_CERRAR)}</p>` : ''}
         <button type="button" class="boton fantasma" data-r="volver">${t('Volver a la rutina')}</button>`
-      : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}${t('Mandar por WhatsApp')}</button>
+      : r.o
+        ? `${r.u ? `<a class="boton" href="${esc(r.u)}">${ICONO.volver}${t('Volver a {sitio}', { sitio: esc(sitioVuelta) })}</a>` : ''}
+        <button type="button" class="boton${r.u ? ' fantasma' : ''}" data-r="volver">${t('Volver a la rutina')}</button>
+        ${tarjetaAMano()}`
+        : `<button type="button" class="boton" data-r="mandar" data-canal="wa">${ICONO.whatsapp}${t('Mandar por WhatsApp')}</button>
         <button type="button" class="boton" data-r="mandar" data-canal="tg">${ICONO.telegram}${t('Mandar por Telegram')}</button>
         <button type="button" class="boton fantasma" data-r="volver">${t('Volver a la rutina')}</button>
         ${tarjetaAMano()}`;
@@ -2337,7 +2479,7 @@ async function vistaRutina(codigo) {
     app.innerHTML = `<div class="rutina">
       <header class="saludo"><div class="de">${t('Hecho')}</div><h1>${parcial ? t('Lo de hoy, guardado') : t('Rutina de hoy, completa')}</h1>${
         parcial ? `<p>${t('Te faltó: {ejercicios}.', { ejercicios: faltan.join(', ') })}</p>` : ''
-      }<p>${trabajo} ${r.de && !enMoodle ? t('Mándale a {de} cómo te ha ido.', { de: esc(r.de) }) : ''}</p></header>
+      }<p>${trabajo} ${r.de && !enMoodle && !r.o ? t('Mándale a {de} cómo te ha ido.', { de: esc(r.de) }) : r.o ? t('Queda apuntado en tu teléfono.') : ''}</p></header>
       <section class="lista">${resumenDia(dia, tope)}</section>
       <footer class="pie">
         ${pie}
@@ -2653,7 +2795,7 @@ async function vistaRutina(codigo) {
       const aviso = app.querySelector('.aviso-molestia');
       if (aviso) {
         aviso.textContent = pasaDelTope(v, tope)
-          ? `${t('Es más de {tope}: {destino}.', { tope, destino: destinoMarca(r.de || t('quien te dio la rutina')) })} ${t('La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.')}`
+          ? `${masDelTope(r.de || t('quien te dio la rutina'))} ${t('La próxima vez, hazlo más suave o con menos repeticiones. Si es un dolor fuerte, para este ejercicio.')}`
           : '';
       }
       return;
@@ -2680,6 +2822,7 @@ async function vistaRutina(codigo) {
       if (el.disabled) return;
       el.disabled = true;
       sesion.paso = null;
+      if (circuito) return pasarEnCircuito();
       if (sesion.item + 1 < cola.length) {
         sesion.item++;
         sesion.serie = 0;

@@ -836,6 +836,10 @@ a.boton { text-decoration: none; }
 /* The voice that guides: a woman's, a man's or none (voz.js). */
 .voz-elegir .segmentos { display: flex; width: 100%; }
 .voz-elegir .segmentos button { flex: 1 1 0; }
+/* Step 1: for one person or to publish (app.js, camposPara), the two halves of the width. */
+.destino { margin-bottom: 14px; }
+.destino .segmentos { display: flex; width: 100%; }
+.destino .segmentos button { flex: 1 1 0; }
 /* Help and contact (app.js, abrirAyuda). */
 .hoja-ayuda .ayuda-plegada { margin: 0 0 6px; }
 .ayuda-contacto { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--linea); }

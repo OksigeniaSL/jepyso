@@ -35,6 +35,24 @@ assert.equal(r.e[0].n.length, 4000);
 assert.equal(r.para, marca, 'names stay text: they are escaped where they are painted');
 assert.equal(limpiarRutina({ e: 'x' }), null);
 
+// A circuit: its rounds are every exercise's sets; the rests, from the builder's own lists.
+const c = limpiarRutina({ k: 3, kd: 120, d: 15, e: [{ i: 'puente', s: 1 }, { i: 'plancha', s: 5 }] });
+assert.deepEqual([c.k, c.kd, c.d], [3, 120, 15]);
+assert.deepEqual(c.e.map((x) => x.s), [3, 3]);
+const c2 = limpiarRutina({ k: 40, kd: 7, d: 15, e: [{ i: 'puente', s: 2 }] });
+assert.deepEqual([c2.k, c2.kd, c2.d, c2.e[0].s], [undefined, undefined, 45, 2], 'rounds out of range: a routine by sets');
+assert.equal(limpiarRutina({ k: 2, kd: 7, d: 90, e: [] }).kd, 120);
+assert.equal(limpiarRutina({ k: 2, d: 90, e: [] }).d, 30, 'between exercises, the circuit list');
+
+// Published: no name, no file, and back only to a plain https page.
+const pub = limpiarRutina({ o: 1, para: 'Ana', p: 'ab12', de: 'Abakinesis', u: 'https://abakinesis.com/articulos/x/', e: [] });
+assert.deepEqual([pub.o, pub.para, pub.p, pub.u], [1, '', undefined, 'https://abakinesis.com/articulos/x/']);
+for (const u of ['javascript:alert(1)', 'http://abakinesis.com/', 'https://user:pw@abakinesis.com/', 'https://localhost/', 'data:text/html,x', 'https://' + 'a'.repeat(300) + '.com', 7]) {
+  assert.equal(limpiarRutina({ o: 1, u, e: [] }).u, undefined, String(u).slice(0, 40));
+}
+assert.equal(limpiarRutina({ o: 2, u: 'https://a.com/', para: 'Ana', e: [] }).u, undefined, 'a page only with a published routine');
+assert.equal(limpiarRutina({ o: 2, para: 'Ana', e: [] }).para, 'Ana');
+
 // People, templates and deletions from a copy or the cloud.
 const personas = limpiarPersonas([{ id: '__proto__', nombre: 'a' }, { id: 'ab12', nombre: '', creada: 'mal', dias: [{ f: 'no' }], rutinas: [{ codigo: '<x>' }, { codigo: 'd.Abc_-', e: ['puente', 'constructor'] }] }, 7]);
 assert.equal(personas.length, 1);

@@ -1,0 +1,78 @@
+{
+ "id": "zancada",
+ "nombre": "Zancada fija",
+ "fps": 30,
+ "duracion": 6.0,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Baja la rodilla de atrás hacia el suelo"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 3.0,
+   "texto": "Aguanta, el tronco recto"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 3.0,
+   "fin": 5.0,
+   "texto": "Sube empujando con la pierna de delante"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.0,
+   "fin": 6.0,
+   "texto": "Respira"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_izquierda_flexion": -30.0,
+   "rodilla_izquierda_flexion": 3.6,
+   "tobillo_izquierda_flexion": -14.7,
+   "cadera_derecha_flexion": 42.7,
+   "rodilla_derecha_flexion": 10.0,
+   "tobillo_derecha_flexion": -24.7,
+   "pelvis_basculacion": 8.0
+  },
+  "llegada": {
+   "cadera_izquierda_flexion": -8.4,
+   "rodilla_izquierda_flexion": 90.0,
+   "tobillo_izquierda_flexion": 17.7,
+   "cadera_derecha_flexion": 90.0,
+   "rodilla_derecha_flexion": 90.0,
+   "tobillo_derecha_flexion": -0.0,
+   "pelvis_basculacion": -0.0
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "aductores"
+  ]
+ },
+ "lado": "derecho",
+ "accesorios": [],
+ "camara": {
+  "pos": [
+   -3.86,
+   2.044,
+   0.264
+  ],
+  "mira": [
+   0.0,
+   0.809,
+   -0.431
+  ]
+ },
+ "archivo": "zancada.glb",
+ "bytes": 42632
+}

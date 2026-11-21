@@ -1,7 +1,7 @@
 // What comes from outside this page is cleaned here before anything uses it: a routine or a summary from a link, a copy
 // file, the professional's cloud and even this browser's own storage. Only the known fields pass, with their type and
 // range, so a forged link can neither paint markup nor leave a file that no longer opens.
-import { EJERCICIOS, BANDAS, TOPE_MOLESTIA, diaLocal, topeReps } from './datos.js';
+import { EJERCICIOS, BANDAS, TOPE_MOLESTIA, diaLocal, topeReps, DESCANSOS_CIRCUITO, ENTRE_VUELTAS, VUELTAS } from './datos.js';
 
 // Limits for what comes in a link, from anyone. What the professional keeps (files, copies, the cloud) is checked for
 // type but never cut, and fields a newer version adds are kept as they are.
@@ -10,7 +10,7 @@ const NOTA = 4000;
 const SIN_TOPE = Infinity;
 const otrosCampos = (o, conocidos) => Object.fromEntries(Object.entries(o).filter(([k]) => clavePropia(k) && !conocidos.includes(k)));
 const CAMPOS_PERSONA = ['id', 'nombre', 'notas', 'creada', 'm', 'rutinas', 'dias', 'ultimoResumen', 'cambiada'];
-const CAMPOS_PLANTILLA = ['nombre', 'cambiada', 'd', 'x', 'w', 'm', 'c', 'orden', 'ejercicios'];
+const CAMPOS_PLANTILLA = ['nombre', 'cambiada', 'd', 'x', 'w', 'm', 'c', 'k', 'kd', 'orden', 'ejercicios'];
 // Days a week (Otago and Vivifrail set them): 1 to 7, or none, when the professional leaves it free.
 const semana = (w) => (Number.isInteger(w) && w >= 1 && w <= 7 ? w : undefined);
 
@@ -31,6 +31,21 @@ const idGuardado = (i) => clavePropia(i) && /^[a-z0-9_]{1,40}$/.test(i);
 const esCodigo = (c) => typeof c === 'string' && /^[A-Za-z0-9._-]{1,20000}$/.test(c);
 
 export const DESCANSOS = [30, 45, 60, 90];
+// Rest between sets, or in a circuit between exercises, which may be shorter.
+const descanso = (d, vueltas) => ((vueltas ? DESCANSOS_CIRCUITO : DESCANSOS).includes(d) ? d : vueltas ? 30 : 45);
+// A circuit: its rounds (none, a routine by sets) and the rest between them.
+const vueltas = (k) => (VUELTAS.includes(k) ? k : undefined);
+const entreVueltas = (kd, k) => (k ? (ENTRE_VUELTAS.includes(kd) ? kd : 120) : undefined);
+// The page a published routine leads back to: a plain https address, nothing else (no script, no credentials).
+export function direccionVuelta(u) {
+  if (typeof u !== 'string' || !u || u.length > 300) return undefined;
+  try {
+    const x = new URL(u);
+    return x.protocol === 'https:' && x.hostname.includes('.') && !x.username && !x.password ? x.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
 const tope = (m) => entero(m, 0, 9, undefined);
 const lado = (l, i) => (l === 'der' || l === 'izq' || l === 'ambos' ? l : EJERCICIOS[i]?.unLado ? 'der' : null);
 const banda = (b) => (clavePropia(b) && Object.hasOwn(BANDAS, b) ? b : undefined);
@@ -40,18 +55,23 @@ const ritmo = (t, d = [2, 1, 2]) => {
   return [entero(x[0], 1, 12, d[0]), entero(x[1], 0, 30, d[1]), entero(x[2], 1, 12, d[2])];
 };
 
-// A routine as the link carries it: { v, para, de, d, x, m, c, f, p, e: [{ i, s, r, t, l, b, n }] }.
+// A routine as the link carries it: { v, para, de, d, x, m, c, f, p, k, kd, o, u, e: [{ i, s, r, t, l, b, n }] }.
+// k: the rounds of a circuit, where every exercise does one set in each (so its sets are the rounds); kd: the rest
+// between rounds. o: published (a blog, a website), for whoever opens it, with nothing to send back; u: its page.
 export function limpiarRutina(r) {
   if (!objeto(r) || !Array.isArray(r.e)) return null;
+  const k = vueltas(r.k);
   const e = lista(r.e, 40).flatMap((x) => {
     if (!objeto(x) || !esEjercicio(x.i)) return [];
     const d = EJERCICIOS[x.i].porDefecto;
     const nota = texto(x.n, NOTA);
-    return [{ i: x.i, s: entero(x.s, 1, 6, d.series), r: entero(x.r, 1, topeReps(EJERCICIOS[x.i]), d.reps), t: ritmo(x.t, d.tempo), l: lado(x.l, x.i), b: banda(x.b), n: nota || undefined }];
+    return [{ i: x.i, s: k || entero(x.s, 1, 6, d.series), r: entero(x.r, 1, topeReps(EJERCICIOS[x.i]), d.reps), t: ritmo(x.t, d.tempo), l: lado(x.l, x.i), b: banda(x.b), n: nota || undefined }];
   });
+  const o = r.o === 1 ? 1 : undefined;
   return {
-    v: 1, para: texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: DESCANSOS.includes(r.d) ? r.d : 45, x: entero(r.x, 1, 3, 1),
-    w: semana(r.w), m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: esId(r.p) ? r.p : undefined, e,
+    v: 1, para: o ? '' : texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: descanso(r.d, k), x: entero(r.x, 1, 3, 1),
+    w: semana(r.w), m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: o ? undefined : esId(r.p) ? r.p : undefined,
+    k, kd: entreVueltas(r.kd, k), o, u: o ? direccionVuelta(r.u) : undefined, e,
   };
 }
 
@@ -119,8 +139,9 @@ export function limpiarPlantilla(t) {
   }
   return {
     ...otrosCampos(t, CAMPOS_PLANTILLA),
-    nombre, cambiada: esMomento(t.cambiada) ? t.cambiada : undefined, d: DESCANSOS.includes(t.d) ? t.d : 45,
-    x: entero(t.x, 1, 3, 1), w: semana(t.w), m: tope(t.m) ?? TOPE_MOLESTIA, c: t.c === 'b' ? 'b' : 'a', orden, ejercicios,
+    nombre, cambiada: esMomento(t.cambiada) ? t.cambiada : undefined, d: descanso(t.d, vueltas(t.k)),
+    x: entero(t.x, 1, 3, 1), w: semana(t.w), m: tope(t.m) ?? TOPE_MOLESTIA, c: t.c === 'b' ? 'b' : 'a',
+    k: vueltas(t.k), kd: entreVueltas(t.kd, vueltas(t.k)), orden, ejercicios,
   };
 }
 

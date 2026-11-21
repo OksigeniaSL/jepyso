@@ -28,6 +28,10 @@ with another link.
   [Silbernagel et al., 2007](https://pubmed.ncbi.nlm.nih.gov/17307888/)): the professional sets the acceptable level
   (5 out of 10 unless they change it), the day after a session the person says how it felt on getting up, and the
   summary marks the days that went above the level.
+- **By sets or as a circuit.** A circuit does every exercise once in each round, one after another, with a short rest
+  between exercises and a longer one between rounds (`k` and `kd` in the routine).
+- **A routine to publish** (`o`): for a website, a blog or social media. It carries no name and nothing comes back; at
+  the end the person gets a link back to the professional's page (`u`, https only).
 - Light and dark themes, from 360 px wide.
 
 ## Run it

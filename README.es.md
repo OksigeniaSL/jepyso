@@ -28,6 +28,10 @@ devuelve el resumen con otro enlace.
   [Silbernagel y otros, 2007](https://pubmed.ncbi.nlm.nih.gov/17307888/)). El profesional pone la molestia aceptable
   (5 de 10 si no la cambia); el día después de una sesión, la persona dice qué tal se levantó, y el resumen marca los
   días que pasaron de ese nivel.
+- **Por series o en circuito.** En circuito, cada ejercicio se hace una vez en cada vuelta, uno detrás de otro, con un
+  descanso corto entre ejercicios y otro más largo entre vueltas (`k` y `kd` en la rutina).
+- **Una rutina para publicar** (`o`): para una web, un blog o las redes. No lleva nombre y no vuelve nada; al terminar,
+  la persona tiene un enlace para volver a la página del profesional (`u`, solo https).
 - Tema claro y oscuro, desde 360 px de ancho.
 
 ## Ponerla en marcha

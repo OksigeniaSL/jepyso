@@ -1,6 +1,6 @@
 {
  "cuerpo": "modelos/cuerpo.glb",
- "bytes_cuerpo": 1316204,
+ "bytes_cuerpo": 1597208,
  "ejercicios": {
   "abdominal": {
    "glb": "modelos/abdominal.glb",
@@ -915,6 +915,21 @@
     ]
    }
   },
+  "puente_una_pierna": {
+   "glb": "modelos/puente_una_pierna.glb",
+   "ficha": "modelos/puente_una_pierna.json",
+   "bytes": 45392,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "erectores"
+    ]
+   }
+  },
   "puntas": {
    "glb": "modelos/puntas.glb",
    "ficha": "modelos/puntas.json",
@@ -1159,6 +1174,18 @@
     "secundarios": []
    }
   },
+  "talones_escalon": {
+   "glb": "modelos/talones_escalon.glb",
+   "ficha": "modelos/talones_escalon.json",
+   "bytes": 45860,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "gemelos"
+    ],
+    "secundarios": []
+   }
+  },
   "talones_sentado": {
    "glb": "modelos/talones_sentado.glb",
    "ficha": "modelos/talones_sentado.json",
@@ -1258,6 +1285,22 @@
      "trapecio"
     ],
     "secundarios": []
+   }
+  },
+  "zancada": {
+   "glb": "modelos/zancada.glb",
+   "ficha": "modelos/zancada.json",
+   "bytes": 42632,
+   "lado": "derecho",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "aductores"
+    ]
    }
   }
  }

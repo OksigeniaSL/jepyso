@@ -1,0 +1,38 @@
+{
+ "id": "puente_una_pierna",
+ "familia": "puente",
+ "nombre": "Puente de glúteo a una pierna",
+ "lado": "derecho",
+ "accesorios": [
+  "esterilla"
+ ],
+ "ritmo": {
+  "subir": 2.0,
+  "mantener": 1.0,
+  "bajar": 2.0,
+  "reposo": 1.0
+ },
+ "textos": {
+  "subir": "Sube la cadera empujando con el pie apoyado",
+  "mantener": "Aguanta, la cadera recta",
+  "bajar": "Baja despacio",
+  "reposo": "Descansa"
+ },
+ "parametros": {
+  "cadera_inicio": 45,
+  "cadera_arriba": 0,
+  "abd_cadera": 3,
+  "brazos_abd": 12,
+  "pierna_libre": "i"
+ },
+ "musculos": {
+  "principales": [
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "erectores"
+  ]
+ },
+ "camara": "lado"
+}

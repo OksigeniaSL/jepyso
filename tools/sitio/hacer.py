@@ -297,7 +297,7 @@ T = {
         'empezar': 'Empezar gratis', 'ver_planes': 'Ver los planes',
         'escena': 'La figura de Jepyso haciendo los ejercicios de una rutina de ejemplo',
         'pasos': [
-            ('01 · Arma', 'Arma la rutina', 'Para fisioterapia, entrenamiento, Educación Física o un centro de mayores, en cualquier sitio. Elige entre casi cien ejercicios, por zona, por músculo o por nombre, con los programas Otago y Vivifrail dentro. Pon las series, las repeticiones, cuánto sube, cuánto mantiene, cuánto baja, el lado y la molestia que aceptas. La figura te enseña cómo lo hará.'),
+            ('01 · Arma', 'Arma la rutina', 'Para fisioterapia, entrenamiento, Educación Física o un centro de mayores, en cualquier sitio. Elige entre cien ejercicios, por zona, por músculo o por nombre, con los programas Otago y Vivifrail dentro. Pon las series o las vueltas de un circuito, las repeticiones, cuánto sube, cuánto mantiene, cuánto baja, el lado y la molestia que aceptas. La figura te enseña cómo lo hará.'),
             ('02 · Manda', 'Mándala por un enlace', 'Por WhatsApp, por Telegram, por correo o con un código QR en la consulta. La rutina va dentro del enlace: la persona solo tiene que abrirlo. No instala nada, no se crea una cuenta y no paga.', 'Quien sabe abrir un WhatsApp sabe abrir su rutina. No hace falta más.'),
             ('03 · Hace', 'La hace con la figura', 'La figura cumple la pauta: la fase en grande, la cuenta atrás, un sonido y una vibración en cada repetición, y una voz que guía, la de Mira o la de Altair, a elegir. Sin conexión, una vez abierta.'),
             ('04 · Vuelve', 'Te devuelve lo que hizo', 'Al acabar apunta lo que hizo y la molestia que notó, y te lo manda en otro enlace. Lo ves en su ficha, día a día y semana a semana. Quien no te ha mandado nada en dos semanas te sale a la vista, con el mensaje listo para escribirle.'),
@@ -325,7 +325,7 @@ T = {
         'ida': 'La rutina, dentro del enlace', 'vuelta': 'Lo que hizo, en otro enlace',
         'nada': '<a href="/privacidad/">Así lo cuenta la política de privacidad.</a>',
         'una_vez': 'una vez',
-        'catalogo_e': 'Lo que hay dentro', 'catalogo_h': 'Casi cien ejercicios, por zonas', 'ejercicios': 'ejercicios',
+        'catalogo_e': 'Lo que hay dentro', 'catalogo_h': 'Cien ejercicios, por zonas', 'ejercicios': 'ejercicios',
         'catalogo_p': 'Cada uno con su figura, sus pasos, el error más común y una forma más fácil cuando la hay. Un ejercicio puede servir para varias zonas.',
         'programas': [('Otago', 'Cuatro niveles, de la A a la D: calentamiento, fuerza con tobillera y equilibrio, del que se hace agarrado al más exigente.'),
                       ('Vivifrail', 'Cuatro niveles según el SPPB, de la A a la D: de quien se levanta con mucha ayuda a quien está en buena forma.')],
@@ -345,7 +345,7 @@ T = {
         'empezar': 'Start for free', 'ver_planes': 'See the plans',
         'escena': 'Jepyso’s figure doing the exercises of an example routine',
         'pasos': [
-            ('01 · Build', 'Build the routine', 'For physiotherapy, training, PE or a care home, anywhere. Choose from nearly a hundred exercises by body area, muscle or name, with the Otago and Vivifrail programmes included. Set the sets, the repetitions, how long it goes up, holds and comes down, the side and the discomfort you accept. The figure shows you how it will be done.'),
+            ('01 · Build', 'Build the routine', 'For physiotherapy, training, PE or a care home, anywhere. Choose from a hundred exercises by body area, muscle or name, with the Otago and Vivifrail programmes included. Set the sets or the rounds of a circuit, the repetitions, how long it goes up, holds and comes down, the side and the discomfort you accept. The figure shows you how it will be done.'),
             ('02 · Send', 'Send it as a link', 'Over WhatsApp, Telegram, email or with a QR code in your practice. The routine travels inside the link: the person only has to open it. Nothing to install, no account to create and nothing to pay.', 'If they can open a WhatsApp message, they can open their routine. That is all it takes.'),
             ('03 · Do', 'They do it with the figure', 'The figure keeps to your prescription: the phase in large type, the countdown, a sound and a vibration on each repetition, and a voice that guides them. Offline, once opened.'),
             ('04 · Back', 'What they did comes back to you', 'When they finish, they record what they did and the discomfort they felt, and send it back in another link. You see it in their file, day by day and week by week. Anyone who has sent you nothing in two weeks stands out, with the message ready to write to them.'),
@@ -373,7 +373,7 @@ T = {
         'ida': 'The routine, inside the link', 'vuelta': 'What they did, in another link',
         'nada': '<a href="/en/privacy/">This is how our privacy policy puts it.</a>',
         'una_vez': 'once',
-        'catalogo_e': 'What is inside', 'catalogo_h': 'Nearly a hundred exercises, by area', 'ejercicios': 'exercises',
+        'catalogo_e': 'What is inside', 'catalogo_h': 'A hundred exercises, by area', 'ejercicios': 'exercises',
         'catalogo_p': 'Each with its figure, its steps, the most common mistake and an easier way when there is one. An exercise can serve more than one area.',
         'programas': [('Otago', 'Four levels, from A to D: warm-up, strength with an ankle weight and balance, from holding on to the most demanding.'),
                       ('Vivifrail', 'Four levels by SPPB score, from A to D: from those who need a lot of help to stand up to those in good shape.')],
@@ -725,8 +725,8 @@ Y además:
 
 ## Qué hace
 
-- **Armar la rutina.** {TOTAL_EJ} ejercicios, por zona, por músculo o por nombre. Cada uno tiene su figura en 3D, sus pasos, el error más común y una forma más fácil cuando la hay. Por zonas: {zonas}; un ejercicio puede servir para varias. El profesional pone las series, las repeticiones, los segundos de subida, mantenimiento y bajada, el lado, los días a la semana y la molestia que acepta. Puede guardar sus plantillas, y tiene dentro los programas Otago y Vivifrail, de cuatro niveles cada uno.
-- **Mandarla por un enlace.** La rutina va dentro del enlace: por WhatsApp, por Telegram, por correo, con la hoja de compartir del teléfono o con un código QR en la consulta.
+- **Armar la rutina.** {TOTAL_EJ} ejercicios, por zona, por músculo o por nombre. Cada uno tiene su figura en 3D, sus pasos, el error más común y una forma más fácil cuando la hay. Por zonas: {zonas}; un ejercicio puede servir para varias. El profesional pone las series (o las vueltas, si la rutina va en circuito), las repeticiones, los segundos de subida, mantenimiento y bajada, el lado, los días a la semana y la molestia que acepta. Puede guardar sus plantillas, y tiene dentro los programas Otago y Vivifrail, de cuatro niveles cada uno.
+- **Mandarla por un enlace.** La rutina va dentro del enlace: por WhatsApp, por Telegram, por correo, con la hoja de compartir del teléfono o con un código QR en la consulta. También se puede publicar en una web, un blog o las redes: quien la abre la hace en su teléfono sin mandar nada y, al terminar, tiene un enlace para volver a la página del profesional.
 - **Hacerla con la figura.** La fase en grande, la cuenta atrás, un sonido y una vibración en cada repetición, el otro lado en espejo y una voz grabada que guía (Mira o Altair, a elegir, o ninguna). Una vez abierta, funciona sin conexión. Un recordatorio la pone en el calendario del teléfono.
 - **Devolver lo hecho.** La persona apunta lo que hizo, la molestia de 0 a 10 y, si quiere, una nota, y se lo manda al profesional en otro enlace. Él lo ve en la ficha de cada persona, día a día y semana a semana. Quien no le ha mandado nada en dos semanas le sale a la vista, con el mensaje listo.
 - **La molestia, con método.** Sigue el modelo de control del dolor: cada rutina lleva la molestia aceptable. Si la persona la pasa, se le dice y el día sale marcado, y a la mañana siguiente se le pregunta cómo estaba la zona al levantarse.
@@ -812,8 +812,8 @@ And also:
 
 ## What it does
 
-- **Build the routine.** {TOTAL_EJ} exercises, by body area, muscle or name. Each one has its 3D figure, its steps, the most common mistake and an easier way when there is one. By area: {zonas}; an exercise can serve more than one area. The professional sets the sets, the repetitions, the seconds going up, holding and coming down, the side, the days a week and the discomfort they accept. They can keep their own templates, and the Otago and Vivifrail programmes are included, with four levels each.
-- **Send it as a link.** The routine travels inside the link: over WhatsApp, Telegram, email, the phone’s share sheet or a QR code in the practice.
+- **Build the routine.** {TOTAL_EJ} exercises, by body area, muscle or name. Each one has its 3D figure, its steps, the most common mistake and an easier way when there is one. By area: {zonas}; an exercise can serve more than one area. The professional sets the sets (or the rounds, when the routine is a circuit), the repetitions, the seconds going up, holding and coming down, the side, the days a week and the discomfort they accept. They can keep their own templates, and the Otago and Vivifrail programmes are included, with four levels each.
+- **Send it as a link.** The routine travels inside the link: over WhatsApp, Telegram, email, the phone’s share sheet or a QR code in the practice. It can also be published on a website, a blog or social media: whoever opens it does it on their phone, sends nothing back and, at the end, gets a link back to the professional’s page.
 - **Do it with the figure.** The phase in large type, the countdown, a sound and a vibration on each repetition, the other side mirrored and a recorded voice that guides (Mira or Altair, to choose, or none). Once opened, it works offline. A reminder puts it in the phone’s calendar.
 - **Send back what was done.** The person records what they did, the discomfort from 0 to 10 and, if they like, a note, and sends it to the professional in another link. The professional sees it in each person’s file, day by day and week by week. Anyone who has sent nothing in two weeks stands out, with the message ready.
 - **Discomfort, with a method.** It follows the pain-monitoring model: each routine carries the acceptable discomfort. If the person goes past it, they are told and the day is flagged, and the next morning they are asked how the area felt when they got up.

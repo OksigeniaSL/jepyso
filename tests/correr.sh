@@ -34,6 +34,7 @@ trap 'kill "$SERVER" 2>/dev/null || true' EXIT
 curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127.0.0.1:$PORT/index.html"
 node "$HERE/accesorios.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/seguir.mjs" "http://127.0.0.1:$PORT"
+node "$HERE/circuito.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/rueda.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/anulada.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/nube.mjs" "http://127.0.0.1:$PORT" "$OUT"

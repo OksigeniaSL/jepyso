@@ -1,0 +1,71 @@
+{
+ "id": "zancada",
+ "familia": "de_pie",
+ "nombre": "Zancada fija",
+ "lado": "derecho",
+ "accesorios": [],
+ "parametros": {
+  "pies": "zancada",
+  "zancada": {
+   "atras": "i",
+   "rodilla_atras": 90
+  }
+ },
+ "ritmo": {
+  "subir": 2.0,
+  "mantener": 1.0,
+  "bajar": 2.0,
+  "reposo": 1.0
+ },
+ "textos": {
+  "subir": "Baja la rodilla de atrás hacia el suelo",
+  "mantener": "Aguanta, el tronco recto",
+  "bajar": "Sube empujando con la pierna de delante",
+  "reposo": "Respira"
+ },
+ "posturas": {
+  "partida": {
+   "apoyos": {
+    "brazos": "cadera"
+   },
+   "knee_r": {
+    "flex": 10
+   },
+   "ankle_l": {
+    "flex": -15
+   },
+   "pelvis": {
+    "flex": 8
+   },
+   "spine": {
+    "flex": -8
+   }
+  },
+  "llegada": {
+   "knee_r": {
+    "flex": 90
+   },
+   "ankle_l": {
+    "flex": 15
+   },
+   "pelvis": {
+    "flex": 0
+   },
+   "spine": {
+    "flex": 0
+   }
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "aductores"
+  ]
+ },
+ "camara": "lado",
+ "margen": 0.9
+}

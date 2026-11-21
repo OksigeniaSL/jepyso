@@ -1,0 +1,77 @@
+{
+ "id": "talones_escalon",
+ "nombre": "Elevación de talones a una pierna en el escalón",
+ "fps": 30,
+ "duracion": 6.5,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 1.5,
+   "texto": "Sube de puntillas todo lo que puedas"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 1.5,
+   "fin": 2.5,
+   "texto": "Aguanta arriba"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 2.5,
+   "fin": 5.5,
+   "texto": "Baja despacio, el talón por debajo del escalón"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 5.5,
+   "fin": 6.5,
+   "texto": "Abajo, estira el gemelo"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "codo_izquierda_flexion": 90.6,
+   "hombro_izquierda_flexion": 75.3,
+   "hombro_izquierda_rotacion_externa": -20.7,
+   "tobillo_derecha_flexion": 19.7,
+   "codo_derecha_flexion": 90.6,
+   "hombro_derecha_flexion": 75.3,
+   "hombro_derecha_rotacion_externa": -20.7
+  },
+  "llegada": {
+   "codo_izquierda_flexion": 123.5,
+   "hombro_izquierda_flexion": 47.5,
+   "hombro_izquierda_rotacion_externa": -37.7,
+   "tobillo_derecha_flexion": -29.4,
+   "codo_derecha_flexion": 123.5,
+   "hombro_derecha_flexion": 47.5,
+   "hombro_derecha_rotacion_externa": -37.7
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "lado": "derecho",
+ "accesorios": [
+  "escalon",
+  "pared"
+ ],
+ "camara": {
+  "pos": [
+   -3.625,
+   1.807,
+   -1.038
+  ],
+  "mira": [
+   -0.025,
+   0.907,
+   0.042
+  ]
+ },
+ "archivo": "talones_escalon.glb",
+ "bytes": 46168
+}

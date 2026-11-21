@@ -1,0 +1,77 @@
+{
+ "id": "talones_escalon",
+ "familia": "escalon",
+ "nombre": "Elevación de talones a una pierna en el escalón",
+ "lado": "derecho",
+ "accesorios": [
+  "escalon",
+  "pared"
+ ],
+ "parametros": {
+  "escalon": {
+   "alto": 0.17
+  },
+  "pared": {
+   "codos": 90,
+   "altura": 0.15
+  }
+ },
+ "ritmo": {
+  "subir": 1.5,
+  "mantener": 1.0,
+  "bajar": 3.0,
+  "reposo": 1.0
+ },
+ "textos": {
+  "subir": "Sube de puntillas todo lo que puedas",
+  "mantener": "Aguanta arriba",
+  "bajar": "Baja despacio, el talón por debajo del escalón",
+  "reposo": "Abajo, estira el gemelo"
+ },
+ "posturas": {
+  "partida": {
+   "apoyos": {
+    "pierna_d": "borde",
+    "pierna_i": "libre",
+    "brazos": "pared"
+   },
+   "ankle_r": {
+    "flex": 15
+   },
+   "hip_l": {
+    "flex": 20
+   },
+   "knee_l": {
+    "flex": 80
+   },
+   "ankle_l": {
+    "flex": -25
+   },
+   "fingers_l": {
+    "curl": 0.05,
+    "sep": -6
+   },
+   "fingers_r": {
+    "curl": 0.05,
+    "sep": -6
+   }
+  },
+  "llegada": {
+   "ankle_r": {
+    "flex": -35
+   }
+  }
+ },
+ "musculos": {
+  "principales": [
+   "gemelos"
+  ],
+  "secundarios": []
+ },
+ "camara": [
+  -1,
+  0.3,
+  0.25
+ ],
+ "margen": 0.9
+}
