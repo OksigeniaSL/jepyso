@@ -28,11 +28,23 @@ try {
   await pagina.click('[data-r="grupo"]');
   await pagina.waitForSelector('.jugador.grupo [data-r="en-posicion"]');
   const panel = () => pagina.evaluate(() => { const m = document.querySelector('.jugador.grupo .mando'); return m.scrollHeight - m.clientHeight; });
-  if ((await panel()) > 1) fallos.push(`al prepararse, el panel necesita bajar ${await panel()} px`);
+  // What the panel still needs once it has settled: a slow machine (CI) can catch it mid-layout, right as a screen
+  // changes. Up to 3 s for it to fit; a panel that really needs scrolling still fails.
+  const sobra = async () => {
+    try {
+      await pagina.waitForFunction(() => { const m = document.querySelector('.jugador.grupo .mando'); return m && m.scrollHeight - m.clientHeight <= 1; }, null, { timeout: 3000 });
+      return 0;
+    } catch {
+      return panel();
+    }
+  };
+  const alPrepararse = await sobra();
+  if (alPrepararse > 1) fallos.push(`al prepararse, el panel necesita bajar ${alPrepararse} px`);
   // A presenter's remote: → goes on.
   await pagina.keyboard.press('ArrowRight');
   await pagina.waitForSelector('.j-fase');
-  if ((await panel()) > 1) fallos.push(`en la serie, el panel necesita bajar ${await panel()} px`);
+  const enLaSerie = await sobra();
+  if (enLaSerie > 1) fallos.push(`en la serie, el panel necesita bajar ${enLaSerie} px`);
   await pagina.waitForSelector('.anillo');
   await pagina.click('[data-r="ya"]');
   // The second set, then straight to the next exercise: no rating.
