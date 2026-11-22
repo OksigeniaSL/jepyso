@@ -589,4 +589,11 @@ export default {
   '{n} vueltas de cada lado': '{n} rounds on each side',
   'Siguiente: {ejercicio}': 'Next: {ejercicio}',
   'Ahora, la vuelta {n} de {total}, empezando por {ejercicio}': 'Now round {n} of {total}, starting with {ejercicio}',
+  // The invitation to professionals on a published routine (22-11-2026)
+  '¿Eres profesional?': 'Are you a professional?',
+  'Con Jepyso mandas rutinas como esta a tus pacientes, clientes o alumnos. Cada uno la hace en su teléfono, siguiendo a la figura, y tú ves cómo le va. Gratis para empezar.':
+    'With Jepyso you send routines like this one to your patients, clients or students. Each of them does it on their phone, following the figure, and you see how they are getting on. Free to start.',
+  'Descárgala en Google Play': 'Get it on Google Play',
+  'O conócela en jepyso.com': 'Or find out more at jepyso.com',
+  'Conoce Jepyso': 'Discover Jepyso',
 };

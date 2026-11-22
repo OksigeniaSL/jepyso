@@ -55,9 +55,10 @@ const ritmo = (t, d = [2, 1, 2]) => {
   return [entero(x[0], 1, 12, d[0]), entero(x[1], 0, 30, d[1]), entero(x[2], 1, 12, d[2])];
 };
 
-// A routine as the link carries it: { v, para, de, d, x, m, c, f, p, k, kd, o, u, e: [{ i, s, r, t, l, b, n }] }.
+// A routine as the link carries it: { v, para, de, d, x, m, c, f, p, k, kd, o, u, lg, e: [{ i, s, r, t, l, b, n }] }.
 // k: the rounds of a circuit, where every exercise does one set in each (so its sets are the rounds); kd: the rest
-// between rounds. o: published (a blog, a website), for whoever opens it, with nothing to send back; u: its page.
+// between rounds. o: published (a blog, a website), for whoever opens it, with nothing to send back; u: its page; lg:
+// the language it was written in, which it opens in (idioma.js).
 export function limpiarRutina(r) {
   if (!objeto(r) || !Array.isArray(r.e)) return null;
   const k = vueltas(r.k);
@@ -71,7 +72,7 @@ export function limpiarRutina(r) {
   return {
     v: 1, para: o ? '' : texto(r.para, NOMBRE), de: texto(r.de, NOMBRE), d: descanso(r.d, k), x: entero(r.x, 1, 3, 1),
     w: semana(r.w), m: tope(r.m), c: r.c === 'b' ? 'b' : 'a', f: esFecha(r.f) ? r.f : undefined, p: o ? undefined : esId(r.p) ? r.p : undefined,
-    k, kd: entreVueltas(r.kd, k), o, u: o ? direccionVuelta(r.u) : undefined, e,
+    k, kd: entreVueltas(r.kd, k), o, u: o ? direccionVuelta(r.u) : undefined, lg: o && (r.lg === 'es' || r.lg === 'en') ? r.lg : undefined, e,
   };
 }
 

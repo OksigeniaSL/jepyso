@@ -1,14 +1,15 @@
 // The language of the screens: Spanish, in which Jepyso is written, or English. Each phone follows its own language
-// (in a Moodle course, the user's language there) unless someone chose one with the switch beside «Accesibilidad»: a
-// routine sent from a phone in Spanish opens in English on a phone set in English, and the other way round. What
-// people write themselves (names, notes) stays as they wrote it.
+// (in a Moodle course, the user's language there) unless someone chose one with the switch (beside «Accesibilidad», and
+// at the top of a routine): a routine sent from a phone in Spanish opens in English on a phone set in English, and the
+// other way round. A routine published on a website is the exception: it opens in the language it was written in, the
+// one of the page it comes from. What people write themselves (names, notes) stays as they wrote it.
 //
 // Texts are looked up by their Spanish wording, as gettext does: t('Nueva rutina'), t('Hola, {nombre}', { nombre }),
 // tn(n, '{n} serie', '{n} series'). The English ones are in idiomas/en.js (the screens) and idiomas/en-ejercicios.js
 // (the exercises, programmes and phases: tools/idiomas/extraer.mjs lists them and checks that none is missing). They
 // load only in English, so a phone in Spanish downloads nothing more. A text with no translation shows in Spanish;
 // tests/idioma.mjs walks the app in English looking for any.
-import { almacen } from './datos.js';
+import { almacen, decodificar } from './datos.js';
 
 export const IDIOMAS = { es: 'Español', en: 'English' };
 
@@ -29,11 +30,24 @@ const deLaPlataforma = () => {
   return l && /^[a-z]{2,3}(_[a-z0-9_]+)?$/i.test(l) ? deLista([l]) : '';
 };
 
+// A routine published on a website (o: 1) carries the language it was written in (lg): a blog in Spanish read on a
+// phone set in English still opens its routine in Spanish, with the notes the professional wrote. Only for this visit.
+let deLaRutina = '';
+async function rutinaPublicada() {
+  if (!location.hash.startsWith('#r=')) return '';
+  try {
+    const r = await decodificar(location.hash.slice(3));
+    return r?.o === 1 && Object.hasOwn(IDIOMAS, r.lg) ? r.lg : '';
+  } catch {
+    return '';
+  }
+}
+
 let actual = '';
 export function idioma() {
   if (!actual) {
     const elegido = almacen.leer('idioma', '');
-    actual = Object.hasOwn(IDIOMAS, elegido) ? elegido : deLaPlataforma() || delTelefono();
+    actual = Object.hasOwn(IDIOMAS, elegido) ? elegido : deLaPlataforma() || deLaRutina || delTelefono();
   }
   return actual;
 }
@@ -53,6 +67,8 @@ export const locale = () => (idioma() === 'en' ? 'en-GB' : 'es-ES');
 let textos = {};
 // Loads the translation of the language in use. The app awaits it before its first screen.
 export async function cargarIdioma() {
+  deLaRutina = await rutinaPublicada();
+  actual = ''; // a module that asked while loading asks again, with the routine's language now known
   document.documentElement.lang = idioma();
   if (idioma() === 'es') return;
   const [pantallas, ejercicios] = await Promise.all([import('./idiomas/en.js'), import('./idiomas/en-ejercicios.js')]);

@@ -31,7 +31,8 @@ devuelve el resumen con otro enlace.
 - **Por series o en circuito.** En circuito, cada ejercicio se hace una vez en cada vuelta, uno detrás de otro, con un
   descanso corto entre ejercicios y otro más largo entre vueltas (`k` y `kd` en la rutina).
 - **Una rutina para publicar** (`o`): para una web, un blog o las redes. No lleva nombre y no vuelve nada; al terminar,
-  la persona tiene un enlace para volver a la página del profesional (`u`, solo https).
+  la persona tiene un enlace para volver a la página del profesional (`u`, solo https). Se abre en el idioma en que se
+  escribió (`lg`), aunque el teléfono esté en otro, y lleva una invitación a los profesionales que la vean.
 - Tema claro y oscuro, desde 360 px de ancho.
 
 ## Ponerla en marcha

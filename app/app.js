@@ -15,7 +15,7 @@ import {
 import { NUBES, nubeElegida, elegirNube, ultimaVez, apuntarVez, nubeAnterior, sincronizar } from './nube.js';
 import { cargarGoogle } from './drive.js';
 import { comprobarLicencia, licencia, licenciaPendiente, licenciaAnulada, comprobarVigencia, guardarLicencia, cuentaDelDrive, licenciaActiva, topeLicencia, nombrePlan } from './licencia.js';
-import { ampliarPlan } from './tienda.js';
+import { ampliarPlan, enAppDeLaTienda } from './tienda.js';
 import {
   valesEnMarcha, fichaAbierta, fichaSinPlaza, cuentaDeVales, fichasQuedan, avisoVales, alCambiarVales, comprobarVales, pedirVale, pedirVales,
   soltarVale, botonGoogle,
@@ -342,6 +342,24 @@ const firmaPersona = `<div class="firma firma-persona"><span class="firma-botone
 const WEB = idioma() === 'en'
   ? { inicio: 'https://jepyso.com/en/', privacidad: 'https://jepyso.com/en/privacy/', condiciones: 'https://jepyso.com/en/terms/' }
   : { inicio: 'https://jepyso.com', privacidad: 'https://jepyso.com/privacidad/', condiciones: 'https://jepyso.com/condiciones/' };
+// A routine published on a website reaches professionals too: an invitation to make their own, with the routine and
+// after the session. On Android it leads to the app on Google Play; elsewhere, to jepyso.com. Never inside the Google
+// Play app, where nothing leads to buying, nor in Moodle. «donde»: «lista» (the list, on a phone), «panel» (the panel
+// at the right, wide) or «fin» (after the session).
+const PLAY = 'https://play.google.com/store/apps/details?id=com.oksigenia.jepyso';
+function invitacionPro(donde) {
+  if (enAppDeLaTienda || enMoodle) return '';
+  const titulo = `invitacion-${donde}`;
+  const ir = /Android/i.test(navigator.userAgent)
+    ? `<a class="boton secundario" href="${PLAY}" target="_blank" rel="noopener">${t('Descárgala en Google Play')}</a>
+       <a class="enlace" href="${WEB.inicio}" target="_blank" rel="noopener">${t('O conócela en jepyso.com')}</a>`
+    : `<a class="boton secundario" href="${WEB.inicio}" target="_blank" rel="noopener">${t('Conoce Jepyso')}</a>`;
+  return `<section class="tarjeta invitacion-pro invitacion-${donde}" aria-labelledby="${titulo}">
+      <h3 id="${titulo}">${t('¿Eres profesional?')}</h3>
+      <p>${t('Con Jepyso mandas rutinas como esta a tus pacientes, clientes o alumnos. Cada uno la hace en su teléfono, siguiendo a la figura, y tú ves cómo le va. Gratis para empezar.')}</p>
+      ${ir}
+    </section>`;
+}
 // Help and contact for the professional, beside «Accesibilidad»: what is asked most, and where to write. Someone who
 // arrives from an app store finds them in the app itself.
 const botonAyuda = `<button type="button" class="firma-acceso" data-ayuda aria-haspopup="dialog">${ICONO.ayuda}<span>${t('Ayuda')}</span></button>`;
@@ -1529,7 +1547,7 @@ async function crearEnlace(b, empezarOtra = null) {
     para: b.publicar && !armandoParaMoodle ? '' : b.para.trim(),
     de: b.de.trim(),
     ...ajustesDeRutina(b),
-    ...(b.publicar && !armandoParaMoodle ? { o: 1, u: direccionVuelta(b.volver.trim()) } : {}),
+    ...(b.publicar && !armandoParaMoodle ? { o: 1, u: direccionVuelta(b.volver.trim()), lg: idioma() } : {}),
     x: b.veces,
     w: b.semana || undefined,
     m: b.tope,
@@ -1823,7 +1841,7 @@ async function vistaRutina(codigo) {
     app.innerHTML = `<div class="rutina rutina-intro">
       <header class="saludo">
         <div class="cabecera-yeso cabecera-rutina" aria-hidden="true"></div>
-        ${r.de ? `<div class="de">${r.o ? t('Rutina de {de}', { de: esc(r.de) }) : t('Tu rutina de {de}', { de: esc(r.de) })}</div>` : ''}
+        <div class="de-fila">${r.de ? `<div class="de">${r.o ? t('Rutina de {de}', { de: esc(r.de) }) : t('Tu rutina de {de}', { de: esc(r.de) })}</div>` : ''}${botonIdioma}</div>
         <h1>${r.para ? t('Hola, {nombre}', { nombre: esc(r.para) }) : t('Tu rutina')}</h1>
         ${r.w ? `<p class="semana-rutina">${r.w === 7 ? t('Todos los días') : r.w <= 3 ? tn(r.w, '{n} día a la semana, mejor no seguidos', '{n} días a la semana, mejor no seguidos') : tn(r.w, '{n} día a la semana', '{n} días a la semana')}</p>` : ''}
         ${circuito ? `<p class="semana-rutina">${tn(r.k, 'En circuito: {n} vuelta, con los ejercicios uno detrás de otro.', 'En circuito: {n} vueltas, con los ejercicios uno detrás de otro y {descanso} de descanso entre vueltas.', { descanso: segundosEnTexto(r.kd) })}</p>` : ''}
@@ -1865,6 +1883,7 @@ async function vistaRutina(codigo) {
           </div>
           <p class="recordatorio-hecho" aria-live="polite"></p>
         </section>`}
+        ${r.o ? invitacionPro('lista') : ''}
         <p class="sin-conexion" aria-live="polite"></p>
         ${firmaPersona}
       </section>
@@ -1882,6 +1901,7 @@ async function vistaRutina(codigo) {
           <button type="button" class="boton secundario" data-r="grupo">${ICONO.pantalla}${t('Ponerla en pantalla grande')}</button>
           <p>${t('Para seguirla en grupo en una tele, un proyector o una pizarra. Sin preguntas a nadie y sin guardar nada.')}</p>
         </div>
+        ${r.o ? invitacionPro('panel') : ''}
       </footer>
     </div>`;
     pintarPie(hist);
@@ -2480,7 +2500,7 @@ async function vistaRutina(codigo) {
       <header class="saludo"><div class="de">${t('Hecho')}</div><h1>${parcial ? t('Lo de hoy, guardado') : t('Rutina de hoy, completa')}</h1>${
         parcial ? `<p>${t('Te faltó: {ejercicios}.', { ejercicios: faltan.join(', ') })}</p>` : ''
       }<p>${trabajo} ${r.de && !enMoodle && !r.o ? t('Mándale a {de} cómo te ha ido.', { de: esc(r.de) }) : r.o ? t('Queda apuntado en tu teléfono.') : ''}</p></header>
-      <section class="lista">${resumenDia(dia, tope)}</section>
+      <section class="lista">${resumenDia(dia, tope)}${r.o ? invitacionPro('fin') : ''}</section>
       <footer class="pie">
         ${pie}
       </footer>

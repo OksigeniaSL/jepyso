@@ -51,6 +51,10 @@ for (const u of ['javascript:alert(1)', 'http://abakinesis.com/', 'https://user:
   assert.equal(limpiarRutina({ o: 1, u, e: [] }).u, undefined, String(u).slice(0, 40));
 }
 assert.equal(limpiarRutina({ o: 2, u: 'https://a.com/', para: 'Ana', e: [] }).u, undefined, 'a page only with a published routine');
+// The language it was written in: only on a published routine, and only one the app speaks.
+assert.equal(limpiarRutina({ o: 1, lg: 'es', e: [] }).lg, 'es');
+assert.equal(limpiarRutina({ o: 1, lg: 'fr', e: [] }).lg, undefined, 'a language the app does not speak');
+assert.equal(limpiarRutina({ lg: 'es', para: 'Ana', e: [] }).lg, undefined, 'a routine for one person follows the phone');
 assert.equal(limpiarRutina({ o: 2, para: 'Ana', e: [] }).para, 'Ana');
 
 // People, templates and deletions from a copy or the cloud.

@@ -1,5 +1,5 @@
 // A circuit (every exercise once in each round, then the next round) and a published routine (for a blog: nothing to
-// send back, and a way back to its page). Usage: node circuito.mjs <base url>      (CHROMIUM_BIN as in correr.sh)
+// send back, a way back to its page, the language it was written in and an invitation to professionals). Usage: node circuito.mjs <base url>      (CHROMIUM_BIN as in correr.sh)
 import { chromium } from 'playwright-core';
 
 const base = process.argv[2];
@@ -14,7 +14,7 @@ try {
   await pagina.goto(`${base}/index.html?calidad=baja`);
   await pagina.evaluate(async () => (await import('./voz.js')).ponerVoz(false));
   const codigo = await pagina.evaluate(async () => (await import('./datos.js')).codificar({
-    v: 1, de: 'Abakinesis', d: 15, x: 1, m: 5, c: 'a', f: '2026-11-21', k: 2, kd: 60, o: 1, u: 'https://abakinesis.com/articulos/fuerza/',
+    v: 1, de: 'Abakinesis', d: 15, x: 1, m: 5, c: 'a', f: '2026-11-21', k: 2, kd: 60, o: 1, u: 'https://abakinesis.com/articulos/fuerza/', lg: 'es',
     e: [{ i: 'puente', s: 1, r: 1, t: [1, 0, 1] }, { i: 'plancha_lateral', s: 1, r: 1, t: [1, 1, 1], l: 'ambos' }],
   }));
   await pagina.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
@@ -24,6 +24,25 @@ try {
   comprobar(intro.includes('En circuito: 2 vueltas') && intro.includes('1 min de descanso entre vueltas'), 'el circuito no se explica arriba');
   comprobar(!/\d serie/.test(await pagina.textContent('.tarjeta-ejercicio')), 'en circuito, las tarjetas no deberían hablar de series');
   comprobar(intro.includes('circuito de 2 vueltas'), 'el pie no dice el circuito');
+  comprobar((await pagina.locator('.saludo [data-idioma]').count()) === 1, 'el cambio de idioma no está arriba, con la rutina');
+  const invita = pagina.locator('.invitacion-lista');
+  comprobar((await invita.count()) === 1 && (await invita.locator('a.boton').getAttribute('href')) === 'https://jepyso.com', 'publicada: no invita a los profesionales a conocer Jepyso');
+
+  // On a phone set in English, a published routine still opens in the language it was written in.
+  const ingles = await (await navegador.newContext({ viewport: { width: 390, height: 844 }, locale: 'en-GB' })).newPage();
+  ingles.setDefaultTimeout(60000);
+  await ingles.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
+  await ingles.waitForSelector('.rutina-intro');
+  comprobar((await ingles.textContent('.saludo')).includes('Rutina de Abakinesis'), 'publicada en español, en un teléfono en inglés sale en inglés');
+  comprobar((await ingles.textContent('.saludo [data-idioma]')).includes('English'), 'arriba no se ofrece pasarla a inglés');
+  await ingles.close();
+  // A routine for one person invites no one: it is the professional's.
+  const privada = await (await navegador.newContext({ viewport: { width: 390, height: 844 } })).newPage();
+  const codigoPrivada = await pagina.evaluate(async () => (await import('./datos.js')).codificar({ v: 1, para: 'Ana', de: 'Abakinesis', d: 30, x: 1, c: 'a', e: [{ i: 'puente', s: 1, r: 1, t: [1, 0, 1] }] }));
+  await privada.goto(`${base}/index.html?calidad=baja#r=${codigoPrivada}`);
+  await privada.waitForSelector('.rutina-intro');
+  comprobar(!(await privada.locator('.invitacion-pro').count()), 'una rutina para una persona invita a los profesionales');
+  await privada.close();
 
   const sub = () => pagina.textContent('.j-sub');
   const serie = async () => {
@@ -81,6 +100,7 @@ try {
     const k = Object.keys(localStorage).find((x) => x.startsWith('hist:'));
     return JSON.parse(localStorage.getItem(k)).at(-1);
   });
+  comprobar((await pagina.locator('.invitacion-fin').count()) === 1, 'publicada: al terminar no invita a los profesionales');
   comprobar(dia.e.length === 3 && dia.e.every((x) => x.s === 2 && x.p.join() === '1,1'), `el día apuntado no lleva las dos vueltas de cada ejercicio (${JSON.stringify(dia.e)})`);
 
   // The builder: a circuit drops the sets of each card, and publishing drops the person's name.
