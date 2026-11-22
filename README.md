@@ -32,7 +32,9 @@ with another link.
   between exercises and a longer one between rounds (`k` and `kd` in the routine).
 - **A routine to publish** (`o`): for a website, a blog or social media. It carries no name and nothing comes back; at
   the end the person gets a link back to the professional's page (`u`, https only). It opens in the language it was
-  written in (`lg`), whatever the phone's language, and invites the professionals who see it to try Jepyso.
+  written in (`lg`), whatever the phone's language.
+- **Routines made with the free plan** (`g`), published or not, invite the professionals who see them to try Jepyso.
+  Routines made with a paid plan carry nothing of Jepyso's.
 - Light and dark themes, from 360 px wide.
 
 ## Run it

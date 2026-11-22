@@ -55,6 +55,8 @@ assert.equal(limpiarRutina({ o: 2, u: 'https://a.com/', para: 'Ana', e: [] }).u,
 assert.equal(limpiarRutina({ o: 1, lg: 'es', e: [] }).lg, 'es');
 assert.equal(limpiarRutina({ o: 1, lg: 'fr', e: [] }).lg, undefined, 'a language the app does not speak');
 assert.equal(limpiarRutina({ lg: 'es', para: 'Ana', e: [] }).lg, undefined, 'a routine for one person follows the phone');
+// Made with the free plan: it carries the invitation, published or not.
+assert.deepEqual([limpiarRutina({ g: 1, e: [] }).g, limpiarRutina({ g: 2, e: [] }).g, limpiarRutina({ e: [] }).g], [1, undefined, undefined]);
 assert.equal(limpiarRutina({ o: 2, para: 'Ana', e: [] }).para, 'Ana');
 
 // People, templates and deletions from a copy or the cloud.

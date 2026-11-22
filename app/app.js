@@ -342,8 +342,8 @@ const firmaPersona = `<div class="firma firma-persona"><span class="firma-botone
 const WEB = idioma() === 'en'
   ? { inicio: 'https://jepyso.com/en/', privacidad: 'https://jepyso.com/en/privacy/', condiciones: 'https://jepyso.com/en/terms/' }
   : { inicio: 'https://jepyso.com', privacidad: 'https://jepyso.com/privacidad/', condiciones: 'https://jepyso.com/condiciones/' };
-// A routine published on a website reaches professionals too: an invitation to make their own, with the routine and
-// after the session. On Android it leads to the app on Google Play; elsewhere, to jepyso.com. Never inside the Google
+// A routine made with the free plan (g), published on a website or sent to one person, reaches professionals too: an
+// invitation to make their own, with the routine and after the session. On Android it leads to the app on Google Play; elsewhere, to jepyso.com. Never inside the Google
 // Play app, where nothing leads to buying, nor in Moodle. «donde»: «lista» (the list, on a phone), «panel» (the panel
 // at the right, wide) or «fin» (after the session).
 const PLAY = 'https://play.google.com/store/apps/details?id=com.oksigenia.jepyso';
@@ -1548,6 +1548,9 @@ async function crearEnlace(b, empezarOtra = null) {
     de: b.de.trim(),
     ...ajustesDeRutina(b),
     ...(b.publicar && !armandoParaMoodle ? { o: 1, u: direccionVuelta(b.volver.trim()), lg: idioma() } : {}),
+    // Made with the free plan: the routine invites the professionals who see it (Enrique, 22-11-2026). With a paid plan
+    // the routine is the professional's own, and carries nothing of Jepyso's.
+    ...(!armandoParaMoodle && !licenciaActiva() ? { g: 1 } : {}),
     x: b.veces,
     w: b.semana || undefined,
     m: b.tope,
@@ -1883,7 +1886,7 @@ async function vistaRutina(codigo) {
           </div>
           <p class="recordatorio-hecho" aria-live="polite"></p>
         </section>`}
-        ${r.o ? invitacionPro('lista') : ''}
+        ${r.g ? invitacionPro('lista') : ''}
         <p class="sin-conexion" aria-live="polite"></p>
         ${firmaPersona}
       </section>
@@ -1901,7 +1904,7 @@ async function vistaRutina(codigo) {
           <button type="button" class="boton secundario" data-r="grupo">${ICONO.pantalla}${t('Ponerla en pantalla grande')}</button>
           <p>${t('Para seguirla en grupo en una tele, un proyector o una pizarra. Sin preguntas a nadie y sin guardar nada.')}</p>
         </div>
-        ${r.o ? invitacionPro('panel') : ''}
+        ${r.g ? invitacionPro('panel') : ''}
       </footer>
     </div>`;
     pintarPie(hist);
@@ -2500,7 +2503,7 @@ async function vistaRutina(codigo) {
       <header class="saludo"><div class="de">${t('Hecho')}</div><h1>${parcial ? t('Lo de hoy, guardado') : t('Rutina de hoy, completa')}</h1>${
         parcial ? `<p>${t('Te faltó: {ejercicios}.', { ejercicios: faltan.join(', ') })}</p>` : ''
       }<p>${trabajo} ${r.de && !enMoodle && !r.o ? t('Mándale a {de} cómo te ha ido.', { de: esc(r.de) }) : r.o ? t('Queda apuntado en tu teléfono.') : ''}</p></header>
-      <section class="lista">${resumenDia(dia, tope)}${r.o ? invitacionPro('fin') : ''}</section>
+      <section class="lista">${resumenDia(dia, tope)}${r.g ? invitacionPro('fin') : ''}</section>
       <footer class="pie">
         ${pie}
       </footer>

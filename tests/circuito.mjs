@@ -14,7 +14,7 @@ try {
   await pagina.goto(`${base}/index.html?calidad=baja`);
   await pagina.evaluate(async () => (await import('./voz.js')).ponerVoz(false));
   const codigo = await pagina.evaluate(async () => (await import('./datos.js')).codificar({
-    v: 1, de: 'Abakinesis', d: 15, x: 1, m: 5, c: 'a', f: '2026-11-21', k: 2, kd: 60, o: 1, u: 'https://abakinesis.com/articulos/fuerza/', lg: 'es',
+    v: 1, de: 'Abakinesis', d: 15, x: 1, m: 5, c: 'a', f: '2026-11-21', k: 2, kd: 60, o: 1, u: 'https://abakinesis.com/articulos/fuerza/', lg: 'es', g: 1,
     e: [{ i: 'puente', s: 1, r: 1, t: [1, 0, 1] }, { i: 'plancha_lateral', s: 1, r: 1, t: [1, 1, 1], l: 'ambos' }],
   }));
   await pagina.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
@@ -36,12 +36,14 @@ try {
   comprobar((await ingles.textContent('.saludo')).includes('Rutina de Abakinesis'), 'publicada en español, en un teléfono en inglés sale en inglés');
   comprobar((await ingles.textContent('.saludo [data-idioma]')).includes('English'), 'arriba no se ofrece pasarla a inglés');
   await ingles.close();
-  // A routine for one person invites no one: it is the professional's.
+  // A routine for one person invites too when it was made with the free plan (g), and not with a paid one.
   const privada = await (await navegador.newContext({ viewport: { width: 390, height: 844 } })).newPage();
-  const codigoPrivada = await pagina.evaluate(async () => (await import('./datos.js')).codificar({ v: 1, para: 'Ana', de: 'Abakinesis', d: 30, x: 1, c: 'a', e: [{ i: 'puente', s: 1, r: 1, t: [1, 0, 1] }] }));
-  await privada.goto(`${base}/index.html?calidad=baja#r=${codigoPrivada}`);
-  await privada.waitForSelector('.rutina-intro');
-  comprobar(!(await privada.locator('.invitacion-pro').count()), 'una rutina para una persona invita a los profesionales');
+  for (const [g, invita] of [[1, true], [undefined, false]]) {
+    const codigoPrivada = await pagina.evaluate(async (g) => (await import('./datos.js')).codificar({ v: 1, para: 'Ana', de: 'Abakinesis', d: 30, x: 1, c: 'a', g, e: [{ i: 'puente', s: 1, r: 1, t: [1, 0, 1] }] }), g);
+    await privada.goto(`${base}/index.html?calidad=baja#r=${codigoPrivada}`);
+    await privada.waitForSelector('.rutina-intro');
+    comprobar((await privada.locator('.invitacion-lista').count()) === (invita ? 1 : 0), invita ? 'una rutina del plan gratis no invita a los profesionales' : 'una rutina de pago invita a los profesionales');
+  }
   await privada.close();
 
   const sub = () => pagina.textContent('.j-sub');

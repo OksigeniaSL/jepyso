@@ -357,7 +357,7 @@ try {
     const malas = soloDatos(rutina, permitidas);
     comprobar(!malas.length, `el enlace hecho en inglés lleva textos que no son datos: ${malas.join(' | ')}`);
     comprobar(rutina.e.map((e) => e.i).join(',') === 'puente,hombro,andar_atras,andar_ocho,caminar,dorsal_banda', `el enlace no lleva los ejercicios en su orden (${rutina.e.map((e) => e.i)})`);
-    comprobar(Object.keys(rutina).every((k) => ['v', 'para', 'de', 'd', 'x', 'w', 'm', 'c', 'f', 'p', 'e'].includes(k)), `el enlace lleva campos nuevos (${Object.keys(rutina)})`);
+    comprobar(Object.keys(rutina).every((k) => ['v', 'para', 'de', 'd', 'x', 'w', 'm', 'c', 'f', 'p', 'g', 'e'].includes(k)), `el enlace lleva campos nuevos (${Object.keys(rutina)})`);
     await p.click('[data-h="otra"]');
     await p.waitForSelector('dialog.hoja-enlace', { state: 'detached', timeout: 30000 });
     await revisar(p, 'constructor tras «empezar otra»');
