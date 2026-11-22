@@ -1,4 +1,4 @@
-// The paid version's licence (the coordinator's design, 14-11-2026). A key signed by Oksigenia with Ed25519:
+// The paid version's licence (Oksigenia's design, 14-11-2026). A key signed by Oksigenia with Ed25519:
 // base64url(payload) + "." + base64url(signature), no padding. The payload is the JSON
 // {"p":"jepyso","s":"consulta","c":"<the account's e-mail, lower case>","f":"YYYY-MM-DD","n":"<order>"}, signed byte
 // for byte. One payment, no expiry. It is checked here, with no connection, against Oksigenia's public key, and it only
@@ -86,7 +86,7 @@ export const licenciaPendiente = () => estado.valida && !estado.activa && !estad
 export const licenciaAnulada = () => estado.valida && estado.anulada;
 
 // Whether the licence is still alive, asked to Oksigenia's server on every sync with the Drive, which already needs a
-// connection (the coordinator, 16-11-2026: a licence moved to a new e-mail cancels the old one, so changing account
+// connection (Oksigenia, 16-11-2026: a licence moved to a new e-mail cancels the old one, so changing account
 // gives no more room). The answer, «estado», is signed with the licence key, {"p":"jepyso","t":"estado","n",
 // "viva","f"}: about this order and dated within a week, so neither an invented answer nor an old one kept counts.
 // Without connection, without an answer or with one that does not check, nothing changes. True while it is alive.

@@ -1,4 +1,4 @@
-// Walking is counted in steps (Gaudí's «andar»: two steps per clip, on a running floor): a set of 5 steps counts 1 to 5,
+// Walking is counted in steps (the «andar» family: two steps per clip, on a running floor): a set of 5 steps counts 1 to 5,
 // ends halfway through the third clip, takes no rest between clips, and the rating asks about «todos los pasos».
 // Usage: node andar.mjs <base url>      (CHROMIUM_BIN as in correr.sh)
 import { chromium } from 'playwright-core';

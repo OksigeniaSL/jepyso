@@ -27,7 +27,7 @@ rm -f "$W/sw.js" "$W/manifest.json"
 # Nor the file that vouches for the Android app, which is app.jepyso.com's.
 rm -f "$W/.well-known/assetlinks.json" && rmdir "$W/.well-known"
 # The content of the package (the sample, the headers, the icon, the body map) under CC BY-SA 4.0, which the Moodle
-# Marketplace accepts as GPL-compatible (coordinator, 15-11-2026, shared/licencias.md), with the sheets the twelve
+# Marketplace accepts as GPL-compatible (Oksigenia, 15-11-2026), with the sheets the twelve
 # movements are built from.
 cp "$ROOT/tools/moodle/LICENSE.md" "$ROOT/tools/moodle/CC-BY-SA-4.0.txt" "$W/modelos/"
 mkdir -p "$W/modelos/fichas"

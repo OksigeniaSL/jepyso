@@ -1084,6 +1084,23 @@
     ]
    }
   },
+  "sentadilla_silla": {
+   "glb": "modelos/b/sentadilla_silla.glb",
+   "ficha": "modelos/b/sentadilla_silla.json",
+   "bytes": 70288,
+   "lado": "ambos",
+   "musculos": {
+    "principales": [
+     "cuadriceps",
+     "gluteo_mayor"
+    ],
+    "secundarios": [
+     "isquiotibiales",
+     "aductores",
+     "erectores"
+    ]
+   }
+  },
   "sentadilla_sin_apoyo": {
    "glb": "modelos/b/sentadilla_sin_apoyo.glb",
    "ficha": "modelos/b/sentadilla_sin_apoyo.json",

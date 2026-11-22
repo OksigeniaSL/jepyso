@@ -171,7 +171,7 @@ export class Figura {
       }
     });
     this.grupo.add(this.cuerpo);
-    // The muscles are drawn from the textures next to the body (Gaudí, 20-11-2026: an anatomy plate over the clothes).
+    // The muscles are drawn from the textures next to the body (20-11-2026: an anatomy plate over the clothes).
     this.musculos = prepararMusculos(this.cuerpo, { texturas: this.base + carpetaTexturas(this.manifiesto.cuerpo) });
   }
 
@@ -236,7 +236,7 @@ export class Figura {
       clip = this.animacionesCuerpo.find((a) => a.name === def.clip) || this.animacionesCuerpo[0];
     }
     this.fases = normalizarFases(ficha, clip.duration);
-    // Walking (Gaudí's «andar»): one clip is «pasos» steps on a running floor, with no rest between one and the next.
+    // Walking (the «andar» family): one clip is «pasos» steps on a running floor, with no rest between one and the next.
     this.pasos = Number.isInteger(ficha?.pasos) && ficha.pasos > 0 ? ficha.pasos : 0;
     this.reposo = this.pasos ? 0 : REPOSO_S;
     // The words of each phase as the exercise sheet writes them («Dobla las rodillas», «Sube despacio»): the player shows

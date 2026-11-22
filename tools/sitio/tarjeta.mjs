@@ -1,4 +1,4 @@
-// Draws the share card of jepyso.com (Open Graph and X), 1200×630, one per language: Gaudí's plaster studio with
+// Draws the share card of jepyso.com (Open Graph and X), 1200×630, one per language: the plaster studio with
 // the bridge, the wordmark and the headline of the home. The cards are committed next to this file and hacer.py
 // copies them; run this again only if the headline, the photo or the fonts change.
 // Usage: node tools/sitio/tarjeta.mjs      (CHROMIUM_BIN as in tests/correr.sh)

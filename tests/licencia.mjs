@@ -1,5 +1,5 @@
-// The paid version's licence (app/licencia.js): a key signed by Oksigenia (Ed25519) for one Google account. The
-// coordinator's test key verifies; changed by one letter, or for another product, it does not; and it only counts once
+// The paid version's licence (app/licencia.js): a key signed by Oksigenia (Ed25519) for one Google account.
+// Oksigenia's test key verifies; changed by one letter, or for another product, it does not; and it only counts once
 // the Drive was connected with that same account.
 import assert from 'node:assert/strict';
 
@@ -14,7 +14,7 @@ const { esDePago } = await import(`${raiz}/personas.js`);
 
 const buena = 'eyJwIjoiamVweXNvIiwicyI6ImNvbnN1bHRhIiwiYyI6InBydWViYS5qZXB5c29AZXhhbXBsZS5jb20iLCJmIjoiMjAyNi0xMS0xNCIsIm4iOiJwcnVlYmEtZm9ybWF0byJ9.oSjSSB2vYoLq3XDak-USpAnPmB-MBCF2vqV1s_1pErRgSVrsY__ISTszEyySTUX-QlIfmoFZEcNEC5W_YhqtAA';
 const l = await L.leerLicencia(buena);
-assert.deepEqual([l.valida, l.cuenta], [true, 'prueba.jepyso@example.com'], 'la clave de prueba del coordinador no verifica');
+assert.deepEqual([l.valida, l.cuenta], [true, 'prueba.jepyso@example.com'], 'la clave de prueba de Oksigenia no verifica');
 // Without «m», the highest plan (Centro, 300), as the licences given before there were plans.
 assert.equal(l.tope, 300, `una licencia sin tope no es del plan más alto (${l.tope})`);
 const [carga, firma] = buena.split('.');
@@ -61,7 +61,7 @@ const inventado = Buffer.from(JSON.stringify({ p: 'jepyso', t: 'estado', n: 'pru
 respuestas.siguiente = { viva: false, estado: `${inventado}.${firma50}` };
 assert.equal(await L.comprobarVigencia(), true, 'una respuesta sin la firma de Oksigenia anula la licencia');
 assert.equal(esDePago(), true);
-// Signed by the coordinator for the test order, dated 16-11-2026: the clock is put on that day, so they never get old.
+// Signed by Oksigenia for the test order, dated 16-11-2026: the clock is put on that day, so they never get old.
 const ANULADA = 'eyJwIjoiamVweXNvIiwidCI6ImVzdGFkbyIsIm4iOiJwcnVlYmEtcGxhbiIsInZpdmEiOmZhbHNlLCJmIjoiMjAyNi0xMS0xNiJ9.XYWf_qelXBVBVb0ewC-JegmVUVdHJdL52zl8bdbIPx3J6fdOWgkrmhdwOqrpqrTNJqOqKXtbMB-Rzn_uufQHDA';
 const VIVA = 'eyJwIjoiamVweXNvIiwidCI6ImVzdGFkbyIsIm4iOiJwcnVlYmEtcGxhbiIsInZpdmEiOnRydWUsImYiOiIyMDI2LTExLTE2In0.WIiOMTRZj7zg8PpSqwsddWlG0tFX5khYpmQToqZ-J8tFRdBmfqG4M-VhLMiaEgvFxN8YXtUshRt3HpkLh6zvAg';
 {

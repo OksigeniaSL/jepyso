@@ -169,7 +169,7 @@ PUNTOS = {
 _y = round(sum(p[2] for p in PUNTOS['tobillo']) / 2, 1)
 PUNTOS['tobillo'] = [[v, x, _y] for v, x, _ in PUNTOS['tobillo']]
 compacto = lambda o: json.dumps(o, ensure_ascii=False, separators=(',', ':'))
-open(DESTINO, 'w').write(f"""// The body map of the library: Gaudí's body (modelos/cuerpo.glb) from the front and from the back, with the muscle
+open(DESTINO, 'w').write(f"""// The body map of the library: the figure's body (modelos/cuerpo.glb) from the front and from the back, with the muscle
 // groups the figure lights and a point on every area a professional looks for. Made by tools/mapa-cuerpo/ from the body
 // itself; to change it, change the body or the tool and run it again, not this file.
 // Muscles: [group, path] in drawing order; a group seen on both sides has one path per side.

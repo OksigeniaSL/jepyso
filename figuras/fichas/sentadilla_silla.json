@@ -1,0 +1,40 @@
+{
+ "id": "sentadilla_silla",
+ "familia": "silla",
+ "nombre": "Sentadilla a la silla",
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "ritmo": {
+  "subir": 2.0,
+  "mantener": 0.3,
+  "bajar": 1.0,
+  "reposo": 1.0
+ },
+ "textos": {
+  "subir": "Baja hasta rozar la silla",
+  "mantener": "Sin sentarte",
+  "bajar": "Sube empujando con los talones",
+  "reposo": "De pie, erguido"
+ },
+ "parametros": {
+  "asiento": 0.45,
+  "pies_atras": 0.06,
+  "cadera_en_asiento": 0.2,
+  "rozar": true
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "aductores",
+   "erectores"
+  ]
+ },
+ "margen": 0.86,
+ "camara": "lado"
+}

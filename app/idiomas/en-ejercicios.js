@@ -1264,4 +1264,23 @@ export default {
   'Sube de puntillas todo lo que puedas': 'Rise onto your toes as high as you can',
   'Baja despacio, el talón por debajo del escalón': 'Lower slowly, heel below the step',
   'Abajo, estira el gemelo': 'At the bottom, stretch your calf',
+  // sentadilla_silla (22-11-2026, for Abakinesis)
+  'Sentadilla a la silla': 'Squat to a chair',
+  'box squat': 'box squat',
+  'chair squat': 'chair squat',
+  'sentadilla tocando la silla': 'squat touching the chair',
+  'De pie, de espaldas a una silla firme, sin ruedas y apoyada en la pared, tan cerca que la notes detrás de las piernas. Los pies, a la anchura de los hombros, y los brazos cruzados sobre el pecho.':
+    'Stand with your back to a sturdy chair with no wheels, placed against a wall, close enough to feel it behind your legs. Feet shoulder-width apart and arms crossed over your chest.',
+  'Baja despacio llevando la cadera hacia atrás, con el pecho alto, como si fueras a sentarte.': 'Lower slowly, taking your hips back and keeping your chest up, as if you were about to sit down.',
+  'Roza el asiento con los glúteos, sin sentarte ni dejar caer el peso.': 'Lightly touch the seat with your buttocks, without sitting down or letting your weight drop.',
+  'Sube empujando con los talones hasta quedar erguido.': 'Push up through your heels until you are standing tall.',
+  'Delante de los muslos y en los glúteos.': 'In the front of your thighs and your buttocks.',
+  'Dejarte caer en la silla o rebotar en ella. Abajo solo la rozas: el peso sigue en los pies.': 'Dropping onto the chair or bouncing off it. At the bottom you only touch it lightly: your weight stays on your feet.',
+  'Si te cuesta, pon un cojín firme en el asiento para bajar menos.': 'If it is too hard, put a firm cushion on the seat so you do not go down as far.',
+  'Cuando te resulte fácil, baja más despacio o usa una silla más baja.': 'When it feels easy, lower more slowly or use a lower chair.',
+  'University Hospitals Coventry and Warwickshire (NHS), Exercise Handbook: box squat': 'University Hospitals Coventry and Warwickshire (NHS), Exercise Handbook: box squat',
+  'British Heart Foundation, strength exercises': 'British Heart Foundation, strength exercises',
+  'Baja hasta rozar la silla': 'Lower until you touch the chair',
+  'Sin sentarte': 'Don’t sit down',
+  'Sube empujando con los talones': 'Push up through your heels',
 };

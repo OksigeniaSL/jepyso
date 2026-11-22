@@ -1790,7 +1790,7 @@ export const EJERCICIOS = {
     error: 'Encoger los hombros. La fuerza, en las manos y en los antebrazos.',
     fuentes: ['Vivifrail, estrujar una toalla (pasaportes C y D, Ministerio de Sanidad)'],
   },
-  // Three for strength, asked by Abakinesis for its article on strength for runners and cyclists (Gaudí, 21-11-2026).
+  // Four for strength, asked by Abakinesis for its article on strength for runners and cyclists (21 and 22-11-2026).
   zancada: {
     nombre: 'Zancada fija',
     otrosNombres: ['split squat', 'zancada estática', 'tijera'],
@@ -1854,6 +1854,27 @@ export const EJERCICIOS = {
     cuidado: 'Si te duele detrás del talón, donde el tendón se une al hueso, no bajes por debajo del escalón: hazlo en el suelo.',
     fuentes: ['Abakinesis, «¿Hace falta hacer fuerza si solo corrés o pedaleás?»', 'Newcastle Hospitals (NHS), tendinopatía de Aquiles', 'Leicestershire Partnership (NHS), tendinopatía de Aquiles'],
   },
+  sentadilla_silla: {
+    nombre: 'Sentadilla a la silla',
+    otrosNombres: ['box squat', 'chair squat', 'sentadilla tocando la silla'],
+    posicion: 'De pie',
+    material: 'Silla firme',
+    unLado: false,
+    zonas: ['rodilla', 'cadera'],
+    musculos: { principales: ['cuadriceps', 'gluteo_mayor'], secundarios: ['isquiotibiales', 'aductores', 'erectores'] },
+    porDefecto: { series: 3, reps: 10, tempo: [2, 0, 1] },
+    partida: 'De pie, de espaldas a una silla firme, sin ruedas y apoyada en la pared, tan cerca que la notes detrás de las piernas. Los pies, a la anchura de los hombros, y los brazos cruzados sobre el pecho.',
+    pasos: [
+      'Baja despacio llevando la cadera hacia atrás, con el pecho alto, como si fueras a sentarte.',
+      'Roza el asiento con los glúteos, sin sentarte ni dejar caer el peso.',
+      'Sube empujando con los talones hasta quedar erguido.',
+    ],
+    notar: 'Delante de los muslos y en los glúteos.',
+    error: 'Dejarte caer en la silla o rebotar en ella. Abajo solo la rozas: el peso sigue en los pies.',
+    ayuda: 'Si te cuesta, pon un cojín firme en el asiento para bajar menos.',
+    masDificil: 'Cuando te resulte fácil, baja más despacio o usa una silla más baja.',
+    fuentes: ['Abakinesis, «¿Hace falta hacer fuerza si solo corrés o pedaleás?»', 'University Hospitals Coventry and Warwickshire (NHS), Exercise Handbook: box squat', 'British Heart Foundation, strength exercises'],
+  },
 };
 
 // The library the professional sees, grouped by position: only exercises whose clips exist for both bodies.
@@ -1868,11 +1889,11 @@ export const ORDEN = [
   // sitting: knee, foot, neck and shoulder blades
   'extension_rodilla', 'extension_rodilla_lastre', 'marcha_sentado', 'abduccion_sentado', 'talones_sentado', 'isquios_sentado', 'curl_sentado', 'brazos_arriba', 'brazos_silla', 'estrujar_toalla', 'silla', 'silla_dos_manos', 'silla_una_mano', 'toalla_dedos', 'retraccion', 'cuello_giro', 'cuello_lado', 'iso_cuello', 'trapecio',
   'escapulas',
-  // sitting at a table: wrist and hand (back on 13 November 2026 with Gaudí's modelled hand)
+  // sitting at a table: wrist and hand (back on 13 November 2026 with the modelled hand)
   'muneca', 'prono_supinacion', 'estira_flexores', 'estira_extensores', 'tendinoso', 'abrir_cerrar', 'pelota',
   'deslizar_mesa',
   // standing by a chair, and on a step
-  'talones', 'talones_sin_apoyo', 'puntas', 'puntas_sin_apoyo', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'sentadilla_sin_apoyo', 'zancada', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'equilibrio_sin_apoyo', 'tandem_quieto', 'tandem_quieto_sin_apoyo', 'cuadriceps_pie', 'escalon', 'talones_escalon', 'extension_espalda_pie', 'rotacion_tronco_pie',
+  'talones', 'talones_sin_apoyo', 'puntas', 'puntas_sin_apoyo', 'curl_isquios', 'curl_isquios_lastre', 'sentadilla', 'sentadilla_sin_apoyo', 'sentadilla_silla', 'zancada', 'abduccion_pie', 'abduccion_pie_lastre', 'equilibrio', 'equilibrio_sin_apoyo', 'tandem_quieto', 'tandem_quieto_sin_apoyo', 'cuadriceps_pie', 'escalon', 'talones_escalon', 'extension_espalda_pie', 'rotacion_tronco_pie',
   // walking on the spot, over a running floor tape (counted in steps)
   'caminar', 'andar_atras', 'andar_lado', 'andar_tandem', 'andar_tandem_atras', 'andar_talones', 'andar_puntillas',
   'andar_ocho', 'andar_obstaculos', 'andar_globo',
@@ -1894,7 +1915,7 @@ export const ZONAS = {
   mano: 'Mano y muñeca',
 };
 
-// The twenty muscle groups painted on Gaudí's bodies (modelos/musculos.js), with the name a professional uses.
+// The twenty muscle groups painted on the figures' bodies (modelos/musculos.js), with the name a professional uses.
 export const MUSCULOS = {
   gluteo_mayor: 'Glúteo mayor',
   gluteo_medio: 'Glúteo medio',

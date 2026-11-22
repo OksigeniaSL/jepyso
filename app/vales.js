@@ -1,4 +1,4 @@
-// The free version's files, counted per Google account (the coordinator's design, with Enrique's yes, 14-11-2026). A
+// The free version's files, counted per Google account (Oksigenia's design, with Enrique's yes, 14-11-2026). A
 // free file opens only with its ticket («vale»): Oksigenia's server gives one per file to a Google account, up to five
 // per account, so opening the app in more browsers, profiles or containers gives no more files. The ticket is signed
 // like the licence, with the payload {"p":"jepyso","t":"ficha","f":<file id>}, and it is kept in the file itself: once

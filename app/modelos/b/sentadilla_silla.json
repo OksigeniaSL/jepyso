@@ -1,0 +1,73 @@
+{
+ "id": "sentadilla_silla",
+ "nombre": "Sentadilla a la silla",
+ "fps": 30,
+ "duracion": 4.3,
+ "fases": [
+  {
+   "fase": "subir",
+   "inicio": 0.0,
+   "fin": 2.0,
+   "texto": "Baja hasta rozar la silla"
+  },
+  {
+   "fase": "mantener",
+   "inicio": 2.0,
+   "fin": 2.3,
+   "texto": "Sin sentarte"
+  },
+  {
+   "fase": "bajar",
+   "inicio": 2.3,
+   "fin": 3.3,
+   "texto": "Sube empujando con los talones"
+  },
+  {
+   "fase": "reposo",
+   "inicio": 3.3,
+   "fin": 4.3,
+   "texto": "De pie, erguido"
+  }
+ ],
+ "angulos": {
+  "partida": {
+   "cadera_derecha_flexion": 0.1,
+   "rodilla_derecha_flexion": 4.0,
+   "tronco_inclinacion": 0.0
+  },
+  "llegada": {
+   "cadera_derecha_flexion": 92.2,
+   "rodilla_derecha_flexion": 99.1,
+   "tronco_inclinacion": 30.1
+  }
+ },
+ "musculos": {
+  "principales": [
+   "cuadriceps",
+   "gluteo_mayor"
+  ],
+  "secundarios": [
+   "isquiotibiales",
+   "aductores",
+   "erectores"
+  ]
+ },
+ "lado": "ambos",
+ "accesorios": [
+  "silla"
+ ],
+ "camara": {
+  "pos": [
+   -3.327,
+   1.86,
+   0.583
+  ],
+  "mira": [
+   0.0,
+   0.795,
+   -0.015
+  ]
+ },
+ "archivo": "sentadilla_silla.glb",
+ "bytes": 70288
+}

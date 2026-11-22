@@ -145,7 +145,7 @@ img { max-width: 100%; height: auto; display: block; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
 /* ---------------------------------------------------------------------------------------------------------------
-   The home, «the room» (Jujol, 16-11-2026, portada.js): the app's figure stays in its plaster room on the right while
+   The home, «the room» (16-11-2026, portada.js): the app's figure stays in its plaster room on the right while
    the story goes down on the left, and each step changes what it does and what lies over it. Full width, under a
    header that stays. The rest of the site keeps the column above. */
 @font-face { font-family: 'Red Hat Mono'; src: url('/fuentes/red-hat-mono.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }

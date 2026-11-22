@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Makes app/mapa.js, the body map of the library, from Gaudí's body (app/modelos/cuerpo.glb). Run it again when the
+# Makes app/mapa.js, the body map of the library, from the figure's body (app/modelos/cuerpo.glb). Run it again when the
 # body changes. Needs node with the test dependencies (tests/), Pillow and potrace.
 # Usage: tools/mapa-cuerpo/hacer.sh     PORT (default 8773), CHROMIUM_BIN as in tests/correr.sh
 set -euo pipefail

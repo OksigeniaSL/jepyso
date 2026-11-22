@@ -1,5 +1,5 @@
 /* Jepyso. Light and dark from the same tokens; layout works from 360 px up.
-   Its look is «the plaster studio» (Enrique, 11 November 2026): Gaudí's figure lit as a cast in a studio, graphite on
+   Its look is «the plaster studio» (Enrique, 11 November 2026): the figure lit as a cast in a studio, graphite on
    plaster, hairlines and square corners, no shadows. The terracotta of the working muscles is the only warm colour;
    nothing else may look like it. Red Hat Display for titles, Text for the rest, and Mono for the professional's
    figures. The professional's screens carry the signatures (registration marks, the protractor under the titles, the
@@ -629,7 +629,7 @@ a.boton { text-decoration: none; }
 .detalle .fuente { margin: 10px 0 0; font-size: 13px; color: var(--tinta-suave); }
 
 /* ---------- The body map of the library ----------
-   Gaudí's body from the front and from the back (mapa.js). The muscles are a quiet layer that tells front from back;
+   The figure's body from the front and from the back (mapa.js). The muscles are a quiet layer that tells front from back;
    the ones with exercises are a touch warmer and can be touched; the one chosen lights as on the figure. The points
    are the areas, in the routine's green. */
 :root {
@@ -734,7 +734,7 @@ a.boton { text-decoration: none; }
 .armar .chip, .armar .num, .armar .tempo text, .biblio-cuenta { font-family: var(--letra-cifras); font-variant-numeric: tabular-nums; }
 .armar .chip { font-size: 12px; letter-spacing: 0.02em; }
 
-/* Gaudí's casts head the two sides: getting up from the chair for the professional, the bridge at the top of its hold
+/* The casts head the two sides: getting up from the chair for the professional, the bridge at the top of its hold
    for the person. Under them, the studio's light while they load. */
 .cabecera-yeso { background-repeat: no-repeat; background-size: cover; border-bottom: 1px solid var(--linea); }
 .cabecera-constructor {
@@ -972,18 +972,18 @@ body.pro { --pestanas: calc(60px + env(safe-area-inset-bottom)); padding-bottom:
   display: grid; place-items: center; width: 28px; height: 28px; background: var(--tinta); color: var(--fondo);
   font-family: var(--letra-cifras); font-size: 14px; font-weight: 500;
 }
-/* Gaudí's cast getting up from the chair waits in the empty routine, instead of heading the page as a web would. */
+/* The cast getting up from the chair waits in the empty routine, instead of heading the page as a web would. */
 .rutina-vacia::before {
   content: ''; display: block; height: 128px; margin: -18px -16px 14px;
   background: url('imagenes/yeso-silla.webp') 74% 6% / cover no-repeat, var(--figura-fondo); border-bottom: 1px solid var(--linea);
 }
-/* Wider, the strip would show a loose head at its edge: taller, and framed from the head to the waist (Gaudí). */
+/* Wider, the strip would show a loose head at its edge: taller, and framed from the head to the waist. */
 @media (min-width: 700px) {
   .rutina-vacia::before { height: 220px; background-position: 75% 14%, center; }
 }
 .rutina-vacia p { margin: 0; }
 
-/* ---------- The professional's first use (Jujol, 15 November 2026) ----------
+/* ---------- The professional's first use (15 November 2026) ----------
    Until the first link, the builder opens with «Así funciona»: the way from building the routine to its summary as a
    path drawn in the studio's graphite, three square marks joined by a dashed line, one under the other on a phone and in
    one line from 700 px. Under it, the routine to try. */
@@ -1087,7 +1087,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   body.pro .nueva-version { left: calc(50% + var(--riel) / 2); }
 }
 
-/* ---------- The builder below 1280 px (Jujol, 13 and 14 November 2026) ----------
+/* ---------- The builder below 1280 px (13 and 14 November 2026) ----------
    The routine is the list, «Añadir ejercicio» is a big button under it, and the library opens as a sheet over the
    whole screen, the search on top. Choosing one closes it and leaves that exercise open in front. From 1280 px the
    library is a column of its own (below). */
@@ -1150,7 +1150,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   /* The card just added: a moment of light, so the eye finds it. */
   .ejercicio.recien { animation: recien 1.4s ease; }
 }
-/* ---------- The builder from 1280 px: three columns (Jujol, 14 November 2026) ----------
+/* ---------- The builder from 1280 px: three columns (14 November 2026) ----------
    The library at the left with its own scroll (search and map fixed on top, the list under them), the routine in the
    middle with «Crear enlace» stuck at its foot, the movement at the right. Nothing of the routine goes under the
    library, so adding never means going down and up again. */

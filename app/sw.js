@@ -2,7 +2,7 @@
 // - The app files are answered from the cache, always as one whole set: a new version is fetched complete into a cache
 //   of its own and only then takes over, so the page never gets a new app.js with an old datos.js (a request that
 //   failed, or a server caught halfway through an upload, left the app blank, even offline).
-// - Figures, exercises, their stills and the three.js files are fetched once and kept. When Gaudí changes a figure or an exercise
+// - Figures, exercises, their stills and the three.js files are fetched once and kept. When a figure or an exercise changes
 //   with the same name, FIJOS goes up by one so every phone fetches them again.
 // The page asks for the files of the routine it opens (message 'guardar') and is told when they are all here.
 const APP = 'jepyso-app-1'; // the set of the first versions; later sets are named when they are fetched

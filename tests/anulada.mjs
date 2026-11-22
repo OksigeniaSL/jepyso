@@ -5,7 +5,7 @@
 import { chromium } from 'playwright-core';
 
 const base = process.argv[2];
-// The Profesional test licence (the coordinator's test order «prueba-plan»), already seen on its Drive.
+// The Profesional test licence (Oksigenia's test order «prueba-plan»), already seen on its Drive.
 const LICENCIA = 'eyJwIjoiamVweXNvIiwicyI6ImNvbnN1bHRhIiwiYyI6InBydWViYS5qZXB5c29AZXhhbXBsZS5jb20iLCJmIjoiMjAyNi0xMS0xNSIsIm4iOiJwcnVlYmEtcGxhbiIsIm0iOjUwfQ.PhdPmE7hHGeHEnnz0hXRAu4wWXYWKMUJg4-Pst0NN70cW41E-8nhPS-6s07PMnWHxAT7Fe2EHwNqrxDCmvZ-AQ';
 const persona = (id, nombre) => ({ id, nombre, notas: '', creada: '2026-11-01', rutinas: [], dias: [] });
 const navegador = await chromium.launch({ executablePath: process.env.CHROMIUM_BIN || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
