@@ -30,7 +30,13 @@ node "$HERE/drive.mjs" "$APP"
 node "$HERE/version.mjs" "$APP" $((PORT + 100))
 python3 -I "$HERE/servir.py" "$PORT" "$APP" ${CSP:+--csp} >/dev/null 2>&1 &
 SERVER=$!
-trap 'kill "$SERVER" 2>/dev/null || true' EXIT
+# The copy of the Moodle activity, with the whole library, as tools/construir-moodle.sh makes it.
+PLUGIN=$(mktemp -d)
+echo '<?php // mod_oksigeniajepyso' > "$PLUGIN/version.php"
+"$HERE/../tools/construir-moodle.sh" "$PLUGIN" --todo >/dev/null
+python3 -I "$HERE/servir.py" $((PORT + 1)) "$PLUGIN/reproductor" >/dev/null 2>&1 &
+MOODLE=$!
+trap 'kill "$SERVER" "$MOODLE" 2>/dev/null || true; rm -rf "$PLUGIN"' EXIT
 curl -sf -o /dev/null --retry 20 --retry-connrefused --retry-delay 1 "http://127.0.0.1:$PORT/index.html"
 node "$HERE/accesorios.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/seguir.mjs" "http://127.0.0.1:$PORT"
@@ -42,7 +48,7 @@ node "$HERE/andar.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/programas.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/noticias.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/accesible.mjs" "http://127.0.0.1:$PORT"
-node "$HERE/moodle.mjs" "http://127.0.0.1:$PORT"
+node "$HERE/moodle.mjs" "http://127.0.0.1:$((PORT + 1))" "$PLUGIN/templates/player.mustache"
 node "$HERE/tienda.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/apuntar.mjs" "http://127.0.0.1:$PORT"
 node "$HERE/vales.mjs" "http://127.0.0.1:$PORT" "$OUT"

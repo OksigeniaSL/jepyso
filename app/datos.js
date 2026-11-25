@@ -2145,6 +2145,3 @@ export const almacen = {
     }
   },
 };
-
-// Kept in Spanish, as the key of its translation: the screens show it through t(SIN_SITIO).
-export const SIN_SITIO = 'No se ha podido guardar: este aparato no tiene más sitio para Jepyso. Guarda una copia en un archivo (en Personas) y borra lo que ya no uses.';

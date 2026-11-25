@@ -24,9 +24,9 @@ function deLista(lista) {
   return 'en';
 }
 const delTelefono = () => deLista(navigator.languages?.length ? navigator.languages : [navigator.language || 'es']);
-// The Moodle activity opens the player with the language of that user in Moodle (?idioma=es_mx).
+// The page of the Moodle activity says the language of that user in Moodle (data-lengua="es_mx").
 const deLaPlataforma = () => {
-  const l = new URLSearchParams(location.search).get('idioma');
+  const l = document.getElementById('app')?.dataset.lengua;
   return l && /^[a-z]{2,3}(_[a-z0-9_]+)?$/i.test(l) ? deLista([l]) : '';
 };
 

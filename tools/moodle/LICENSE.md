@@ -8,8 +8,8 @@ Attribution-ShareAlike 4.0 International licence (CC BY-SA 4.0), compatible with
 
 It covers, in `reproductor/`:
 
-- `modelos/`: the two bodies (`cuerpo.glb`), the movements and props of the twelve exercises of the free sample
-  (the other `.glb` files), their sheets and index (the `.json` files) and their stills (`posters/`);
+- `modelos/`: the two bodies (`cuerpo.glb`), the movements and props of the twelve exercises it brings (the other
+  `.glb` files), their sheets and index (the `.json` files) and their stills (`posters/`);
 - `modelos/fichas/`: the sheets the twelve movements are built from;
 - `imagenes/`: the plaster headers and the stills of the two figures;
 - `iconos/`: the icon of Jepyso;
@@ -17,8 +17,7 @@ It covers, in `reproductor/`:
 - `voz/`: the recorded voice of the player (the count, its own sentences and those of the twelve exercises), said by
   a brand voice of Oksigenia.
 
-Attribution: «Oksigenia Jepyso, by Oksigenia SL (https://jepyso.com)». The bodies are made from the base assets of
+Attribution: «Oksigenia Jepyso, by Oksigenia SL (https://github.com/OksigeniaSL/jepyso)». The bodies are made from the base assets of
 MakeHuman, which are under CC0 (https://static.makehumancommunity.org/about/license.html).
 
-The full library of Jepyso (the other exercises) and the figures of the web app at app.jepyso.com are not part of this
-package and keep their own terms.
+The other exercises of Jepyso and the figures of its web app are not part of this package and keep their own terms.

@@ -1,4 +1,5 @@
-// Checks that every text the screens look up (t('…') and tn(n, '…', '…') with a literal in app/*.js) has its English
+// Checks that every text the screens look up (t('…') and tn(n, '…', '…') with a literal in app/*.js and in the module of
+// the Moodle activity) has its English
 // in app/idiomas/en.js or en-ejercicios.js, so a new sentence cannot reach a phone in English half in Spanish.
 // Texts built at run time (exercise content, data) are checked by tools/idiomas/extraer.mjs and tests/idioma.mjs.
 // Usage: node tools/idiomas/pantallas.mjs        (exit 1 and the list when something lacks its English)
@@ -18,7 +19,7 @@ const valor = (s) => s.replace(/\\(.)/g, (m, c) => ({ n: '\n', t: '\t' }[c] ?? c
 
 const faltan = new Map();
 let vistas = 0;
-for (const f of readdirSync(APP).filter((n) => n.endsWith('.js'))) {
+for (const f of [...readdirSync(APP).filter((n) => n.endsWith('.js')), '../tools/moodle/entorno.js']) {
   const codigo = readFileSync(join(APP, f), 'utf8');
   for (const re of LLAMADAS) {
     for (const m of codigo.matchAll(re)) {

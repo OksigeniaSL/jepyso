@@ -348,12 +348,14 @@ a.boton { text-decoration: none; }
 .a-mano-icono { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--linea); background: var(--fondo); color: var(--tinta); }
 .a-mano-icono svg { width: 22px; height: 22px; }
 .pie-poster { display: none; }
+/* [app.jepyso.com] What follows is not in the copy for Moodle (tools/construir-moodle.sh). */
 /* The invitation to professionals on a published routine: a quiet card, its link in the line under the button. In the
    list on a phone; in the panel at the right when wide. */
 .invitacion-pro p { margin: 0; color: var(--tinta-suave); }
 .invitacion-pro .boton { justify-self: start; }
 .invitacion-pro .enlace { justify-self: start; display: inline-flex; align-items: center; font-size: 15px; }
 .invitacion-panel { display: none; }
+/* [/app.jepyso.com] */
 /* Wide (the WhatsApp of a computer): the list at the left at the width of a phone's reading, and at the right a panel
    that stays, with the still of the first exercise, how long it takes and «Empezar». Also a TV or a board lying wide
    from 900 px (a 1920×1080 screen at double density is 960×540), where «Ponerla en pantalla grande» goes in the panel. */
@@ -1374,6 +1376,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
   .firma-pro .firma-linea { font-size: 11px; line-height: 1.35; text-align: center; }
 }
 
+/* [app.jepyso.com] What follows is not in the copy for Moodle (tools/construir-moodle.sh). */
 /* Where a licence is pasted, in Personas: folded, it is one line. */
 .licencia-pegar summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 .licencia-fila { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1412,6 +1415,7 @@ body.pro .nueva-version { top: calc(64px + env(safe-area-inset-top)); }
 .cuenta-dentro strong { color: var(--tinta); font-weight: 600; }
 .aviso-vales { margin: 0; color: var(--vivo-texto); font-size: 14px; }
 .aviso-vales:empty { display: none; }
+/* [/app.jepyso.com] */
 
 /* Reference programmes (programas.js), under the professional's own templates. */
 .programas { display: grid; gap: 10px; margin-top: 24px; }

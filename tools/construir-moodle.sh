@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-# Builds the player of the Moodle activity (mod_oksigeniajepyso, app/moodle.js) into <plugin>/reproductor/: the strict
-# copy of tools/construir.sh with what a Moodle plugin needs.
+# Builds the player of the Moodle activity (mod_oksigeniajepyso) into <plugin>/reproductor/, and its page into
+# <plugin>/templates/player.mustache: the strict copy of tools/construir.sh with what a Moodle plugin needs.
+#  - tools/moodle/entorno.js in the place of app/entorno.js: the course instead of the professional's people. With it
+#    go the modules only that one uses (people, cloud, licence, free files…), their texts and their styles: nothing in
+#    the copy sells anything, calls anyone outside the site or leads there. The script checks it before it ends.
+#  - No page of its own: player.php and builder.php of the plugin, from tools/moodle/player.mustache.
+#  - Every import carries the version of the copy, so a browser never mixes the modules of two versions.
 #  - vendor/ becomes libs/: the server configurations Moodle recommends answer 404 to any path with /vendor/.
 #  - No worker and no manifest of its own: the plugin serves the app and the course keeps the sessions.
 #  - The models of the free sample only (MUESTRA, below), or all of them with --todo; the two lists of clips
@@ -23,7 +28,11 @@ trap 'rm -rf "$TMP"' EXIT
 "$ROOT/tools/construir.sh" "$TMP/web" >/dev/null
 W=$TMP/web
 mv "$W/vendor" "$W/libs"
-rm -f "$W/sw.js" "$W/manifest.json"
+rm -f "$W/sw.js" "$W/manifest.json" "$W/index.html"
+# The course in the place of the professional's side, and what only that side uses.
+cp "$ROOT/tools/moodle/entorno.js" "$W/entorno.js"
+for f in personas nube drive dropbox onedrive oauth sincronia licencia vales tienda conectar; do rm "$W/$f.js"; done
+rm -r "$W/conectar.html" "$W/libs/qrcode"
 # Nor the file that vouches for the Android app, which is app.jepyso.com's.
 rm -f "$W/.well-known/assetlinks.json" && rmdir "$W/.well-known"
 # The content of the package (the sample, the headers, the icon, the body map) under CC BY-SA 4.0, which the Moodle
@@ -44,6 +53,41 @@ for raiz, _, ficheros in os.walk(w):
             n = re.sub(r"(?<![A-Za-z0-9_-])vendor/", 'libs/', s)
             if n != s:
                 open(p, 'w', encoding='utf-8').write(n)
+# The styles of what is not here.
+p = os.path.join(w, 'estilos.css')
+s = open(p, encoding='utf-8').read()
+n, k = re.subn(r'/\* \[app\.jepyso\.com\][^\n]*\n.*?/\* \[/app\.jepyso\.com\] \*/\n', '', s, flags=re.S)
+if not k:
+    sys.exit('estilos.css: the marks of [app.jepyso.com] are missing')
+open(p, 'w', encoding='utf-8').write(n)
+# The accessibility panel signs with a link to Oksigenia's website; here, with its name.
+p = os.path.join(w, 'libs/oksigenia-access-panel/oksigenia-access-panel.js')
+s = open(p, encoding='utf-8').read()
+n, k = re.subn(r'<a href="https://oksigenia\.com"[^>]*>Oksigenia</a>', 'Oksigenia', s)
+if k != 1:
+    sys.exit('the signature of the accessibility panel has changed')
+open(p, 'w', encoding='utf-8').write(n)
+# The English of the screens: only the texts some module of the copy still says.
+codigo = ''
+for f in sorted(os.listdir(w)):
+    if f.endswith('.js'):
+        codigo += open(os.path.join(w, f), encoding='utf-8').read()
+p = os.path.join(w, 'idiomas/en.js')
+lineas = open(p, encoding='utf-8').read().split('\n')
+fuera, n, saltar = 0, [], False
+for i, l in enumerate(lineas):
+    m = re.match(r"  '((?:[^'\\]|\\.)*)':", l)
+    if m:
+        saltar = f"'{m.group(1)}'" not in codigo
+        fuera += saltar
+    elif not l.startswith('    '):
+        saltar = False
+    if not saltar:
+        n.append(l)
+# A heading with nothing left under it goes too.
+n = [l for i, l in enumerate(n) if not (l.startswith('  //') and (i + 1 == len(n) or n[i + 1].startswith('  //') or n[i + 1] == '};'))]
+n = ['// The English of the screens of the course, looked up by their Spanish wording (idioma.js). British English.'] + n[next(i for i, l in enumerate(n) if l.startswith('export')):]
+open(p, 'w', encoding='utf-8').write('\n'.join(n))
 # The models: each body's list of clips keeps the sample (or all), and the files of the rest go.
 for sub in ('', 'b'):
     carpeta = os.path.join(w, 'modelos', sub)
@@ -117,6 +161,25 @@ if grep -rIl --include=*.js --include=*.html --include=*.css "vendor/" "$W" | gr
   echo "paths with vendor/ left" >&2
   exit 1
 fi
-mkdir -p "$PLUGIN/reproductor"
+# Nothing here sells, promotes or leads out of the site: no plan, licence, price or cloud, and no address of anyone
+# else's but the names of the SVG and XML standards.
+if grep -rInE --include=*.js --include=*.css --include=*.json "licen[cs][ei]|precio|pricing|upgrade your plan|de pago|dropbox|onedrive|googleapis|accounts\.google|play\.google|wa\.me|t\.me/|whatsapp:|(jepyso|oksigenia)\.com/|href=\"https?:" "$W" | grep -vE "^$W/(libs/three|modelos/)|SPDX-License|MIT licen|[Ll]icensed under|@license"; then
+  echo "the copy for Moodle still has something of app.jepyso.com" >&2
+  exit 1
+fi
+# Every import with the version of the copy, a hash of its code.
+python3 -I - "$W" <<'PY'
+import hashlib, os, re, sys
+w = sys.argv[1]
+todos = sorted(os.path.join(r, f) for r, _, fs in os.walk(w) for f in fs if f.endswith('.js'))
+h = hashlib.sha256(b''.join(open(p, 'rb').read() for p in todos)).hexdigest()[:10]
+for p in todos:
+    s = open(p, encoding='utf-8').read()
+    n = re.sub(r'''((?:\bfrom|\bimport\(|\bimport)\s*)(['"])(\.{1,2}/[^'"?]+\.js)\2''', lambda m: f'{m.group(1)}{m.group(2)}{m.group(3)}?v={h}{m.group(2)}', s)
+    if n != s:
+        open(p, 'w', encoding='utf-8').write(n)
+PY
+mkdir -p "$PLUGIN/reproductor" "$PLUGIN/templates"
+cp "$ROOT/tools/moodle/player.mustache" "$PLUGIN/templates/player.mustache"
 rsync -a --delete "$W/" "$PLUGIN/reproductor/"
 du -sh "$PLUGIN/reproductor" | cut -f1

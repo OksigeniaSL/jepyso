@@ -8,6 +8,7 @@
 // (voz/mira-en, voz/altair-en), and the phone's own voice is an English one.
 import { almacen } from './datos.js';
 import { idioma, t } from './idioma.js';
+import { RAIZ } from './raiz.js';
 
 let voz = null;
 let buscada = false;
@@ -63,7 +64,7 @@ function cargarIndice() {
     indiceListo = false;
     tomas.clear();
   }
-  pidiendoIndice ||= pedir(`voz/${carpetas()[q]}/indice.json`)
+  pidiendoIndice ||= pedir(`${RAIZ}voz/${carpetas()[q]}/indice.json`)
     .then((r) => (r ? r.json() : null))
     .then((i) => {
       if (indiceDe === q) indice = i && typeof i === 'object' && !Array.isArray(i) ? i : null;
@@ -114,7 +115,7 @@ function toma(texto) {
   const k = indice?.[texto];
   if (!esClave(k)) return null;
   if (!tomas.has(k)) {
-    tomas.set(k, pedir(`voz/${carpetas()[indiceDe]}/${k}.mp3`)
+    tomas.set(k, pedir(`${RAIZ}voz/${carpetas()[indiceDe]}/${k}.mp3`)
       .then((r) => (r ? r.arrayBuffer() : Promise.reject(new Error(k))))
       .then((b) => audio().decodeAudioData(b))
       .catch(() => {
@@ -198,7 +199,7 @@ export function callar() {
 export async function rutasDeVoz(textos) {
   await cargarIndice();
   if (!indice) return [];
-  const carpeta = `voz/${carpetas()[indiceDe]}`;
+  const carpeta = `${RAIZ}voz/${carpetas()[indiceDe]}`;
   const claves = new Set(textos.flatMap((x) => partes(t(x))).map((x) => indice[x]).filter(esClave));
   return [`${carpeta}/indice.json`, ...[...claves].map((k) => `${carpeta}/${k}.mp3`)];
 }

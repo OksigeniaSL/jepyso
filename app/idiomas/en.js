@@ -596,4 +596,18 @@ export default {
   'Descárgala en Google Play': 'Get it on Google Play',
   'O conócela en jepyso.com': 'Or find out more at jepyso.com',
   'Conoce Jepyso': 'Discover Jepyso',
+  // Inside a Moodle course (tools/moodle/entorno.js)
+  'Jepyso · un producto de Oksigenia': 'Jepyso · an Oksigenia product',
+  'Actividad': 'Activity',
+  'El formulario de la actividad no está abierto detrás de esta ventana. Copia el código y pégalo allí.': 'The activity form is not open behind this window. Copy the code and paste it there.',
+  'Copiar el código': 'Copy the code',
+  '¿Cómo pongo la rutina en la actividad?': 'How do I put the routine in the activity?',
+  'Ármala en «Nueva rutina» y pulsa «Usar en la actividad»: vuelve sola al formulario. Guarda la actividad para que la clase la vea.': 'Build it in “New routine” and press “Use in the activity”: it goes back to the form by itself. Save the activity so the class sees it.',
+  '¿Qué hace cada estudiante?': 'What does each student do?',
+  'Sigue a la figura, que lleva el ritmo, el lado y las series que pusiste. Al acabar apunta lo que hizo y la molestia que notó, y la sesión se guarda en el curso.': 'They follow the figure, which keeps the tempo, the side and the sets you set. At the end they record what they did and the discomfort they felt, and the session is saved in the course.',
+  '¿Dónde veo cómo le va a la clase?': 'Where do I see how the class is getting on?',
+  'En la actividad, en «Ver el seguimiento»: quién la ha hecho, los días que pasaron de la molestia aceptable, lo que costó y las notas.': 'In the activity, under “See the follow-up”: who has done it, the days above the acceptable discomfort, what was hard and the notes.',
+  '¿Dónde se guardan mis plantillas?': 'Where are my templates kept?',
+  'En este navegador. Una plantilla guarda los ejercicios y sus ajustes, para usarlos en otra rutina.': 'In this browser. A template keeps the exercises and their settings, to use them in another routine.',
+  'No se ha podido guardar: este navegador no tiene más sitio. Borra lo que ya no uses.': 'Could not save: this browser has no room left. Delete what you no longer use.',
 };

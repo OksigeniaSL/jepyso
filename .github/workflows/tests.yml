@@ -1,14 +1,12 @@
 name: tests
 
-# The end-to-end walk (tests/recorrido.mjs) on every change to the app or the tests: the builder, the routine, the
-# rating, the morning-after question and the summary, in light and dark, wide and on a phone.
+# The end-to-end walk (tests/recorrido.mjs): the builder, the routine, the rating, the morning-after question and the
+# summary, in light and dark, wide and on a phone. On a version tag or by hand: the battery runs before on the laptop,
+# and this confirms it.
 
 on:
   push:
-    branches: [main]
-    paths: ['app/**', 'tests/**', 'tools/**', '.github/workflows/tests.yml']
-  pull_request:
-    paths: ['app/**', 'tests/**', 'tools/**', '.github/workflows/tests.yml']
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:

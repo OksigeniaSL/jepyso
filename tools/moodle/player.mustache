@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_oksigeniajepyso/player
+
+    The page of the player and of the builder: a document of its own, with the app of Jepyso in it and none of the
+    theme, so a phone loads only what the figure needs. Its content policy lets it load and call nothing outside the
+    site. The app reads from #app who is there and in which activity (classes/output/player_page.php).
+
+    This file comes from the repository of Jepyso (tools/moodle/player.mustache) with the player.
+
+    Context variables required for this template:
+    * lang - The language of the page, for its lang attribute
+    * title - The name of the activity, or of the builder
+    * base - The address of the folder of the player
+    * version - The version of the plugin, so a browser never mixes two versions
+    * userlang - The language of the user in Moodle
+    * cmid - The course module of the activity, or empty in the builder
+    * code - The code of its routine, or empty in the builder
+    * sesskey, service - What the external functions of the plugin are called with, and where
+    * backurl - The page of the activity, or empty
+    * firstname - The first name of the person
+    * cansubmit - Whether the person keeps sessions, or is only trying the routine
+
+    Example context (json):
+    {
+        "lang": "en",
+        "title": "Strength routine",
+        "base": "https://example.com/mod/oksigeniajepyso/reproductor",
+        "version": "2026112500",
+        "userlang": "en",
+        "cmid": "7",
+        "code": "j.e30",
+        "sesskey": "abcdef",
+        "service": "https://example.com/lib/ajax/service.php",
+        "backurl": "https://example.com/mod/oksigeniajepyso/view.php?id=7",
+        "firstname": "Ana",
+        "cansubmit": true
+    }
+}}
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+<meta charset="utf-8">
+{{! The style hashes are those of the accessibility panel: its effects, its own sheet and its SVG filters. }}
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-hashes' 'sha256-S7ClRAmGJq3evHjIDEpITgQRsrKVzPiY8x2s1HkH4Kg=' 'sha256-4wOm3BwddL5VP97matJWlHbRkq9UhogcJWNPtIU220A=' 'sha256-HXpdsTS7aV+r+X2zQtxJcxGFkx9YDkRb2LwtnZjFr/E='; img-src 'self' data: blob:; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#e4e6e3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121517" media="(prefers-color-scheme: dark)">
+<title>{{title}}</title>
+<link rel="icon" href="{{base}}/iconos/icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="{{base}}/estilos.css?v={{version}}">
+<script src="{{base}}/tema.js?v={{version}}"></script>
+<script type="module" src="{{base}}/libs/oksigenia-access-panel/oksigenia-access-panel.js?v={{version}}"></script>
+</head>
+<body>
+<main id="app" data-lengua="{{userlang}}" data-cm="{{cmid}}" data-rutina="{{code}}" data-sesskey="{{sesskey}}" data-servicio="{{service}}" data-volver="{{backurl}}" data-nombre="{{firstname}}" data-puede="{{#cansubmit}}1{{/cansubmit}}"></main>
+<oksigenia-access-panel trigger="none" locale="{{lang}}" position="bottom-left" storage-key="jepyso" controls="line-height,letter-spacing,readable-font,dyslexia-font,contrast,highlight-links,colorblind,reading-guide,big-cursor,big-targets,pause-anim,focus"></oksigenia-access-panel>
+<script type="module" src="{{base}}/app.js?v={{version}}"></script>
+</body>
+</html>
