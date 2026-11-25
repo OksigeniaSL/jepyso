@@ -280,6 +280,7 @@ export default {
   'Este teléfono no puede mover la figura en 3D.': 'This phone cannot move the 3D figure.',
   'Revisa la conexión y prueba otra vez.': 'Check your connection and try again.',
   'No se ha podido cargar la figura.': 'The figure could not be loaded.',
+  'Cargando la figura…': 'Loading the figure…',
   'Cómo se hace': 'How to do it',
   'Probar otra vez': 'Try again',
   'Posición de partida': 'Starting position',

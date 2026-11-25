@@ -58,6 +58,18 @@ try {
   const texto = await profesional.textContent('.lista');
   comprobar(texto.includes('Costó') && texto.includes('Me molestó la rodilla al bajar'), `el profesional no ve «Costó» ni la nota (${texto.slice(0, 200)})`);
   comprobar(texto.includes('10 y 6') || texto.includes('10, 6') || texto.includes('6 de 10'), 'el profesional no ve la corrección');
+  // Two more noted in the same minute: each keeps its own time, so neither takes the place of the other.
+  await pagina.goto(`${base}/index.html?calidad=baja#r=${codigo}`);
+  await pagina.reload();
+  for (let i = 0; i < 2; i++) {
+    await pagina.click('[data-r="sin-app"]');
+    await pagina.waitForSelector('dialog.hoja-corregir');
+    await pagina.click('dialog.hoja-corregir [data-c="guardar"]');
+    await pagina.waitForSelector('dialog.hoja-corregir', { state: 'detached' });
+  }
+  hist = await pagina.evaluate(() => JSON.parse(localStorage.getItem(Object.keys(localStorage).find((k) => k.startsWith('hist:')))));
+  comprobar(hist.length === 3 && new Set(hist.map((d) => `${d.f} ${d.h}`)).size === 3 && hist.every((d) => /^\d\d:\d\d$/.test(d.h)),
+    `dos sesiones del mismo minuto comparten hora (${JSON.stringify(hist.map((d) => [d.f, d.h]))})`);
   if (errores.length) fallos.push(...errores.map((e) => `error: ${e}`));
 } finally {
   await navegador.close();

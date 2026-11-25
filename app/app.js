@@ -1614,8 +1614,6 @@ async function vistaRutina(codigo) {
   document.addEventListener('visibilitychange', alVolver);
 
   function pintarJugador() {
-    // The hint goes by itself after a few seconds: it was covering the figure when the scene got small.
-    setTimeout(() => app.querySelector('.girar-pista')?.style.setProperty('opacity', '0'), 5000);
     const completa = grupo && document.fullscreenEnabled
       ? `<button type="button" class="redondo" data-r="completa" aria-pressed="${!!document.fullscreenElement}" aria-label="${t('Pantalla completa')}">${document.fullscreenElement ? ICONO.salirCompleta : ICONO.completa}</button>`
       : '';
@@ -1628,7 +1626,7 @@ async function vistaRutina(codigo) {
       </div>
       <div class="escena">
         <span class="chip lado-etiqueta j-lado oculto"></span>
-        <div class="girar-pista">${ICONO.girar} ${t('Arrastra para girar la figura')}</div>
+        <div class="girar-pista oculto">${ICONO.girar} ${t('Arrastra para girar la figura')}</div>
         <button type="button" class="recolocar oculto" data-r="recolocar">${ICONO.girar}${t('Recolocar')}</button>
       </div>
       <div class="mando j-mando"></div>
@@ -1654,11 +1652,18 @@ async function vistaRutina(codigo) {
     const def = EJERCICIOS[e.i];
     const banda = bandaDe(def, e.b);
     app.querySelector('.j-nombre').textContent = t(def.nombre);
-    app.querySelector('.j-sub').textContent = subtitulo(e, sesion.serie + 1);
+    // A new exercise says which one it is from the start, as its «get ready» does; between sets, the set.
+    const estrena = sesion.retomada || (sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e));
+    app.querySelector('.j-sub').textContent = estrena ? enQueVamos(e) : subtitulo(e, sesion.serie + 1);
     const etiquetaLado = app.querySelector('.j-lado');
     etiquetaLado.textContent = t(LADOS[lado]);
     etiquetaLado.classList.toggle('oculto', !def.unLado);
     let f;
+    // On a slow connection the figure takes some seconds: said, instead of an empty scene.
+    const tarda = setTimeout(() => {
+      const mando = app.querySelector('.j-mando');
+      if (sesion?.item === item && mando && !mando.firstElementChild) mando.innerHTML = `<div class="centro" role="status"><p>${t('Cargando la figura…')}</p></div>`;
+    }, 600);
     try {
       f = await figuraEn(app.querySelector('.escena'), r.c);
       f.oyentes = {};
@@ -1670,7 +1675,16 @@ async function vistaRutina(codigo) {
       app.querySelector('.recolocar')?.classList.add('oculto');
       await f.poner(e.i, { tempo: e.t, lado, banda: banda?.color });
       nombrarFigura(f, e.i, lado);
+      clearTimeout(tarda);
+      // The hint comes with the figure, and goes by itself after a few seconds: it was covering it when the scene got
+      // small.
+      const pista = app.querySelector('.girar-pista.oculto');
+      if (pista) {
+        pista.classList.remove('oculto');
+        setTimeout(() => pista.style.setProperty('opacity', '0'), 5000);
+      }
     } catch {
+      clearTimeout(tarda);
       // No connection and the figure not kept yet, or a phone without the 3D it needs: say so, with a way on.
       if (sesion.item !== item) return;
       const sin3d = !document.createElement('canvas').getContext('webgl2');
@@ -1684,11 +1698,10 @@ async function vistaRutina(codigo) {
     // Between sets of the same exercise, and when only the side changes, the rest leads into the countdown.
     // In a circuit, from the second round on, the next exercise comes after a short rest (a longer one between rounds),
     // with the figure already in its starting position.
-    const nuevo = sesion.retomada || (sesion.serie === 0 && (item === 0 || cola[item - 1].e !== e));
     const transicion = sesion.transicion;
     sesion.retomada = false;
     sesion.transicion = null;
-    if (nuevo) preparacion();
+    if (estrena) preparacion();
     else if (transicion) descanso(transicion.segundos, { siguiente: true, vuelta: transicion.vuelta });
     else cuentaAtras(5);
   }
@@ -2069,6 +2082,7 @@ async function vistaRutina(codigo) {
     };
     if (parcial && !dia.e.length) return intro();
     const hist = almacen.leer(clave, []);
+    dia.h = horaLibre(hist, dia.f, dia.h);
     hist.push(dia);
     almacen.guardar(clave, hist.slice(-200));
     const trabajo = t('{tiempo} de trabajo.', { tiempo: mayuscula(minutos((ahora - sesion.inicio) / 1000)) });
@@ -2145,7 +2159,10 @@ async function vistaRutina(codigo) {
       } else if (c === 'guardar') {
         dia.ed = new Date().toISOString();
         const lista = almacen.leer(clave, []);
-        if (nuevo) lista.push(dia);
+        if (nuevo) {
+          dia.h = horaLibre(lista, dia.f, dia.h);
+          lista.push(dia);
+        }
         else lista[k] = dia;
         lista.sort((x, y) => `${x.f} ${x.h || ''}`.localeCompare(`${y.f} ${y.h || ''}`));
         almacen.guardar(clave, lista.slice(-200));
@@ -2440,6 +2457,18 @@ function diaDeSesion(inicio) {
   const d = new Date(inicio);
   if (d.getHours() < 5) d.setDate(d.getDate() - 1);
   return diaLocal(d);
+}
+
+// Two sessions of the same day never share their minute: day and time name a session (what the course keeps, what a
+// correction replaces), so one noted in the same minute as another takes the nearest free one before it, or after.
+function horaLibre(hist, f, h) {
+  const tomadas = new Set(hist.filter((d) => d.f === f).map((d) => d.h));
+  const aMinutos = ([hh, mm]) => Number(hh) * 60 + Number(mm);
+  const enTexto = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+  const desde = aMinutos(h.split(':'));
+  for (let m = desde; m >= 0; m--) if (!tomadas.has(enTexto(m))) return enTexto(m);
+  for (let m = desde + 1; m < 1440; m++) if (!tomadas.has(enTexto(m))) return enTexto(m);
+  return h;
 }
 
 // «jueves, 13 de noviembre», for the person's own days.
